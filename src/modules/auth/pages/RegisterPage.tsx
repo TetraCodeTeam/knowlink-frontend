@@ -1,28 +1,18 @@
-import { Link as RouterLink } from "react-router-dom";
-import { Box, Typography, Link } from "@mui/material";
-import RegisterForm from "@/modules/auth/components/RegisterForm";
+import AuthLayout from "@/modules/auth/layouts/AuthLayout";
+import RegisterForm from "../components/RegisterForm";
 
 export default function RegisterPage() {
+  const illustration = (
+    <img
+      src="/register-image.png"
+      alt="Estudiante con libros"
+      style={{ width: "100%" }}
+    />
+  );
+
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "background.default",
-        p: 2,
-        gap: 2,
-      }}
-    >
+    <AuthLayout illustration={illustration}>
       <RegisterForm />
-      <Typography variant="body2">
-        ¿Ya tenés cuenta?{" "}
-        <Link component={RouterLink} to="/auth/login">
-          Iniciá sesión
-        </Link>
-      </Typography>
-    </Box>
+    </AuthLayout>
   );
 }
