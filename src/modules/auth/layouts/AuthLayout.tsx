@@ -50,7 +50,6 @@ export default function AuthLayout({ illustration, stepper, children }: AuthLayo
               alignItems: "center",
               justifyContent: "center",
               bgcolor: "#eef2ff",
-              p: 6,
             }}
           >
             {illustration}
