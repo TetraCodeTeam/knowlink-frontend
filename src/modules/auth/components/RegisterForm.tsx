@@ -10,23 +10,45 @@ import {
   Typography,
 } from "@mui/material";
 import { BookSearch, NotebookPen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { registerSchema, type RegisterFormData } from "@/modules/auth/schemas/user-register.schema";
 import { useRegister } from "@/modules/auth/hooks/useRegister";
+import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import PasswordField from "@/modules/auth/components/PasswordField";
 
 export default function RegisterForm() {
   const { mutate, isPending } = useRegister();
+  const navigate = useNavigate();
+  const setCredentials = useRegistrationStore((s) => s.setCredentials);
 
   const {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterFormData) => mutate(data);
+  const selectedRole = watch("role");
+
+  const onSubmit = (data: RegisterFormData) => {
+    if (data.role === "TUTOR") {
+      setCredentials({
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      });
+      navigate("/auth/register/tutor");
+    } else {
+      mutate({
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      });
+    }
+  };
 
   return (
     <Box
@@ -177,7 +199,11 @@ export default function RegisterForm() {
           "&:hover": { bgcolor: "#3451d1" },
         }}
       >
-        {isPending ? "Creando cuenta..." : "→ Crear cuenta y continuar"}
+        {isPending
+          ? "Cargando..."
+          : selectedRole === "TUTOR"
+            ? "→ Continuar como tutor"
+            : "→ Crear cuenta y continuar"}
       </Button>
     </Box>
   );
