@@ -9,7 +9,7 @@ import { TutorReviewsCard } from "@/modules/tutor/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/tutor/hooks/useTutorProfile";
 
 export const TutorProfilePage = () => {
-  const { tutorId } = useParams<{ tutorId: string }>();
+  const { tutorId } = useParams();
   const navigate = useNavigate();
   const { data: tutor, isLoading, isError } = useTutorProfile(tutorId ?? "");
 
