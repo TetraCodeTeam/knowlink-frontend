@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import type { Step2Data } from "@/modules/auth/schemas/tutor-register.schema";
-import Step1Account from "./steps/Step1Account";
-import Step2AcademicProfile from "./steps/Step2AcademicProfile";
-import Step3MercadoPago from "./steps/Step3MercadoPago";
-import Step4Confirmation from "./steps/Step4Confirmation";
+import Step1Account from "@/modules/auth/components/tutor-register/steps/Step1Account";
+import Step2AcademicProfile from "@/modules/auth/components/tutor-register/steps/Step2AcademicProfile";
+import Step3MercadoPago from "@/modules/auth/components/tutor-register/steps/Step3MercadoPago";
+import Step4Confirmation from "@/modules/auth/components/tutor-register/steps/Step4Confirmation";
 import { useTutorRegister } from "@/modules/auth/hooks/useTutorRegister";
 
 interface Credentials {

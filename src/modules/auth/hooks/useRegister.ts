@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { registerUser } from "../api/auth.api";
-import { AUTH_REGISTER_KEY } from "../constants";
+import { registerUser } from "@/modules/auth/api/auth.api";
+import { AUTH_REGISTER_KEY } from "@/modules/auth/constants";
 
-import type { UserRegisterRequest } from "../interfaces/requests/user-register.interface";
+import type { UserRegisterRequest } from "@/modules/auth/interfaces/requests/user-register.interface";
 
 export function useRegister() {
   const navigate = useNavigate();
