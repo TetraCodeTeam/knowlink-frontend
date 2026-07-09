@@ -74,7 +74,17 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         variant="contained"
         onClick={onReservar}
         startIcon={<CalendarCheck size={18} />}
-        sx={{width:"60%", mx: "auto", mt:2, bgcolor: "#5865C8", "&:hover": { bgcolor: "#4752C4" }, fontSize: "16px", fontWeight: 600, textTransform: "none", borderRadius: 2}}
+        sx={{
+          width: "60%",
+          mx: "auto",
+          mt: 2,
+          bgcolor: "#5865C8",
+          "&:hover": { bgcolor: "#4752C4" },
+          fontSize: "16px",
+          fontWeight: 600,
+          textTransform: "none",
+          borderRadius: 2,
+        }}
       >
         Reservar Sesión
       </Button>
