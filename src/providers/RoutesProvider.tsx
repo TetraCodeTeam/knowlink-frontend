@@ -12,9 +12,8 @@ export default function RoutesProvider() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<div>Dashboard – Coming soon</div>} />
+        <Route path="/student/*" element={<StudentRoutes />} />
       </Route>
-
-      <Route path="/student/*" element={<StudentRoutes />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
