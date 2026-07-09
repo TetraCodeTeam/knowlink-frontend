@@ -38,16 +38,16 @@ export const TutorProfilePage = () => {
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
 
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 8 }}>
+        <Grid item xs={12} md={8}>
           <Stack spacing={2}>
             <TutorAboutCard about={tutor.about} />
             <TutorSubjectsCard subjectRates={tutor.subjectRates} />
             <TutorReviewsCard reviews={tutor.reviews} />
           </Stack>
         </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid item xs={12} md={4}>
           <Stack spacing={2}>
-            <TutorAvailabilityCard onVerDisponibilidad={() => navigate(`/tutores/${tutor.id}/disponibilidad`)} />
+            <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} />
             <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
           </Stack>
         </Grid>
