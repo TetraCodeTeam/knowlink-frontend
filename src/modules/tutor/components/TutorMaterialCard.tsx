@@ -31,7 +31,9 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
           <List dense disablePadding>
             {material.map((item) => (
               <ListItem key={item.id} disableGutters>
-                <FileText size={16} color="#5865C8" style={{ marginRight: 8 }} />
+                <Box sx={{ mr: 1, display: "inline-flex" }}>
+                  <FileText size={16} color="#5865C8" />
+                </Box>
                 <ListItemText
                   primary={
                     <Link href={item.fileUrl} underline="hover">
