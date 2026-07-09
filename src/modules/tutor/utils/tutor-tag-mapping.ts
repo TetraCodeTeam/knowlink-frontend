@@ -29,13 +29,13 @@ export const TUTOR_STATUS: Record<TutorStatusDisplay, TutorTag> = {
   },
 };
 
-export const MODALITY_DISPLAY_NAME: Record<Modalidad, string> = {
+export const MODALITY_DISPLAY_NAME = {
   Presencial: "Presencial",
   Virtual: "Virtual",
+} as const satisfies Record<Modalidad, string>;
 
-};
-
-export type ModalityDisplay = (typeof MODALITY_DISPLAY_NAME)[Modalidad];
+export type ModalityDisplay =
+  (typeof MODALITY_DISPLAY_NAME)[keyof typeof MODALITY_DISPLAY_NAME];
 
 export const MODALITY: Record<ModalityDisplay, TutorTag> = {
   Presencial: {
