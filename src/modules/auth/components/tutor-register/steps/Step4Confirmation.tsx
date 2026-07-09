@@ -1,3 +1,4 @@
+import type React from "react";
 import { Box, Card, CardContent, Chip, Typography } from "@mui/material";
 import { Laptop, LibraryBig } from "lucide-react";
 import type { Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
