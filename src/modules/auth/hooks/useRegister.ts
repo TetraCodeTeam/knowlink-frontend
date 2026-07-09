@@ -15,8 +15,11 @@ export function useRegister() {
     onSuccess: (_, variables) => {
       navigate("/auth/check-email", { state: { email: variables.email } });
     },
-    onError: () => {
-      toast.error("Registration failed. Please try again.");
+    onError: (error: unknown) => {
+      const message =
+        (error as { response?: { data?: { message?: string; detail?: string } } })?.response?.data
+          ?.message ?? "No se pudo crear la cuenta. Intentá de nuevo.";
+      toast.error(message);
     },
   });
 }

@@ -8,9 +8,10 @@ export function useResendConfirmation() {
     onSuccess: () => {
       toast.success("Correo de verificación reenviado. Revisá tu bandeja de entrada.");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       const message =
-        error?.response?.data?.message ?? "Error al reenviar el correo. Intentá de nuevo.";
+        (error as { response?: { data?: { message?: string; detail?: string } } })?.response?.data
+          ?.message ?? "Error al reenviar el correo. Intentá de nuevo.";
       toast.error(message);
     },
   });
