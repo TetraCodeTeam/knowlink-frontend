@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Chip, Rating, Stack, Typography } from "@mui/material";
 import type { TutorProfile } from "@/modules/tutor/interfaces/tutor.interface";
-import { getSubjectDisplayName, TUTOR_SUBJECT_TAG_COLOR } from "@/modules/tutor/utils/tutor-tag-mapping";
+import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/tutor/utils/tutor-tag-mapping";
 import { CalendarCheck } from "lucide-react";
 
 interface TutorProfileHeaderProps {
@@ -32,10 +32,10 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 72, height: 72 }} />
           <Box>
-            <Typography variant="h6" fontWeight={600}>
+            <Typography variant="h4" fontWeight={600}>
               {tutor.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
+            <Typography variant="h6" color="#494949" gutterBottom>
               Materias
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -46,8 +46,9 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
                   size="small"
                   variant="outlined"
                   sx={{
-                    bgcolor: TUTOR_SUBJECT_TAG_COLOR.bg,
-                    color: TUTOR_SUBJECT_TAG_COLOR.color,
+                    bgcolor: TUTOR_SUBJECT_TAG.bg,
+                    color: TUTOR_SUBJECT_TAG.color,
+                    fontSize: TUTOR_SUBJECT_TAG.fontSize,
                     borderColor: "transparent",
                   }}
                 />
@@ -59,10 +60,10 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         <Stack spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Rating value={tutor.rating} precision={0.1} readOnly size="small" />
-            <Typography variant="body2" fontWeight={600}>
+            <Typography variant="h6" fontWeight={600}>
               {tutor.rating}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="h6" color="text.secondary">
               ({tutor.reviewsCount} Reseñas)
             </Typography>
           </Stack>
@@ -73,7 +74,7 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         variant="contained"
         onClick={onReservar}
         startIcon={<CalendarCheck size={18} />}
-        sx={{width:"60%", mx: "auto", mt:2, bgcolor: "#5865C8", "&:hover": { bgcolor: "#4752C4" }, fontSize: "16px", fontWeight: 600, textTransform: "none", cornerRadius: 2}}
+        sx={{width:"60%", mx: "auto", mt:2, bgcolor: "#5865C8", "&:hover": { bgcolor: "#4752C4" }, fontSize: "16px", fontWeight: 600, textTransform: "none", borderRadius: 2}}
       >
         Reservar Sesión
       </Button>

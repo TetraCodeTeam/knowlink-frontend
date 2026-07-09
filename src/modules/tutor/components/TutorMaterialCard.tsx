@@ -12,15 +12,15 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
-          <FolderLock size={18} />
-          <Typography variant="subtitle1" fontWeight={600}>
+          <FolderLock size={18} color="#5865C8"/>
+          <Typography variant="h6" fontWeight={600}>
             Material Académico
           </Typography>
         </Stack>
 
         {!hasConfirmedBooking ? (
           <Box sx={{ textAlign: "center", py: 3 }}>
-            <FolderLock size={32} style={{ opacity: 0.5 }} />
+            <FolderLock size={32} color="#5865C8" style={{ opacity: 0.5 }} />
             <Typography variant="body2" fontWeight={600} mt={1}>
               Material Bloqueado
             </Typography>
@@ -29,7 +29,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
           <List dense disablePadding>
             {material.map((item) => (
               <ListItem key={item.id} disableGutters>
-                <FileText size={16} style={{ marginRight: 8 }} />
+                <FileText size={16} color="#5865C8" style={{ marginRight: 8 }} />
                 <ListItemText
                   primary={
                     <Link href={item.fileUrl} underline="hover">

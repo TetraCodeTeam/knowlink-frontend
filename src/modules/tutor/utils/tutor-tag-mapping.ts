@@ -1,13 +1,17 @@
 import type { Modalidad } from "@/modules/tutor/interfaces/tutor.interface";
+import { LibraryBig, Monitor, ShieldCheck, type LucideIcon } from "lucide-react";
 
-type TutorTagColor = {
+type TutorTag = {
   bg: string;
   color: string;
+  fontSize?: string;
+  icon?: LucideIcon;
 };
 
-export const TUTOR_SUBJECT_TAG_COLOR: TutorTagColor = {
+export const TUTOR_SUBJECT_TAG: TutorTag = {
   bg: "#E0E0FA",
   color: "#494949",
+  fontSize: "18px",
 };
 
 export const TUTOR_STATUS_DISPLAY_NAME = {
@@ -16,28 +20,48 @@ export const TUTOR_STATUS_DISPLAY_NAME = {
 
 export type TutorStatusDisplay = (typeof TUTOR_STATUS_DISPLAY_NAME)[keyof typeof TUTOR_STATUS_DISPLAY_NAME];
 
-export const TUTOR_STATUS_COLORS: Record<TutorStatusDisplay, TutorTagColor> = {
+export const TUTOR_STATUS: Record<TutorStatusDisplay, TutorTag> = {
   "Tutor Verificado": {
-    bg: "#E5F8EA",
-    color: "#1F7A3E",
+    bg: "#C7C8FF",
+    color: "#3147C2",
+    fontSize: "15px",
+    icon: ShieldCheck,
   },
 };
 
 export const MODALITY_DISPLAY_NAME: Record<Modalidad, string> = {
   Presencial: "Presencial",
   Virtual: "Virtual",
+
 };
 
 export type ModalityDisplay = (typeof MODALITY_DISPLAY_NAME)[Modalidad];
 
-export const MODALITY_COLORS: Record<ModalityDisplay, TutorTagColor> = {
+export const MODALITY: Record<ModalityDisplay, TutorTag> = {
   Presencial: {
-    bg: "#FFF1DE",
-    color: "#A66300",
+    bg: "#E0E0FA",
+    color: "#3A48AD",
+    fontSize: "15px",
+    icon: LibraryBig,
   },
   Virtual: {
-    bg: "#ECE8FF",
-    color: "#5D48B8",
+    bg: "#E0E0FA",
+    color: "#3A48AD",
+    fontSize: "15px",
+    icon: Monitor,
+  },
+};
+
+export const PRICE_TAG: Record<"FREE" | "PAID", TutorTag> = {
+  FREE: {
+    bg: "#E5F8EA",
+    color: "#1F7A3E",
+    fontSize: "20px",
+  },
+  PAID: {
+    bg: "#E0E0FA",
+    color: "#3A48AD",
+    fontSize: "20px",
   },
 };
 
