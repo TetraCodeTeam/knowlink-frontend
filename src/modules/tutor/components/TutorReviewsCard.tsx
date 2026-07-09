@@ -10,12 +10,11 @@ interface TutorReviewsCardProps {
 }
 
 const PREVIEW_LIMIT = 5;
-const VER_TODAS_THRESHOLD = 1;
 
 export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const previewReviews = reviews.slice(0, PREVIEW_LIMIT);
-  const showVerTodas = reviews.length >= VER_TODAS_THRESHOLD;
+  const showVerTodas = reviews.length > PREVIEW_LIMIT;
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
