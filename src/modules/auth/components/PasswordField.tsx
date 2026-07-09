@@ -1,20 +1,22 @@
 import { useState } from "react";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField, type TextFieldProps } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
-import type { TextFieldProps } from "@mui/material";
 
 type PasswordFieldProps = Omit<TextFieldProps, "type">;
 
 export default function PasswordField(props: PasswordFieldProps) {
+  const { InputProps, ...rest } = props;
   const [visible, setVisible] = useState(false);
 
   return (
     <TextField
-      {...props}
+      {...rest}
       type={visible ? "text" : "password"}
       InputProps={{
+        ...InputProps,
         endAdornment: (
           <InputAdornment position="end">
+            {InputProps?.endAdornment}
             <IconButton
               onClick={() => setVisible((prev) => !prev)}
               edge="end"
