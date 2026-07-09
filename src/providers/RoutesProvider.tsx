@@ -1,12 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthRoutes from "@/routes/AuthRoutes";
 import ProtectedRoute from "@/routes/ProtectedRoute";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
 export default function RoutesProvider() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
   return (
     <Routes>
       {/* Redirección raíz */}
-      <Route path="/" element={<Navigate to="/auth/login" replace />} />
+      <Route
+        path="/"
+        element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth/login"} replace />}
+      />
 
       {/* Public routes */}
       <Route path="/auth/*" element={<AuthRoutes />} />
@@ -17,7 +23,10 @@ export default function RoutesProvider() {
       </Route>
 
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/auth/login" replace />} />
+      <Route
+        path="*"
+        element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth/login"} replace />}
+      />
     </Routes>
   );
 }
