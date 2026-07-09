@@ -2,8 +2,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AuthRoutes from "@/routes/AuthRoutes";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import StudentRoutes from "@/routes/StudentRoutes";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
 export default function RoutesProvider() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
   return (
     <Routes>
       {/* Public routes */}
@@ -16,7 +19,10 @@ export default function RoutesProvider() {
       </Route>
 
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="*"
+        element={<Navigate to={isAuthenticated ? "/" : "/auth/login"} replace />}
+      />
     </Routes>
   );
 }

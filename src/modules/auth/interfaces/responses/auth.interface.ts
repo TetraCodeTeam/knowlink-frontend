@@ -1,7 +1,7 @@
 export interface AuthResponse {
-  token: string;
+  userId: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
+  fullName: string | null;
+  token: string;
+  role: "STUDENT" | "TUTOR" | "ADMIN";
 }
