@@ -3,8 +3,7 @@ import { Home, LayoutGrid, Bell, AlertTriangle, LogOut } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useStudentBadgesStore } from "@/modules/student/hooks/useStudentBadgesStore";
-
-const SIDEBAR_WIDTH = 120;
+import { SIDEBAR_WIDTH } from "@/modules/student/components/StudentTopbar";
 
 interface NavItem {
   icon: React.ElementType;
@@ -17,7 +16,7 @@ const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/student/home" },
   { icon: LayoutGrid, label: "Mis clases", path: "/student/classes" },
   { icon: Bell, label: "Notificaciones", path: "/student/notifications", badge: "notifications" },
-  { icon: AlertTriangle, label: "Rec y Solicitudes", path: "/student/complaints", badge: "complaints" },
+  { icon: AlertTriangle, label: "Mis reclamos", path: "/student/complaints", badge: "complaints" },
 ];
 
 const badgeSx = {
@@ -84,7 +83,15 @@ export default function StudentSidebar() {
           return (
             <Box
               key={path}
+              role="button"
+              tabIndex={0}
               onClick={() => navigate(path)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  navigate(path);
+                }
+              }}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -131,7 +138,15 @@ export default function StudentSidebar() {
 
       <Box sx={{ width: "100%", px: "12px", mb: "8px" }}>
         <Box
+          role="button"
+          tabIndex={0}
           onClick={() => navigate("/student/profile")}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              navigate("/student/profile");
+            }
+          }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -181,7 +196,15 @@ export default function StudentSidebar() {
 
       <Box sx={{ width: "100%", px: "12px" }}>
         <Box
+          role="button"
+          tabIndex={0}
           onClick={handleLogout}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleLogout();
+            }
+          }}
           sx={{
             display: "flex",
             flexDirection: "column",

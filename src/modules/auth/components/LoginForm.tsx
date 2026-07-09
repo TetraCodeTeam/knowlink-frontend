@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Box, Divider } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
 import { useLogin } from "@/modules/auth/hooks/useLogin";
@@ -50,6 +49,8 @@ export default function LoginForm() {
                 type="email"
                 placeholder="correo@ejemplo.com"
                 className="kl-input"
+                aria-label="Correo electrónico"
+                autoComplete="email"
                 style={{
                   padding: "14px 14px 14px 45px",
                   fontSize: "15px",
@@ -74,12 +75,6 @@ export default function LoginForm() {
               >
                 Contraseña
               </Box>
-              <Link
-                to="/auth/forgot-password"
-                style={{ fontSize: 14, color: "#3F4CAE", textDecoration: "none", fontFamily: "Inter, sans-serif" }}
-              >
-                ¿Olvidaste tu Contraseña?
-              </Link>
             </Box>
             <Box sx={{ position: "relative" }}>
               <Box
@@ -99,6 +94,8 @@ export default function LoginForm() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••••••"
                 className="kl-input"
+                aria-label="Contraseña"
+                autoComplete="current-password"
                 style={{
                   padding: "14px 45px 14px 45px",
                   fontSize: "15px",
@@ -109,6 +106,7 @@ export default function LoginForm() {
               <Box
                 component="button"
                 type="button"
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 onClick={() => setShowPassword(!showPassword)}
                 sx={{
                   position: "absolute",

@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap } from "lucide-react";
+import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap, BookOpen, BarChart2 } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
@@ -22,8 +22,10 @@ const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/tutor/home" },
   { icon: CalendarClock, label: "Disponibilidad", path: "/tutor/availability" },
   { icon: LayoutGrid, label: "Mis clases", path: "/tutor/classes" },
+  { icon: BookOpen, label: "Mi contenido", path: "/tutor/content" },
+  { icon: BarChart2, label: "Panel de estadísticas", path: "/tutor/stats" },
   { icon: Bell, label: "Notificaciones", path: "/tutor/notifications", badge: "notifications" },
-  { icon: Headphones, label: "Solicitudes", path: "/tutor/requests", badge: "requests" },
+  { icon: Headphones, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
 ];
 
 const badgeSx = {
@@ -119,7 +121,15 @@ export default function TutorSidebar() {
           return (
             <Box
               key={path}
+              role="button"
+              tabIndex={0}
               onClick={() => navigate(path)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  navigate(path);
+                }
+              }}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -163,7 +173,15 @@ export default function TutorSidebar() {
       {/* Profile */}
       <Box sx={{ width: "100%", px: "8px", mb: "8px" }}>
         <Box
+          role="button"
+          tabIndex={0}
           onClick={() => navigate("/tutor/profile")}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              navigate("/tutor/profile");
+            }
+          }}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -216,7 +234,15 @@ export default function TutorSidebar() {
       {/* Logout */}
       <Box sx={{ width: "100%", px: "8px" }}>
         <Box
+          role="button"
+          tabIndex={0}
           onClick={handleLogout}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleLogout();
+            }
+          }}
           sx={{
             display: "flex",
             flexDirection: "column",

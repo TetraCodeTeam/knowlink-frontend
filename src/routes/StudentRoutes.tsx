@@ -16,7 +16,7 @@ export default function StudentRoutes() {
         <Route path="complaints" element={<UnderConstructionPage />} />
         <Route path="profile" element={<StudentProfilePage />} />
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
-        <Route path="tutor/:tutorId/disponibilidad" element={<div>Disponibilidad – Coming soon</div>} />
+        <Route path="tutor/:tutorId/disponibilidad" element={<UnderConstructionPage />} />
       </Route>
     </Routes>
   );

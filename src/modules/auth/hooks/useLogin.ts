@@ -23,7 +23,7 @@ export function useLogin() {
       navigate(destination, { replace: true });
     },
     onError: () => {
-      toast.error("Credenciales incorrectas. Verificá tu correo y contraseña.");
+      toast.error("Credenciales incorrectas");
     },
   });
 

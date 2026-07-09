@@ -8,7 +8,7 @@ export default function UnderConstructionPage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "calc(100vh - 64px)",
+        minHeight: "100%",
         gap: "0px",
         textAlign: "center",
         padding: "24px",
