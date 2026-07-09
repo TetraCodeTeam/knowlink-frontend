@@ -1,4 +1,4 @@
 export const EXCLUDED_BEARER_ROUTES: string[] = [
-  "/auth/login",
-  "/auth/register",
+  "/api/v1/auth/login",
+  "/api/v1/auth/register",
 ];

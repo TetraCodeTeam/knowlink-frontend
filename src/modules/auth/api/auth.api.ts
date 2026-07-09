@@ -1,11 +1,11 @@
-import { httpClient, rawHttpClient } from "@/shared/lib/httpClient";
+import { rawHttpClient } from "@/shared/lib/httpClient";
 import type { LoginRequest } from "@/modules/auth/interfaces/requests/login-request.interface";
 import type { UserRegisterRequest } from "@/modules/auth/interfaces/requests/user-register.interface";
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";
 
 export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
-  const response = await httpClient.post<AuthResponse>("/api/v1/auth/login", data);
+  const response = await rawHttpClient.post<AuthResponse>("/api/v1/auth/login", data);
   return response.data;
 }
 
