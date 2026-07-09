@@ -5,6 +5,7 @@ export default function StudentRoutes() {
   return (
     <Routes>
       <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
+      <Route path="tutor/:tutorId/disponibilidad" element={<div>Disponibilidad – Coming soon</div>} />
     </Routes>
   );
-};
+}
