@@ -7,10 +7,7 @@ import { fileURLToPath } from "url";
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [
-    viteTsConfigPaths({ projects: ["./tsconfig.json"] }),
-    react(),
-  ],
+  plugins: [viteTsConfigPaths({ projects: ["./tsconfig.json"] }), react()],
   resolve: {
     alias: {
       "@": path.resolve(rootDir, "./src"),
