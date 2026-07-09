@@ -49,6 +49,11 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (avatarPreview?.startsWith("blob:")) {
+      URL.revokeObjectURL(avatarPreview);
+    }
+
     const url = URL.createObjectURL(file);
     setAvatarPreview(url);
     setValue("profilePictureUrl", url);
