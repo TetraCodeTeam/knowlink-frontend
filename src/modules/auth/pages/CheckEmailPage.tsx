@@ -104,8 +104,8 @@ export default function CheckEmailPage() {
           variant="outlined"
           fullWidth
           size="large"
-          disabled={isPending || isSuccess}
-          onClick={() => mutate(email)}
+          disabled={!email || isPending || isSuccess}
+          onClick={() => email && mutate(email)}
           startIcon={<RefreshCw size={16} />}
           sx={{
             borderRadius: 3,
