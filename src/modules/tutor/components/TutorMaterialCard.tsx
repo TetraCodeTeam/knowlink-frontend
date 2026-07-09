@@ -20,7 +20,9 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
 
         {!hasConfirmedBooking ? (
           <Box sx={{ textAlign: "center", py: 3 }}>
-            <FolderLock size={32} color="#5865C8" style={{ opacity: 0.5 }} />
+            <Box sx={{ opacity: 0.5, display: "inline-flex" }}>
+              <FolderLock size={32} color="#5865C8" />
+            </Box>
             <Typography variant="body2" fontWeight={600} mt={1}>
               Material Bloqueado
             </Typography>
