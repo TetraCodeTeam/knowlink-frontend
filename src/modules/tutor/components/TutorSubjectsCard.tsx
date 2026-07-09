@@ -10,9 +10,7 @@ interface TutorSubjectsCardProps {
 }
 
 export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-const previewSubjects = subjectRates.slice(0, 3);
-
+  const previewSubjects = subjectRates.slice(0, 3);
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
       <CardContent>
