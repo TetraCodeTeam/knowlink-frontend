@@ -8,6 +8,7 @@ import {
   TUTOR_STATUS_DISPLAY_NAME,
   PRICE_TAG,
 } from "@/modules/tutor/utils/tutor-tag-mapping";
+import { useReviewsDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 
 interface SubjectRateItemProps {
   subject: TutorSubjectRate;
@@ -21,6 +22,7 @@ const formatPrice = (price: number, isFree: boolean) => {
 };
 
 export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
+  const openDialog = useReviewsDialogStore((state) => state.openDialog);
   const verifiedLabel = TUTOR_STATUS_DISPLAY_NAME.VERIFIED;
   const priceTag = subject.isFree ? PRICE_TAG.FREE : PRICE_TAG.PAID;
 
@@ -41,7 +43,12 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
         </Typography>
         <Stack direction="row" spacing={1} alignItems="center" mt={0.5}>
           <Rating value={subject.rating} precision={0.1} readOnly size="small" />
-          <Typography variant="subtitle1" color="text.secondary">
+          <Typography
+            variant="subtitle1"
+            color="primary"
+            onClick={() => openDialog(subject.name)}
+            sx={{ cursor: "pointer", textDecoration: "underline" }}
+          >
             ({subject.reviewsCount} Reseñas)
           </Typography>
         </Stack>

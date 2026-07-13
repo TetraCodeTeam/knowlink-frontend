@@ -1,21 +1,20 @@
-import { useState } from "react";
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import { MessageSquare } from "lucide-react";
 import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
-import { ReviewsDialog } from "@/modules/tutor/components/ReviewsDialog";
+import { useReviewsDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 
 interface TutorReviewsCardProps {
   reviews: TutorReview[];
 }
 
-const PREVIEW_LIMIT = 5;
-const DIALOG_LIMIT = 5;
+const PREVIEW_LIMIT = 3;
+const VER_TODAS_THRESHOLD = 5;
 
 export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const openDialog = useReviewsDialogStore((state) => state.openDialog);
   const previewReviews = reviews.slice(0, PREVIEW_LIMIT);
-  const showVerTodas = reviews.length > DIALOG_LIMIT;
+  const showVerTodas = reviews.length >= VER_TODAS_THRESHOLD;
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
@@ -23,12 +22,12 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
           <Stack direction="row" spacing={1} alignItems="center">
             <MessageSquare size={18} color="#5865C8" />
-            <Typography variant="h5" fontWeight={600}>
+            <Typography variant="h6" fontWeight={600}>
               Reseñas
             </Typography>
           </Stack>
           {showVerTodas && (
-            <Button size="medium" onClick={() => setDialogOpen(true)}>
+            <Button size="small" onClick={() => openDialog()}>
               Ver Todas
             </Button>
           )}
@@ -40,8 +39,6 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
           ))}
         </Stack>
       </CardContent>
-
-      <ReviewsDialog open={dialogOpen} onClose={() => setDialogOpen(false)} reviews={reviews} />
     </Card>
   );
 };

@@ -8,6 +8,7 @@ import { TutorAvailabilityCard } from "@/modules/tutor/components/TutorAvailabil
 import { TutorMaterialCard } from "@/modules/tutor/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/tutor/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/tutor/hooks/useTutorProfile";
+import { ReviewsDialog } from "@/modules/tutor/components/ReviewsDialog";
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
@@ -53,6 +54,7 @@ export const TutorProfilePage = () => {
           </Stack>
         </Grid>
       </Grid>
+       <ReviewsDialog reviews={tutor.reviews} />
     </Stack>
   );
 };
