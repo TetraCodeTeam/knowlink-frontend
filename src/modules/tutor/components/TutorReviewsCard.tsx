@@ -10,11 +10,12 @@ interface TutorReviewsCardProps {
 }
 
 const PREVIEW_LIMIT = 5;
+const DIALOG_LIMIT = 5;
 
 export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const previewReviews = reviews.slice(0, PREVIEW_LIMIT);
-  const showVerTodas = reviews.length > PREVIEW_LIMIT;
+  const showVerTodas = reviews.length > DIALOG_LIMIT;
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
@@ -27,7 +28,7 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
             </Typography>
           </Stack>
           {showVerTodas && (
-            <Button size="small" onClick={() => setDialogOpen(true)}>
+            <Button size="medium" onClick={() => setDialogOpen(true)}>
               Ver Todas
             </Button>
           )}

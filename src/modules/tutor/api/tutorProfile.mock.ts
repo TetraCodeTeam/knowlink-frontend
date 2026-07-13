@@ -66,9 +66,41 @@ export const mockTutorProfile: TutorProfile = {
         "de que lo entiendas.",
     },
   ],
+  
   material: [
-    { id: "m1", title: "Guía de Árboles AVL", subject: "Algoritmos y Estructuras de Datos", fileUrl: "#" },
-    { id: "m2", title: "Resumen Modelo OSI", subject: "Sistemas y Organizaciones", fileUrl: "#" },
+    {
+      id: "m1",
+      title: "Guía de Ejercicios",
+      subject: "Algoritmos y Estructuras de Datos",
+      fileUrl: "#",
+      fileType: "PDF",
+      fileSizeMB: 25,
+    },
+    {
+      id: "m2",
+      title: "Planilla de Clase",
+      subject: "Algoritmos y Estructuras de Datos",
+      fileUrl: "#",
+      fileType: "XLSX",
+      fileSizeMB: 15,
+    },
+    {
+      id: "m3",
+      title: "Guía de Ejercicios",
+      subject: "Sistemas y Organizaciones",
+      fileUrl: "#",
+      fileType: "PDF",
+      fileSizeMB: 30.5,
+    },
+    {
+      id: "m4",
+      title: "Gráfico Organizacional",
+      subject: "Sistemas y Organizaciones",
+      fileUrl: "#",
+      fileType: "PNG",
+      fileSizeMB: 5,
+    },
   ],
-  hasConfirmedBooking: false,
+  hasConfirmedBooking: true,
+
 };
