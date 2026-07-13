@@ -30,7 +30,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
           <FolderLock size={18} color="#5865C8" />
-          <Typography variant="h6" fontWeight={600}>
+          <Typography variant="h5" fontWeight={600}>
             Material Académico
           </Typography>
         </Stack>
@@ -51,7 +51,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
           <Stack spacing={2}>
             {Object.entries(groupedMaterial).map(([subject, items]) => (
               <Box key={subject}>
-                <Typography variant="subtitle2" color="text.secondary" mb={1}>
+                <Typography variant="subtitle1" color="text.secondary" mb={1}>
                   {subject}
                 </Typography>
                 <Stack spacing={1}>
@@ -72,10 +72,10 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
                         <Stack direction="row" spacing={1.5} alignItems="center">
                           <FileIcon size={20} color="#5865C8" />
                           <Box>
-                            <Typography variant="body2" fontWeight={600}>
+                            <Typography variant="subtitle1" fontWeight={600}>
                               {item.title}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography variant="subtitle2" color="text.secondary">
                               {item.fileType} · {formatFileSize(item.fileSizeMB)}
                             </Typography>
                           </Box>

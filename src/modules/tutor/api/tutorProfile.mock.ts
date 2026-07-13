@@ -3,7 +3,7 @@ import type { TutorProfile } from "@/modules/tutor/interfaces/tutor.interface";
 export const mockTutorProfile: TutorProfile = {
   id: "1",
   name: "Silvina Rubio",
-  avatarUrl: null,
+  avatarUrl: "https://cdn.i-scmp.com/sites/default/files/styles/1020x680/public/d8/images/canvas/2024/09/20/e91add8a-eac2-4776-b54f-d7d0f514ccf1_24b3e2cb.jpg?itok=68VOyy9L&v=1726827504",
   rating: 4.9,
   reviewsCount: 128,
   subjects: ["Algoritmos y Estructuras de Datos", "Sistemas y Organizaciones", "Sistemas Operativos"],
@@ -48,7 +48,7 @@ export const mockTutorProfile: TutorProfile = {
     {
       id: "r1",
       studentName: "Lucía López",
-      studentAvatarUrl: null,
+      studentAvatarUrl: "https://people.com/thmb/UkD6kL1xphDh99a17fchMAS7XV8=/4000x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(674x389:676x391)/Blackpink-2023-Lalisa-01-276dd509c1bf426d876cb95bcd66263e.jpg",
       subject: "Algoritmos y Estructuras de Datos",
       rating: 5,
       comment:
@@ -58,7 +58,7 @@ export const mockTutorProfile: TutorProfile = {
     {
       id: "r2",
       studentName: "Ciro Gutierrez",
-      studentAvatarUrl: null,
+      studentAvatarUrl: "https://straykids-members.carrd.co/assets/images/image06.jpg?v=ad8450e5",
       subject: "Sistemas y Organizaciones",
       rating: 4,
       comment:
@@ -66,7 +66,7 @@ export const mockTutorProfile: TutorProfile = {
         "de que lo entiendas.",
     },
   ],
-  
+
   material: [
     {
       id: "m1",
