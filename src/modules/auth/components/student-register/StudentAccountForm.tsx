@@ -1,4 +1,3 @@
-import type React from "react";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,39 +13,37 @@ import {
   Typography,
 } from "@mui/material";
 import { Camera } from "lucide-react";
-import { step1Schema, type Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
-import AppButton from "@/shared/components/AppButton";
+import { studentAccountSchema, type StudentAccountData } from "@/modules/auth/schemas/user-register.schema";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import AppButton from "@/shared/components/AppButton";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
 const inputSx = {
   "& .MuiOutlinedInput-root": { borderRadius: 2 },
 };
 
-interface Step1Props {
-  defaultValues: Partial<Step1Data>;
-  onNext: (data: Step1Data) => void;
+interface StudentAccountFormProps {
+  onSubmit: (data: StudentAccountData) => void;
   onBack: () => void;
+  isPending: boolean;
 }
 
-export default function Step1Account({ defaultValues, onNext, onBack }: Step1Props) {
-  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
-    defaultValues.profilePictureUrl
-  );
+export default function StudentAccountForm({ onSubmit, onBack, isPending }: StudentAccountFormProps) {
+  const [avatarPreview, setAvatarPreview] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data: careers, isLoading: careersLoading } = useCareers();
 
   const {
     register,
     handleSubmit,
-    setValue,
     control,
-    formState: { errors },
+    setValue,
     setError,
-  } = useForm<Step1Data>({
-    resolver: zodResolver(step1Schema),
-    defaultValues,
+    formState: { errors },
+  } = useForm<StudentAccountData>({
+    resolver: zodResolver(studentAccountSchema),
   });
+
+  const { data: careers, isLoading: careersLoading } = useCareers();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -61,18 +58,18 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     setValue("profilePictureUrl", url);
   };
 
-  const handleAccountSubmit = async (data: Step1Data) => {
+  const handleAccountSubmit = async (data: StudentAccountData) => {
     try {
       await checkAvailability({ dni: data.dni });
     } catch (error: unknown) {
       const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "Este DNI ya está registrado.";
+        (error as { response?: { data?: { message?: string; detail?: string } } })?.response?.data
+          ?.message ?? "Este DNI ya está registrado.";
       setError("dni", { type: "manual", message });
       return;
     }
 
-    onNext(data);
+    onSubmit(data);
   };
 
   return (
@@ -86,13 +83,9 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         Cuenta
       </Typography>
 
-      {/* Foto de perfil */}
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
         <Box sx={{ position: "relative" }}>
-          <Avatar
-            src={avatarPreview}
-            sx={{ width: 72, height: 72, bgcolor: "#eef2ff", color: "#4361ee" }}
-          >
+          <Avatar src={avatarPreview} sx={{ width: 72, height: 72, bgcolor: "#eef2ff", color: "#5B6ED9" }}>
             {!avatarPreview && <Camera size={28} />}
           </Avatar>
           <IconButton
@@ -102,7 +95,7 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
               position: "absolute",
               bottom: -4,
               right: -4,
-              bgcolor: "#4361ee",
+              bgcolor: "#5B6ED9",
               color: "#fff",
               width: 24,
               height: 24,
@@ -120,7 +113,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
       </Box>
 
-      {/* Nombre */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
           Nombre*
@@ -128,7 +120,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         <TextField
           placeholder="Nombre"
           fullWidth
-          size="medium"
           {...register("firstName")}
           error={!!errors.firstName}
           helperText={errors.firstName?.message}
@@ -136,7 +127,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         />
       </Box>
 
-      {/* Apellido */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
           Apellido*
@@ -144,7 +134,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         <TextField
           placeholder="Apellido"
           fullWidth
-          size="medium"
           {...register("lastName")}
           error={!!errors.lastName}
           helperText={errors.lastName?.message}
@@ -152,7 +141,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         />
       </Box>
 
-      {/* Carrera */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
           Carrera*
@@ -161,8 +149,8 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
           <Controller
             name="career"
             control={control}
-            render={({ field: f }) => (
-              <Select {...f} sx={{ borderRadius: 2 }} disabled={careersLoading}>
+            render={({ field }) => (
+              <Select {...field} disabled={careersLoading} sx={{ borderRadius: 2 }}>
                 {careers?.map((c) => (
                   <MenuItem key={c.careerId} value={c.name}>
                     {c.name}
@@ -175,7 +163,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         </FormControl>
       </Box>
 
-      {/* Teléfono */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
           Teléfono celular*
@@ -183,7 +170,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         <TextField
           placeholder="+54 9 3534138xxx"
           fullWidth
-          size="medium"
           {...register("phoneNumber")}
           error={!!errors.phoneNumber}
           helperText={errors.phoneNumber?.message}
@@ -191,7 +177,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         />
       </Box>
 
-      {/* DNI */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
           DNI*
@@ -199,7 +184,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         <TextField
           placeholder="43606xxx"
           fullWidth
-          size="medium"
           {...register("dni")}
           error={!!errors.dni}
           helperText={errors.dni?.message}
@@ -207,29 +191,19 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         />
       </Box>
 
-      {/* Legajo institucional (opcional) */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
           Legajo institucional
         </Typography>
-        <TextField
-          placeholder=""
-          fullWidth
-          size="medium"
-          {...register("institutionalId")}
-          error={!!errors.institutionalId}
-          helperText={errors.institutionalId?.message}
-          sx={inputSx}
-        />
+        <TextField fullWidth {...register("institutionalId")} sx={inputSx} />
       </Box>
 
-      {/* Botones */}
       <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-        <AppButton appVariant="outline" fullWidth onClick={onBack} type="button">
+        <AppButton appVariant="outline" fullWidth onClick={onBack} type="button" disabled={isPending}>
           ← Volver
         </AppButton>
-        <AppButton appVariant="primary" fullWidth type="submit">
-          → Continuar
+        <AppButton appVariant="primary" fullWidth type="submit" loading={isPending}>
+          → Finalizar registro
         </AppButton>
       </Box>
     </Box>

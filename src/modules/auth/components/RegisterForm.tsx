@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,20 +13,21 @@ import {
 import { BookSearch, NotebookPen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { registerSchema, type RegisterFormData } from "@/modules/auth/schemas/user-register.schema";
-import { useRegister } from "@/modules/auth/hooks/useRegister";
+import { checkAvailability } from "@/modules/auth/api/auth.api";
 import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import PasswordField from "@/modules/auth/components/PasswordField";
 
 export default function RegisterForm() {
-  const { mutate, isPending } = useRegister();
   const navigate = useNavigate();
   const setCredentials = useRegistrationStore((s) => s.setCredentials);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   const {
     register,
     handleSubmit,
     control,
     watch,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -33,20 +35,32 @@ export default function RegisterForm() {
 
   const selectedRole = watch("role");
 
-  const onSubmit = (data: RegisterFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
+    setIsCheckingEmail(true);
+
+    try {
+      await checkAvailability({ email: data.email });
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "Este correo ya está registrado.";
+      setError("email", { type: "manual", message });
+      setIsCheckingEmail(false);
+      return;
+    }
+
+    setIsCheckingEmail(false);
+
+    setCredentials({
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    });
+
     if (data.role === "TUTOR") {
-      setCredentials({
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      });
       navigate("/auth/register/tutor");
     } else {
-      mutate({
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      });
+      navigate("/auth/register/student");
     }
   };
 
@@ -187,8 +201,8 @@ export default function RegisterForm() {
         type="submit"
         variant="contained"
         fullWidth
-        disabled={isPending}
-        startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : null}
+        disabled={isCheckingEmail}
+        startIcon={isCheckingEmail ? <CircularProgress size={16} color="inherit" /> : null}
         sx={{
           bgcolor: "#5B6ED9",
           borderRadius: 3,
@@ -199,8 +213,8 @@ export default function RegisterForm() {
           "&:hover": { bgcolor: "#3451d1" },
         }}
       >
-        {isPending
-          ? "Cargando..."
+        {isCheckingEmail
+          ? "Verificando..."
           : selectedRole === "TUTOR"
             ? "→ Continuar como tutor"
             : "→ Crear cuenta y continuar"}
