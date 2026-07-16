@@ -2,7 +2,7 @@ import { rawHttpClient } from "@/shared/lib/httpClient";
 import type { LoginRequest } from "@/modules/auth/interfaces/requests/login-request.interface";
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";
-import { StudentRegisterRequest } from "../interfaces/requests/student-register.interface";
+import type { StudentRegisterRequest } from "@/modules/auth/interfaces/requests/student-register.interface";
 
 export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
   const response = await rawHttpClient.post<AuthResponse>("/api/v1/auth/login", data);

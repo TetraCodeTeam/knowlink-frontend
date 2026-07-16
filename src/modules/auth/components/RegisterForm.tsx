@@ -20,6 +20,7 @@ import PasswordField from "@/modules/auth/components/PasswordField";
 export default function RegisterForm() {
   const navigate = useNavigate();
   const setCredentials = useRegistrationStore((s) => s.setCredentials);
+  const [initialCredentials] = useState(() => useRegistrationStore.getState().credentials);
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   const {
@@ -31,6 +32,7 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: initialCredentials ?? undefined,
   });
 
   const selectedRole = watch("role");
@@ -43,7 +45,7 @@ export default function RegisterForm() {
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "Este correo ya está registrado.";
+        "No se pudo verificar la disponibilidad del correo. Intentá nuevamente.";
       setError("email", { type: "manual", message });
       setIsCheckingEmail(false);
       return;
@@ -55,6 +57,7 @@ export default function RegisterForm() {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
+      role: data.role,
     });
 
     if (data.role === "TUTOR") {

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -13,7 +13,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Camera } from "lucide-react";
-import { studentAccountSchema, type StudentAccountData } from "@/modules/auth/schemas/user-register.schema";
+import {
+  studentAccountSchema,
+  type StudentAccountData,
+} from "@/modules/auth/schemas/user-register.schema";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import AppButton from "@/shared/components/AppButton";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
@@ -28,9 +31,21 @@ interface StudentAccountFormProps {
   isPending: boolean;
 }
 
-export default function StudentAccountForm({ onSubmit, onBack, isPending }: StudentAccountFormProps) {
+export default function StudentAccountForm({
+  onSubmit,
+  onBack,
+  isPending,
+}: StudentAccountFormProps) {
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (avatarPreview?.startsWith("blob:")) {
+        URL.revokeObjectURL(avatarPreview);
+      }
+    };
+  }, [avatarPreview]);
 
   const {
     register,
@@ -64,7 +79,7 @@ export default function StudentAccountForm({ onSubmit, onBack, isPending }: Stud
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string; detail?: string } } })?.response?.data
-          ?.message ?? "Este DNI ya está registrado.";
+          ?.message ?? "No se pudo verificar la disponibilidad del DNI. Intentá nuevamente.";
       setError("dni", { type: "manual", message });
       return;
     }
@@ -85,7 +100,10 @@ export default function StudentAccountForm({ onSubmit, onBack, isPending }: Stud
 
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
         <Box sx={{ position: "relative" }}>
-          <Avatar src={avatarPreview} sx={{ width: 72, height: 72, bgcolor: "#eef2ff", color: "#5B6ED9" }}>
+          <Avatar
+            src={avatarPreview}
+            sx={{ width: 72, height: 72, bgcolor: "#eef2ff", color: "#5B6ED9" }}
+          >
             {!avatarPreview && <Camera size={28} />}
           </Avatar>
           <IconButton
@@ -199,7 +217,13 @@ export default function StudentAccountForm({ onSubmit, onBack, isPending }: Stud
       </Box>
 
       <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-        <AppButton appVariant="outline" fullWidth onClick={onBack} type="button" disabled={isPending}>
+        <AppButton
+          appVariant="outline"
+          fullWidth
+          onClick={onBack}
+          type="button"
+          disabled={isPending}
+        >
           ← Volver
         </AppButton>
         <AppButton appVariant="primary" fullWidth type="submit" loading={isPending}>

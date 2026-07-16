@@ -67,7 +67,7 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "Este DNI ya está registrado.";
+        "No se pudo verificar la disponibilidad del DNI. Intentá nuevamente.";
       setError("dni", { type: "manual", message });
       return;
     }
