@@ -1,17 +1,19 @@
 import { httpClient } from "@/shared/lib/httpClient";
-import type { SearchResults } from "@/modules/students/interfaces/responses/search-results.interface";
+import type { TutorSearchResult } from "@/modules/students/interfaces/responses/tutor-search-result.interface";
 
 /**
  * GET /api/v1/tutors/search/{query}
- * -> { materias: MateriaSearchResult[], tutores: TutorSearchResult[] }
+ * -> TutorSearchResult[]
  *
- * El backend es responsable de:
- *  - Interpretar `query` contra nombre de materia y nombre/apellido de tutor.
- *  - Excluir de `tutores` a los usuarios que solo tienen rol alumno activo.
- *  - Rechazar (403) la consulta si quien llama está en modo tutor.
+ * Contrato real (rama Julian-SalvucciV3 de knowlink-backend):
+ *  - Devuelve un array plano de tutores, no { materias, tutores }.
+ *  - Matchea únicamente por nombre de materia (findBySubject_NameContainingIgnoreCase),
+ *    NO por nombre de tutor. Cada tutor incluye en `subjects` las materias que matchearon.
+ *  - Requiere rol STUDENT (@PreAuthorize("hasRole('STUDENT')")); si el usuario está en
+ *    modo tutor el backend responde 403.
  */
-export async function searchTutorsAndMaterias(query: string): Promise<SearchResults> {
-  const response = await httpClient.get<SearchResults>(
+export async function searchTutors(query: string): Promise<TutorSearchResult[]> {
+  const response = await httpClient.get<TutorSearchResult[]>(
     `/api/v1/tutors/search/${encodeURIComponent(query)}`
   );
   return response.data;

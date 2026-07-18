@@ -48,26 +48,36 @@ export default function SearchBar() {
   // según lo pedido: GET /api/v1/tutors/search/{query}.
   const { data, isFetching } = useSearchTutorsAndMaterias(inputValue);
 
-   const options: SearchOption[] = useMemo(() => {
-    if (!data) return [];
+  const options: SearchOption[] = useMemo(() => {
+    const tutors: TutorSearchResult[] = Array.isArray(data) ? data : [];
 
-    const materiaOptions: SearchOption[] = data.materias?.map((materia: MateriaSearchResult) => ({
-      kind: "materia",
-      id: materia.materiaId,
-      nombre: materia.nombre,
-    }));
+    // El backend solo matchea por nombre de materia (ver search.api.ts), así
+    // que las "Materias" se derivan de las subjects que cada tutor trajo
+    // como coincidencia, deduplicadas por nombre (case-insensitive).
+    const seenMaterias = new Map<string, string>();
+    for (const tutor of tutors) {
+      for (const subjectName of tutor.subjects) {
+        const key = subjectName.trim().toLowerCase();
+        if (!seenMaterias.has(key)) {
+          seenMaterias.set(key, subjectName);
+        }
+      }
+    }
 
-    const tutorOptions: SearchOption[] = data.tutores?.map((tutor: TutorSearchResult) => ({
+    const materiaOptions: SearchOption[] = [...seenMaterias.values()]
+      .sort((a, b) => a.localeCompare(b))
+      .map((nombre) => ({ kind: "materia", id: nombre, nombre }));
+
+    const tutorOptions: SearchOption[] = tutors.map((tutor) => ({
       kind: "tutor",
       id: tutor.tutorId,
-      nombre: `${tutor.firstName} ${tutor.lastName}`,
-      profilePicture: tutor.profilePicture,
+      nombre: tutor.fullName,
+      profilePicture: tutor.photoProfile ?? undefined,
     }));
 
     return [...materiaOptions, ...tutorOptions];
   }, [data]);
 
-  
   const handleChange = (_event: SyntheticEvent, value: SearchOption | null) => {
     if (!value) return;
 
