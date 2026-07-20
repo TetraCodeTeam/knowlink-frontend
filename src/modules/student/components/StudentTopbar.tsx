@@ -24,9 +24,7 @@ export default function StudentTopbar() {
         borderBottom: "1px solid #F0EEFE",
       }}
     >
-      {/* Search bar area — implemented by another team member */}
-      <Box sx={{ flex: 1 }} />
-      <Box sx={{ flex: 1, display: "flex" }}>
+      <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
         <SearchBar />
       </Box>
 
@@ -46,3 +44,4 @@ export default function StudentTopbar() {
     </Box>
   );
 }
+

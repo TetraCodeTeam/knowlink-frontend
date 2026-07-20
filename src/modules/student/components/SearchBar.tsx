@@ -14,11 +14,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { buildMateriaTutorsRoute, buildTutorProfileRoute, TUTOR_ROLE } from "../constants";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
+import { SubjectSummary } from "../interfaces/tutor-search-result.interface";
 import SearchResultsPanel from "./SearchResultsPanel";
 
 
 const SEARCH_BAR_PLACEHOLDER = "Busca tutores, materias";
-const SEARCH_BAR_MAX_WIDTH = 640;
+const SEARCH_BAR_MAX_WIDTH = 760;
 
 const pillInputSx = {
   "& .MuiOutlinedInput-root": {
@@ -72,16 +73,16 @@ export default function SearchBar() {
   // que las "Materias" se derivan de las subjects que cada tutor trajo como
   // coincidencia, deduplicadas por nombre (case-insensitive).
   const materias = useMemo(() => {
-    const seen = new Map<string, string>();
+    const seen = new Map<string, SubjectSummary>();
     for (const tutor of tutors) {
-      for (const subjectName of tutor.subjects) {
-        const key = subjectName.trim().toLowerCase();
+      for (const subject of tutor.subjects) {
+        const key = subject.name.trim().toLowerCase();
         if (!seen.has(key)) {
-          seen.set(key, subjectName);
+          seen.set(key, subject);
         }
       }
     }
-    return [...seen.values()].sort((a, b) => a.localeCompare(b));
+    return [...seen.values()].sort((a, b) => a.name.localeCompare(b.name));
   }, [tutors]);
 
   const showPanel = open && inputValue.trim().length > 0;

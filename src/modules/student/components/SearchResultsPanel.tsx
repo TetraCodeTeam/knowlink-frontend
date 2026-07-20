@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 import { Avatar, Box, ButtonBase, Divider, Paper, Stack, Typography } from "@mui/material";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import StarIcon from "@mui/icons-material/Star";
+import { SubjectSummary, TutorSearchResult } from "../interfaces/tutor-search-result.interface";
+import { getCareerIcon } from "../icons/career-icon";
 import { highlightMatch } from "./highlight-match";
-import { TutorSearchResult } from "../interfaces/tutor-search-result.interface";
+
 
 const BRAND_COLOR = "#5865C8";
 const ICON_BOX_BG = "#EDEBFA";
@@ -27,12 +28,14 @@ function SectionHeader({ icon, label }: SectionHeaderProps) {
 }
 
 interface MateriaRowProps {
-  nombre: string;
+  materia: SubjectSummary;
   query: string;
   onClick: () => void;
 }
 
-function MateriaRow({ nombre, query, onClick }: MateriaRowProps) {
+function MateriaRow({ materia, query, onClick }: MateriaRowProps) {
+  const CareerIcon = getCareerIcon(materia.career);
+
   return (
     <ButtonBase
       onClick={onClick}
@@ -58,11 +61,16 @@ function MateriaRow({ nombre, query, onClick }: MateriaRowProps) {
           flexShrink: 0,
         }}
       >
-        <FactCheckOutlinedIcon sx={{ color: BRAND_COLOR, fontSize: 20 }} />
+        <CareerIcon size={20} color={BRAND_COLOR} />
       </Box>
-      <Typography variant="body2" sx={{ color: BRAND_COLOR, fontWeight: 500 }} noWrap>
-        {highlightMatch(nombre, query)}
-      </Typography>
+      <Box sx={{ minWidth: 0 }}>
+        <Typography variant="body2" sx={{ color: BRAND_COLOR, fontWeight: 500 }} noWrap>
+          {highlightMatch(materia.name, query)}
+        </Typography>
+        <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block" }}>
+          {materia.career}
+        </Typography>
+      </Box>
     </ButtonBase>
   );
 }
@@ -121,7 +129,7 @@ function TutorRow({ tutor, query, onClick }: TutorRowProps) {
 
 export interface SearchResultsPanelProps {
   query: string;
-  materias: string[];
+  materias: SubjectSummary[];
   tutors: TutorSearchResult[];
   loading: boolean;
   onSelectMateria: (nombre: string) => void;
@@ -172,12 +180,12 @@ export default function SearchResultsPanel({
                 label="Materias"
               />
               <Stack spacing={2} sx={{ mt: 2 }}>
-                {materias.map((nombre) => (
+                {materias.map((materia) => (
                   <MateriaRow
-                    key={nombre}
-                    nombre={nombre}
+                    key={materia.name}
+                    materia={materia}
                     query={query}
-                    onClick={() => onSelectMateria(nombre)}
+                    onClick={() => onSelectMateria(materia.name)}
                   />
                 ))}
               </Stack>
