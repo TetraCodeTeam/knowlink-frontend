@@ -1,0 +1,5 @@
+import { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
+
+export interface AvailabilityBlockResponse extends AvailabilityBlockRequest {
+  availabilityBlockId: string;
+}
