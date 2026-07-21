@@ -5,7 +5,10 @@ export const step1Schema = z.object({
   lastName: z.string().min(1, "El apellido es obligatorio"),
   career: z.string().min(1, "La carrera es obligatoria"),
   phoneNumber: z.string().min(1, "El teléfono es obligatorio"),
-  dni: z.string().min(1, "El DNI es obligatorio"),
+  dni: z
+    .string()
+    .min(1, "El DNI es obligatorio")
+    .regex(/^\d{7,8}$/, "El DNI debe tener 7 u 8 dígitos"),
   institutionalId: z.string().optional(),
   profilePictureUrl: z.string().optional(),
 });
