@@ -7,7 +7,7 @@ import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore"
 import { Box } from "@mui/material";
 
 export default function TutorRegisterPage() {
-  const credentials = useRegistrationStore((s) => s.credentials);
+  const [credentials] = useState(() => useRegistrationStore.getState().credentials);
   const [currentStep, setCurrentStep] = useState(1);
 
   if (!credentials) {
