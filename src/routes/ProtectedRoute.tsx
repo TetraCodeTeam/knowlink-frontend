@@ -3,7 +3,7 @@ import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
 export default function ProtectedRoute() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isDevAuthBypassEnabled = import.meta.env.DEV;
+  const isDevAuthBypassEnabled = import.meta.env.DEV && import.meta.env.VITE_AUTH_BYPASS === "true";
 
   if (isDevAuthBypassEnabled) {
     return <Outlet />;
