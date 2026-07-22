@@ -12,8 +12,9 @@ interface ReviewsDialogProps {
 export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
   const { isOpen, subjectFilter, closeDialog, setSubjectFilter } = useReviewsDialogStore();
 
-  const subjects = Array.from(new Set(reviews.map((review) => review.subject)));
-  const filteredReviews = subjectFilter ? reviews.filter((review) => review.subject === subjectFilter) : reviews;
+  const subjects = Array.from(new Set(reviews.map((review) => review.subject).filter(Boolean)));
+  const canFilterBySubject = subjects.length > 0;
+  const filteredReviews = canFilterBySubject && subjectFilter ? reviews.filter((review) => review.subject === subjectFilter) : reviews;
 
   return (
     <Dialog open={isOpen} onClose={closeDialog} maxWidth="sm" fullWidth scroll="paper">
@@ -29,9 +30,11 @@ export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
         </IconButton>
       </DialogTitle>
       <DialogContent dividers sx={{ maxHeight: 480 }}>
-        <Stack mb={2}>
-          <SubjectFilterBar subjects={subjects} selected={subjectFilter} onSelect={setSubjectFilter} />
-        </Stack>
+        {canFilterBySubject && (
+          <Stack mb={2}>
+            <SubjectFilterBar subjects={subjects} selected={subjectFilter} onSelect={setSubjectFilter} />
+          </Stack>
+        )}
 
         <Stack spacing={1.5}>
           {filteredReviews.length > 0 ? (
