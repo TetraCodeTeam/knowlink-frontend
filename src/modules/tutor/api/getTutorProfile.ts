@@ -7,6 +7,30 @@ const normalizeModality = (modality: string): TutorSubjectRate["modalities"][num
   return "Virtual";
 };
 
+const MATERIAL_FALLBACK_SUBJECT = "Material general";
+
+const inferFileType = (name: string, fileUrl: string): TutorMaterialItem["fileType"] => {
+  const normalizedSource = `${name}.${fileUrl}`.toUpperCase();
+
+  if (normalizedSource.includes(".XLSX") || normalizedSource.includes(".XLS")) {
+    return "XLSX";
+  }
+
+  if (normalizedSource.includes(".PNG") || normalizedSource.includes(".JPG") || normalizedSource.includes(".JPEG") || normalizedSource.includes(".WEBP")) {
+    return "PNG";
+  }
+
+  if (normalizedSource.includes(".DOCX") || normalizedSource.includes(".DOC")) {
+    return "DOCX";
+  }
+
+  if (normalizedSource.includes(".PPTX") || normalizedSource.includes(".PPT")) {
+    return "PPTX";
+  }
+
+  return "PDF";
+};
+
 function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
   const subjects = api.subjects ?? [];
   const reviewsApi = api.reviews ?? [];
@@ -35,9 +59,9 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
   const material: TutorMaterialItem[] = materialsApi.map((m, i) => ({
     id: `material-${i}`,
     title: m.name,
-    subject: "",
+    subject: MATERIAL_FALLBACK_SUBJECT,
     fileUrl: m.fileUrl,
-    fileType: "PDF",
+    fileType: inferFileType(m.name, m.fileUrl),
     fileSizeMB: 0,
   }));
 

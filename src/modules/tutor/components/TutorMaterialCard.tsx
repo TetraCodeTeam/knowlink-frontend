@@ -22,6 +22,14 @@ const formatFileSize = (sizeMB: number) => {
   return sizeMB % 1 === 0 ? `${sizeMB} MB` : `${sizeMB.toString().replace(".", ",")} MB`;
 };
 
+const formatMaterialMetadata = (item: TutorMaterialItem) => {
+  if (item.fileSizeMB > 0) {
+    return `${item.fileType} · ${formatFileSize(item.fileSizeMB)}`;
+  }
+
+  return item.fileType;
+};
+
 export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMaterialCardProps) => {
   const groupedMaterial = groupBySubject(material);
 
@@ -76,7 +84,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
                               {item.title}
                             </Typography>
                             <Typography variant="subtitle2" color="text.secondary">
-                              {item.fileType} · {formatFileSize(item.fileSizeMB)}
+                              {formatMaterialMetadata(item)}
                             </Typography>
                           </Box>
                         </Stack>
