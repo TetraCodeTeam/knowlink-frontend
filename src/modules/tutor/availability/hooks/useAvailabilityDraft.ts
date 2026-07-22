@@ -149,7 +149,7 @@ export function useAvailabilityDraft() {
     }
 
     const newBlock: DraftBlock = {
-      id: crypto.randomUUID(),
+      id: typeof crypto?.randomUUID === "function" ? crypto.randomUUID() : String(Date.now()),
       date: toDateStr(start),
       startTime: start.toTimeString().slice(0, 8),
       endTime: end.toTimeString().slice(0, 8),
