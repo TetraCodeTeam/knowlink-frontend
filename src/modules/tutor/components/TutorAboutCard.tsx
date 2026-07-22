@@ -11,7 +11,7 @@ export const TutorAboutCard = ({ about }: TutorAboutCardProps) => {
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
           <User size={18} color="#5865C8"/>
-          <Typography variant="h6" fontWeight={600}>
+          <Typography variant="h5" fontWeight={600}>
             Sobre Mí
           </Typography>
         </Stack>

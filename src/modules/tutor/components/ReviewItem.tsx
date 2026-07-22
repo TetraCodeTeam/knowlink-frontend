@@ -7,6 +7,8 @@ interface ReviewItemProps {
 }
 
 export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
+  const hasSubject = Boolean(review.subject?.trim());
+
   return (
     <Box
       sx={{
@@ -20,22 +22,22 @@ export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
       <Avatar src={review.studentAvatarUrl ?? undefined} alt={review.studentName} sx={{ width: 36, height: 36 }} />
       <Box sx={{ flex: 1 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="subtitle1" fontWeight={600}>
+          <Typography variant="h6" fontWeight={600}>
             {review.studentName}
           </Typography>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <Rating value={review.rating} readOnly size="small" />
-            <Typography variant="body2" fontWeight={600} color="text.secondary">
+            <Typography variant="subtitle1" fontWeight={600} color="text.secondary">
               {review.rating.toFixed(1)}
             </Typography>
           </Stack>
         </Stack>
-        {showSubject && (
-          <Typography variant="caption" color="primary" display="block" mb={0.5}>
+        {showSubject && hasSubject && (
+          <Typography variant="subtitle1" color="primary" display="block" mb={0.5}>
             {review.subject}
           </Typography>
         )}
-        <Typography variant="body2">"{review.comment}"</Typography>
+        <Typography variant="subtitle1">"{review.comment}"</Typography>
       </Box>
     </Box>
   );

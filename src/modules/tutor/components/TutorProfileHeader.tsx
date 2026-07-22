@@ -1,7 +1,8 @@
-import { Avatar, Box, Button, Chip, Rating, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Chip, Rating, Stack, Typography } from "@mui/material";
 import type { TutorProfile } from "@/modules/tutor/interfaces/tutor.interface";
 import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/tutor/utils/tutor-tag-mapping";
 import { CalendarCheck } from "lucide-react";
+import AppButton from "@/shared/components/AppButton";
 
 interface TutorProfileHeaderProps {
   tutor: TutorProfile;
@@ -70,24 +71,21 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         </Stack>
       </Box>
 
-      <Button
-        variant="contained"
+      <AppButton
+        appVariant="primary"
         onClick={onReservar}
         startIcon={<CalendarCheck size={18} />}
         sx={{
           width: "60%",
           mx: "auto",
           mt: 2,
-          bgcolor: "#5865C8",
-          "&:hover": { bgcolor: "#4752C4" },
           fontSize: "16px",
           fontWeight: 600,
-          textTransform: "none",
           borderRadius: 2,
         }}
       >
         Reservar Sesión
-      </Button>
+      </AppButton>
     </Box>
   );
 };

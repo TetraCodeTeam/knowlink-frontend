@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { TutorProfileHeader } from "@/modules/tutor/components/TutorProfileHeader";
 import { TutorAboutCard } from "@/modules/tutor/components/TutorAboutCard";
 import { TutorSubjectsCard } from "@/modules/tutor/components/TutorSubjectsCard";
@@ -7,6 +8,7 @@ import { TutorAvailabilityCard } from "@/modules/tutor/components/TutorAvailabil
 import { TutorMaterialCard } from "@/modules/tutor/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/tutor/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/tutor/hooks/useTutorProfile";
+import { ReviewsDialog } from "@/modules/tutor/components/ReviewsDialog";
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
@@ -34,24 +36,25 @@ export const TutorProfilePage = () => {
   };
 
   return (
-    <Stack spacing={2} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 3 }, bgcolor: "#F4F3FB" }}>
+    <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 3 }, bgcolor: "#F4F3FB" }}>
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
 
       <Grid container spacing={2}>
-        <Grid item xs={12} md={8}>
-          <Stack spacing={2}>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Stack spacing={4}>
             <TutorAboutCard about={tutor.about} />
             <TutorSubjectsCard subjectRates={tutor.subjectRates} />
             <TutorReviewsCard reviews={tutor.reviews} />
           </Stack>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <Stack spacing={2}>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Stack spacing={4}>
             <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} />
             <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
           </Stack>
         </Grid>
       </Grid>
+      <ReviewsDialog reviews={tutor.reviews} />
     </Stack>
   );
 };
