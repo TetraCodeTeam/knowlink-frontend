@@ -160,7 +160,7 @@ export function useAvailabilityDraft() {
   }
 
   function removeDraftBlock(blockId: string) {
-    setDraftBlocks(blocks.filter((b) => b.id !== blockId));
+    setDraftBlocks((prev) => (prev ?? blocks).filter((b) => b.id !== blockId));
   }
 
   function saveAvailability() {
