@@ -1,6 +1,6 @@
 import { httpClient } from "@/shared/lib/httpClient";
-import { AvailabilityBlockRequest } from "../interfaces/requests/availability-block.interface";
-import { AvailabilityBlockResponse } from "../interfaces/responses/availability-block.interface";
+import type { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
+import type { AvailabilityBlockResponse } from "@/modules/tutor/availability/interfaces/responses/availability-block.interface";
 import type { WeekCustomizationResponse } from "@/modules/tutor/availability/interfaces/responses/week-customization.interface";
 
 export async function getAvailabilityBlocksInRange(from: string, to: string): Promise<AvailabilityBlockResponse[]> {
