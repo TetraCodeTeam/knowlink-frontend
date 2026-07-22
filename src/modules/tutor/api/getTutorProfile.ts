@@ -2,48 +2,57 @@ import type { TutorProfile, TutorSubjectRate, TutorReview, TutorMaterialItem } f
 import type { TutorProfileApiResponse } from "@/modules/tutor/interfaces/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
+const normalizeModality = (modality: string): TutorSubjectRate["modalities"][number] => {
+  if (modality === "IN_PERSON") return "Presencial";
+  return "Virtual";
+};
+
 function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
-  const subjectRates: TutorSubjectRate[] = api.materias.map((m, i) => ({
-    id: `${m.materia}-${i}`,
-    name: m.materia,
-    rating: api.calificacionPromedio ?? 0,
-    reviewsCount: api.calificaciones.length,
-    price: m.precio ?? 0,
-    isFree: m.tipoCompensacion === "GRATUITA" || !m.precio,
-    modalities: [m.modalidad] as TutorSubjectRate["modalities"],
-    isVerified: api.verificado,
+  const subjects = api.subjects ?? [];
+  const reviewsApi = api.reviews ?? [];
+  const materialsApi = api.materials ?? [];
+
+  const subjectRates: TutorSubjectRate[] = subjects.map((m, i) => ({
+    id: m.tutorSubjectId ?? `${m.subjectName}-${i}`,
+    name: m.subjectName,
+    rating: m.averageRating ?? api.averageRating ?? 0,
+    reviewsCount: m.reviewCount ?? reviewsApi.length,
+    price: m.pricePerHour ?? 0,
+    isFree: m.compensationType === "FREE" || !m.pricePerHour,
+    modalities: [normalizeModality(m.modality)] as TutorSubjectRate["modalities"],
+    isVerified: api.verified,
   }));
 
-  const reviews: TutorReview[] = api.calificaciones.map((r, i) => ({
+  const reviews: TutorReview[] = reviewsApi.map((r, i) => ({
     id: `review-${i}`,
     studentName: "Alumno",
     studentAvatarUrl: null,
     subject: "",
-    rating: r.puntuacion,
-    comment: r.comentario ?? "",
+    rating: r.score,
+    comment: r.comment ?? "",
   }));
 
-  const material: TutorMaterialItem[] = api.materiales.map((m, i) => ({
+  const material: TutorMaterialItem[] = materialsApi.map((m, i) => ({
     id: `material-${i}`,
-    title: m.nome,
+    title: m.name,
     subject: "",
-    fileUrl: m.urlArchivo,
+    fileUrl: m.fileUrl,
     fileType: "PDF",
     fileSizeMB: 0,
   }));
 
   return {
     id: api.id,
-    name: api.nombreCompleto,
-    avatarUrl: api.fotoPerfil ?? null,
-    rating: api.calificacionPromedio ?? 0,
-    reviewsCount: api.calificaciones.length,
-    subjects: api.materias.map((m) => m.materia),
-    about: api.biografia ?? "",
+    name: api.fullName,
+    avatarUrl: api.profilePictureUrl ?? null,
+    rating: api.averageRating ?? 0,
+    reviewsCount: reviewsApi.length,
+    subjects: subjects.map((m) => m.subjectName),
+    about: api.biography ?? "",
     subjectRates,
     reviews,
     material,
-    hasConfirmedBooking: api.materiales.length > 0,
+    hasConfirmedBooking: materialsApi.length > 0,
   };
 }
 
