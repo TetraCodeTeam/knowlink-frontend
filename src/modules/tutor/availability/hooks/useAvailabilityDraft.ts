@@ -155,7 +155,7 @@ export function useAvailabilityDraft() {
       endTime: end.toTimeString().slice(0, 8),
     };
 
-    setDraftBlocks([...blocks, newBlock]);
+    setDraftBlocks((prev) => [...(prev ?? blocks), newBlock]);
     return true;
   }
 
