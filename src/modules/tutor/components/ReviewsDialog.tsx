@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } fro
 import { MessageSquare, X } from "lucide-react";
 import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
-import { useReviewsDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
+import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 import { SubjectFilterBar } from "@/modules/tutor/components/subjectFilter";
 
 interface ReviewsDialogProps {
@@ -10,7 +10,7 @@ interface ReviewsDialogProps {
 }
 
 export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
-  const { isOpen, subjectFilter, closeDialog, setSubjectFilter } = useReviewsDialogStore();
+  const { isOpen, subjectFilter, closeDialog, setSubjectFilter } = useReviewDialogStore();
 
   const subjects = Array.from(new Set(reviews.map((review) => review.subject).filter(Boolean)));
   const canFilterBySubject = subjects.length > 0;

@@ -8,7 +8,7 @@ import {
   TUTOR_STATUS_DISPLAY_NAME,
   PRICE_TAG,
 } from "@/modules/tutor/utils/tutor-tag-mapping";
-import { useReviewsDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
+import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 
 interface SubjectRateItemProps {
   subject: TutorSubjectRate;
@@ -22,7 +22,7 @@ const formatPrice = (price: number, isFree: boolean) => {
 };
 
 export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
-  const openDialog = useReviewsDialogStore((state) => state.openDialog);
+  const openDialog = useReviewDialogStore((state) => state.openDialog);
   const verifiedLabel = TUTOR_STATUS_DISPLAY_NAME.VERIFIED;
   const priceTag = subject.isFree ? PRICE_TAG.FREE : PRICE_TAG.PAID;
 

@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material
 import { MessageSquare } from "lucide-react";
 import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
-import { useReviewsDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
+import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 
 interface TutorReviewsCardProps {
   reviews: TutorReview[];
@@ -12,7 +12,7 @@ const PREVIEW_LIMIT = 3;
 const VER_TODAS_THRESHOLD = 5;
 
 export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
-  const openDialog = useReviewsDialogStore((state) => state.openDialog);
+  const openDialog = useReviewDialogStore((state) => state.openDialog);
   const previewReviews = reviews.slice(0, PREVIEW_LIMIT);
   const showVerTodas = reviews.length >= VER_TODAS_THRESHOLD;
   const hasReviews = reviews.length > 0;

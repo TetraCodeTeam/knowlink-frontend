@@ -8,7 +8,7 @@ interface ReviewsDialogState {
   setSubjectFilter: (subject: string | null) => void;
 }
 
-export const useReviewsDialogStore = create<ReviewsDialogState>((set) => ({
+export const useReviewDialogStore = create<ReviewsDialogState>((set) => ({
   isOpen: false,
   subjectFilter: null,
   openDialog: (subject) => set({ isOpen: true, subjectFilter: subject ?? null }),
