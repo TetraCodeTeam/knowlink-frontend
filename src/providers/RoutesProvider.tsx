@@ -5,8 +5,8 @@ import StudentRoutes from "@/routes/StudentRoutes";
 import TutorRoutes from "@/routes/TutorRoutes";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
-const isDevAuthBypassEnabled = import.meta.env.DEV;
-
+const isDevAuthBypassEnabled =
+  import.meta.env.DEV && import.meta.env.VITE_AUTH_BYPASS === "true";
 function RoleRedirect() {
   const authResponse = useAuthStore((s) => s.authResponse);
   if (authResponse?.role === "TUTOR") return <Navigate to="/tutor/home" replace />;
