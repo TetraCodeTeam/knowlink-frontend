@@ -25,7 +25,7 @@ export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
             Reseñas
           </Typography>
         </Stack>
-        <IconButton onClick={closeDialog} size="small">
+        <IconButton onClick={closeDialog} size="small" aria-label="Cerrar reseñas">
           <X size={20} />
         </IconButton>
       </DialogTitle>

@@ -88,7 +88,12 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
                             </Typography>
                           </Box>
                         </Stack>
-                        <IconButton component={Link} href={item.fileUrl} size="small">
+                        <IconButton
+                          component={Link}
+                          href={item.fileUrl}
+                          size="small"
+                          aria-label={`Descargar ${item.title}`}
+                        >
                           <Download size={18} color="#5865C8" />
                         </IconButton>
                       </Box>
