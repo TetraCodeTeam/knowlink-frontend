@@ -3,7 +3,7 @@ import { MessageSquare, X } from "lucide-react";
 import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
 import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
-import { SubjectFilterBar } from "@/modules/tutor/components/subjectFilter";
+import { SubjectFilterBar } from "@/modules/tutor/components/SubjectFilterBar";
 
 interface ReviewsDialogProps {
   reviews: TutorReview[];
