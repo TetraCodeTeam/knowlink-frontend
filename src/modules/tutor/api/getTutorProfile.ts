@@ -7,6 +7,11 @@ const normalizeModality = (modality: string): TutorSubjectRate["modalities"][num
   return "Virtual";
 };
 
+const isSubjectVerified = (verificationStatus: string | null | undefined, profileVerified: boolean) => {
+  if (!verificationStatus) return profileVerified;
+  return verificationStatus === "ACTIVE";
+};
+
 const MATERIAL_FALLBACK_SUBJECT = "Material general";
 
 const inferFileType = (name: string, fileUrl: string): TutorMaterialItem["fileType"] => {
@@ -36,22 +41,30 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
   const reviewsApi = api.reviews ?? [];
   const materialsApi = api.materials ?? [];
 
+  const reviewsBySubject = reviewsApi.reduce<Record<string, number>>((acc, review) => {
+    const key = review.subjectName?.trim();
+    if (!key) return acc;
+
+    acc[key] = (acc[key] ?? 0) + 1;
+    return acc;
+  }, {});
+
   const subjectRates: TutorSubjectRate[] = subjects.map((m, i) => ({
     id: m.tutorSubjectId ?? `${m.subjectName}-${i}`,
     name: m.subjectName,
     rating: m.averageRating ?? api.averageRating ?? 0,
-    reviewsCount: m.reviewCount ?? reviewsApi.length,
+    reviewsCount: m.reviewCount ?? reviewsBySubject[m.subjectName] ?? reviewsApi.length,
     price: m.pricePerHour ?? 0,
     isFree: m.compensationType === "FREE" || !m.pricePerHour,
     modalities: [normalizeModality(m.modality)] as TutorSubjectRate["modalities"],
-    isVerified: api.verified,
+    isVerified: isSubjectVerified(m.verificationStatus, api.verified),
   }));
 
   const reviews: TutorReview[] = reviewsApi.map((r, i) => ({
     id: `review-${i}`,
     studentName: "Alumno",
     studentAvatarUrl: null,
-    subject: "",
+    subject: r.subjectName ?? "",
     rating: r.score,
     comment: r.comment ?? "",
   }));

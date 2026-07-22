@@ -13,6 +13,8 @@ export interface TutorReviewApiResponse {
   score: number;
   comment: string | null;
   ratingDate: string; // ISO string from LocalDateTime
+  subjectName?: string | null;
+  subjectId?: string | null;
 }
 
 export interface TutorAvailabilityApiResponse {
