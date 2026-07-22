@@ -44,10 +44,19 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
         <Stack direction="row" spacing={1} alignItems="center" mt={0.5}>
           <Rating value={subject.rating} precision={0.1} readOnly size="small" />
           <Typography
+            component="button"
+            type="button"
             variant="subtitle1"
             color="primary"
             onClick={() => openDialog(subject.name)}
-            sx={{ cursor: "pointer", textDecoration: "underline" }}
+            sx={{
+              cursor: "pointer",
+              textDecoration: "underline",
+              background: "none",
+              border: 0,
+              padding: 0,
+              font: "inherit",
+            }}
           >
             ({subject.reviewsCount} Reseñas)
           </Typography>
