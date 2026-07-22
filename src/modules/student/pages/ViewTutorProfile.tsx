@@ -54,7 +54,7 @@ export const TutorProfilePage = () => {
           </Stack>
         </Grid>
       </Grid>
-       <ReviewsDialog reviews={tutor.reviews} />
+      <ReviewsDialog reviews={tutor.reviews} />
     </Stack>
   );
 };
