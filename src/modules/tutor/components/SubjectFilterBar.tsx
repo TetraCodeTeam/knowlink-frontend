@@ -34,7 +34,11 @@ export const SubjectFilterBar = ({ subjects, selected, onSelect }: SubjectFilter
   return (
     <Stack direction="row" alignItems="center" spacing={0.5}>
       {canScrollLeft && (
-        <IconButton size="small" onClick={() => handleScrollBy(-SCROLL_AMOUNT)}>
+        <IconButton
+          size="small"
+          aria-label="Desplazar filtros a la izquierda"
+          onClick={() => handleScrollBy(-SCROLL_AMOUNT)}
+        >
           <ChevronLeft size={18} />
         </IconButton>
       )}
