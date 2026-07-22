@@ -9,7 +9,7 @@ interface TutorReviewsCardProps {
 }
 
 const PREVIEW_LIMIT = 3;
-const VER_TODAS_THRESHOLD = 5;
+const VER_TODAS_THRESHOLD = 4;
 
 export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
   const openDialog = useReviewDialogStore((state) => state.openDialog);
