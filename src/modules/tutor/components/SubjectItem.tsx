@@ -38,7 +38,7 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
       }}
     >
       <Box>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography variant="h5" fontWeight={520}>
           {subject.name}
         </Typography>
         <Stack direction="row" spacing={1} alignItems="center" mt={0.5}>
