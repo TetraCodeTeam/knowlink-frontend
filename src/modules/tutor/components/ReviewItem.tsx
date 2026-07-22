@@ -7,6 +7,8 @@ interface ReviewItemProps {
 }
 
 export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
+  const hasSubject = Boolean(review.subject?.trim());
+
   return (
     <Box
       sx={{
@@ -30,7 +32,7 @@ export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
             </Typography>
           </Stack>
         </Stack>
-        {showSubject && (
+        {showSubject && hasSubject && (
           <Typography variant="subtitle1" color="primary" display="block" mb={0.5}>
             {review.subject}
           </Typography>
