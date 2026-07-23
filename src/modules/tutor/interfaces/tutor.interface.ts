@@ -20,11 +20,15 @@ export interface TutorReview {
   comment: string;
 }
 
+export type FileType = "PDF" | "XLSX" | "PNG" | "DOCX" | "PPTX";
+
 export interface TutorMaterialItem {
   id: string;
   title: string;
   subject: string;
   fileUrl: string;
+  fileType: FileType;
+  fileSizeMB: number;
 }
 
 export interface TutorProfile {

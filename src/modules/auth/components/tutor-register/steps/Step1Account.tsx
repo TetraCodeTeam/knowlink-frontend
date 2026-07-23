@@ -17,6 +17,7 @@ import { Camera } from "lucide-react";
 import { step1Schema, type Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import AppButton from "@/shared/components/AppButton";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { checkAvailability } from "@/modules/auth/api/auth.api";
 
 const inputSx = {
   "& .MuiOutlinedInput-root": { borderRadius: 2 },
@@ -41,6 +42,7 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     setValue,
     control,
     formState: { errors },
+    setError,
   } = useForm<Step1Data>({
     resolver: zodResolver(step1Schema),
     defaultValues,
@@ -59,10 +61,24 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     setValue("profilePictureUrl", url);
   };
 
+  const handleAccountSubmit = async (data: Step1Data) => {
+    try {
+      await checkAvailability({ dni: data.dni });
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "No se pudo verificar la disponibilidad del DNI. Intentá nuevamente.";
+      setError("dni", { type: "manual", message });
+      return;
+    }
+
+    onNext(data);
+  };
+
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(onNext)}
+      onSubmit={handleSubmit(handleAccountSubmit)}
       noValidate
       sx={{ display: "flex", flexDirection: "column", gap: 2.5, width: "100%", maxWidth: 400 }}
     >

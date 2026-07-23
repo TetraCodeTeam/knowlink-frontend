@@ -1,4 +1,4 @@
-export type TeachingModality = "VIRTUAL" | "IN_PERSON";
+export type TeachingModality = "VIRTUAL" | "IN_PERSON" | "BOTH";
 
 export type CompensationType = "FREE" | "PAID";
 
