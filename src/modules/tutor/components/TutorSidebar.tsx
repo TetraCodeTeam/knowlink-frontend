@@ -103,16 +103,19 @@ export default function TutorSidebar() {
         </Typography>
       </Box>
 
-      <Box sx={{ flex: 1 }} />
-
       {/* Nav items */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "32px",
+          gap: "24px",
           width: "100%",
           px: "8px",
+          flex: 1,
+          overflowY: "auto",
+          py: "16px",
+          "&::-webkit-scrollbar": { display: "none" },
+          scrollbarWidth: "none",
         }}
       >
         {navItems.map(({ icon: Icon, label, path, badge }) => {
@@ -167,8 +170,6 @@ export default function TutorSidebar() {
           );
         })}
       </Box>
-
-      <Box sx={{ flex: 1 }} />
 
       {/* Profile */}
       <Box sx={{ width: "100%", px: "8px", mb: "8px" }}>
