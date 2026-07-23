@@ -1,13 +1,22 @@
-import type { TutorProfile, TutorSubjectRate, TutorReview, TutorMaterialItem } from "@/modules/tutor/interfaces/tutor.interface";
+import type {
+  TutorProfile,
+  TutorSubjectRate,
+  TutorReview,
+  TutorMaterialItem,
+} from "@/modules/tutor/interfaces/tutor.interface";
 import type { TutorProfileApiResponse } from "@/modules/tutor/interfaces/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
-const normalizeModality = (modality: string): TutorSubjectRate["modalities"][number] => {
-  if (modality === "IN_PERSON") return "Presencial";
-  return "Virtual";
+const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => {
+  if (modality === "BOTH") return ["Virtual", "Presencial"];
+  if (modality === "IN_PERSON") return ["Presencial"];
+  return ["Virtual"];
 };
 
-const isSubjectVerified = (verificationStatus: string | null | undefined, profileVerified: boolean) => {
+const isSubjectVerified = (
+  verificationStatus: string | null | undefined,
+  profileVerified: boolean
+) => {
   if (!verificationStatus) return profileVerified;
   return verificationStatus === "ACTIVE";
 };
@@ -21,7 +30,12 @@ const inferFileType = (name: string, fileUrl: string): TutorMaterialItem["fileTy
     return "XLSX";
   }
 
-  if (normalizedSource.includes(".PNG") || normalizedSource.includes(".JPG") || normalizedSource.includes(".JPEG") || normalizedSource.includes(".WEBP")) {
+  if (
+    normalizedSource.includes(".PNG") ||
+    normalizedSource.includes(".JPG") ||
+    normalizedSource.includes(".JPEG") ||
+    normalizedSource.includes(".WEBP")
+  ) {
     return "PNG";
   }
 
@@ -56,7 +70,7 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     reviewsCount: m.reviewCount ?? reviewsBySubject[m.subjectName] ?? reviewsApi.length,
     price: m.pricePerHour ?? 0,
     isFree: m.compensationType === "FREE" || !m.pricePerHour,
-    modalities: [normalizeModality(m.modality)] as TutorSubjectRate["modalities"],
+    modalities: normalizeModality(m.modality),
     isVerified: isSubjectVerified(m.verificationStatus, api.verified),
   }));
 
@@ -94,6 +108,8 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
 }
 
 export const getTutorProfile = async (tutorId: string): Promise<TutorProfile> => {
-  const { data } = await httpClient.get<TutorProfileApiResponse>(`/api/v1/tutors/${tutorId}/profile`);
+  const { data } = await httpClient.get<TutorProfileApiResponse>(
+    `/api/v1/tutors/${tutorId}/profile`
+  );
   return mapTutorProfile(data);
 };
