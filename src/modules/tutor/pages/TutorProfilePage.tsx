@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Avatar,
   Box,
@@ -58,7 +58,7 @@ function ModalityChip({ modality }: { modality: TutorModality }) {
 }
 
 interface DataItemProps {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string | null | undefined;
 }
@@ -145,7 +145,11 @@ function SubjectCard({ subject }: { subject: TutorOwnSubject }) {
       >
         <ModalityChip modality={subject.modality} />
         <Typography sx={{ fontSize: "22px", fontWeight: 700, color: "#5B6ED9" }}>
-          {isFree ? "Gratis" : `$${Number(subject.pricePerHour).toLocaleString("es-AR")}`}
+          {isFree
+            ? "Gratis"
+            : subject.pricePerHour != null
+            ? `$${Number(subject.pricePerHour).toLocaleString("es-AR")}`
+            : "A consultar"}
         </Typography>
       </Box>
     </Box>
@@ -174,15 +178,13 @@ function PaymentSection({ linked }: { linked: boolean }) {
         />
         <Box>
           <Typography sx={{ fontSize: "17px", fontWeight: 600, color: "#1A6B3A" }}>
-            Mercado pago vinculado
+            Mercado Pago vinculado
           </Typography>
           <Typography
             component="span"
             sx={{
               fontSize: "14px",
               color: LINKED_BORDER,
-              textDecoration: "underline",
-              cursor: "pointer",
             }}
           >
             Desvincular
@@ -216,7 +218,7 @@ function PaymentSection({ linked }: { linked: boolean }) {
         </Typography>
       </Box>
       <Typography sx={{ fontSize: "15px", color: "#888", mt: "8px", lineHeight: 1.5 }}>
-        Para comenzar a percibir pagos por tus tutorias, por favor finaliza la vinculación de tu
+        Para comenzar a percibir pagos por tus tutorías, por favor finaliza la vinculación de tu
         cuenta en la sección de perfil.
       </Typography>
     </Box>
@@ -329,7 +331,7 @@ export default function TutorProfilePage() {
         <Tabs
           value={activeTab}
           onChange={(_, newVal: number) => setActiveTab(newVal)}
-          TabIndicatorProps={{ style: { backgroundColor: "#4C5CB5" } }}
+          TabIndicatorProps={{ sx: { backgroundColor: "#4C5CB5" } }}
           sx={{
             px: "12px",
             "& .MuiTab-root": {
@@ -474,9 +476,6 @@ export default function TutorProfilePage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              cursor: "pointer",
-              transition: "background-color 0.15s ease",
-              "&:hover": { backgroundColor: "#EEECF9" },
             }}
           >
             <Typography sx={{ fontSize: "20px", color: "#5B6ED9", fontWeight: 600 }}>
