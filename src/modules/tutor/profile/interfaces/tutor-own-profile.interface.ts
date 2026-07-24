@@ -1,4 +1,4 @@
-export type TutorModality = "VIRTUAL" | "IN_PERSON";
+export type TutorModality = "VIRTUAL" | "IN_PERSON" | "BOTH";
 
 export interface TutorOwnSubject {
   tutorSubjectId: string;

@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import TutorLayout from "@/modules/tutor/layouts/TutorLayout";
 import TutorHomePage from "@/modules/tutor/pages/TutorHomePage";
-import TutorProfilePage from "@/modules/tutor/pages/TutorProfilePage";
+import TutorProfilePage from "@/modules/tutor/profile/components/TutorProfilePage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import AvailabilityPage from "@/modules/tutor/pages/AvailabilityPage";
 

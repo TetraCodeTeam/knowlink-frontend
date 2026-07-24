@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import {
   Avatar,
   Box,
@@ -9,221 +9,18 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { Mail, Map, Monitor, Building2, Phone } from "lucide-react";
-import { useMyTutorProfile } from "@/modules/tutor/hooks/useMyTutorProfile";
-import type {
-  TutorModality,
-  TutorOwnSubject,
-} from "@/modules/tutor/interfaces/tutor-own-profile.interface";
+import { Mail, Map, Phone } from "lucide-react";
+import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
+import { getInitials, getUniqueModalities } from "@/modules/tutor/profile/utils/profile.utils";
+import { SECTION_LABEL_SX } from "@/modules/tutor/profile/styles/profileStyles";
+import { STAR_COLOR, BIO_BG, BIO_BORDER, BIO_TEXT } from "@/modules/tutor/profile/constants/profileColors.constants";
+import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
+import DataItem from "@/modules/tutor/profile/components/DataItem";
+import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";
+import PaymentSection from "@/modules/tutor/profile/components/PaymentSection";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
-
-const STAR_COLOR = "#E4CF8C";
-const VIRTUAL_BG = "#A3AFF0";
-const PRESENTIAL_BG = "#CEC0F0";
-const PAYMENT_BG = "#EED6D0";
-const LINKED_BORDER = "#229D59";
-const UNLINKED_BORDER = "#9D3422";
-const BIO_BG = "#F4F3FB";
-const BIO_BORDER = "#676E99";
-const BIO_TEXT = "#5B6ED9";
-const SECTION_LABEL_SX = {
-  fontSize: "19px",
-  fontWeight: 700,
-  color: "#333",
-  letterSpacing: "0.5px",
-  mb: "20px",
-  textTransform: "uppercase" as const,
-};
-
-function ModalityChip({ modality }: { modality: TutorModality }) {
-  const isVirtual = modality === "VIRTUAL";
-  return (
-    <Box
-      sx={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "8px",
-        px: "18px",
-        py: "10px",
-        borderRadius: "20px",
-        backgroundColor: isVirtual ? VIRTUAL_BG : PRESENTIAL_BG,
-      }}
-    >
-      {isVirtual ? <Monitor size={22} /> : <Building2 size={22} />}
-      <Typography sx={{ fontSize: "17px", fontWeight: 500, color: "#333" }}>
-        {isVirtual ? "Virtual" : "Presencial"}
-      </Typography>
-    </Box>
-  );
-}
-
-interface DataItemProps {
-  icon: ReactNode;
-  label: string;
-  value: string | null | undefined;
-}
-
-function DataItem({ icon, label, value }: DataItemProps) {
-  if (!value) return null;
-  return (
-    <Box sx={{ display: "flex", alignItems: "flex-start", gap: "18px", mb: "40px" }}>
-      <Box sx={{ color: "#555", mt: "2px", flexShrink: 0 }}>{icon}</Box>
-      <Box>
-        <Typography sx={{ fontSize: "17px", color: "#222", fontWeight: 600, mb: "4px" }}>
-          {label}
-        </Typography>
-        <Typography sx={{ fontSize: "19px", color: "#777", fontWeight: 400 }}>{value}</Typography>
-      </Box>
-    </Box>
-  );
-}
-
-function SubjectCard({ subject }: { subject: TutorOwnSubject }) {
-  const hasReviews =
-    subject.averageRating !== null && subject.reviewCount !== null && subject.reviewCount > 0;
-  const isFree = subject.compensationType === "FREE";
-
-  return (
-    <Box
-      sx={{
-        backgroundColor: "#fff",
-        borderRadius: "16px",
-        p: "24px 26px",
-        boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
-      }}
-    >
-      <Typography
-        sx={{ fontSize: "24px", fontWeight: 700, color: "#1a1a2e", mb: "14px", lineHeight: 1.3 }}
-      >
-        {subject.subjectName}
-      </Typography>
-
-      {hasReviews ? (
-        <Box sx={{ display: "flex", alignItems: "center", gap: "10px", mb: "16px" }}>
-          <Rating
-            value={subject.averageRating}
-            precision={0.5}
-            readOnly
-            size="medium"
-            sx={{
-              "& .MuiRating-iconFilled": { color: STAR_COLOR },
-              "& .MuiRating-iconEmpty": { color: STAR_COLOR, opacity: 0.35 },
-            }}
-          />
-          <Divider
-            orientation="vertical"
-            flexItem
-            sx={{ borderColor: "#2435A1", opacity: 0.5, my: "3px" }}
-          />
-          <Typography sx={{ fontSize: "17px", color: "#2435A1", fontWeight: 500 }}>
-            {subject.averageRating!.toFixed(1)} · {subject.reviewCount} Reseñas
-          </Typography>
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            display: "inline-flex",
-            px: "14px",
-            py: "6px",
-            borderRadius: "20px",
-            backgroundColor: "#F0F0F6",
-            mb: "16px",
-          }}
-        >
-          <Typography sx={{ fontSize: "17px", color: "#767684" }}>Aún no hay reseñas</Typography>
-        </Box>
-      )}
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "8px",
-        }}
-      >
-        <ModalityChip modality={subject.modality} />
-        <Typography sx={{ fontSize: "22px", fontWeight: 700, color: "#5B6ED9" }}>
-          {isFree
-            ? "Gratis"
-            : subject.pricePerHour != null
-            ? `$${Number(subject.pricePerHour).toLocaleString("es-AR")}`
-            : "A consultar"}
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
-
-function PaymentSection({ linked }: { linked: boolean }) {
-  if (linked) {
-    return (
-      <Box
-        sx={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "16px",
-          p: "14px 22px",
-          borderRadius: "10px",
-          backgroundColor: PAYMENT_BG,
-          border: `1.5px solid ${LINKED_BORDER}`,
-        }}
-      >
-        <Box
-          component="img"
-          src="/MercadoPago.png"
-          alt="MercadoPago"
-          sx={{ width: 52, height: 52, objectFit: "contain", flexShrink: 0 }}
-        />
-        <Box>
-          <Typography sx={{ fontSize: "17px", fontWeight: 600, color: "#1A6B3A" }}>
-            Mercado Pago vinculado
-          </Typography>
-          <Typography
-            component="span"
-            sx={{
-              fontSize: "14px",
-              color: LINKED_BORDER,
-            }}
-          >
-            Desvincular
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-
-  return (
-    <Box>
-      <Box
-        sx={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "16px",
-          p: "14px 22px",
-          borderRadius: "10px",
-          backgroundColor: PAYMENT_BG,
-          border: `1.5px solid ${UNLINKED_BORDER}`,
-        }}
-      >
-        <Box
-          component="img"
-          src="/MercadoPago.png"
-          alt="MercadoPago"
-          sx={{ width: 52, height: 52, objectFit: "contain", flexShrink: 0 }}
-        />
-        <Typography sx={{ fontSize: "17px", fontWeight: 600, color: "#9D3422" }}>
-          Vincular Mercado Pago
-        </Typography>
-      </Box>
-      <Typography sx={{ fontSize: "15px", color: "#888", mt: "8px", lineHeight: 1.5 }}>
-        Para comenzar a percibir pagos por tus tutorías, por favor finaliza la vinculación de tu
-        cuenta en la sección de perfil.
-      </Typography>
-    </Box>
-  );
-}
+import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
+import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
 
 export default function TutorProfilePage() {
   const [activeTab, setActiveTab] = useState(0);
@@ -250,15 +47,8 @@ export default function TutorProfilePage() {
   }
 
   const subjects = profile.subjects ?? [];
-  const allModalities = [...new Set(subjects.map((s) => s.modality))] as TutorModality[];
-
-  const initials = (profile.fullName ?? "")
-    .split(" ")
-    .filter(Boolean)
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+  const allModalities = getUniqueModalities(subjects);
+  const initials = getInitials(profile.fullName ?? "");
 
   return (
     <Box sx={{ p: "28px 32px", minHeight: "100vh" }}>
@@ -331,17 +121,16 @@ export default function TutorProfilePage() {
         <Tabs
           value={activeTab}
           onChange={(_, newVal: number) => setActiveTab(newVal)}
+          variant="fullWidth"
           TabIndicatorProps={{ sx: { backgroundColor: "#4C5CB5" } }}
           sx={{
-            px: "12px",
             "& .MuiTab-root": {
               textTransform: "none",
               fontSize: "19px",
               fontWeight: 500,
               color: "#888",
               minHeight: "60px",
-              minWidth: 160,
-              px: "24px",
+              letterSpacing: "0.4px",
             },
             "& .MuiTab-root.Mui-selected": {
               color: "#4C5CB5",
@@ -468,6 +257,8 @@ export default function TutorProfilePage() {
           </Box>
 
           <Box
+            role="button"
+            tabIndex={0}
             sx={{
               border: "1.5px dashed #676E99",
               borderRadius: "16px",
@@ -476,6 +267,9 @@ export default function TutorProfilePage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              cursor: "pointer",
+              transition: "background-color 0.15s ease",
+              "&:hover": { backgroundColor: "#ECEAF8" },
             }}
           >
             <Typography sx={{ fontSize: "20px", color: "#5B6ED9", fontWeight: 600 }}>
@@ -486,7 +280,21 @@ export default function TutorProfilePage() {
       )}
 
       {/* ── Tab: Availability ────────────────────────────────────── */}
-      {activeTab === 2 && <Box />}
+      {activeTab === 2 && (
+        <Box
+          sx={{
+            backgroundColor: "#fff",
+            borderRadius: "16px",
+            boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
+            p: "28px 32px",
+          }}
+        >
+          <AvailabilityEditor />
+          <Box sx={{ mt: 3 }}>
+            <MinNoticeHoursPanel />
+          </Box>
+        </Box>
+      )}
 
       {/* ── Tab: Resources ───────────────────────────────────────── */}
       {activeTab === 3 && (
