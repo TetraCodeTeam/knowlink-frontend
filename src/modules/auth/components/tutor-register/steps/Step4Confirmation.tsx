@@ -161,16 +161,6 @@ export default function Step4Confirmation({
                 </Typography>
               </Box>
             )}
-          {step2.subjects.some((s) => s.modality === "IN_PERSON") && step2.address && (
-            <Box mt={1.5}>
-              <Typography variant="body2" fontWeight={500}>
-                Dirección para clases presenciales
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {step2.address}
-              </Typography>
-            </Box>
-          )}
         </CardContent>
       </Card>
 
