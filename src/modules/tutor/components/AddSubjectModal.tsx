@@ -5,6 +5,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -22,8 +23,14 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useState } from "react";
-import { mockSubjects } from "../utils/mockSubjects";
+import { useEffect, useState } from "react";
+import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
+import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
+import { CompensationTypeRequest, ModalityRequest } from "../interfaces/TutorSubjectRequest";
+import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
+import { useMyTutorProfile } from "../hooks/Usemytutorprofile";
+
 
 interface Props {
   open: boolean;
@@ -31,21 +38,76 @@ interface Props {
   onSuccess: () => void;
 }
 
-export default function AddSubjectModal({
-  open,
-  onClose,
-  onSuccess,
-}: Props) {
+export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
   const [basic, setBasic] = useState(true);
   const [free, setFree] = useState(false);
-  const [subject, setSubject] = useState(mockSubjects[1]);
+  const [subject, setSubject] = useState("");
   const [price, setPrice] = useState("10000");
-  const [modality, setModality] = useState(["virtual"]);
+  const [modality, setModality] = useState<ModalityRequest>("VIRTUAL");
+
+  const { data: profile } = useMyTutorProfile();
+  const { data: careers } = useCareers();
+  const ownCareer = careers?.find((c) => c.name === profile?.career);
+
+  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
+  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(ownCareer?.careerId);
+
+  const subjectOptions = basic ? basicSubjects : careerSubjects;
+  const subjectsLoading = basic ? basicLoading : careerLoading;
+
+  const { mutate, isPending } = useCreateTutorSubject();
+
+  // Cuando cambia el listado disponible (toggle Básica, o llega la carrera propia),
+  // aseguramos que la materia seleccionada sea una opción válida.
+  useEffect(() => {
+    if (!subjectOptions?.length) {
+      setSubject("");
+      return;
+    }
+
+    if (!subjectOptions.some((s) => s.name === subject)) {
+      setSubject(subjectOptions[0].name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subjectOptions]);
+
+  const handleClose = () => {
+    if (isPending) return;
+    onClose();
+  };
+
+  const handleSubmit = () => {
+    if (!subject) return;
+
+    const compensationType: CompensationTypeRequest = free ? "FREE" : "PAID";
+    const parsedPrice = Number(price);
+    const pricePerHour = free
+      ? null
+      : Number.isFinite(parsedPrice) && parsedPrice > 0
+        ? parsedPrice
+        : null;
+
+    if (!free && pricePerHour == null) return;
+
+    mutate(
+      {
+        subjectName: subject,
+        modality,
+        compensationType,
+        pricePerHour,
+      },
+      {
+        onSuccess: () => {
+          onSuccess();
+        },
+      }
+    );
+  };
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       fullWidth
       maxWidth="xs"
       PaperProps={{
@@ -65,8 +127,7 @@ export default function AddSubjectModal({
         }}
       >
         Agregar materia
-
-        <IconButton onClick={onClose}>
+        <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
@@ -84,23 +145,19 @@ export default function AddSubjectModal({
 
             <Stack direction="row" spacing={2} alignItems="center">
               <FormControlLabel
-                control={
-                  <Switch
-                    checked={basic}
-                    onChange={(e) => setBasic(e.target.checked)}
-                  />
-                }
+                control={<Switch checked={basic} onChange={(e) => setBasic(e.target.checked)} />}
                 label="Básica"
               />
 
               <Select
                 fullWidth
                 value={subject}
+                disabled={subjectsLoading || !subjectOptions?.length}
                 onChange={(e) => setSubject(e.target.value)}
               >
-                {mockSubjects.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    {item}
+                {subjectOptions?.map((item) => (
+                  <MenuItem key={item.subjectId} value={item.name}>
+                    {item.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -116,18 +173,14 @@ export default function AddSubjectModal({
 
             <Stack direction="row" spacing={2} alignItems="center">
               <FormControlLabel
-                control={
-                  <Switch
-                    checked={free}
-                    onChange={(e) => setFree(e.target.checked)}
-                  />
-                }
+                control={<Switch checked={free} onChange={(e) => setFree(e.target.checked)} />}
                 label="Gratis"
               />
 
               <TextField
                 disabled={free}
                 value={price}
+                type="number"
                 onChange={(e) => setPrice(e.target.value)}
                 sx={{ width: 160 }}
               />
@@ -138,15 +191,16 @@ export default function AddSubjectModal({
 
           <Box>
             <Typography mb={1} fontWeight={500}>
-              Selecciona al menos una modalidad*
+              Selecciona una modalidad*
             </Typography>
 
             <ToggleButtonGroup
+              exclusive
               value={modality}
-              onChange={(_, value) => value.length && setModality(value)}
+              onChange={(_, value) => value && setModality(value)}
             >
               <ToggleButton
-                value="virtual"
+                value="VIRTUAL"
                 sx={{
                   borderRadius: 5,
                   textTransform: "none",
@@ -158,7 +212,7 @@ export default function AddSubjectModal({
               </ToggleButton>
 
               <ToggleButton
-                value="presencial"
+                value="IN_PERSON"
                 sx={{
                   borderRadius: 5,
                   textTransform: "none",
@@ -182,19 +236,13 @@ export default function AddSubjectModal({
               textAlign: "center",
             }}
           >
-            <Typography
-              color="primary"
-              fontWeight={600}
-              fontSize={18}
-              gutterBottom
-            >
+            <Typography color="primary" fontWeight={600} fontSize={18} gutterBottom>
               Requisito para el cobro de sesiones
             </Typography>
 
             <Typography color="text.secondary">
-              Para procesar la compensación de tus sesiones pagas,
-              asegurate de tener tu cuenta de Mercado Pago correctamente
-              vinculada en tu perfil.
+              Para procesar la compensación de tus sesiones pagas, asegurate de tener tu cuenta de
+              Mercado Pago correctamente vinculada en tu perfil.
             </Typography>
           </Box>
         </Stack>
@@ -203,7 +251,8 @@ export default function AddSubjectModal({
       <DialogActions sx={{ px: 3, pb: 3 }}>
         <Button
           variant="outlined"
-          onClick={onClose}
+          onClick={handleClose}
+          disabled={isPending}
           sx={{
             borderRadius: 2,
             px: 4,
@@ -214,14 +263,15 @@ export default function AddSubjectModal({
 
         <Button
           variant="contained"
-          onClick={onSuccess}
+          onClick={handleSubmit}
+          disabled={isPending || !subject}
           sx={{
             flex: 1,
             borderRadius: 2,
             ml: 2,
           }}
         >
-          Agregar materia
+          {isPending ? <CircularProgress size={22} color="inherit" /> : "Agregar materia"}
         </Button>
       </DialogActions>
     </Dialog>
