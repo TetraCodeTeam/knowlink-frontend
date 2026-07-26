@@ -30,7 +30,7 @@ import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
 import { CompensationTypeRequest, ModalityRequest } from "../interfaces/TutorSubjectRequest";
 import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
 import { useMyTutorProfile } from "../hooks/Usemytutorprofile";
-
+import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 
 interface Props {
   open: boolean;
@@ -51,6 +51,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
 
   const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
   const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(ownCareer?.careerId);
+  const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
 
   const subjectOptions = basic ? basicSubjects : careerSubjects;
   const subjectsLoading = basic ? basicLoading : careerLoading;
@@ -59,6 +60,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
 
   // Cuando cambia el listado disponible (toggle Básica, o llega la carrera propia),
   // aseguramos que la materia seleccionada sea una opción válida.
+
   useEffect(() => {
     if (!subjectOptions?.length) {
       setSubject("");
@@ -99,181 +101,190 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
       {
         onSuccess: () => {
           onSuccess();
+          openFeedbackDialog({
+            title: "Materia agregada",
+            description: "La materia se ha agregado correctamente a tu perfil.",
+            variant: "success",
+          });
+          handleClose();
         },
       }
     );
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      fullWidth
-      maxWidth="xs"
-      PaperProps={{
-        sx: {
-          borderRadius: 3,
-          p: 1,
-        },
-      }}
-    >
-      <DialogTitle
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          pb: 1,
-          fontSize: 24,
+    <>
+      {feedbackDialog}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="xs"
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            p: 1,
+          },
         }}
       >
-        Agregar materia
-        <IconButton onClick={handleClose}>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            pb: 1,
+            fontSize: 24,
+          }}
+        >
+          Agregar materia
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
-      <Divider />
+        <Divider />
 
-      <DialogContent sx={{ mt: 2 }}>
-        <Stack spacing={3}>
-          {/* Materia */}
+        <DialogContent sx={{ mt: 2 }}>
+          <Stack spacing={3}>
+            {/* Materia */}
 
-          <Box>
-            <Typography mb={1} fontWeight={500}>
-              Materia*
-            </Typography>
+            <Box>
+              <Typography mb={1} fontWeight={500}>
+                Materia*
+              </Typography>
 
-            <Stack direction="row" spacing={2} alignItems="center">
-              <FormControlLabel
-                control={<Switch checked={basic} onChange={(e) => setBasic(e.target.checked)} />}
-                label="Básica"
-              />
+              <Stack direction="row" spacing={2} alignItems="center">
+                <FormControlLabel
+                  control={<Switch checked={basic} onChange={(e) => setBasic(e.target.checked)} />}
+                  label="Básica"
+                />
 
-              <Select
-                fullWidth
-                value={subject}
-                disabled={subjectsLoading || !subjectOptions?.length}
-                onChange={(e) => setSubject(e.target.value)}
+                <Select
+                  fullWidth
+                  value={subject}
+                  disabled={subjectsLoading || !subjectOptions?.length}
+                  onChange={(e) => setSubject(e.target.value)}
+                >
+                  {subjectOptions?.map((item) => (
+                    <MenuItem key={item.subjectId} value={item.name}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Stack>
+            </Box>
+
+            {/* Precio */}
+
+            <Box>
+              <Typography mb={1} fontWeight={500}>
+                Precio por hora*
+              </Typography>
+
+              <Stack direction="row" spacing={2} alignItems="center">
+                <FormControlLabel
+                  control={<Switch checked={free} onChange={(e) => setFree(e.target.checked)} />}
+                  label="Gratis"
+                />
+
+                <TextField
+                  disabled={free}
+                  value={price}
+                  type="number"
+                  onChange={(e) => setPrice(e.target.value)}
+                  sx={{ width: 160 }}
+                />
+              </Stack>
+            </Box>
+
+            {/* Modalidad */}
+
+            <Box>
+              <Typography mb={1} fontWeight={500}>
+                Selecciona una modalidad*
+              </Typography>
+
+              <ToggleButtonGroup
+                exclusive
+                value={modality}
+                onChange={(_, value) => value && setModality(value)}
               >
-                {subjectOptions?.map((item) => (
-                  <MenuItem key={item.subjectId} value={item.name}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-          </Box>
+                <ToggleButton
+                  value="VIRTUAL"
+                  sx={{
+                    borderRadius: 5,
+                    textTransform: "none",
+                    px: 2,
+                  }}
+                >
+                  <ComputerIcon sx={{ mr: 1 }} fontSize="small" />
+                  Virtual
+                </ToggleButton>
 
-          {/* Precio */}
+                <ToggleButton
+                  value="IN_PERSON"
+                  sx={{
+                    borderRadius: 5,
+                    textTransform: "none",
+                    px: 2,
+                  }}
+                >
+                  <ApartmentIcon sx={{ mr: 1 }} fontSize="small" />
+                  Presencial
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
 
-          <Box>
-            <Typography mb={1} fontWeight={500}>
-              Precio por hora*
-            </Typography>
+            {/* Aviso */}
 
-            <Stack direction="row" spacing={2} alignItems="center">
-              <FormControlLabel
-                control={<Switch checked={free} onChange={(e) => setFree(e.target.checked)} />}
-                label="Gratis"
-              />
-
-              <TextField
-                disabled={free}
-                value={price}
-                type="number"
-                onChange={(e) => setPrice(e.target.value)}
-                sx={{ width: 160 }}
-              />
-            </Stack>
-          </Box>
-
-          {/* Modalidad */}
-
-          <Box>
-            <Typography mb={1} fontWeight={500}>
-              Selecciona una modalidad*
-            </Typography>
-
-            <ToggleButtonGroup
-              exclusive
-              value={modality}
-              onChange={(_, value) => value && setModality(value)}
+            <Box
+              sx={{
+                border: "2px dashed #D5D9FF",
+                borderRadius: 3,
+                bgcolor: "#F9FAFF",
+                p: 2.5,
+                textAlign: "center",
+              }}
             >
-              <ToggleButton
-                value="VIRTUAL"
-                sx={{
-                  borderRadius: 5,
-                  textTransform: "none",
-                  px: 2,
-                }}
-              >
-                <ComputerIcon sx={{ mr: 1 }} fontSize="small" />
-                Virtual
-              </ToggleButton>
+              <Typography color="primary" fontWeight={600} fontSize={18} gutterBottom>
+                Requisito para el cobro de sesiones
+              </Typography>
 
-              <ToggleButton
-                value="IN_PERSON"
-                sx={{
-                  borderRadius: 5,
-                  textTransform: "none",
-                  px: 2,
-                }}
-              >
-                <ApartmentIcon sx={{ mr: 1 }} fontSize="small" />
-                Presencial
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
+              <Typography color="text.secondary">
+                Para procesar la compensación de tus sesiones pagas, asegurate de tener tu cuenta de
+                Mercado Pago correctamente vinculada en tu perfil.
+              </Typography>
+            </Box>
+          </Stack>
+        </DialogContent>
 
-          {/* Aviso */}
-
-          <Box
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            disabled={isPending}
             sx={{
-              border: "2px dashed #D5D9FF",
-              borderRadius: 3,
-              bgcolor: "#F9FAFF",
-              p: 2.5,
-              textAlign: "center",
+              borderRadius: 2,
+              px: 4,
             }}
           >
-            <Typography color="primary" fontWeight={600} fontSize={18} gutterBottom>
-              Requisito para el cobro de sesiones
-            </Typography>
+            Cancelar
+          </Button>
 
-            <Typography color="text.secondary">
-              Para procesar la compensación de tus sesiones pagas, asegurate de tener tu cuenta de
-              Mercado Pago correctamente vinculada en tu perfil.
-            </Typography>
-          </Box>
-        </Stack>
-      </DialogContent>
-
-      <DialogActions sx={{ px: 3, pb: 3 }}>
-        <Button
-          variant="outlined"
-          onClick={handleClose}
-          disabled={isPending}
-          sx={{
-            borderRadius: 2,
-            px: 4,
-          }}
-        >
-          Cancelar
-        </Button>
-
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={isPending || !subject}
-          sx={{
-            flex: 1,
-            borderRadius: 2,
-            ml: 2,
-          }}
-        >
-          {isPending ? <CircularProgress size={22} color="inherit" /> : "Agregar materia"}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={isPending || !subject}
+            sx={{
+              flex: 1,
+              borderRadius: 2,
+              ml: 2,
+            }}
+          >
+            {isPending ? <CircularProgress size={22} color="inherit" /> : "Agregar materia"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
