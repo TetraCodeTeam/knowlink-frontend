@@ -124,6 +124,18 @@ export default function Step2AcademicProfile({
           const subjectOptions = isBasicWatched ? basicSubjects : careerSubjects;
           const subjectsLoading = isBasicWatched ? basicLoading : careerLoading;
 
+          const selectedSubjectIds = watchedSubjects
+            ?.filter((_, i) => i !== index)
+            .map((s) => {
+              const options = s.isBasic ? basicSubjects : careerSubjects;
+              return options?.find((opt) => opt.name === s.subjectName)?.subjectId;
+            })
+            .filter((id): id is string => Boolean(id));
+
+          const availableSubjectOptions = subjectOptions?.filter(
+            (s) => !selectedSubjectIds?.includes(s.subjectId)
+          );
+
           return (
             <Box
               key={field.id}
@@ -156,7 +168,7 @@ export default function Step2AcademicProfile({
                     control={control}
                     render={({ field: f }) => (
                       <Select {...f} disabled={subjectsLoading} sx={{ borderRadius: 2 }}>
-                        {subjectOptions?.map((s) => (
+                        {availableSubjectOptions?.map((s) => (
                           <MenuItem key={s.subjectId} value={s.name}>
                             {s.name}
                           </MenuItem>

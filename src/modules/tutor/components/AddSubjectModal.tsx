@@ -56,22 +56,33 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
   const subjectOptions = basic ? basicSubjects : careerSubjects;
   const subjectsLoading = basic ? basicLoading : careerLoading;
 
+  const existingSubjectIds = profile?.subjects
+    ?.map((ts) => {
+      const allOptions = [...(basicSubjects ?? []), ...(careerSubjects ?? [])];
+      return allOptions.find((opt) => opt.name === ts.subjectName)?.subjectId;
+    })
+    .filter((id): id is string => Boolean(id));
+
+  const availableSubjectOptions = subjectOptions?.filter(
+    (s) => !existingSubjectIds?.includes(s.subjectId)
+  );
+
   const { mutate, isPending } = useCreateTutorSubject();
 
   // Cuando cambia el listado disponible (toggle Básica, o llega la carrera propia),
   // aseguramos que la materia seleccionada sea una opción válida.
 
   useEffect(() => {
-    if (!subjectOptions?.length) {
+    if (!availableSubjectOptions?.length) {
       setSubject("");
       return;
     }
 
-    if (!subjectOptions.some((s) => s.name === subject)) {
-      setSubject(subjectOptions[0].name);
+    if (!availableSubjectOptions.some((s) => s.name === subject)) {
+      setSubject(availableSubjectOptions[0].name);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subjectOptions]);
+  }, [availableSubjectOptions]);
 
   const handleClose = () => {
     if (isPending) return;
@@ -162,10 +173,10 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
                 <Select
                   fullWidth
                   value={subject}
-                  disabled={subjectsLoading || !subjectOptions?.length}
+                  disabled={subjectsLoading || !availableSubjectOptions?.length}
                   onChange={(e) => setSubject(e.target.value)}
                 >
-                  {subjectOptions?.map((item) => (
+                  {availableSubjectOptions?.map((item) => (
                     <MenuItem key={item.subjectId} value={item.name}>
                       {item.name}
                     </MenuItem>
