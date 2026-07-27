@@ -5,6 +5,8 @@ import StudentRoutes from "@/routes/StudentRoutes";
 import TutorRoutes from "@/routes/TutorRoutes";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
+const isDevAuthBypassEnabled =
+  import.meta.env.DEV && import.meta.env.VITE_AUTH_BYPASS === "true";
 function RoleRedirect() {
   const authResponse = useAuthStore((s) => s.authResponse);
   if (authResponse?.role === "TUTOR") return <Navigate to="/tutor/home" replace />;
@@ -12,6 +14,10 @@ function RoleRedirect() {
 }
 
 function RoleRoute({ allowedRole }: { allowedRole: string }) {
+  if (isDevAuthBypassEnabled) {
+    return <Outlet />;
+  }
+
   const authResponse = useAuthStore((s) => s.authResponse);
   if (!authResponse || authResponse.role !== allowedRole) {
     return <Navigate to="/" replace />;
@@ -41,7 +47,12 @@ export default function RoutesProvider() {
       {/* Fallback */}
       <Route
         path="*"
-        element={<Navigate to={isAuthenticated ? "/" : "/auth/login"} replace />}
+        element={
+          <Navigate
+            to={isAuthenticated || isDevAuthBypassEnabled ? "/" : "/auth/login"}
+            replace
+          />
+        }
       />
     </Routes>
   );

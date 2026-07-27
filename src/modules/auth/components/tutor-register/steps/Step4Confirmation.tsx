@@ -17,6 +17,7 @@ interface Step4Props {
 const MODALITY_LABEL: Record<string, string> = {
   VIRTUAL: "Virtual",
   IN_PERSON: "Presencial",
+  BOTH: "Virtual y Presencial",
 };
 
 const MODALITY_ICON: Record<string, React.ElementType> = {
@@ -49,7 +50,13 @@ export default function Step4Confirmation({
       {/* Datos personales */}
       <Card elevation={0} sx={{ border: "1px solid #e2e8f0", borderRadius: 3 }}>
         <CardContent>
-          <Typography variant="body2" fontWeight={700} mb={1.5} textTransform="uppercase" letterSpacing={0.5}>
+          <Typography
+            variant="body2"
+            fontWeight={700}
+            mb={1.5}
+            textTransform="uppercase"
+            letterSpacing={0.5}
+          >
             Datos personales
           </Typography>
           <Box component="ul" sx={{ pl: 2, m: 0 }}>
@@ -69,7 +76,13 @@ export default function Step4Confirmation({
       {/* Perfil académico */}
       <Card elevation={0} sx={{ border: "1px solid #e2e8f0", borderRadius: 3 }}>
         <CardContent>
-          <Typography variant="body2" fontWeight={700} mb={1.5} textTransform="uppercase" letterSpacing={0.5}>
+          <Typography
+            variant="body2"
+            fontWeight={700}
+            mb={1.5}
+            textTransform="uppercase"
+            letterSpacing={0.5}
+          >
             Perfil académico
           </Typography>
           {step2.biography && (
@@ -83,12 +96,13 @@ export default function Step4Confirmation({
             </Box>
           )}
           {step2.subjects.map((subject, i) => {
-            const ModalityIcon = MODALITY_ICON[subject.modality];
+            const modalitiesToShow =
+              subject.modality === "BOTH"
+                ? (["VIRTUAL", "IN_PERSON"] as const)
+                : ([subject.modality] as const);
+
             return (
-              <Box
-                key={i}
-                sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-              >
+              <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
                 <Typography variant="body2" fontWeight={500} sx={{ minWidth: 72 }}>
                   Materia {i + 1}:
                 </Typography>
@@ -104,49 +118,62 @@ export default function Step4Confirmation({
                     py: 0.5,
                     flex: 1,
                     minWidth: 0,
+                    flexWrap: "wrap",
                   }}
                 >
                   <Typography variant="body2" noWrap sx={{ flex: 1 }}>
                     {subject.subjectName}
                   </Typography>
+                  {modalitiesToShow.map((mod) => {
+                    const ModalityIcon = MODALITY_ICON[mod];
+                    return (
+                      <Chip
+                        key={mod}
+                        icon={ModalityIcon ? <ModalityIcon size={14} /> : undefined}
+                        label={MODALITY_LABEL[mod] ?? mod}
+                        size="small"
+                        color="primary"
+                        sx={{ "& .MuiChip-icon": { color: "#fff" } }}
+                      />
+                    );
+                  })}
                   <Chip
-                    icon={ModalityIcon ? <ModalityIcon size={14} /> : undefined}
-                    label={MODALITY_LABEL[subject.modality] ?? subject.modality}
+                    label={
+                      subject.compensationType === "FREE"
+                        ? "Gratis"
+                        : `$${subject.pricePerHour?.toLocaleString("es-AR") ?? 0}/h`
+                    }
                     size="small"
-                    color="primary"
-                    sx={{ "& .MuiChip-icon": { color: "#fff" } }}
+                    sx={{ bgcolor: "#fde8d0", flexShrink: 0 }}
                   />
-                  <Chip
-                  label={
-                    subject.compensationType === "FREE"
-                      ? "Gratis"
-                      : `$${subject.pricePerHour?.toLocaleString("es-AR") ?? 0}/h`
-                  }
-                  size="small"
-                  sx={{ bgcolor: "#fde8d0", flexShrink: 0 }}
-                />
                 </Box>
-                
               </Box>
             );
           })}
-          {step2.subjects.some((s) => s.modality === "IN_PERSON") && step2.address && (
-      <Box mt={1.5}>
-        <Typography variant="body2" fontWeight={500}>
-          Dirección para clases presenciales
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {step2.address}
-        </Typography>
-      </Box>
-    )}
+          {step2.subjects.some((s) => s.modality === "IN_PERSON" || s.modality === "BOTH") &&
+            step2.address && (
+              <Box mt={1.5}>
+                <Typography variant="body2" fontWeight={500}>
+                  Dirección para clases presenciales
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {step2.address}
+                </Typography>
+              </Box>
+            )}
         </CardContent>
       </Card>
 
       {/* Mercado Pago */}
       <Card elevation={0} sx={{ border: "1px solid #e2e8f0", borderRadius: 3 }}>
         <CardContent>
-          <Typography variant="body2" fontWeight={700} mb={1.5} textTransform="uppercase" letterSpacing={0.5}>
+          <Typography
+            variant="body2"
+            fontWeight={700}
+            mb={1.5}
+            textTransform="uppercase"
+            letterSpacing={0.5}
+          >
             Mercado pago
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
@@ -163,21 +190,24 @@ export default function Step4Confirmation({
             />
           </Box>
           {!mpLinked && (
-  <Box
-    sx={{
-      mt: 1,
-      p: 1.5,
-      bgcolor: "#faf3e8",
-      border: "1px solid #f0e4d0",
-      borderRadius: 2,
-    }}
-  >
-    <Typography variant="caption" sx={{ color: "#7a5c2e", display: "block", textAlign: "center" }}>
-      No podrás recibir reservas pagas hasta que vincules tu cuenta de Mercado Pago. Podés
-      hacerlo después desde tu perfil.
-    </Typography>
-  </Box>
-)}
+            <Box
+              sx={{
+                mt: 1,
+                p: 1.5,
+                bgcolor: "#faf3e8",
+                border: "1px solid #f0e4d0",
+                borderRadius: 2,
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{ color: "#7a5c2e", display: "block", textAlign: "center" }}
+              >
+                No podrás recibir reservas pagas hasta que vincules tu cuenta de Mercado Pago. Podés
+                hacerlo después desde tu perfil.
+              </Typography>
+            </Box>
+          )}
         </CardContent>
       </Card>
 

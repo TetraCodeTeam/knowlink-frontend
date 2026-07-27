@@ -72,7 +72,9 @@ export default function Step2AcademicProfile({
     selectedCareer?.careerId
   );
 
-  const hasPresencial = watchedSubjects?.some((s) => s.modality === "IN_PERSON");
+  const hasPresencial = watchedSubjects?.some(
+    (s) => s.modality === "IN_PERSON" || s.modality === "BOTH"
+  );
   const bioValue = watch("biography") ?? "";
 
   return (
@@ -251,44 +253,64 @@ export default function Step2AcademicProfile({
                 )}
               </Box>
 
-              {/* Modalidad (selección única) */}
+              {/* Modalidad */}
               <Box>
                 <Typography variant="body2" fontWeight={500} mb={0.5}>
-                  Seleccioná una modalidad*
+                  Seleccioná una o ambas modalidades*
                 </Typography>
                 <Controller
                   name={`subjects.${index}.modality`}
                   control={control}
-                  render={({ field: f }) => (
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Chip
-                        icon={<Laptop size={18} />}
-                        label="Virtual"
-                        onClick={() => f.onChange("VIRTUAL")}
-                        color={f.value === "VIRTUAL" ? "primary" : "default"}
-                        variant={f.value === "VIRTUAL" ? "filled" : "outlined"}
-                        sx={{
-                          cursor: "pointer",
-                          fontWeight: 500,
-                          "& .MuiChip-icon": { color: f.value === "VIRTUAL" ? "#fff" : undefined },
-                        }}
-                      />
-                      <Chip
-                        icon={<LibraryBig size={18} />}
-                        label="Presencial"
-                        onClick={() => f.onChange("IN_PERSON")}
-                        color={f.value === "IN_PERSON" ? "primary" : "default"}
-                        variant={f.value === "IN_PERSON" ? "filled" : "outlined"}
-                        sx={{
-                          cursor: "pointer",
-                          fontWeight: 500,
-                          "& .MuiChip-icon": {
-                            color: f.value === "IN_PERSON" ? "#fff" : undefined,
-                          },
-                        }}
-                      />
-                    </Box>
-                  )}
+                  render={({ field: f }) => {
+                    const isVirtualSelected = f.value === "VIRTUAL" || f.value === "BOTH";
+                    const isInPersonSelected = f.value === "IN_PERSON" || f.value === "BOTH";
+
+                    const combine = (virtual: boolean, inPerson: boolean) => {
+                      if (virtual && inPerson) return "BOTH";
+                      if (virtual) return "VIRTUAL";
+                      if (inPerson) return "IN_PERSON";
+                      return null; // no se permite dejar las dos sin marcar
+                    };
+
+                    const toggleVirtual = () => {
+                      const next = combine(!isVirtualSelected, isInPersonSelected);
+                      if (next) f.onChange(next);
+                    };
+
+                    const toggleInPerson = () => {
+                      const next = combine(isVirtualSelected, !isInPersonSelected);
+                      if (next) f.onChange(next);
+                    };
+
+                    return (
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Chip
+                          icon={<Laptop size={18} />}
+                          label="Virtual"
+                          onClick={toggleVirtual}
+                          color={isVirtualSelected ? "primary" : "default"}
+                          variant={isVirtualSelected ? "filled" : "outlined"}
+                          sx={{
+                            cursor: "pointer",
+                            fontWeight: 500,
+                            "& .MuiChip-icon": { color: isVirtualSelected ? "#fff" : undefined },
+                          }}
+                        />
+                        <Chip
+                          icon={<LibraryBig size={18} />}
+                          label="Presencial"
+                          onClick={toggleInPerson}
+                          color={isInPersonSelected ? "primary" : "default"}
+                          variant={isInPersonSelected ? "filled" : "outlined"}
+                          sx={{
+                            cursor: "pointer",
+                            fontWeight: 500,
+                            "& .MuiChip-icon": { color: isInPersonSelected ? "#fff" : undefined },
+                          }}
+                        />
+                      </Box>
+                    );
+                  }}
                 />
               </Box>
             </Box>

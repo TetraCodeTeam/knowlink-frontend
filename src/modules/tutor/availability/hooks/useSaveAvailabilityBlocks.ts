@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { saveWeekAvailabilityBlocks } from "@/modules/tutor/availability/api/availability.api";
+import { saveWeekAvailabilityBlocks } from "@/modules/tutor/availability/api/availability-blocks.api";
 import type { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
 
 export function useSaveAvailabilityBlocks() {

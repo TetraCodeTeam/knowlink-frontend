@@ -15,10 +15,12 @@ import AvailabilityInfoNote from "@/modules/tutor/availability/components/Availa
 import AppButton from "@/shared/components/AppButton";
 import AvailabilityDayHeader from "@/modules/tutor/availability/components/AvailabilityDayHeader";
 import AvailabilityLegend from "@/modules/tutor/availability/components/AvailabilityLegend";
-import RepeatWeeklyConfirmDialog from "@/modules/tutor/availability/components/RepeatWeeklyConfirmDialog";
+import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/components/AvailabilityWeekCustomizationBanner";
 import { availabilityCalendarSx } from "@/modules/tutor/availability/styles/availabilityCalendarSx";
 import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
 import { isBeforeToday } from "@/modules/tutor/availability/utils/availability.utils";
+import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
+import { Trash2 } from "lucide-react";
 
 const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
 const TITLE_FORMAT = { month: "short" as const, day: "numeric" as const };
@@ -49,6 +51,14 @@ export default function AvailabilityEditor() {
     requestSave,
     confirmSave,
     cancelSave,
+    isWeekCustomized,
+    isRemovingCustomization,
+    removeWeekCustomization,
+    isClearConfirmOpen,
+    requestClearWeek,
+    confirmClearWeek,
+    cancelClearWeek,
+    isInheritedRepeat,
   } = useAvailabilityDraft();
 
   const validRange = useMemo(() => ({ start: currentMondayStr }), [currentMondayStr]);
@@ -125,27 +135,65 @@ export default function AvailabilityEditor() {
       />
 
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Typography variant="body2">Repetir horarios semanalmente</Typography>
-          <Switch checked={effectiveRepeatWeekly} onChange={(_, val) => setRepeatWeekly(val)} />
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="body2">Repetir horarios semanalmente</Typography>
+            <Switch checked={effectiveRepeatWeekly} onChange={(_, val) => setRepeatWeekly(val)} />
+          </Box>
+          {isInheritedRepeat && (
+            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
+              Este horario se repite porque configuraste repetición en una semana anterior.
+            </Typography>
+          )}
         </Box>
-        <AppButton
-          appVariant="primary"
-          onClick={requestSave}
-          loading={isPending}
-          disabled={!hasChanges}
-        >
-          ✓ Guardar
-        </AppButton>
+
+        <Box sx={{ display: "flex", gap: 1.5 }}>
+          <AppButton
+            appVariant="soft-danger"
+            onClick={requestClearWeek}
+            disabled={events.length === 0}
+            loading={isPending}
+            startIcon={<Trash2 size={16} />}
+          >
+            Borrar todo
+          </AppButton>
+          <AppButton
+            appVariant="primary"
+            onClick={requestSave}
+            loading={isPending}
+            disabled={!hasChanges}
+          >
+            ✓ Guardar
+          </AppButton>
+        </Box>
       </Box>
 
-      <RepeatWeeklyConfirmDialog
+      <AppConfirmDialog
         open={isConfirmDialogOpen}
+        title="Confirmar repetición semanal"
+        message={`Activaste "Repetir horarios semanalmente". Este horario se va a repetir automáticamente durante las próximas ${repeatWeeksAhead} semanas, salvo en las semanas donde ya hayas configurado un horario distinto - esas quedan como están. ¿Querés continuar?`}
+        severity="warning"
         onConfirm={confirmSave}
         onCancel={cancelSave}
         isPending={isPending}
-        weeksAhead={repeatWeeksAhead}
       />
+
+      <AppConfirmDialog
+        open={isClearConfirmOpen}
+        title="¿Borrar todos los bloques de esta semana?"
+        message="Se van a eliminar todos los horarios disponibles que configuraste para esta semana. Esta acción no se puede deshacer."
+        severity="danger"
+        confirmLabel="Borrar todo"
+        onConfirm={confirmClearWeek}
+        onCancel={cancelClearWeek}
+        isPending={isPending}
+      />
+      {isWeekCustomized && (
+        <AvailabilityWeekCustomizationBanner
+          onRestore={removeWeekCustomization}
+          isPending={isRemovingCustomization}
+        />
+      )}
 
       <AvailabilityInfoNote weeksAhead={repeatWeeksAhead} />
     </Box>
