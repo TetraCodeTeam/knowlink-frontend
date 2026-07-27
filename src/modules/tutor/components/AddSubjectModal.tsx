@@ -24,13 +24,10 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
-import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
-import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
 import { CompensationTypeRequest, ModalityRequest } from "../interfaces/TutorSubjectRequest";
 import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
-import { useMyTutorProfile } from "../hooks/Usemytutorprofile";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
+import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
 
 interface Props {
   open: boolean;
@@ -45,27 +42,11 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
   const [price, setPrice] = useState("10000");
   const [modality, setModality] = useState<ModalityRequest>("VIRTUAL");
 
-  const { data: profile } = useMyTutorProfile();
-  const { data: careers } = useCareers();
-  const ownCareer = careers?.find((c) => c.name === profile?.career);
-
-  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
-  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(ownCareer?.careerId);
+  const { basicSubjects, careerSubjects, basicLoading, careerLoading } = useAvailableSubjects();
   const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
 
-  const subjectOptions = basic ? basicSubjects : careerSubjects;
+  const availableSubjectOptions = basic ? basicSubjects : careerSubjects;
   const subjectsLoading = basic ? basicLoading : careerLoading;
-
-  const existingSubjectIds = profile?.subjects
-    ?.map((ts) => {
-      const allOptions = [...(basicSubjects ?? []), ...(careerSubjects ?? [])];
-      return allOptions.find((opt) => opt.name === ts.subjectName)?.subjectId;
-    })
-    .filter((id): id is string => Boolean(id));
-
-  const availableSubjectOptions = subjectOptions?.filter(
-    (s) => !existingSubjectIds?.includes(s.subjectId)
-  );
 
   const { mutate, isPending } = useCreateTutorSubject();
 
