@@ -23,11 +23,11 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CompensationTypeRequest, ModalityRequest } from "../interfaces/TutorSubjectRequest";
 import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
-import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
+import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 
 interface Props {
   open: boolean;
@@ -47,6 +47,25 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
 
   const availableSubjectOptions = basic ? basicSubjects : careerSubjects;
   const subjectsLoading = basic ? basicLoading : careerLoading;
+
+  // Si "Básica" no tiene materias disponibles pero "Carrera" sí, arrancamos
+  // mostrando la categoría que realmente tiene opciones para elegir.
+  const autoSwitchedRef = useRef(false);
+
+  useEffect(() => {
+    if (!open) {
+      autoSwitchedRef.current = false;
+      return;
+    }
+
+    if (basicLoading || careerLoading || autoSwitchedRef.current) return;
+
+    if (!basicSubjects?.length && !!careerSubjects?.length) {
+      setBasic(false);
+    }
+
+    autoSwitchedRef.current = true;
+  }, [open, basicLoading, careerLoading, basicSubjects, careerSubjects]);
 
   const { mutate, isPending } = useCreateTutorSubject();
 

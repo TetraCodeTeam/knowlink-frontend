@@ -20,22 +20,18 @@ export function useAvailableSubjects() {
   }
 
   const ownCareer = careers?.find(
-    (c) =>
-      normalizeName(c.name) === normalizeName(profile?.career ?? "")
+    (c) => normalizeName(c.name) === normalizeName(profile?.career ?? "")
   );
 
   const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
-  const { data: careerSubjects, isLoading: careerLoading } =
-    useCareerSubjects(ownCareer?.careerId);
+  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(ownCareer?.careerId);
 
   const existingSubjectIds = profile?.subjects
     ?.map((ts) => {
       const allOptions = [...(basicSubjects ?? []), ...(careerSubjects ?? [])];
 
-      return allOptions.find(
-        (opt) =>
-          normalizeName(opt.name) === normalizeName(ts.subjectName)
-      )?.subjectId;
+      return allOptions.find((opt) => normalizeName(opt.name) === normalizeName(ts.subjectName))
+        ?.subjectId;
     })
     .filter((id): id is string => Boolean(id));
 
@@ -47,11 +43,7 @@ export function useAvailableSubjects() {
     (s) => !existingSubjectIds?.includes(s.subjectId)
   );
 
-  const isLoading =
-    profileLoading ||
-    careersLoading ||
-    basicLoading ||
-    careerLoading;
+  const isLoading = profileLoading || careersLoading || basicLoading || careerLoading;
 
   const hasAvailableSubjects =
     !!availableBasicSubjects?.length || !!availableCareerSubjects?.length;
