@@ -120,9 +120,11 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
         onSuccess: () => {
           onSuccess();
           openFeedbackDialog({
-            title: "Materia agregada",
-            description: "La materia se ha agregado correctamente a tu perfil.",
+            title: "¡Materia registrada exitosamente!",
+            description:
+              "Tu nueva materia está lista. Recuerda mantener tu disponibilidad actualizada para que los estudiantes puedan reservar sus sesiones.",
             variant: "success",
+            actionLabel: "Volver a mi perfil"
           });
           handleClose();
         },

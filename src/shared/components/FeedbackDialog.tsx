@@ -1,19 +1,8 @@
 import { ReactNode } from "react";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Dialog, DialogContent, IconButton, Stack, Typography } from "@mui/material";
 import { X } from "lucide-react";
 
-export type FeedbackDialogVariant =
-  | "success"
-  | "error"
-  | "warning"
-  | "info";
+export type FeedbackDialogVariant = "success" | "error" | "warning" | "info";
 
 interface FeedbackDialogProps {
   open: boolean;
@@ -55,24 +44,12 @@ export function FeedbackDialog({
       }}
     >
       <DialogContent className="relative px-10 py-8">
-        <IconButton
-          aria-label="Close dialog"
-          onClick={onClose}
-          className="!absolute right-4 top-4"
-        >
+        <IconButton aria-label="Close dialog" onClick={onClose} className="!absolute right-4 top-4">
           <X size={28} />
         </IconButton>
 
-        <Stack
-          spacing={4}
-          alignItems="center"
-          textAlign="center"
-        >
-          <Typography
-            variant="h3"
-            component="h2"
-            fontWeight={500}
-          >
+        <Stack spacing={4} alignItems="center" textAlign="center">
+          <Typography variant="h3" component="h2" fontWeight={500}>
             {title}
           </Typography>
 
@@ -82,6 +59,10 @@ export function FeedbackDialog({
             variant="body1"
             color="text.secondary"
             className="max-w-lg"
+            sx={{
+              textAlign: "justify",
+              textJustify: "inter-word", // opcional
+            }}
           >
             {description}
           </Typography>
