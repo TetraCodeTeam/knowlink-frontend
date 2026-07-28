@@ -13,7 +13,12 @@ import { Mail, Map, Phone } from "lucide-react";
 import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 import { getInitials, getUniqueModalities } from "@/modules/tutor/profile/utils/profile.utils";
 import { SECTION_LABEL_SX } from "@/modules/tutor/profile/styles/profileStyles";
-import { STAR_COLOR, BIO_BG, BIO_BORDER, BIO_TEXT } from "@/modules/tutor/profile/constants/profileColors.constants";
+import {
+  STAR_COLOR,
+  BIO_BG,
+  BIO_BORDER,
+  BIO_TEXT,
+} from "@/modules/tutor/profile/constants/profileColors.constants";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import DataItem from "@/modules/tutor/profile/components/DataItem";
 import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";
@@ -21,10 +26,31 @@ import PaymentSection from "@/modules/tutor/profile/components/PaymentSection";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
 import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
+import AddSubjectModal from "../../components/AddSubjectModal";
+import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
+import { useAvailableSubjects } from "../../availability/hooks/useAvailableSubjects";
 
 export default function TutorProfilePage() {
   const [activeTab, setActiveTab] = useState(0);
   const { data: profile, isLoading, isError } = useMyTutorProfile();
+  const [openAddSubject, setOpenAddSubject] = useState(false);
+  const { hasAvailableSubjects, isLoading: subjectsLoading } = useAvailableSubjects();
+  const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
+
+  const handleAddSubjectClick = () => {
+    if (subjectsLoading) return;
+
+    if (!hasAvailableSubjects) {
+      openFeedbackDialog({
+        title: "No se encuentran materias disponibles",
+        description: "No se encuentran materias disponibles para agregar",
+        variant: "warning",
+      });
+      return;
+    }
+
+    setOpenAddSubject(true);
+  };
 
   if (isLoading) {
     return (
@@ -259,6 +285,7 @@ export default function TutorProfilePage() {
           <Box
             role="button"
             tabIndex={0}
+            onClick={handleAddSubjectClick}
             sx={{
               border: "1.5px dashed #676E99",
               borderRadius: "16px",
@@ -312,6 +339,12 @@ export default function TutorProfilePage() {
           <UnderConstructionPage />
         </Box>
       )}
+      {feedbackDialog}
+      <AddSubjectModal
+        open={openAddSubject}
+        onClose={() => setOpenAddSubject(false)}
+        onSuccess={() => setOpenAddSubject(false)}
+      />
     </Box>
   );
 }
