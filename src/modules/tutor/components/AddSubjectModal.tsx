@@ -1,6 +1,4 @@
 import CloseIcon from "@mui/icons-material/Close";
-import ComputerIcon from "@mui/icons-material/Computer";
-import ApartmentIcon from "@mui/icons-material/Apartment";
 
 import {
   Box,
@@ -18,8 +16,6 @@ import {
   Stack,
   Switch,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 
@@ -28,6 +24,7 @@ import { CompensationTypeRequest, ModalityRequest } from "../interfaces/TutorSub
 import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
 import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
+import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 
 interface Props {
   open: boolean;
@@ -40,7 +37,17 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
   const [free, setFree] = useState(false);
   const [subject, setSubject] = useState("");
   const [price, setPrice] = useState("10000");
-  const [modality, setModality] = useState<ModalityRequest>("VIRTUAL");
+  const [virtualSelected, setVirtualSelected] = useState(true);
+  const [inPersonSelected, setInPersonSelected] = useState(false);
+
+  const modality: ModalityRequest | null =
+    virtualSelected && inPersonSelected
+      ? "BOTH"
+      : virtualSelected
+        ? "VIRTUAL"
+        : inPersonSelected
+          ? "IN_PERSON"
+          : null;
 
   const { basicSubjects, careerSubjects, basicLoading, careerLoading } = useAvailableSubjects();
   const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
@@ -90,7 +97,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
   };
 
   const handleSubmit = () => {
-    if (!subject) return;
+    if (!subject || !modality) return;
 
     const compensationType: CompensationTypeRequest = free ? "FREE" : "PAID";
     const parsedPrice = Number(price);
@@ -212,38 +219,22 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
 
             <Box>
               <Typography mb={1} fontWeight={500}>
-                Selecciona una modalidad*
+                Selecciona una o ambas modalidades*
               </Typography>
 
-              <ToggleButtonGroup
-                exclusive
-                value={modality}
-                onChange={(_, value) => value && setModality(value)}
-              >
-                <ToggleButton
-                  value="VIRTUAL"
-                  sx={{
-                    borderRadius: 5,
-                    textTransform: "none",
-                    px: 2,
-                  }}
-                >
-                  <ComputerIcon sx={{ mr: 1 }} fontSize="small" />
-                  Virtual
-                </ToggleButton>
+              <Stack direction="row" spacing={2}>
+                <ModalityChip
+                  modality="VIRTUAL"
+                  selected={virtualSelected}
+                  onClick={() => setVirtualSelected((prev) => !prev)}
+                />
 
-                <ToggleButton
-                  value="IN_PERSON"
-                  sx={{
-                    borderRadius: 5,
-                    textTransform: "none",
-                    px: 2,
-                  }}
-                >
-                  <ApartmentIcon sx={{ mr: 1 }} fontSize="small" />
-                  Presencial
-                </ToggleButton>
-              </ToggleButtonGroup>
+                <ModalityChip
+                  modality="IN_PERSON"
+                  selected={inPersonSelected}
+                  onClick={() => setInPersonSelected((prev) => !prev)}
+                />
+              </Stack>
             </Box>
 
             {/* Aviso */}
@@ -285,7 +276,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={isPending || !subject}
+            disabled={isPending || !subject || !modality}
             sx={{
               flex: 1,
               borderRadius: 2,
