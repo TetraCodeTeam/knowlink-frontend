@@ -29,13 +29,20 @@ import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoti
 import AddSubjectModal from "../../components/AddSubjectModal";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "../../availability/hooks/useAvailableSubjects";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function TutorProfilePage() {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState(0);
   const { data: profile, isLoading, isError } = useMyTutorProfile();
   const [openAddSubject, setOpenAddSubject] = useState(false);
   const { hasAvailableSubjects, isLoading: subjectsLoading } = useAvailableSubjects();
   const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
+
+  const handleSubjectAdded = () => {
+    setOpenAddSubject(false);
+    queryClient.invalidateQueries({ queryKey: ["myTutorProfile"] });
+  };
 
   const handleAddSubjectClick = () => {
     if (subjectsLoading) return;
@@ -343,7 +350,7 @@ export default function TutorProfilePage() {
       <AddSubjectModal
         open={openAddSubject}
         onClose={() => setOpenAddSubject(false)}
-        onSuccess={() => setOpenAddSubject(false)}
+        onSuccess={() => handleSubjectAdded()}
       />
     </Box>
   );
