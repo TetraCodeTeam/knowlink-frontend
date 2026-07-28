@@ -25,6 +25,7 @@ import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
 import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
+import { prefetchSuccessAnimation } from "@/shared/components/SuccessAnimation";
 
 interface Props {
   open: boolean;
@@ -109,6 +110,8 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
 
     if (!free && pricePerHour == null) return;
 
+    prefetchSuccessAnimation();
+
     mutate(
       {
         subjectName: subject,
@@ -124,7 +127,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
             description:
               "Tu nueva materia está lista. Recuerda mantener tu disponibilidad actualizada para que los estudiantes puedan reservar sus sesiones.",
             variant: "success",
-            actionLabel: "Volver a mi perfil"
+            actionLabel: "Volver a mi perfil",
           });
           handleClose();
         },

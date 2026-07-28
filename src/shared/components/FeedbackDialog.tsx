@@ -1,13 +1,14 @@
 import { ReactNode } from "react";
 import { Button, Dialog, DialogContent, IconButton, Stack, Typography } from "@mui/material";
 import { X } from "lucide-react";
+import { SuccessAnimation } from "./SuccessAnimation";
 
 export type FeedbackDialogVariant = "success" | "error" | "warning" | "info";
 
 interface FeedbackDialogProps {
   open: boolean;
   title: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   description: string;
   onClose: () => void;
   variant?: FeedbackDialogVariant;
@@ -53,7 +54,9 @@ export function FeedbackDialog({
             {title}
           </Typography>
 
-          <div className="flex items-center justify-center">{icon}</div>
+          <div className="flex items-center justify-center">
+            {icon ?? (variant === "success" && <SuccessAnimation />)}
+          </div>
 
           <Typography
             variant="body1"
