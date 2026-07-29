@@ -111,6 +111,7 @@ src/
 │   ├── users/
 │   │   └── (misma estructura)
 │   └── tutor/
+│       ├── types/            # Enums del backend, uno por archivo, compartidos entre availability y otros submódulos de tutor
 │       └── availability/     # Submódulos anidados cuando el dominio lo justifica
 │           ├── api/          # Un archivo por recurso, no un único archivo por módulo
 │           ├── components/
@@ -236,6 +237,63 @@ componentes, no para configuración de una librería externa.
 - No usar `any` bajo ningún concepto
 - Tipos de respuestas de API en `interfaces/` del módulo correspondiente
 - Inferir tipos desde schemas Zod (`z.infer<typeof schema>`)
+
+---
+
+### Enums del backend
+
+Los enums de Java (`@Enumerated(EnumType.STRING)`) se representan en el
+frontend como **union types de strings literales**, nunca con la
+palabra reservada `enum` de TypeScript:
+
+```typescript
+// ✅ Correcto
+export type Modality = "VIRTUAL" | "IN_PERSON" | "BOTH";
+
+// ❌ Incorrecto
+export enum Modality { VIRTUAL, IN_PERSON, BOTH }
+```
+
+Cada enum se define **una sola vez**, en `modules/<modulo>/types/`, en
+un archivo por enum (`modality.type.ts`, `compensation-type.type.ts`).
+Si el mismo enum se necesita en más de un módulo, se mueve a
+`shared/types/` — no se copia ni se re-escribe el union inline en cada
+archivo que lo use.
+
+```
+modules/tutor/types/
+├── modality.type.ts           # export type Modality = "VIRTUAL" | "IN_PERSON" | "BOTH";
+└── compensation-type.type.ts  # export type CompensationType = "FREE" | "PAID";
+```
+
+Los `interfaces/requests` y `interfaces/responses` importan el tipo
+desde `types/` en vez de repetir el union:
+
+```typescript
+import type { Modality } from "@/modules/tutor/types/modality.type";
+
+export interface TutorSubjectRequest {
+  subjectName: string;
+  modality: Modality; // no: modality: "VIRTUAL" | "IN_PERSON" | "BOTH";
+  // ...
+}
+```
+
+Los mapeos de UI (labels, íconos, colores por valor del enum) siguen
+viviendo en `constants/`, pero tipando su `Record` contra el union de
+`types/` en vez de un string suelto — así, si el backend agrega un
+valor nuevo al enum y no se actualiza el mapeo de UI, TypeScript tira
+error de compilación en vez de fallar en silencio en runtime:
+
+```typescript
+import type { Modality } from "@/modules/tutor/types/modality.type";
+
+export const MODALITY_LABEL: Record<Modality, string> = {
+  VIRTUAL: "Virtual",
+  IN_PERSON: "Presencial",
+  BOTH: "Virtual y Presencial",
+}; // TS error si falta o sobra alguna clave
+```
 
 ---
 
