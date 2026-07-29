@@ -32,29 +32,23 @@ export default function MinNoticeHoursPanel() {
         sx={{ display: "flex", alignItems: "center", gap: 1, justifyContent: "center", mb: 1.5 }}
       >
         <AlarmClock size={22} />
-        <Typography variant="h6" fontWeight={700}>
+        <Typography variant="h5" fontWeight={700}>
           Antelación mínima para reservar
         </Typography>
       </Box>
 
       <Typography
-        variant="body2"
+        variant="body1"
         color="text.secondary"
         textAlign="center"
-        mb={0.5}
-        sx={{ maxWidth: 560, mx: "auto" }}
+        mb={1.5}
+        sx={{ maxWidth: 590, mx: "auto" }}
       >
         ¿Con cuánto tiempo de antelación necesitás recibir reservas? Los alumnos solo podrán
         reservar clases que comiencen después de este margen de tiempo.
       </Typography>
 
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        display="block"
-        textAlign="center"
-        mb={3}
-      >
+      <Typography variant="body2" color="text.secondary" display="block" textAlign="center" mb={3}>
         Ejemplo: Si eliges 2 horas, una clase a las 17:00 dejará de estar disponible para reservas a
         las 15:01.
       </Typography>
