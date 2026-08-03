@@ -23,6 +23,7 @@ export function useFeedbackDialog() {
 
   const closeFeedbackDialog = useCallback(() => {
     setIsOpen(false);
+    setOptions(null);
   }, []);
 
   const handleClose = useCallback(() => {
