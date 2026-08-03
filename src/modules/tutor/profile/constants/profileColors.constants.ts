@@ -1,9 +1,10 @@
 export const STAR_COLOR = "#E4CF8C";
 export const VIRTUAL_BG = "#A3AFF0";
 export const PRESENTIAL_BG = "#CEC0F0";
-export const PAYMENT_BG = "#EED6D0";
+export const UNLINKED_BG = "#FFF4E5";
+export const LINKED_BG = "#E8FFE3";
 export const LINKED_BORDER = "#229D59";
-export const UNLINKED_BORDER = "#9D3422";
+export const UNLINKED_BORDER = "#ef7918";
 export const BIO_BG = "#F4F3FB";
 export const BIO_BORDER = "#676E99";
 export const BIO_TEXT = "#5B6ED9";
