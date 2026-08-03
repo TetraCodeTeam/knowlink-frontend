@@ -3,7 +3,7 @@ import { getMyTutorProfile } from "../api/Tutorsubject.api";
 
 export function useMyTutorProfile() {
   return useQuery({
-    queryKey: ["tutorProfile", "me"],
+    queryKey: ["myTutorProfile"],
     queryFn: getMyTutorProfile,
     staleTime: 1000 * 60 * 5,
   });

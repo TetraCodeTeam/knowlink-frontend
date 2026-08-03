@@ -10,7 +10,7 @@ export function useCreateTutorSubject() {
     mutationKey: ["create-tutor-subject"],
     mutationFn: (request: TutorSubjectRequest) => createTutorSubject(request),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tutorProfile", "me"] });
+      queryClient.invalidateQueries({ queryKey: ["myTutorProfile"] });
       toast.success("Materia agregada correctamente.");
     },
     onError: (error: unknown) => {
