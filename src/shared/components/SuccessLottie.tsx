@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import tokenSuccess from "@/shared/assets/animations/token-success.json";
+import tokenSuccess from "@/shared/assets/animations/token-success.json.json";
 
 export default function SuccessLottie() {
   return (
