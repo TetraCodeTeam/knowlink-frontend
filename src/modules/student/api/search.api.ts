@@ -1,5 +1,5 @@
 import { httpClient } from "@/shared/lib/httpClient";
-import type { TutorSearchResult } from "@/modules/students/interfaces/responses/tutor-search-result.interface";
+import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
 
 /**
  * GET /api/v1/tutors/search/{query}
