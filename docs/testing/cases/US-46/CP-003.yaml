@@ -1,0 +1,162 @@
+sistema: "KnowLink"
+historia_usuario:
+  id: "US-46"
+  nombre: "Busqueda unificada de tutores y materias"
+  estimacion_sp: null
+  descripcion: >
+    Como alumno, quiero un campo de búsqueda que matchee tutores y materias
+    por nombre (sin distinguir mayúsculas), para encontrar rápidamente quién
+    dicta la materia que necesito y tener un listado de tutores candidatos.
+
+caso_prueba:
+  id: "CP-003"
+  objetivo: >
+    Validar el endpoint GET /api/v1/tutors/search/{query} (backend) y el
+    comportamiento de búsqueda en el frontend (barra, panel y resaltado de
+    coincidencias). La búsqueda matchea por nombre de materia y por nombre
+    completo del tutor, unifica resultados sin duplicados y excluye tutores
+    sin materias cargadas.
+  prioridad: "Media"
+  tipo_testing: "Funcional"
+  ambiente: "Desarrollo"
+  niveles: ["unit", "integration"]
+  comentario_po: null
+  notas: >
+    US-ID creado para esta funcionalidad (no existía en el backlog del repo).
+    Los tests del backend siguen la convención Maven (src/test/java) y los del
+    frontend viven en test/ espejando la ruta de src/, con fixtures en
+    fixtures/busqueda/. Se detectó casing inconsistente histórico en el repo
+    (ej. Usecreatetutorsubject.ts) que no se renombra por regla del spec.
+
+pruebas:
+  - id: "CP-003.01"
+    descripcion: "Buscar por nombre de materia devuelve el tutor que la dicta"
+    modulo: "back"
+    nivel: "integration"
+    salida_esperada: >
+      GET /api/v1/tutors/search/Algebra como alumno devuelve 200 con el tutor
+      que dicta Algebra (nombre y materias con su carrera).
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.02"
+    descripcion: "Buscar por nombre completo devuelve solo tutores (sin estudiantes)"
+    modulo: "back"
+    nivel: "integration"
+    salida_esperada: >
+      GET /api/v1/tutors/search/Ana devuelve 200 solo con el perfil tutor
+      "Ana García" y no perfiles de estudiantes.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.03"
+    descripcion: "Query sin coincidencias devuelve lista vacía"
+    modulo: "back"
+    nivel: "integration"
+    salida_esperada: >
+      GET /api/v1/tutors/search/zzz devuelve 200 con un array vacío.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.04"
+    descripcion: "Un tutor autenticado no puede buscar"
+    modulo: "back"
+    nivel: "integration"
+    salida_esperada: >
+      GET /api/v1/tutors/search/{query} con rol TUTOR devuelve 403 Forbidden.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.05"
+    descripcion: "Un usuario anónimo no está autenticado"
+    modulo: "back"
+    nivel: "integration"
+    salida_esperada: >
+      GET /api/v1/tutors/search/{query} sin autenticación devuelve 401
+      Unauthorized.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.06"
+    descripcion: "La búsqueda por materia es case-insensitive"
+    modulo: "back"
+    nivel: "unit"
+    salida_esperada: >
+      searchTutor("algebra") matchea un tutor de "Álgebra" sin distinguir
+      mayúsculas/minúsculas.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.07"
+    descripcion: "Tutor con varias materias matcheadas se devuelve una sola vez"
+    modulo: "back"
+    nivel: "unit"
+    salida_esperada: >
+      Si las materias "Álgebra" y "Física" de un mismo tutor matchean, la
+      respuesta contiene una única entrada con ambas materias.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.08"
+    descripcion: "Envolver la primera coincidencia en <strong>"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      highlightMatch("Ana García", "ana") envuelve "Ana" en <strong>.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.09"
+    descripcion: "Sin coincidencia o query vacía devuelve texto plano"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      highlightMatch devuelve todo el texto sin <strong> si no hay match o la
+      query está vacía o en blanco.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.10"
+    descripcion: "Panel muestra estados de carga, vacío y resultados"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      SearchResultsPanel muestra "Buscando…", el estado vacío o las secciones
+      Materias/Tutores según corresponda, y el rating o su fallback.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.11"
+    descripcion: "Panel solo incluye la sección que tenga datos"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Si no hay materias no se muestra la sección Materias; si no hay tutores
+      no se muestra la sección Tutores.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.12"
+    descripcion: "Seleccionar una materia o un tutor dispara su callback"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      El panel llama a onSelectMateria(nombre) y onSelectTutor(tutorId) al
+      hacer click en una materia o tutor respectivamente.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.13"
+    descripcion: "La barra renderiza el campo de búsqueda"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      SearchBar muestra un campo con placeholder "Busca tutores, materias".
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.14"
+    descripcion: "La barra muestra sugerencias al tipear"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al escribir, el popper muestra las secciones Materias y Tutores con los
+      resultados del hook.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-003.15"
+    descripcion: "La barra deshabilita el campo para usuarios tutor"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Con rol TUTOR el campo queda deshabilitado y se muestra el caption
+      "Cambiá tu rol a alumno para buscar tutores y materias.".
+    resultado: "PENDING"
+    salida_obtenida: null

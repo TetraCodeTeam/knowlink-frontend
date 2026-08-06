@@ -1,35 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SearchResultsPanel, { SearchResultsPanelProps } from "./SearchResultsPanel";
-import type {
-  SubjectSummary,
-  TutorSearchResult,
-} from "../interfaces/tutor-search-result.interface";
-
-const materias: SubjectSummary[] = [
-  { name: "Álgebra", career: "Ingeniería en Sistemas" },
-  { name: "Física", career: "Ingeniería en Sistemas" },
-];
-
-const tutores: TutorSearchResult[] = [
-  {
-    tutorId: "t1",
-    fullName: "Ana García",
-    photoProfile: null,
-    averageRating: 4.5,
-    totalReviews: 2,
-    subjects: [{ name: "Álgebra", career: "Ingeniería en Sistemas" }],
-  },
-  {
-    tutorId: "t2",
-    fullName: "Carlos López",
-    photoProfile: null,
-    averageRating: null,
-    totalReviews: 0,
-    subjects: [{ name: "Física", career: "Ingeniería en Sistemas" }],
-  },
-];
+import SearchResultsPanel, {
+  SearchResultsPanelProps,
+} from "@/modules/student/components/SearchResultsPanel";
+import { materiasIngenieria, tutoresDePrueba } from "../../../fixtures/busqueda/tutoresDePrueba";
 
 function getTextContent(text: string) {
   return (_content: string, element: Element | null) =>
@@ -42,8 +17,8 @@ function renderPanel(props: Partial<SearchResultsPanelProps> = {}) {
   render(
     <SearchResultsPanel
       query="a"
-      materias={materias}
-      tutors={tutores}
+      materias={materiasIngenieria}
+      tutors={tutoresDePrueba}
       loading={false}
       onSelectMateria={onSelectMateria}
       onSelectTutor={onSelectTutor}
@@ -53,18 +28,18 @@ function renderPanel(props: Partial<SearchResultsPanelProps> = {}) {
   return { onSelectMateria, onSelectTutor };
 }
 
-describe("SearchResultsPanel", () => {
-  it("shows loading message while fetching", () => {
+describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
+  it("CP-003.05 — Muestra mensaje de carga mientras se busca", () => {
     renderPanel({ loading: true });
     expect(screen.getByText("Buscando…")).toBeInTheDocument();
   });
 
-  it("shows empty state when there are no results", () => {
+  it("CP-003.06 — Muestra estado vacío cuando no hay resultados", () => {
     renderPanel({ materias: [], tutors: [] });
     expect(screen.getByText("No se encontraron resultados para tu búsqueda")).toBeInTheDocument();
   });
 
-  it("renders Materias and Tutores sections with their rows", () => {
+  it("CP-003.07 — Renderiza secciones Materias y Tutores con sus filas", () => {
     renderPanel();
     expect(screen.getByText("Materias")).toBeInTheDocument();
     expect(screen.getByText("Tutores")).toBeInTheDocument();
@@ -74,23 +49,35 @@ describe("SearchResultsPanel", () => {
     expect(screen.getByText(getTextContent("Carlos López"))).toBeInTheDocument();
   });
 
-  it("shows rating when present and fallback otherwise", () => {
+  it("CP-003.08 — Muestra rating cuando existe y fallback cuando no", () => {
     renderPanel();
     expect(screen.getByText("4,5")).toBeInTheDocument();
     expect(screen.getByText("Sin reseñas aún")).toBeInTheDocument();
   });
 
-  it("calls onSelectMateria when a materia is clicked", async () => {
+  it("CP-003.09 — Llama a onSelectMateria al hacer click en una materia", async () => {
     const user = userEvent.setup();
     const { onSelectMateria } = renderPanel();
     await user.click(screen.getByText(getTextContent("Álgebra")));
     expect(onSelectMateria).toHaveBeenCalledWith("Álgebra");
   });
 
-  it("calls onSelectTutor when a tutor is clicked", async () => {
+  it("CP-003.10 — Llama a onSelectTutor al hacer click en un tutor", async () => {
     const user = userEvent.setup();
     const { onSelectTutor } = renderPanel();
     await user.click(screen.getByText(getTextContent("Ana García")));
     expect(onSelectTutor).toHaveBeenCalledWith("t1");
+  });
+
+  it("CP-003.11 — No renderiza sección Materias cuando no hay materias", () => {
+    renderPanel({ materias: [], tutors: tutoresDePrueba });
+    expect(screen.queryByText("Materias")).toBeNull();
+    expect(screen.getByText("Tutores")).toBeInTheDocument();
+  });
+
+  it("CP-003.12 — No renderiza sección Tutores cuando no hay tutores", () => {
+    renderPanel({ materias: materiasIngenieria, tutors: [] });
+    expect(screen.getByText("Materias")).toBeInTheDocument();
+    expect(screen.queryByText("Tutores")).toBeNull();
   });
 });

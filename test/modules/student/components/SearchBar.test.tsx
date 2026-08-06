@@ -2,15 +2,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import SearchBar from "./SearchBar";
+import SearchBar from "@/modules/student/components/SearchBar";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import type { TutorSearchResult } from "../interfaces/tutor-search-result.interface";
+import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
+import { tutorAna } from "../../../fixtures/busqueda/tutoresDePrueba";
 
-vi.mock("../hooks/useSearchTutorsAndMaterias", () => ({
+vi.mock("@/modules/student/hooks/useSearchTutorsAndMaterias", () => ({
   useSearchTutorsAndMaterias: vi.fn(),
 }));
 
-import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
+import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
 
 const mockedHook = vi.mocked(useSearchTutorsAndMaterias);
 
@@ -27,28 +28,6 @@ function hookResult(data: TutorSearchResult[], isFetching = false): HookResult {
   return { data, isFetching } as unknown as HookResult;
 }
 
-const resultadoAlgebra: TutorSearchResult[] = [
-  {
-    tutorId: "t1",
-    fullName: "Ana García",
-    photoProfile: null,
-    averageRating: 4.5,
-    totalReviews: 2,
-    subjects: [{ name: "Álgebra", career: "Ingeniería en Sistemas" }],
-  },
-];
-
-const resultadoAna: TutorSearchResult[] = [
-  {
-    tutorId: "t1",
-    fullName: "Ana García",
-    photoProfile: null,
-    averageRating: 4.5,
-    totalReviews: 2,
-    subjects: [{ name: "Álgebra", career: "Ingeniería en Sistemas" }],
-  },
-];
-
 function renderSearchBar() {
   return render(
     <MemoryRouter>
@@ -57,22 +36,22 @@ function renderSearchBar() {
   );
 }
 
-describe("SearchBar", () => {
+describe("US-46 / CP-003 — Barra de búsqueda unificada", () => {
   beforeEach(() => {
     useAuthStore.setState({ authResponse: undefined, isAuthenticated: false });
     mockedHook.mockReset();
   });
 
-  it("renders the search field with its placeholder", () => {
+  it("CP-003.13 — Renderiza el campo de búsqueda con su placeholder", () => {
     mockedHook.mockReturnValue(hookResult([]));
     renderSearchBar();
     expect(screen.getByPlaceholderText(SEARCH_PLACEHOLDER)).toBeInTheDocument();
   });
 
-  it("shows dynamic suggestions (materias + tutores) while typing", async () => {
+  it("CP-003.14 — Muestra sugerencias dinámicas (materias + tutores) al tipear", async () => {
     const user = userEvent.setup();
     mockedHook.mockImplementation((query: string) =>
-      hookResult(query.includes("Alge") ? resultadoAlgebra : [])
+      hookResult(query.includes("Alge") ? [tutorAna] : [])
     );
 
     renderSearchBar();
@@ -85,10 +64,10 @@ describe("SearchBar", () => {
     expect(mockedHook).toHaveBeenCalled();
   });
 
-  it("shows tutors matched by name", async () => {
+  it("CP-003.15 — Muestra tutores que matchean por nombre", async () => {
     const user = userEvent.setup();
     mockedHook.mockImplementation((query: string) =>
-      hookResult(query.includes("Ana") ? resultadoAna : [])
+      hookResult(query.includes("Ana") ? [tutorAna] : [])
     );
 
     renderSearchBar();
@@ -97,7 +76,7 @@ describe("SearchBar", () => {
     expect(await screen.findByText(getTextContent("Ana García"))).toBeInTheDocument();
   });
 
-  it("shows the empty state when there are no results", async () => {
+  it("CP-003.16 — Muestra estado vacío cuando no hay resultados", async () => {
     const user = userEvent.setup();
     mockedHook.mockReturnValue(hookResult([]));
 
@@ -109,7 +88,7 @@ describe("SearchBar", () => {
     ).toBeInTheDocument();
   });
 
-  it("disables the search field and shows a caption for tutor users", () => {
+  it("CP-003.17 — Deshabilita el campo y muestra caption para usuarios tutor", () => {
     useAuthStore.setState({
       authResponse: {
         userId: "u1",
