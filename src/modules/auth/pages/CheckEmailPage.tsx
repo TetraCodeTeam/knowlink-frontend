@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import { AlarmClock, Mail, RefreshCw } from "lucide-react";
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
-import { useResendConfirmation } from "@/modules/auth/hooks/useResendConfirmation";
+import { useResendConfirmation } from "@/modules/auth/hooks/use-resend-confirmation";
 
 function PaperPlaneIcon() {
   return (

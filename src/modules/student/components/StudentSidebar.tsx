@@ -1,12 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, LayoutGrid, Bell, AlertTriangle, LogOut } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
-import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import { useStudentBadgesStore } from "@/modules/student/hooks/useStudentBadgesStore";
+import type { ElementType } from "react";
+import { useAuthStore } from "@/modules/auth/hooks/use-auth-store";
+import { useStudentBadgesStore } from "@/modules/student/hooks/use-student-badges-store";
 import { SIDEBAR_WIDTH } from "@/modules/student/components/StudentTopbar";
 
 interface NavItem {
-  icon: React.ElementType;
+  icon: ElementType;
   label: string;
   path: string;
   badge?: "notifications" | "complaints";

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Box, Divider } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
-import { useLogin } from "@/modules/auth/hooks/useLogin";
+import { useLogin } from "@/modules/auth/hooks/use-login";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);

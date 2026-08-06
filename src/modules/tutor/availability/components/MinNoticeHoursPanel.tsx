@@ -1,12 +1,12 @@
 import { Box, Chip, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { AlarmClock } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
-import { useMinNoticeDraft } from "@/modules/tutor/availability/hooks/useMinNoticeDraft";
-import type { MinNoticeUnit } from "@/modules/tutor/availability/constants/minNotice.constants";
+import { useMinNoticeDraft } from "@/modules/tutor/availability/hooks/use-min-notice-draft";
+import type { MinNoticeUnit } from "@/modules/tutor/availability/constants/min-notice.constants";
 import {
   minNoticePanelSx,
   minNoticeChipSx,
-} from "@/modules/tutor/availability/styles/minNoticeHoursPanelSx";
+} from "@/modules/tutor/availability/styles/min-notice-hours-panel-sx";
 
 export default function MinNoticeHoursPanel() {
   const {

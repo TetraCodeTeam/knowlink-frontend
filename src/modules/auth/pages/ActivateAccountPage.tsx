@@ -2,7 +2,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { ShieldCheck } from "lucide-react";
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
-import { useVerifyAccount } from "@/modules/auth/hooks/useVerifyAccount";
+import { useVerifyAccount } from "@/modules/auth/hooks/use-verify-account";
 import AppButton from "@/shared/components/AppButton";
 
 export default function ActivateAccountPage() {

@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/httpClient";
+import { httpClient } from "@/shared/lib/http-client";
 import type { UserResponse } from "@/modules/users/interfaces/responses/user.interface";
 import type { UpdateUserRequest } from "@/modules/users/interfaces/requests/update-user.interface";
 

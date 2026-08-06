@@ -1,8 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap, BookOpen, BarChart2 } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
-import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
+import type { ElementType } from "react";
+import { useAuthStore } from "@/modules/auth/hooks/use-auth-store";
+import { useTutorBadgesStore } from "@/modules/tutor/hooks/use-tutor-badges-store";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 
@@ -12,7 +13,7 @@ const HOVER_BG = "rgba(255, 255, 255, 0.1)";
 const TEXT_COLOR = "#FFFFFF";
 
 interface NavItem {
-  icon: React.ElementType;
+  icon: ElementType;
   label: string;
   path: string;
   badge?: "notifications" | "requests";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMyTutorProfile } from "@/modules/tutor/profile/api/getMyTutorProfile";
+import { getMyTutorProfile } from "@/modules/tutor/profile/api/get-my-tutor-profile";
 
 export const useMyTutorProfile = () => {
   return useQuery({

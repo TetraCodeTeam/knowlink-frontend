@@ -156,7 +156,11 @@ export default function LoginPage() {
             sx={{ textAlign: "center", mt: 0, color: "#555", fontSize: 15, fontFamily: "Inter, sans-serif" }}
           >
             ¿No tienes cuenta?{" "}
-            <Link to="/auth/register" style={{ color: "#3F4CAE", fontWeight: 600, textDecoration: "none" }}>
+            <Link
+              to="/auth/register"
+              className="kl-register-link"
+              aria-label="Ir al registro"
+            >
               Regístrate
             </Link>
           </Box>

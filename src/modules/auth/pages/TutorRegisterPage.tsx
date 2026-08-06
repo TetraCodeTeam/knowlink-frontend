@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
 import RegistrationStepper from "@/modules/auth/components/RegistrationStepper";
 import TutorRegisterWizard from "@/modules/auth/components/tutor-register/TutorRegisterWizard";
-import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
+import { useRegistrationStore } from "@/modules/auth/hooks/use-registration-store";
 import { Box } from "@mui/material";
 
 export default function TutorRegisterPage() {

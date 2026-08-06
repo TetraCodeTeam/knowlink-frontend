@@ -27,3 +27,9 @@ body {
 .kl-input::placeholder {
   color: #bbb;
 }
+
+.kl-register-link {
+  color: #3f4cae;
+  font-weight: 600;
+  text-decoration: none;
+}
