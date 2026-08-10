@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { GraduationCap } from "lucide-react";
+import SearchBar from "./SearchBar";
 
 export const TOPBAR_HEIGHT = 64;
 export const SIDEBAR_WIDTH = 120;
@@ -23,8 +24,9 @@ export default function StudentTopbar() {
         borderBottom: "1px solid #F0EEFE",
       }}
     >
-      {/* Search bar area — implemented by another team member */}
-      <Box sx={{ flex: 1 }} />
+      <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
+        <SearchBar />
+      </Box>
 
       <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <GraduationCap size={32} color="#5865C8" />
@@ -42,3 +44,4 @@ export default function StudentTopbar() {
     </Box>
   );
 }
+
