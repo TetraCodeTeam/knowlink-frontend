@@ -1,6 +1,6 @@
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
-import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
-import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
+import { useCareers } from "@/modules/tutors/hooks/use-careers";
+import { useBasicSubjects } from "@/modules/tutors/hooks/use-basic-subjects";
+import { useCareerSubjects } from "@/modules/tutors/hooks/use-career-subjects";
 import { useMyTutorProfile } from "../../hooks/Usemytutorprofile";
 
 /**

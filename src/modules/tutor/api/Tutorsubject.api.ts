@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/httpClient";
+import { httpClient } from "@/shared/lib/http-client";
 import { TutorSelfProfileResponse } from "../interfaces/TutorSelfProfileResponse";
 import { TutorSubjectRequest } from "../interfaces/TutorSubjectRequest";
 import { TutorSubjectResponse } from "../interfaces/TutorSubjectResponse";

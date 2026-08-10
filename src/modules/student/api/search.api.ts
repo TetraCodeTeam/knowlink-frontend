@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/httpClient";
+import { httpClient } from "@/shared/lib/http-client";
 import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
 
 /**

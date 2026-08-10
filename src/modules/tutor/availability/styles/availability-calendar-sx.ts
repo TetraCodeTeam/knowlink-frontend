@@ -29,9 +29,10 @@ export const availabilityCalendarSx: SxProps<Theme> = {
   // Eje de horas
   "& .fc-timegrid-axis": {
     borderColor: "#ececf4",
+    width: "90px",
   },
   "& .fc-timegrid-slot-label": {
-    fontSize: "0.78rem",
+    fontSize: "1.1rem",
     color: "#8a8aa3",
     fontWeight: 500,
   },
@@ -98,7 +99,7 @@ export const availabilityCalendarSx: SxProps<Theme> = {
     mb: 2,
   },
   "& .fc-toolbar-title": {
-    fontSize: "1rem",
+    fontSize: "1.1rem",
     fontWeight: 700,
     color: "#1a1a2e",
   },
@@ -118,5 +119,10 @@ export const availabilityCalendarSx: SxProps<Theme> = {
     "&:disabled": {
       opacity: 0.35,
     },
+  },
+
+  "& .fc-bg-event.fc-unavailable-now": {
+    bgcolor: "rgba(138, 138, 163, 0.08) !important",
+    borderBottom: "2px solid #5B6ED9",
   },
 };

@@ -16,14 +16,14 @@ import AppButton from "@/shared/components/AppButton";
 import AvailabilityDayHeader from "@/modules/tutor/availability/components/AvailabilityDayHeader";
 import AvailabilityLegend from "@/modules/tutor/availability/components/AvailabilityLegend";
 import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/components/AvailabilityWeekCustomizationBanner";
-import { availabilityCalendarSx } from "@/modules/tutor/availability/styles/availabilityCalendarSx";
-import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
+import { availabilityCalendarSx } from "@/modules/tutor/availability/styles/availability-calendar-sx";
+import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/use-availability-draft";
 import { isBeforeToday } from "@/modules/tutor/availability/utils/availability.utils";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { Trash2 } from "lucide-react";
 
 const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
-const TITLE_FORMAT = { month: "short" as const, day: "numeric" as const };
+const TITLE_FORMAT = { month: "short" as const, day: "numeric" as const, year: "numeric" as const };
 const SLOT_LABEL_FORMAT = {
   hour: "2-digit" as const,
   minute: "2-digit" as const,
@@ -122,7 +122,7 @@ export default function AvailabilityEditor() {
         slotLabelFormat={SLOT_LABEL_FORMAT}
         selectable
         selectAllow={handleSelectAllow}
-        selectOverlap={false}
+        selectOverlap={(event) => event.display === "background"}
         eventOverlap={false}
         select={handleSelect}
         events={events}
@@ -137,11 +137,15 @@ export default function AvailabilityEditor() {
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 2 }}>
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography variant="body2">Repetir horarios semanalmente</Typography>
+            <Typography variant="body1">Repetir horarios semanalmente</Typography>
             <Switch checked={effectiveRepeatWeekly} onChange={(_, val) => setRepeatWeekly(val)} />
           </Box>
           {isInheritedRepeat && (
-            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ display: "block", mt: 0.5 }}
+            >
               Este horario se repite porque configuraste repetición en una semana anterior.
             </Typography>
           )}

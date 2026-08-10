@@ -1,4 +1,4 @@
-import { rawHttpClient } from "@/shared/lib/httpClient";
+import { rawHttpClient } from "@/shared/lib/http-client";
 import type { LoginRequest } from "@/modules/auth/interfaces/requests/login-request.interface";
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { AVAILABILITY_LEGEND } from "@/modules/tutor/availability/constants/availabilityLegend.constants";
+import { AVAILABILITY_LEGEND } from "@/modules/tutor/availability/constants/availability-legend.constants";
 
 export default function AvailabilityLegend() {
   return (
@@ -15,7 +15,7 @@ export default function AvailabilityLegend() {
               border: item.color === "#f7f7fb" ? "1px solid #e2e2ec" : "none",
             }}
           />
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             {item.label}
           </Typography>
         </Box>

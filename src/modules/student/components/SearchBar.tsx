@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useAuthStore } from "@/modules/auth/hooks/use-auth-store";
 import { buildMateriaTutorsRoute, buildTutorProfileRoute, TUTOR_ROLE } from "../constants";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
 import { SubjectSummary } from "../interfaces/tutor-search-result.interface";

@@ -5,10 +5,10 @@ import { DAY_LABELS } from "@/modules/tutor/availability/constants/availability.
 export default function AvailabilityDayHeader({ date }: Pick<DayHeaderContentArg, "date">) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 0.5 }}>
-      <Typography variant="body2" fontWeight={600}>
+      <Typography variant="body1" fontWeight={600}>
         {DAY_LABELS[date.getDay()]}
       </Typography>
-      <Typography variant="caption" color="text.secondary">
+      <Typography variant="body1" color="text.secondary">
         {date.getDate()}
       </Typography>
     </Box>

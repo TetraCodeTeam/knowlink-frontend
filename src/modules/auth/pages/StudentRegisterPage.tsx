@@ -3,8 +3,8 @@ import { Box } from "@mui/material";
 import { Navigate, useNavigate } from "react-router-dom";
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
 import StudentAccountForm from "@/modules/auth/components/student-register/StudentAccountForm";
-import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
-import { useStudentRegister } from "@/modules/auth/hooks/useStudentRegister";
+import { useRegistrationStore } from "@/modules/auth/hooks/use-registration-store";
+import { useStudentRegister } from "@/modules/auth/hooks/use-student-register";
 import type { StudentAccountData } from "@/modules/auth/schemas/user-register.schema";
 
 export default function StudentRegisterPage() {

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -17,7 +18,7 @@ import {
   studentAccountSchema,
   type StudentAccountData,
 } from "@/modules/auth/schemas/user-register.schema";
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { useCareers } from "@/modules/tutors/hooks/use-careers";
 import AppButton from "@/shared/components/AppButton";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
@@ -60,7 +61,7 @@ export default function StudentAccountForm({
 
   const { data: careers, isLoading: careersLoading } = useCareers();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 

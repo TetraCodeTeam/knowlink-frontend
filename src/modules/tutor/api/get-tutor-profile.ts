@@ -5,7 +5,7 @@ import type {
   TutorMaterialItem,
 } from "@/modules/tutor/interfaces/tutor.interface";
 import type { TutorProfileApiResponse } from "@/modules/tutor/interfaces/tutor-api.types";
-import { httpClient } from "@/shared/lib/httpClient";
+import { httpClient } from "@/shared/lib/http-client";
 
 const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => {
   if (modality === "BOTH") return ["Virtual", "Presencial"];

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { AUTH_LOGIN_KEY } from "@/modules/auth/constants";
 import { loginUser } from "@/modules/auth/api/auth.api";
-import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useAuthStore } from "@/modules/auth/hooks/use-auth-store";
 
 const ROLE_REDIRECT: Record<string, string> = {
   STUDENT: "/student/home",

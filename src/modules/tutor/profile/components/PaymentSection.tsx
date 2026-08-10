@@ -4,7 +4,7 @@ import {
   LINKED_BG,
   LINKED_BORDER,
   UNLINKED_BORDER,
-} from "@/modules/tutor/profile/constants/profileColors.constants";
+} from "@/modules/tutor/profile/constants/profile-colors.constants";
 
 interface PaymentSectionProps {
   linked: boolean;
