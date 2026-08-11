@@ -1,8 +1,8 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import type { ErrorResponse } from "@/shared/interfaces/error-response.interface";
 import { EXCLUDED_BEARER_ROUTES } from "@/shared/lib/constants";
-import { useAuthStore } from "@/modules/auth/hooks/use-auth-store";
-import { useSnackbarStore } from "@/shared/hooks/use-snackbar-store";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
 import { isTokenExpired } from "@/shared/utils/jwt.utils";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";

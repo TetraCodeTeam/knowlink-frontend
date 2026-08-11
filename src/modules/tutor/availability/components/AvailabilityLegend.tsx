@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { AVAILABILITY_LEGEND } from "@/modules/tutor/availability/constants/availability-legend.constants";
+import { AVAILABILITY_LEGEND } from "@/modules/tutor/availability/constants/availabilityLegend.constants";
 
 export default function AvailabilityLegend() {
   return (

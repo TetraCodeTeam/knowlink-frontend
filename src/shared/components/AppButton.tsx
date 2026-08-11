@@ -6,7 +6,7 @@ import {
   softButtonSx,
   softDangerButtonSx,
   outlineButtonSx,
-} from "@/shared/styles/button-sx";
+} from "@/shared/styles/buttonSx";
 
 type AppButtonVariant = "primary" | "soft" | "soft-danger" | "outline";
 

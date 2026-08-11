@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/http-client";
+import { httpClient } from "@/shared/lib/httpClient";
 
 export interface CareerOption {
   careerId: string;

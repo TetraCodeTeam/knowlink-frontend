@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { registerTutor } from "@/modules/auth/api/auth.api";
 import { AUTH_TUTOR_REGISTER_KEY } from "@/modules/auth/constants";
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";
-import { useRegistrationStore } from "@/modules/auth/hooks/use-registration-store";
+import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 
 export function useTutorRegister() {
   const navigate = useNavigate();

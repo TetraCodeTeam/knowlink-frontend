@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { registerStudent } from "@/modules/auth/api/auth.api";
 import { AUTH_REGISTER_KEY } from "@/modules/auth/constants";
-import { useRegistrationStore } from "@/modules/auth/hooks/use-registration-store";
+import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import type { StudentRegisterRequest } from "@/modules/auth/interfaces/requests/student-register.interface";
 
 export function useStudentRegister() {

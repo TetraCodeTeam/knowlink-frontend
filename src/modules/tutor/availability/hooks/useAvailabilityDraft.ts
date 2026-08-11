@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useAvailabilityBlocks } from "@/modules/tutor/availability/hooks/use-availability-blocks";
-import { useSaveAvailabilityBlocks } from "@/modules/tutor/availability/hooks/use-save-availability-blocks";
+import { useAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useAvailabilityBlocks";
+import { useSaveAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useSaveAvailabilityBlocks";
 import {
   getCurrentWeekMonday,
   getWeekEnd,
@@ -10,8 +10,8 @@ import {
   getEarliestSelectableTime,
   normalizeBlocks,
 } from "@/modules/tutor/availability/utils/availability.utils";
-import { useWeekCustomization } from "@/modules/tutor/availability/hooks/use-week-customization";
-import { useRemoveWeekCustomization } from "@/modules/tutor/availability/hooks/use-remove-week-customization";
+import { useWeekCustomization } from "@/modules/tutor/availability/hooks/useWeekCustomization";
+import { useRemoveWeekCustomization } from "@/modules/tutor/availability/hooks/useRemoveWeekCustomization";
 import type { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
 
 interface DraftBlock {

@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/http-client";
+import { httpClient } from "@/shared/lib/httpClient";
 import type { TutorOwnProfileResponse } from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
 
 export const getMyTutorProfile = async (): Promise<TutorOwnProfileResponse> => {

@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material
 import { MessageSquare } from "lucide-react";
 import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
-import { useReviewDialogStore } from "@/modules/tutor/hooks/use-review-dialog-store";
+import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 
 interface TutorReviewsCardProps {
   reviews: TutorReview[];

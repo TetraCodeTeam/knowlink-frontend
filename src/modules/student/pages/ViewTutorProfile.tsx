@@ -7,7 +7,7 @@ import { TutorSubjectsCard } from "@/modules/tutor/components/TutorSubjectsCard"
 import { TutorAvailabilityCard } from "@/modules/tutor/components/TutorAvailabilityCard";
 import { TutorMaterialCard } from "@/modules/tutor/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/tutor/components/TutorReviewsCard";
-import { useTutorProfile } from "@/modules/tutor/hooks/use-tutor-profile";
+import { useTutorProfile } from "@/modules/tutor/hooks/useTutorProfile";
 import { ReviewsDialog } from "@/modules/tutor/components/ReviewsDialog";
 
 export const TutorProfilePage = () => {

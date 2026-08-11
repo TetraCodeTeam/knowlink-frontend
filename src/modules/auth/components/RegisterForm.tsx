@@ -14,7 +14,7 @@ import { BookSearch, NotebookPen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { registerSchema, type RegisterFormData } from "@/modules/auth/schemas/user-register.schema";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
-import { useRegistrationStore } from "@/modules/auth/hooks/use-registration-store";
+import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import PasswordField from "@/modules/auth/components/PasswordField";
 
 export default function RegisterForm() {

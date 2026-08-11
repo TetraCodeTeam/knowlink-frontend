@@ -2,7 +2,7 @@ import {
   MIN_NOTICE_PRESETS,
   UNIT_TO_MINUTES,
   type MinNoticeUnit,
-} from "@/modules/tutor/availability/constants/min-notice.constants";
+} from "@/modules/tutor/availability/constants/minNotice.constants";
 
 export function minutesToBestUnit(minutes: number): { unit: MinNoticeUnit; value: string } {
   if (minutes % 1440 === 0) return { unit: "DAYS", value: String(minutes / 1440) };

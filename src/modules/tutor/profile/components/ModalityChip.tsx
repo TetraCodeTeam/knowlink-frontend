@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Monitor, Building2 } from "lucide-react";
-import { VIRTUAL_BG, PRESENTIAL_BG } from "@/modules/tutor/profile/constants/profile-colors.constants";
+import { VIRTUAL_BG, PRESENTIAL_BG } from "@/modules/tutor/profile/constants/profileColors.constants";
 
 interface ModalityChipProps {
   modality: "VIRTUAL" | "IN_PERSON";
