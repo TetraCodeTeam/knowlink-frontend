@@ -14,9 +14,9 @@ import {
 } from "@mui/material";
 import { Plus, Trash2, Laptop, LibraryBig } from "lucide-react";
 import { step2Schema, type Step2Data } from "@/modules/auth/schemas/tutor-register.schema";
-import { useCareers } from "@/modules/tutors/hooks/use-careers";
-import { useBasicSubjects } from "@/modules/tutors/hooks/use-basic-subjects";
-import { useCareerSubjects } from "@/modules/tutors/hooks/use-career-subjects";
+import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
+import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
 import AppButton from "@/shared/components/AppButton";
 
 const inputSx = { "& .MuiOutlinedInput-root": { borderRadius: 2 } };

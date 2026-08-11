@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } fro
 import { MessageSquare, X } from "lucide-react";
 import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
-import { useReviewDialogStore } from "@/modules/tutor/hooks/use-review-dialog-store";
+import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 import { SubjectFilterBar } from "@/modules/tutor/components/SubjectFilterBar";
 
 interface ReviewsDialogProps {

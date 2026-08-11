@@ -37,7 +37,7 @@ export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
             {review.subject}
           </Typography>
         )}
-        <Typography variant="subtitle1">&ldquo;{review.comment}&rdquo;</Typography>
+        <Typography variant="subtitle1">"{review.comment}"</Typography>
       </Box>
     </Box>
   );

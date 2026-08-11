@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import { useMinNoticeMinutes } from "@/modules/tutor/availability/hooks/use-min-notice-minutes";
-import { useUpdateMinNoticeMinutes } from "@/modules/tutor/availability/hooks/use-update-min-notice-minutes";
-import { MIN_NOTICE_PRESETS, type MinNoticeUnit } from "@/modules/tutor/availability/constants/min-notice.constants";
-import { minutesToBestUnit, customValueToMinutes, findMatchingPreset } from "@/modules/tutor/availability/utils/min-notice.utils";
+import { useMinNoticeMinutes } from "@/modules/tutor/availability/hooks/useMinNoticeMinutes";
+import { useUpdateMinNoticeMinutes } from "@/modules/tutor/availability/hooks/useUpdateMinNoticeMinutes";
+import { MIN_NOTICE_PRESETS, type MinNoticeUnit } from "@/modules/tutor/availability/constants/minNotice.constants";
+import { minutesToBestUnit, customValueToMinutes, findMatchingPreset } from "@/modules/tutor/availability/utils/minNotice.utils";
 
 export type MinNoticeSelection = number | "OTHER" | null;
 
@@ -18,13 +18,10 @@ export function useMinNoticeDraft() {
       ? "OTHER"
       : null;
 
-  const initialCustom = useMemo(
-    () =>
-      !matchingPreset && initialMinutes != null
-        ? minutesToBestUnit(initialMinutes)
-        : { unit: "HOURS" as MinNoticeUnit, value: "" },
-    [matchingPreset, initialMinutes]
-  );
+  const initialCustom =
+    !matchingPreset && initialMinutes != null
+      ? minutesToBestUnit(initialMinutes)
+      : { unit: "HOURS" as MinNoticeUnit, value: "" };
 
   const [selection, setSelection] = useState<MinNoticeSelection | undefined>(undefined);
   const [customValue, setCustomValue] = useState<string | undefined>(undefined);

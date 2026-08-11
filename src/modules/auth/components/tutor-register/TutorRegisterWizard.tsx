@@ -6,7 +6,7 @@ import Step1Account from "@/modules/auth/components/tutor-register/steps/Step1Ac
 import Step2AcademicProfile from "@/modules/auth/components/tutor-register/steps/Step2AcademicProfile";
 import Step3MercadoPago from "@/modules/auth/components/tutor-register/steps/Step3MercadoPago";
 import Step4Confirmation from "@/modules/auth/components/tutor-register/steps/Step4Confirmation";
-import { useTutorRegister } from "@/modules/auth/hooks/use-tutor-register";
+import { useTutorRegister } from "@/modules/auth/hooks/useTutorRegister";
 
 interface Credentials {
   email: string;

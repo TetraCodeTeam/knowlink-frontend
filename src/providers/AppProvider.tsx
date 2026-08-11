@@ -6,7 +6,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import RoutesProvider from "@/providers/RoutesProvider";
 import { SnackbarProvider } from "@/providers/SnackbarProvider";
-import { useSnackbarStore } from "@/shared/hooks/use-snackbar-store";
+import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
 import theme from "@/theme";
 
 const queryClient = new QueryClient({
