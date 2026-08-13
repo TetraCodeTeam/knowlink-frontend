@@ -4,6 +4,7 @@ import StudentHomePage from "@/modules/student/pages/StudentHomePage";
 import StudentProfilePage from "@/modules/student/pages/StudentProfilePage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import { TutorProfilePage } from "@/modules/student/pages/ViewTutorProfile";
+import BookingPreviewPage from "@/modules/student/booking/pages/BookingClassPage";
 
 export default function StudentRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function StudentRoutes() {
         <Route path="profile" element={<StudentProfilePage />} />
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
         <Route path="tutor/:tutorId/disponibilidad" element={<UnderConstructionPage />} />
+        <Route path="booking" element={<BookingPreviewPage />} />
       </Route>
     </Routes>
   );
