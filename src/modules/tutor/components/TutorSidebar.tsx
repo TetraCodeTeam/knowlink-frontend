@@ -72,9 +72,6 @@ export default function TutorSidebar() {
         left: 0,
         top: 0,
         zIndex: 100,
-        overflowY: "auto",
-        "&::-webkit-scrollbar": { display: "none" },
-        scrollbarWidth: "none",
       }}
     >
       {/* Brand */}
