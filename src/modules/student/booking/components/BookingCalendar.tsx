@@ -2,13 +2,18 @@ import { useCallback, useMemo, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import type { EventClickArg, EventContentArg, DayHeaderContentArg } from "@fullcalendar/core";
+import type { EventContentArg, DayHeaderContentArg } from "@fullcalendar/core";
 import { Box, Typography } from "@mui/material";
 import { isBeforeNow } from "@/shared/utils/calendarDateUtils";
 import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalendarSx";
 import InfoTooltip from "@/modules/student/booking/components/InfoTooltip";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
-import { LOCKED_SLOT_TOOLTIP, MOCK_BOOKING_SLOTS } from "@/modules/student/booking/mockBookingSlots";
+import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
+import type { ReservationWindow } from "@/modules/student/booking/utils/reservationWindowUtils";
+import {
+  RESERVED_SLOT_TOOLTIP,
+  MOCK_BOOKING_SLOTS,
+} from "@/modules/student/booking/mockBookingSlots";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/mockBookingSlots";
 import type { BookingSlot } from "@/modules/student/booking/components/BookingCard";
 
@@ -22,14 +27,11 @@ const SLOT_LABEL_FORMAT = {
 };
 const DAY_LABELS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
 
-type ResolvedSlotStatus = "AVAILABLE" | "LOCKED_BY_OTHER" | "PAST";
+type ResolvedSlotStatus = "AVAILABLE" | "RESERVED_BY_OTHER" | "PAST";
 
-// Única fuente de verdad de "¿se puede tomar este slot?", consultada tanto
-// para pintar el evento (classNames) como para permitir el click
-// (handleEventClick). Evita que ambos criterios se desincronicen.
 function getSlotStatus(slot: MockBookingSlotEvent): ResolvedSlotStatus {
   if (isBeforeNow(new Date(slot.end))) return "PAST";
-  if (slot.status === "LOCKED_BY_OTHER") return "LOCKED_BY_OTHER";
+  if (slot.status === "RESERVED_BY_OTHER") return "RESERVED_BY_OTHER";
   return "AVAILABLE";
 }
 
@@ -41,10 +43,6 @@ interface BookingCalendarProps {
 export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
 
-  // MOCK_BOOKING_SLOTS todavía no viene de una API, pero igual se memoiza:
-  // FullCalendar recalcula estado interno cuando cambia la *referencia* de
-  // `events`, no solo su valor, así que conviene mantener la disciplina
-  // desde ahora para cuando esto pase a venir de useQuery.
   const events = useMemo(
     () =>
       MOCK_BOOKING_SLOTS.map((slot) => {
@@ -54,59 +52,79 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
           start: slot.start,
           end: slot.end,
           classNames:
-            slot.id === selectedSlot?.id
-              ? ["booking-slot-selected"]
-              : status === "LOCKED_BY_OTHER"
-                ? ["booking-slot-locked"]
-                : status === "PAST"
-                  ? ["booking-slot-past"]
-                  : [],
+            status === "RESERVED_BY_OTHER"
+              ? ["booking-slot-reserved"]
+              : status === "PAST"
+                ? ["booking-slot-past"]
+                : ["booking-slot-available"],
           editable: false,
           extendedProps: { status },
         };
       }),
-    [selectedSlot?.id],
+    [],
   );
 
-  const handleEventClick = useCallback(
-    (info: EventClickArg) => {
-      const slot = MOCK_BOOKING_SLOTS.find((item) => item.id === info.event.id);
-      if (!slot || getSlotStatus(slot) !== "AVAILABLE") return;
-
+  // El id de un slot reservable identifica una VENTANA de 1h dentro de un
+  // bloque de disponibilidad, no el bloque completo. Se compone del id del
+  // bloque original + el horario exacto de inicio de la ventana.
+  const handleSelectWindow = useCallback(
+    (blockId: string, window: ReservationWindow) => {
       onSelectSlot({
-        id: slot.id,
-        date:
-          info.event.start?.toLocaleDateString("es-AR", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-          }) ?? "",
-        startTime:
-          info.event.start?.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) ??
-          "",
-        endTime:
-          info.event.end?.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }) ?? "",
+        id: `${blockId}__${window.start.toISOString()}`,
+        date: window.start.toLocaleDateString("es-AR", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+        }),
+        startTime: window.start.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+        endTime: window.end.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
       });
     },
     [onSelectSlot],
   );
 
-  const eventContent = useCallback((arg: EventContentArg) => {
-    const status = arg.event.extendedProps.status as ResolvedSlotStatus;
-    const content = (
-      <Box sx={{ px: 0.5, py: 0.25, fontSize: 12, fontWeight: 600, height: "100%" }}>
-        {arg.timeText}
-      </Box>
-    );
+  const eventContent = useCallback(
+    (arg: EventContentArg) => {
+      const status = arg.event.extendedProps.status as ResolvedSlotStatus;
 
-    if (status === "LOCKED_BY_OTHER") {
-      return <InfoTooltip message={LOCKED_SLOT_TOOLTIP}>{content}</InfoTooltip>;
-    }
-    if (status === "PAST") {
-      return <InfoTooltip message="Este horario ya pasó.">{content}</InfoTooltip>;
-    }
-    return content;
-  }, []);
+      if (status === "AVAILABLE") {
+        if (!arg.event.start || !arg.event.end) return null;
+
+        const isThisBlockSelected = selectedSlot?.id.startsWith(`${arg.event.id}__`) ?? false;
+        const selectedWindow: ReservationWindow | null = isThisBlockSelected
+          ? (() => {
+              const windowStart = new Date(selectedSlot!.id.split("__")[1]);
+              return { start: windowStart, end: new Date(windowStart.getTime() + 60 * 60 * 1000) };
+            })()
+          : null;
+
+        return (
+          <AvailabilityBlockContent
+            blockStart={arg.event.start}
+            blockEnd={arg.event.end}
+            selectedWindow={selectedWindow}
+            onHoverWindow={() => {}}
+            onSelectWindow={(window) => handleSelectWindow(arg.event.id, window)}
+          />
+        );
+      }
+
+      const content = (
+        <Box sx={{ px: 0.5, py: 0.25, fontSize: 12, fontWeight: 600, height: "100%" }}>
+          {arg.timeText}
+        </Box>
+      );
+
+      if (status === "RESERVED_BY_OTHER") {
+        return <InfoTooltip message={RESERVED_SLOT_TOOLTIP}>{content}</InfoTooltip>;
+      }
+      if (status === "PAST") {
+        return <InfoTooltip message="Este horario ya pasó.">{content}</InfoTooltip>;
+      }
+      return content;
+    },
+    [handleSelectWindow, selectedSlot],
+  );
 
   const dayHeaderContent = useCallback(
     (arg: DayHeaderContentArg) => (
@@ -124,14 +142,7 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
 
   return (
     <Box sx={bookingCalendarSx}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          mb: 2,
-        }}
-      >
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", mb: 2 }}>
         <BookingCalendarLegend />
       </Box>
 
@@ -151,7 +162,6 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         selectable={false}
         events={events}
         eventContent={eventContent}
-        eventClick={handleEventClick}
         height={600}
         locale="es"
         firstDay={1}

@@ -2,19 +2,23 @@ import type { SxProps, Theme } from "@mui/material";
 import { calendarBaseSx } from "@/shared/styles/calendarBaseSx";
 
 // Extiende el estilo base de FullCalendar sumando los estados propios del
-// flujo de reserva: seleccionado, bloqueado por otro estudiante, y pasado.
+// flujo de reserva: disponible, reservado por otro, y pasado. El estado
+// "seleccionado" no tiene clase propia acá: lo resuelve internamente
+// AvailabilityBlockContent, pintando solo la franja de 1h correspondiente
+// dentro del bloque (el bloque en sí conserva el fondo de "available").
+// Usa un violeta propio (#5865C8), distinto del violeta general del
+// proyecto (#5B6ED9), específico para los bloques de este calendario.
 export const bookingCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
-  // Bloque disponible seleccionado por el alumno
-  "& .fc-event.booking-slot-selected": {
-    bgcolor: "#5B6ED9 !important",
-    borderColor: "#5B6ED9 !important",
-    boxShadow: "0 2px 6px rgba(91, 110, 217, 0.35)",
+  "& .fc-event.booking-slot-available": {
+    bgcolor: "#acb2e4  !important",
+    borderColor: "#acb2e4 !important",
+    color: "#1a1a2e !important",
+    boxShadow: "none",
   },
 
-  // Bloque tomado temporalmente por otro alumno: amarillo, no clickeable
-  "& .fc-event.booking-slot-locked": {
+  "& .fc-event.booking-slot-reserved": {
     bgcolor: "#f5d98a !important",
     borderColor: "#f5d98a !important",
     color: "#6b5a1e !important",
@@ -23,7 +27,6 @@ export const bookingCalendarSx: SxProps<Theme> = {
     opacity: "1 !important",
   },
 
-  // Bloque cuyo horario ya pasó: gris, no clickeable
   "& .fc-event.booking-slot-past": {
     bgcolor: "#e2e2ea !important",
     borderColor: "#e2e2ea !important",
