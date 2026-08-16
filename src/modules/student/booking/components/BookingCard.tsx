@@ -205,10 +205,10 @@ function SelectedSlotSummary({ slot }: { slot: BookingSlot }) {
     >
       <CalendarArrowDown size={30} color="#3A48AD" />
       <Box>
-        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: "capitalize" }}>
           {slot.date}
         </Typography>
-        <Typography variant="caption" sx={{ color: "text.secondary" }}>
+        <Typography variant="subtitle1" sx={{ color: "text.secondary" }}>
           {slot.startTime} - {slot.endTime}
         </Typography>
       </Box>
