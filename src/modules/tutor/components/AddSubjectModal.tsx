@@ -2,8 +2,6 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import {
   Box,
-  Button,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -26,6 +24,7 @@ import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import { prefetchSuccessAnimation } from "@/shared/components/SuccessAnimation";
+import AppButton from "@/shared/components/AppButton";
 
 interface Props {
   open: boolean;
@@ -266,30 +265,19 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
         </DialogContent>
 
         <DialogActions sx={{ px: 3, pb: 3 }}>
-          <Button
-            variant="outlined"
-            onClick={handleClose}
-            disabled={isPending}
-            sx={{
-              borderRadius: 2,
-              px: 4,
-            }}
-          >
+          <AppButton appVariant="outline" onClick={handleClose} disabled={isPending} sx={{ px: 7 }}>
             Cancelar
-          </Button>
+          </AppButton>
 
-          <Button
-            variant="contained"
+          <AppButton
+            appVariant="primary"
             onClick={handleSubmit}
-            disabled={isPending || !subject || !modality}
-            sx={{
-              flex: 1,
-              borderRadius: 2,
-              ml: 2,
-            }}
+            loading={isPending}
+            disabled={!subject || !modality}
+            sx={{ flex: 1, ml: 2 }}
           >
-            {isPending ? <CircularProgress size={22} color="inherit" /> : "Agregar materia"}
-          </Button>
+            Agregar materia
+          </AppButton>
         </DialogActions>
       </Dialog>
     </>
