@@ -11,6 +11,11 @@ interface AvailabilityBlockContentProps {
   blockStart: Date;
   blockEnd: Date;
   selectedWindow: ReservationWindow | null;
+  // true cuando YA hay una ventana elegida en CUALQUIER bloque del
+  // calendario (no necesariamente este). Similar a elegir un asiento de
+  // avión: una vez elegido, el resto de las opciones deja de reaccionar
+  // hasta que se cancele la reserva en curso desde otro lado del flujo.
+  locked: boolean;
   onHoverWindow: (window: ReservationWindow | null) => void;
   onSelectWindow: (window: ReservationWindow) => void;
 }
@@ -21,24 +26,40 @@ function formatRange(start: Date, end: Date): string {
   return `${timeFormatter.format(start)} - ${timeFormatter.format(end)}`;
 }
 
+// Contenido interactivo de un bloque de disponibilidad. Por default se ve el
+// rango COMPLETO del bloque centrado (ej. "16:00 - 18:00"). Al mover el
+// mouse, se calcula en qué franja de 30 min cae el cursor y se resalta esa
+// ventana de 1h con un recuadro sólido ocupando SOLO la porción proporcional
+// que le corresponde dentro del bloque, con su horario exacto.
+//
+// Una vez que el alumno elige una ventana en CUALQUIER bloque del
+// calendario (locked=true), todo bloque deja de reaccionar al mouse: el que
+// tiene la selección queda fijo mostrándola: el resto vuelve a mostrar su
+// rango completo, atenuado, sin hover ni click posible. No hay forma de
+// cambiar de horario sin cancelar la reserva en curso desde otro lado del
+// flujo (no desde acá).
 export default function AvailabilityBlockContent({
   blockStart,
   blockEnd,
   selectedWindow,
+  locked,
   onHoverWindow,
   onSelectWindow,
 }: AvailabilityBlockContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredWindow, setHoveredWindow] = useState<ReservationWindow | null>(null);
 
-  const isFixed = selectedWindow !== null;
   const windows = getReservationWindows(blockStart, blockEnd);
 
-  const highlightedWindow = selectedWindow ?? hoveredWindow;
+  // La ventana a resaltar visualmente: si este bloque tiene la selección
+  // confirmada, esa manda; si el calendario está bloqueado por una
+  // selección en OTRO bloque, no hay nada que resaltar acá (ni hover
+  // posible); si no, la que esté bajo el mouse en este momento.
+  const highlightedWindow = selectedWindow ?? (locked ? null : hoveredWindow);
 
   const handleMouseMove = useCallback(
     (event: ReactMouseEvent<HTMLDivElement>) => {
-      if (isFixed) return;
+      if (locked) return;
       const container = containerRef.current;
       if (!container) return;
 
@@ -49,26 +70,28 @@ export default function AvailabilityBlockContent({
       setHoveredWindow(window);
       onHoverWindow(window);
     },
-    [isFixed, windows, onHoverWindow],
+    [locked, windows, onHoverWindow],
   );
 
   const handleMouseLeave = useCallback(() => {
-    if (isFixed) return;
+    if (locked) return;
     setHoveredWindow(null);
     onHoverWindow(null);
-  }, [isFixed, onHoverWindow]);
+  }, [locked, onHoverWindow]);
 
   const handleClick = useCallback(() => {
-    if (isFixed) return;
+    if (locked) return;
     if (hoveredWindow) onSelectWindow(hoveredWindow);
-  }, [isFixed, hoveredWindow, onSelectWindow]);
+  }, [locked, hoveredWindow, onSelectWindow]);
 
-  // Comparar por timestamp (valor), no por referencia: getReservationWindows
-  // genera un array nuevo en cada render, así que .indexOf() por referencia
-  // nunca matchea.
+  // Comparar por timestamp (valor), no por referencia de objeto:
+  // getReservationWindows() genera un array nuevo en cada render.
   const highlightIndex = highlightedWindow
     ? windows.findIndex((w) => w.start.getTime() === highlightedWindow.start.getTime())
     : -1;
+
+  // Bloqueado por selección en OTRO bloque: se ve atenuado, sin interacción.
+  const isDimmedByLock = locked && selectedWindow === null;
 
   return (
     <Box
@@ -80,9 +103,12 @@ export default function AvailabilityBlockContent({
         position: "relative",
         height: "100%",
         width: "100%",
-        cursor: isFixed ? "default" : "pointer",
+        cursor: locked ? "default" : "pointer",
+        opacity: isDimmedByLock ? 0.4 : 1,
+        transition: "opacity 0.15s ease",
       }}
     >
+      {/* Rango completo del bloque, visible solo sin ninguna franja resaltada */}
       <Box
         sx={{
           position: "absolute",
@@ -100,6 +126,8 @@ export default function AvailabilityBlockContent({
         </Typography>
       </Box>
 
+      {/* Franja de 1h resaltada: ocupa solo su porción proporcional dentro
+          del bloque, ya sea por hover o por selección ya confirmada. */}
       {highlightedWindow && highlightIndex >= 0 && (
         <Box
           sx={{

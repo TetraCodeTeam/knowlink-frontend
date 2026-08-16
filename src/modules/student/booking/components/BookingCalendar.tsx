@@ -29,6 +29,9 @@ const DAY_LABELS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
 
 type ResolvedSlotStatus = "AVAILABLE" | "RESERVED_BY_OTHER" | "PAST";
 
+// Única fuente de verdad de "¿se puede tomar este slot?", consultada tanto
+// para pintar el evento (classNames) como para permitir el click
+// (handleEventClick). Evita que ambos criterios se desincronicen.
 function getSlotStatus(slot: MockBookingSlotEvent): ResolvedSlotStatus {
   if (isBeforeNow(new Date(slot.end))) return "PAST";
   if (slot.status === "RESERVED_BY_OTHER") return "RESERVED_BY_OTHER";
@@ -43,6 +46,10 @@ interface BookingCalendarProps {
 export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
 
+  // MOCK_BOOKING_SLOTS todavía no viene de una API, pero igual se memoiza:
+  // FullCalendar recalcula estado interno cuando cambia la *referencia* de
+  // `events`, no solo su valor, así que conviene mantener la disciplina
+  // desde ahora para cuando esto pase a venir de useQuery.
   const events = useMemo(
     () =>
       MOCK_BOOKING_SLOTS.map((slot) => {
@@ -64,8 +71,9 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
     [],
   );
 
-  // El id de un slot reservable identifica una VENTANA de 1h dentro de un
-  // bloque de disponibilidad, no el bloque completo. Se compone del id del
+  // El id de un slot reservable ahora identifica una VENTANA de 1h dentro de
+  // un bloque de disponibilidad, no el bloque completo (un mismo bloque
+  // largo puede ofrecer varias ventanas distintas). Se compone del id del
   // bloque original + el horario exacto de inicio de la ventana.
   const handleSelectWindow = useCallback(
     (blockId: string, window: ReservationWindow) => {
@@ -103,6 +111,7 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
             blockStart={arg.event.start}
             blockEnd={arg.event.end}
             selectedWindow={selectedWindow}
+            locked={selectedSlot !== null}
             onHoverWindow={() => {}}
             onSelectWindow={(window) => handleSelectWindow(arg.event.id, window)}
           />
@@ -142,7 +151,14 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
 
   return (
     <Box sx={bookingCalendarSx}>
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          mb: 2,
+        }}
+      >
         <BookingCalendarLegend />
       </Box>
 
