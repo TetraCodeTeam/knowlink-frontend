@@ -8,6 +8,7 @@ import { MOCK_SUBJECTS, SERVICE_FEE_RATE } from "@/modules/student/booking/mockd
 export type Modality = "VIRTUAL" | "IN_PERSON";
 
 export interface BookingSlot {
+  id: string;
   date: string;
   startTime: string;
   endTime: string;
