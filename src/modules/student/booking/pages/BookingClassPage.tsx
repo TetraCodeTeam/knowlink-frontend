@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
 import BookingCard from "@/modules/student/booking/components/BookingCard";
-import type { BookingSlot } from "@/modules/student/booking/components/BookingCard";
-import BookingCalendar from "../components/BookingCalendar";
+import BookingCalendar from "@/modules/student/booking/components/BookingCalendar";
+import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 
 // Página temporal solo para previsualizar BookingCard mientras se investiga
 // la librería de calendario a usar. Eliminar/reemplazar cuando el calendario
 // real esté integrado.
 export default function BookingClassPage() {
   const [slot, setSlot] = useState<BookingSlot | null>(null);
-
 
   return (
     <Box sx={{ display: "flex", gap: 3, p: 4, alignItems: "flex-start" }}>

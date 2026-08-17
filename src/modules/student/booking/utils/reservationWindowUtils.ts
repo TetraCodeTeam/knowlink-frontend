@@ -1,10 +1,7 @@
+import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
+
 const RESERVATION_DURATION_MS = 60 * 60 * 1000; // 1 hora, fija para esta versión
 const STEP_MS = 30 * 60 * 1000; // paso de 30 minutos entre ventanas posibles
-
-export interface ReservationWindow {
-  start: Date;
-  end: Date;
-}
 
 /**
  * Dado un bloque de disponibilidad (start-end), devuelve todas las ventanas
@@ -39,7 +36,7 @@ export function getReservationWindows(blockStart: Date, blockEnd: Date): Reserva
  */
 export function getWindowAtRelativePosition(
   windows: ReservationWindow[],
-  relativeY: number,
+  relativeY: number
 ): ReservationWindow | null {
   if (windows.length === 0) return null;
 

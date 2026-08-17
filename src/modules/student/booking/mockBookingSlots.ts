@@ -1,13 +1,9 @@
 import { getCurrentWeekMonday } from "@/shared/utils/calendarDateUtils";
+import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
+import type { SlotStatus } from "@/modules/student/booking/interfaces/slotStatusType";
 
-export type BookingSlotStatus = "AVAILABLE" | "RESERVED_BY_OTHER";
-
-export interface MockBookingSlotEvent {
-  id: string;
-  start: string;
-  end: string;
-  status: BookingSlotStatus;
-}
+export const BLOCKED_SLOT_TOOLTIP =
+  "Otro estudiante ya seleccionó este horario para reservar. Está temporalmente bloqueado para vos.";
 
 export const RESERVED_SLOT_TOOLTIP =
   "Reservado definitivamente por otro estudiante. Este horario ya no está disponible.";
@@ -22,15 +18,19 @@ function isoAt(monday: Date, dayOffset: number, time: string): string {
 }
 
 const WEEKLY_PATTERN: Array<{
-  slotKey: string; dayOffset: number; start: string; end: string; status: BookingSlotStatus;
+  slotKey: string;
+  dayOffset: number;
+  start: string;
+  end: string;
+  status: SlotStatus;
 }> = [
   { slotKey: "a", dayOffset: 0, start: "09:00", end: "10:00", status: "AVAILABLE" },
   { slotKey: "b", dayOffset: 1, start: "10:00", end: "12:00", status: "AVAILABLE" },
   { slotKey: "c", dayOffset: 2, start: "10:30", end: "12:00", status: "AVAILABLE" },
-  { slotKey: "d", dayOffset: 1, start: "16:00", end: "17:00", status: "RESERVED_BY_OTHER" },
+  { slotKey: "d", dayOffset: 1, start: "16:00", end: "17:00", status: "BLOCKED" },
   { slotKey: "e", dayOffset: 3, start: "15:00", end: "16:30", status: "AVAILABLE" },
   { slotKey: "f", dayOffset: 4, start: "14:00", end: "15:30", status: "AVAILABLE" },
-  { slotKey: "g", dayOffset: 4, start: "18:00", end: "19:30", status: "AVAILABLE" },
+  { slotKey: "g", dayOffset: 4, start: "18:00", end: "19:30", status: "RESERVED" },
 ];
 
 export function generateMockBookingSlots(weeksBefore = 1, weeksAfter = 3): MockBookingSlotEvent[] {

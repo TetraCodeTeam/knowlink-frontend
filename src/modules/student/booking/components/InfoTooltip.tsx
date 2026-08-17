@@ -1,14 +1,9 @@
 import { Tooltip } from "@mui/material";
-import type { ReactElement } from "react";
+import type { InfoTooltipProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 
-interface LockedSlotTooltipProps {
-  message: string;
-  children: ReactElement;
-}
+// Tooltip para mostrar el motivo por el que un slot no está disponible.
 
-// Tooltip para mostrar el motivo por el que un slot no está disponible. 
-
-export default function LockedSlotTooltip({ message, children }: LockedSlotTooltipProps) {
+export default function LockedSlotTooltip({ message, children }: InfoTooltipProps) {
   return (
     <Tooltip
       title={message}

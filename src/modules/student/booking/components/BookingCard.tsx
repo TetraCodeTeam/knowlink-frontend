@@ -1,22 +1,14 @@
 import { useMemo, useState } from "react";
 import { Box, Divider, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
-import { CalendarArrowDown, XCircle } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
-import { MOCK_SUBJECTS, SERVICE_FEE_RATE } from "@/modules/student/booking/mockdata";
-
-export type Modality = "VIRTUAL" | "IN_PERSON";
-
-export interface BookingSlot {
-  id: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-}
-
-interface BookingCardProps {
-  selectedSlot?: BookingSlot | null;
-}
+import BookingModalityToggle from "@/modules/student/booking/components/BookingModalityToggle";
+import BookingPricingRow from "@/modules/student/booking/components/BookingPricingRow";
+import BookingSlotSelectionSummary from "@/modules/student/booking/components/BookingSlotSelectionSummary";
+import { SERVICE_FEE_RATE } from "@/modules/student/booking/mockdata";
+import { useBookingSubjects } from "@/modules/student/booking/hooks/use-booking-subjects";
+import type { BookingCardProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
+import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -33,21 +25,26 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
   const [subjectId, setSubjectId] = useState("");
   const [topic, setTopic] = useState("");
   const [modality, setModality] = useState<Modality>("VIRTUAL");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null);
+  const subjects = useBookingSubjects();
 
   const hasSlot = selectedSlot !== null;
   const selectedSubject = useMemo(
-    () => MOCK_SUBJECTS.find((subject) => subject.id === subjectId) ?? null,
-    [subjectId],
+    () => subjects.find((subject) => subject.id === subjectId) ?? null,
+    [subjectId, subjects]
   );
 
-  const availableModalities: Modality[] =
-    selectedSubject?.availableModalities ?? ["VIRTUAL", "IN_PERSON"];
+  const availableModalities: Modality[] = selectedSubject?.availableModalities ?? [
+    "VIRTUAL",
+    "IN_PERSON",
+  ];
 
   const handleSubjectChange = (event: SelectChangeEvent) => {
     const nextSubjectId = event.target.value;
     setSubjectId(nextSubjectId);
 
-    const nextSubject = MOCK_SUBJECTS.find((subject) => subject.id === nextSubjectId);
+    const nextSubject = subjects.find((subject) => subject.id === nextSubjectId);
     if (nextSubject && !nextSubject.availableModalities.includes(modality)) {
       setModality(nextSubject.availableModalities[0]);
     }
@@ -64,7 +61,21 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
     };
   }, [selectedSubject]);
 
-  const canSubmit = hasSlot && subjectId !== "" && topic.trim() !== "";
+  const canSubmit =
+    hasSlot && subjectId !== "" && topic.trim() !== "" && !isSubmitting && !confirmedBookingId;
+
+  const handleReserve = async () => {
+    if (!selectedSlot || !canSubmit) return;
+
+    setIsSubmitting(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
+    setConfirmedBookingId(selectedSlot.id);
+    setIsSubmitting(false);
+  };
+
+  const isConfirmedForCurrentSlot = selectedSlot !== null && confirmedBookingId === selectedSlot.id;
 
   return (
     <Paper
@@ -83,11 +94,7 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
         Reserva una clase
       </Typography>
 
-      {hasSlot ? (
-        <SelectedSlotSummary slot={selectedSlot} />
-      ) : (
-        <EmptySlotPlaceholder />
-      )}
+      <BookingSlotSelectionSummary slot={selectedSlot} />
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
         <Typography variant="h5" sx={{ fontWeight: 550 }}>
@@ -98,13 +105,17 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
           onChange={handleSubjectChange}
           displayEmpty
           size="small"
-          sx={{ borderRadius: 2 , fontSize: "20px", color:"#494949"}}
+          sx={{ borderRadius: 2, fontSize: "20px", color: "#494949" }}
         >
           <MenuItem value="" disabled>
             Selecciona la materia
           </MenuItem>
-          {MOCK_SUBJECTS.map((subject) => (
-            <MenuItem key={subject.id} value={subject.id} sx={{ fontSize: "20px", color:"#494949" }}>
+          {subjects.map((subject) => (
+            <MenuItem
+              key={subject.id}
+              value={subject.id}
+              sx={{ fontSize: "20px", color: "#494949" }}
+            >
               {subject.name}
             </MenuItem>
           ))}
@@ -122,9 +133,11 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
           multiline
           minRows={3}
           size="small"
-          sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 }, 
-          "& .MuiInputBase-input::placeholder": {fontSize: "20px"},
-          "& .MuiInputBase-input": {fontSize: "20px"}, }}
+          sx={{
+            "& .MuiOutlinedInput-root": { borderRadius: 2 },
+            "& .MuiInputBase-input::placeholder": { fontSize: "20px" },
+            "& .MuiInputBase-input": { fontSize: "20px" },
+          }}
         />
       </Box>
 
@@ -132,7 +145,7 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
         <Typography variant="h5" sx={{ fontWeight: 550 }}>
           Modalidad
         </Typography>
-        <ModalityToggle
+        <BookingModalityToggle
           value={modality}
           onChange={setModality}
           availableModalities={availableModalities}
@@ -148,10 +161,18 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
       <Divider />
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <PricingRow label="Tarifa por hora" value={pricing?.hourlyRate} formatter={currencyFormatter} />
-        <PricingRow label="Tarifa de servicio (3%)" value={pricing?.serviceFee} formatter={currencyFormatter} />
+        <BookingPricingRow
+          label="Tarifa por hora"
+          value={pricing?.hourlyRate}
+          formatter={currencyFormatter}
+        />
+        <BookingPricingRow
+          label="Tarifa de servicio (3%)"
+          value={pricing?.serviceFee}
+          formatter={currencyFormatter}
+        />
         <Divider sx={{ my: 0.5 }} />
-        <PricingRow
+        <BookingPricingRow
           label="Total"
           value={pricing?.total}
           formatter={currencyFormatter}
@@ -159,146 +180,28 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
         />
       </Box>
 
-      <AppButton appVariant="primary" disabled={!canSubmit} fullWidth>
-        Reservar
+      {isConfirmedForCurrentSlot && (
+        <Box
+          sx={{
+            p: 2,
+            borderRadius: 2,
+            bgcolor: "#e8f7ed",
+            border: "1px solid #bfe7cc",
+            color: "#1f6f46",
+          }}
+        >
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+            Reserva confirmada
+          </Typography>
+          <Typography variant="body2">
+            Tu clase quedó registrada con éxito. Este es un mock de la confirmación del endpoint.
+          </Typography>
+        </Box>
+      )}
+
+      <AppButton appVariant="primary" disabled={!canSubmit} loading={isSubmitting} onClick={handleReserve} fullWidth>
+        {isConfirmedForCurrentSlot ? "Reservado" : "Reservar"}
       </AppButton>
     </Paper>
-  );
-}
-
-function EmptySlotPlaceholder() {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 1,
-        py: 4,
-        px: 2,
-        borderRadius: 2,
-        bgcolor: "#EEEDFE",
-        textAlign: "center",
-      }}
-    >
-      <CalendarArrowDown size={30} color="#494949" />
-      <Typography variant="subtitle1" sx={{ color: "text.secondary", px: 5 }}>
-        Selecciona un horario en el calendario para continuar
-      </Typography>
-    </Box>
-  );
-}
-
-function SelectedSlotSummary({ slot }: { slot: BookingSlot }) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1.5,
-        py: 1.5,
-        px: 2,
-        borderRadius: 2,
-        bgcolor: "#eef2ff",
-      }}
-    >
-      <CalendarArrowDown size={30} color="#3A48AD" />
-      <Box>
-        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: "capitalize" }}>
-          {slot.date}
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: "text.secondary" }}>
-          {slot.startTime} - {slot.endTime}
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
-
-
-interface ModalityToggleProps {
-  value: Modality;
-  onChange: (modality: Modality) => void;
-  availableModalities: Modality[];
-}
-
-const MODALITY_OPTIONS: Modality[] = ["VIRTUAL", "IN_PERSON"];
-
-function ModalityToggle({ value, onChange, availableModalities }: ModalityToggleProps) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        gap: 0.5,
-        p: 1,
-        borderRadius: 3,
-        bgcolor: "#E0E0FA",
-      }}
-    >
-      {MODALITY_OPTIONS.map((option) => {
-        const isSelected = value === option;
-        const isDisabled = !availableModalities.includes(option);
-
-        return (
-          <Box
-            key={option}
-            component="button"
-            type="button"
-            disabled={isDisabled}
-            onClick={() => !isDisabled && onChange(option)}
-            sx={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 0.5,
-              border: "none",
-              borderRadius: 2.5,
-              py: 1.5,
-              px: 2,
-              fontSize: 18,
-              fontWeight: 600,
-              fontFamily: "inherit",
-              cursor: isDisabled ? "not-allowed" : "pointer",
-              bgcolor: isSelected ? "#fff" : "transparent",
-              color: isDisabled ? "text.disabled" : isSelected ? "#5B6ED9" : "text.secondary",
-              boxShadow: isSelected ? "0 1px 4px 0 rgba(15, 23, 42, 0.12)" : "none",
-              transition: "background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease",
-            }}
-          >
-            {MODALITY_LABEL[option]}
-            {isDisabled && <XCircle size={15} strokeWidth={2} />}
-          </Box>
-        );
-      })}
-    </Box>
-  );
-}
-
-
-interface PricingRowProps {
-  label: string;
-  value?: number;
-  formatter: Intl.NumberFormat;
-  emphasized?: boolean;
-}
-
-function PricingRow({ label, value, formatter, emphasized = false }: PricingRowProps) {
-  return (
-    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-      <Typography
-        variant="h6"
-        sx={{ color: emphasized ? "text.primary" : "text.secondary", fontWeight: emphasized ? 700 : 400 }}
-      >
-        {label}
-      </Typography>
-      <Typography
-        variant="h5"
-        sx={{ fontWeight: emphasized ? 700 : 500 }}
-      >
-        {value !== undefined ? formatter.format(value) : "-"}
-      </Typography>
-    </Box>
   );
 }

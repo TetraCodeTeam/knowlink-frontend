@@ -7,12 +7,22 @@ export interface BookingLegendItem {
 
 export const BOOKING_CALENDAR_LEGEND: BookingLegendItem[] = [
   {
+    label: "Disponible",
+    color: "#acb2e4",
+  },
+  {
     label: "Bloqueado",
     color: "#f5d98a",
+    description:
+      "Otro estudiante ya seleccionó este horario para reservar. Está temporalmente bloqueado para vos.",
+  },
+  {
+    label: "Reservado",
+    color: "#dfe1ec",
     description: "Reservado definitivamente por otro estudiante. Este horario ya no está disponible.",
   },
   {
-    label: "Ocupado",
+    label: "Pasado",
     color: "#e2e2ea",
   },
   {

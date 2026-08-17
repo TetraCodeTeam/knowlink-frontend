@@ -22,7 +22,9 @@ export default function BookingCalendarLegend() {
           </Typography>
           {item.description && (
             <InfoTooltip message={item.description}>
-              <Info size={14} color="#8a8aa3" style={{ cursor: "help" }} />
+              <Box component="span" sx={{ display: "inline-flex", cursor: "help" }}>
+                <Info size={14} color="#8a8aa3" />
+              </Box>
             </InfoTooltip>
           )}
         </Box>

@@ -5,20 +5,8 @@ import {
   getReservationWindows,
   getWindowAtRelativePosition,
 } from "@/modules/student/booking/utils/reservationWindowUtils";
-import type { ReservationWindow } from "@/modules/student/booking/utils/reservationWindowUtils";
-
-interface AvailabilityBlockContentProps {
-  blockStart: Date;
-  blockEnd: Date;
-  selectedWindow: ReservationWindow | null;
-  // true cuando YA hay una ventana elegida en CUALQUIER bloque del
-  // calendario (no necesariamente este). Similar a elegir un asiento de
-  // avión: una vez elegido, el resto de las opciones deja de reaccionar
-  // hasta que se cancele la reserva en curso desde otro lado del flujo.
-  locked: boolean;
-  onHoverWindow: (window: ReservationWindow | null) => void;
-  onSelectWindow: (window: ReservationWindow) => void;
-}
+import type { AvailabilityBlockContentProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
+import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 
 const timeFormatter = new Intl.DateTimeFormat("es-AR", { hour: "2-digit", minute: "2-digit" });
 
@@ -70,7 +58,7 @@ export default function AvailabilityBlockContent({
       setHoveredWindow(window);
       onHoverWindow(window);
     },
-    [locked, windows, onHoverWindow],
+    [locked, windows, onHoverWindow]
   );
 
   const handleMouseLeave = useCallback(() => {
