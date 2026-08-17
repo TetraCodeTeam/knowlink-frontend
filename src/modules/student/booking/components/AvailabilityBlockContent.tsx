@@ -7,6 +7,7 @@ import {
 } from "@/modules/student/booking/utils/reservationWindowUtils";
 import type { AvailabilityBlockContentProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
+import { BOOKING_STATUS_META } from "@/modules/student/booking/constants/bookingLegendConstants";
 
 const timeFormatter = new Intl.DateTimeFormat("es-AR", { hour: "2-digit", minute: "2-digit" });
 
@@ -37,6 +38,7 @@ export default function AvailabilityBlockContent({
   const [hoveredWindow, setHoveredWindow] = useState<ReservationWindow | null>(null);
 
   const windows = getReservationWindows(blockStart, blockEnd);
+
 
   const highlightedWindow = selectedWindow ?? (locked ? null : hoveredWindow);
 
@@ -119,13 +121,13 @@ export default function AvailabilityBlockContent({
             right: 2,
             top: `${(highlightIndex / windows.length) * 100}%`,
             height: `${(1 / windows.length) * 100}%`,
-            bgcolor: "rgba(88, 101, 200, 0.9)",
-            border: "2px solid #5865C8",
+            bgcolor: `${BOOKING_STATUS_META.SELECTED.color}CC`,
+            border: `2px solid ${BOOKING_STATUS_META.SELECTED.color}`,
             borderRadius: "6px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 2px 8px rgba(88, 101, 200, 0.4)",
+            boxShadow: `0 2px 8px ${BOOKING_STATUS_META.SELECTED.color}66`,
             pointerEvents: "none",
           }}
         >

@@ -14,7 +14,7 @@ import type { ReservationWindow } from "@/modules/student/booking/interfaces/res
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { SlotDisplayStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
-import { BOOKING_CALENDAR_LEGEND, STATUS_TO_LEGEND_LABEL } from "../constants/bookingLegendConstants";
+import { BOOKING_STATUS_META } from "../constants/bookingLegendConstants";
 
 const PLUGINS = [timeGridPlugin, interactionPlugin];
 const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
@@ -120,8 +120,7 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         </Box>
       );
 
-      const legendLabel = STATUS_TO_LEGEND_LABEL[status];
-      const legendItem = BOOKING_CALENDAR_LEGEND.find((item) => item.label === legendLabel);
+      const legendItem = BOOKING_STATUS_META[status];
 
       if (legendItem?.description) {
         return <InfoTooltip message={legendItem.description}>{content}</InfoTooltip>;
