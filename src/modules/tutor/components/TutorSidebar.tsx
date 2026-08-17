@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap, BookOpen, BarChart2 } from "lucide-react";
+import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
@@ -20,10 +20,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/tutor/home" },
-  { icon: CalendarClock, label: "Disponibilidad", path: "/tutor/availability" },
+  { icon: CalendarClock, label: "Mi agenda", path: "/tutor/availability" },
   { icon: LayoutGrid, label: "Mis clases", path: "/tutor/classes" },
-  { icon: BookOpen, label: "Mi contenido", path: "/tutor/content" },
-  { icon: BarChart2, label: "Panel de estadísticas", path: "/tutor/stats" },
   { icon: Bell, label: "Notificaciones", path: "/tutor/notifications", badge: "notifications" },
   { icon: Headphones, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
 ];
@@ -64,7 +62,7 @@ export default function TutorSidebar() {
       component="nav"
       sx={{
         width: TUTOR_SIDEBAR_WIDTH,
-        minHeight: "100vh",
+        height: "100vh",
         backgroundColor: SIDEBAR_BG,
         display: "flex",
         flexDirection: "column",
@@ -108,7 +106,7 @@ export default function TutorSidebar() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "24px",
+          justifyContent: "space-evenly",
           width: "100%",
           px: "8px",
           flex: 1,
