@@ -14,7 +14,7 @@ export default function LockedSlotTooltip({ message, children }: InfoTooltipProp
           sx: {
             bgcolor: "#fff",
             color: "text.primary",
-            fontSize: 16,
+            fontSize: 13,
             fontWeight: 500,
             lineHeight: 1.4,
             textAlign: "center",

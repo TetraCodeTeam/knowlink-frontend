@@ -9,7 +9,7 @@ export default function BookingClassPage() {
   const [slot, setSlot] = useState<BookingSlot | null>(null);
 
   return (
-    <Box sx={{ display: "flex", gap: 4, p: 4, alignItems: "flex-start" }}>
+    <Box sx={{ display: "flex", gap: 4, p: 4, alignItems: "stretch" }}>
       <Box sx={{ flex: 1 }}>
         <BookingCalendar selectedSlot={slot} onSelectSlot={setSlot} />
       </Box>

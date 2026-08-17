@@ -156,18 +156,27 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
   ), []);
 
   return (
-    <Box sx={bookingCalendarSx}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          mb: 2,
-        }}
-      >
-        <BookingCalendarLegend />
-      </Box>
+  <Box
+    sx={{
+      ...bookingCalendarSx,
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      minHeight: 0,
+    }}
+  >
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        mb: 2,
+      }}
+    >
+      <BookingCalendarLegend />
+    </Box>
 
+    <Box sx={{ flex: 1, minHeight: 0 }}>
       <FullCalendar
         ref={calendarRef}
         plugins={PLUGINS}
@@ -184,10 +193,11 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         selectable={false}
         events={events}
         eventContent={eventContent}
-        height={600}
+        height="100%"
         locale="es"
         firstDay={1}
       />
     </Box>
-  );
+  </Box>
+);
 }

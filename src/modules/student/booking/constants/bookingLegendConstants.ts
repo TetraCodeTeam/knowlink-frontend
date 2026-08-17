@@ -6,10 +6,6 @@ export interface BookingLegendItem {
 }
 
 export const BOOKING_STATUS_META = {
-  AVAILABLE: {
-    label: "Disponible",
-    color: "#acb2e4",
-  },
   BLOCKED: {
     label: "Bloqueado",
     color: "#f5d98a",
@@ -26,6 +22,10 @@ export const BOOKING_STATUS_META = {
     color: "#cacad1",
     description: "Este horario ya pasó.",
   },
+  AVAILABLE: {
+    label: "Disponible",
+    color: "#acb2e4",
+  },
   SELECTED: {
     label: "Seleccionado",
     color: "#5865C8",
@@ -33,16 +33,17 @@ export const BOOKING_STATUS_META = {
 } satisfies Record<string, BookingLegendItem>;
 
 export const BOOKING_CALENDAR_LEGEND: BookingLegendItem[] = [
-  BOOKING_STATUS_META.AVAILABLE,
   BOOKING_STATUS_META.BLOCKED,
   BOOKING_STATUS_META.RESERVED,
   BOOKING_STATUS_META.PAST,
+  BOOKING_STATUS_META.AVAILABLE,
   BOOKING_STATUS_META.SELECTED,
 ];
 
 export const STATUS_TO_LEGEND_LABEL: Record<string, string> = {
-  AVAILABLE: BOOKING_STATUS_META.AVAILABLE.label,
   BLOCKED: BOOKING_STATUS_META.BLOCKED.label,
   RESERVED: BOOKING_STATUS_META.RESERVED.label,
   PAST: BOOKING_STATUS_META.PAST.label,
+  AVAILABLE: BOOKING_STATUS_META.AVAILABLE.label,
+  SELECTED: BOOKING_STATUS_META.SELECTED.label,
 };

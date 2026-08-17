@@ -10,14 +10,14 @@ export default function BookingCalendarLegend() {
         <Box key={item.label} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
             sx={{
-              width: 20,
-              height: 20,
+              width: 15,
+              height: 15,
               borderRadius: "4px",
               bgcolor: item.color,
               border: item.color === "#f7f7fb" ? "1px solid #e2e2ec" : "none",
             }}
           />
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="caption" color="text.secondary">
             {item.label}
           </Typography>
           {item.description && (
