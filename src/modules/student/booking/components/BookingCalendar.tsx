@@ -11,10 +11,10 @@ import BookingCalendarLegend from "@/modules/student/booking/components/BookingC
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
 import { useBookingSlots } from "@/modules/student/booking/hooks/use-booking-slots";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
-import { BLOCKED_SLOT_TOOLTIP, RESERVED_SLOT_TOOLTIP } from "@/modules/student/booking/mockBookingSlots";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { SlotDisplayStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
+import { BOOKING_CALENDAR_LEGEND, STATUS_TO_LEGEND_LABEL } from "../constants/bookingLegendConstants";
 
 const PLUGINS = [timeGridPlugin, interactionPlugin];
 const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
@@ -120,14 +120,11 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         </Box>
       );
 
-      if (status === "BLOCKED") {
-        return <InfoTooltip message={BLOCKED_SLOT_TOOLTIP}>{content}</InfoTooltip>;
-      }
-      if (status === "RESERVED") {
-        return <InfoTooltip message={RESERVED_SLOT_TOOLTIP}>{content}</InfoTooltip>;
-      }
-      if (status === "PAST") {
-        return <InfoTooltip message="Este horario ya pasó.">{content}</InfoTooltip>;
+      const legendLabel = STATUS_TO_LEGEND_LABEL[status];
+      const legendItem = BOOKING_CALENDAR_LEGEND.find((item) => item.label === legendLabel);
+
+      if (legendItem?.description) {
+        return <InfoTooltip message={legendItem.description}>{content}</InfoTooltip>;
       }
       return content;
     },

@@ -2,11 +2,6 @@ import { getCurrentWeekMonday } from "@/shared/utils/calendarDateUtils";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { SlotStatus } from "@/modules/student/booking/interfaces/slotStatusType";
 
-export const BLOCKED_SLOT_TOOLTIP =
-  "Otro estudiante ya seleccionó este horario para reservar. Está temporalmente bloqueado para vos.";
-
-export const RESERVED_SLOT_TOOLTIP =
-  "Reservado definitivamente por otro estudiante. Este horario ya no está disponible.";
 
 function isoAt(monday: Date, dayOffset: number, time: string): string {
   const date = new Date(monday);

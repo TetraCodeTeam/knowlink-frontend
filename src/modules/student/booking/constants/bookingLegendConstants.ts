@@ -18,15 +18,23 @@ export const BOOKING_CALENDAR_LEGEND: BookingLegendItem[] = [
   },
   {
     label: "Reservado",
-    color: "#dfe1ec",
+    color: "#b3b5c0",
     description: "Reservado por otro estudiante. Este horario ya no está disponible.",
   },
   {
     label: "Pasado",
-    color: "#e2e2ea",
+    color: "#cacad1",
+    description: "Este horario ya pasó.",
   },
   {
     label: "Seleccionado",
     color: "#5865C8",
   },
 ];
+
+export const STATUS_TO_LEGEND_LABEL: Record<string, string> = {
+  BLOCKED: "Bloqueado",
+  RESERVED: "Reservado",
+  PAST: "Pasado",
+  AVAILABLE: "Disponible",
+};
