@@ -10,7 +10,7 @@ export default function BookingPricingRow({
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Typography
-        variant="h6"
+        variant="subtitle1"
         sx={{
           color: emphasized ? "text.primary" : "text.secondary",
           fontWeight: emphasized ? 700 : 400,
@@ -18,7 +18,7 @@ export default function BookingPricingRow({
       >
         {label}
       </Typography>
-      <Typography variant="h5" sx={{ fontWeight: emphasized ? 700 : 500 }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: emphasized ? 700 : 500 }}>
         {value !== undefined ? formatter.format(value) : "-"}
       </Typography>
     </Box>

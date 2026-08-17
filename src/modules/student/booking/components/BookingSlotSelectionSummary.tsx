@@ -20,7 +20,7 @@ export default function BookingSlotSelectionSummary({ slot }: BookingSlotSelecti
         }}
       >
         <CalendarArrowDown size={30} color="#494949" />
-        <Typography variant="subtitle1" sx={{ color: "text.secondary", px: 5 }}>
+        <Typography variant="body1" sx={{ color: "text.secondary", px: 5 }}>
           Selecciona un horario en el calendario para continuar
         </Typography>
       </Box>
@@ -41,10 +41,10 @@ export default function BookingSlotSelectionSummary({ slot }: BookingSlotSelecti
     >
       <CalendarArrowDown size={30} color="#3A48AD" />
       <Box>
-        <Typography variant="h6" sx={{ fontWeight: 600, textTransform: "capitalize" }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 600, textTransform: "capitalize" }}>
           {slot.date}
         </Typography>
-        <Typography variant="subtitle1" sx={{ color: "text.secondary" }}>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {slot.startTime} - {slot.endTime}
         </Typography>
       </Box>

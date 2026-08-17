@@ -81,23 +81,23 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
     <Paper
       elevation={0}
       sx={{
-        width: 450,
+        width: 350,
         p: 4,
         borderRadius: 3,
         border: "1px solid #e2e8f0",
         display: "flex",
         flexDirection: "column",
-        gap: 4,
+        gap: 2.5,
       }}
     >
-      <Typography variant="h4" sx={{ fontWeight: 700 }}>
+      <Typography variant="h5" sx={{ fontWeight: 700 }}>
         Reserva una clase
       </Typography>
 
       <BookingSlotSelectionSummary slot={selectedSlot} />
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-        <Typography variant="h5" sx={{ fontWeight: 550 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
           Materia
         </Typography>
         <Select
@@ -105,7 +105,7 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
           onChange={handleSubjectChange}
           displayEmpty
           size="small"
-          sx={{ borderRadius: 2, fontSize: "20px", color: "#494949" }}
+          sx={{ borderRadius: 2, fontSize: "14px", color: "#494949" }}
         >
           <MenuItem value="" disabled>
             Selecciona la materia
@@ -114,7 +114,7 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
             <MenuItem
               key={subject.id}
               value={subject.id}
-              sx={{ fontSize: "20px", color: "#494949" }}
+              sx={{ fontSize: "14px", color: "#494949" }}
             >
               {subject.name}
             </MenuItem>
@@ -123,7 +123,7 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-        <Typography variant="h5" sx={{ fontWeight: 550 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
           Tema a tratar
         </Typography>
         <TextField
@@ -135,14 +135,14 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
           size="small"
           sx={{
             "& .MuiOutlinedInput-root": { borderRadius: 2 },
-            "& .MuiInputBase-input::placeholder": { fontSize: "20px" },
-            "& .MuiInputBase-input": { fontSize: "20px" },
+            "& .MuiInputBase-input::placeholder": { fontSize: "14px" },
+            "& .MuiInputBase-input": { fontSize: "14px" },
           }}
         />
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-        <Typography variant="h5" sx={{ fontWeight: 550 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
           Modalidad
         </Typography>
         <BookingModalityToggle
