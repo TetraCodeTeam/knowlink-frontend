@@ -24,8 +24,7 @@ function formatRange(start: Date, end: Date): string {
 // calendario (locked=true), todo bloque deja de reaccionar al mouse: el que
 // tiene la selección queda fijo mostrándola: el resto vuelve a mostrar su
 // rango completo, atenuado, sin hover ni click posible. No hay forma de
-// cambiar de horario sin cancelar la reserva en curso desde otro lado del
-// flujo (no desde acá).
+// cambiar de horario sin cancelar la reserva en curso 
 export default function AvailabilityBlockContent({
   blockStart,
   blockEnd,
@@ -39,10 +38,6 @@ export default function AvailabilityBlockContent({
 
   const windows = getReservationWindows(blockStart, blockEnd);
 
-  // La ventana a resaltar visualmente: si este bloque tiene la selección
-  // confirmada, esa manda; si el calendario está bloqueado por una
-  // selección en OTRO bloque, no hay nada que resaltar acá (ni hover
-  // posible); si no, la que esté bajo el mouse en este momento.
   const highlightedWindow = selectedWindow ?? (locked ? null : hoveredWindow);
 
   const handleMouseMove = useCallback(

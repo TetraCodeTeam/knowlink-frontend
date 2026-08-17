@@ -4,14 +4,12 @@ import BookingCard from "@/modules/student/booking/components/BookingCard";
 import BookingCalendar from "@/modules/student/booking/components/BookingCalendar";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 
-// Página temporal solo para previsualizar BookingCard mientras se investiga
-// la librería de calendario a usar. Eliminar/reemplazar cuando el calendario
-// real esté integrado.
+
 export default function BookingClassPage() {
   const [slot, setSlot] = useState<BookingSlot | null>(null);
 
   return (
-    <Box sx={{ display: "flex", gap: 3, p: 4, alignItems: "flex-start" }}>
+    <Box sx={{ display: "flex", gap: 7, p: 4, alignItems: "flex-start" }}>
       <Box sx={{ flex: 1 }}>
         <BookingCalendar selectedSlot={slot} onSelectSlot={setSlot} />
       </Box>

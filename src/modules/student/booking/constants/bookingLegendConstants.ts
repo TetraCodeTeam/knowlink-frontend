@@ -14,12 +14,12 @@ export const BOOKING_CALENDAR_LEGEND: BookingLegendItem[] = [
     label: "Bloqueado",
     color: "#f5d98a",
     description:
-      "Otro estudiante ya seleccionó este horario para reservar. Está temporalmente bloqueado para vos.",
+      "Bloqueado por otro estudiante. En unos minutos puede liberarse o quedar reservado.",
   },
   {
     label: "Reservado",
     color: "#dfe1ec",
-    description: "Reservado definitivamente por otro estudiante. Este horario ya no está disponible.",
+    description: "Reservado por otro estudiante. Este horario ya no está disponible.",
   },
   {
     label: "Pasado",

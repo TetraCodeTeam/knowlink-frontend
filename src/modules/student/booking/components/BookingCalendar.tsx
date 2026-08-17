@@ -134,19 +134,30 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
     [handleSelectWindow, selectedSlot]
   );
 
-  const dayHeaderContent = useCallback(
-    (arg: DayHeaderContentArg) => (
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 0.5 }}>
-        <Typography variant="body2" fontWeight={600}>
-          {DAY_LABELS[arg.date.getDay()]}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {arg.date.getDate()}
-        </Typography>
+
+  const dayHeaderContent = useCallback(({ date, isToday }: DayHeaderContentArg) => (
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
+      <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
+        {DAY_LABELS[date.getDay()]}
+      </Typography>
+      
+      <Box
+        sx={{
+          width: 32,
+          height: 32,
+          borderRadius: "50%",
+          display: "grid",
+          placeItems: "center",
+          fontWeight: 700,
+          bgcolor: isToday ? "#5B6ED9" : "transparent",
+          color: isToday ? "#fff" : "#1A1A2E",
+          boxShadow: isToday ? "0 4px 10px rgba(91, 110, 217, 0.35)" : "none",
+        }}
+      >
+        {date.getDate()}
       </Box>
-    ),
-    []
-  );
+    </Box>
+  ), []);
 
   return (
     <Box sx={bookingCalendarSx}>
