@@ -1,14 +1,10 @@
 import { Box } from "@mui/material";
 import { XCircle } from "lucide-react";
 import type { ModalityToggleProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
-import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
-
-const MODALITY_OPTIONS: Modality[] = ["VIRTUAL", "IN_PERSON"];
-
-const MODALITY_LABEL: Record<Modality, string> = {
-  VIRTUAL: "Virtual",
-  IN_PERSON: "Presencial",
-};
+import {
+  BOOKING_MODALITY_LABEL,
+  BOOKING_MODALITY_OPTIONS,
+} from "@/modules/student/booking/constants/modality.constants";
 
 export default function BookingModalityToggle({
   value,
@@ -25,7 +21,7 @@ export default function BookingModalityToggle({
         bgcolor: "#E0E0FA",
       }}
     >
-      {MODALITY_OPTIONS.map((option) => {
+      {BOOKING_MODALITY_OPTIONS.map((option) => {
         const isSelected = value === option;
         const isDisabled = !availableModalities.includes(option);
 
@@ -56,7 +52,7 @@ export default function BookingModalityToggle({
               transition: "background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease",
             }}
           >
-            {MODALITY_LABEL[option]}
+            {BOOKING_MODALITY_LABEL[option]}
             {isDisabled && <XCircle size={15} strokeWidth={2} />}
           </Box>
         );

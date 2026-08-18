@@ -1,4 +1,4 @@
-import type { SlotStatus } from "@/modules/student/booking/interfaces/slotStatusType";
+import type { SlotStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
 
 export interface MockBookingSlotEvent {
   id: string;

@@ -120,7 +120,7 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         </Box>
       );
 
-      const legendItem = BOOKING_STATUS_META[status];
+      const legendItem = BOOKING_STATUS_META[status as keyof typeof BOOKING_STATUS_META];
 
       if (legendItem?.description) {
         return <InfoTooltip message={legendItem.description}>{content}</InfoTooltip>;

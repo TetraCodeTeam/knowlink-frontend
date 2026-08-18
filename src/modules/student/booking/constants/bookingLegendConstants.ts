@@ -5,7 +5,9 @@ export interface BookingLegendItem {
   description?: string; // Si tiene texto, el label muestra un ícono (i) con tooltip informativo
 }
 
-export const BOOKING_STATUS_META = {
+export type BookingStatusKey = "BLOCKED" | "RESERVED" | "PAST" | "AVAILABLE" | "SELECTED";
+
+export const BOOKING_STATUS_META: Record<BookingStatusKey, BookingLegendItem> = {
   BLOCKED: {
     label: "Bloqueado",
     color: "#f5d98a",
@@ -30,7 +32,7 @@ export const BOOKING_STATUS_META = {
     label: "Seleccionado",
     color: "#5865C8",
   },
-} satisfies Record<string, BookingLegendItem>;
+};
 
 export const BOOKING_CALENDAR_LEGEND: BookingLegendItem[] = [
   BOOKING_STATUS_META.BLOCKED,
@@ -40,7 +42,7 @@ export const BOOKING_CALENDAR_LEGEND: BookingLegendItem[] = [
   BOOKING_STATUS_META.SELECTED,
 ];
 
-export const STATUS_TO_LEGEND_LABEL: Record<string, string> = {
+export const STATUS_TO_LEGEND_LABEL: Record<BookingStatusKey, string> = {
   BLOCKED: BOOKING_STATUS_META.BLOCKED.label,
   RESERVED: BOOKING_STATUS_META.RESERVED.label,
   PAST: BOOKING_STATUS_META.PAST.label,

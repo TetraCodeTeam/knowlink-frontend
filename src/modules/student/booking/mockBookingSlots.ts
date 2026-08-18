@@ -1,6 +1,6 @@
 import { getCurrentWeekMonday } from "@/shared/utils/calendarDateUtils";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
-import type { SlotStatus } from "@/modules/student/booking/interfaces/slotStatusType";
+import type { SlotStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
 
 
 function isoAt(monday: Date, dayOffset: number, time: string): string {

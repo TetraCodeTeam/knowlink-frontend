@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
-import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
+import type { Modality } from "@/modules/student/booking/constants/modality.constants";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 
 export interface AvailabilityBlockContentProps {

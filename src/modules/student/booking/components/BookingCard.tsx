@@ -8,10 +8,11 @@ import BookingSlotSelectionSummary from "@/modules/student/booking/components/Bo
 import { SERVICE_FEE_RATE } from "@/modules/student/booking/mockdata";
 import { useBookingSubjects } from "@/modules/student/booking/hooks/use-booking-subjects";
 import type { BookingCardProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
-import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
+import type { Modality } from "@/modules/student/booking/constants/modality.constants";
 import { CheckCircle2, MapPin } from "lucide-react";
 import BookingCountdownTimer from "./BookingTimer";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
+import { BOOKING_MODALITY_LABEL } from "@/modules/student/booking/constants/modality.constants";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -19,10 +20,6 @@ const currencyFormatter = new Intl.NumberFormat("es-AR", {
   maximumFractionDigits: 0,
 });
 
-const MODALITY_LABEL: Record<Modality, string> = {
-  VIRTUAL: "Virtual",
-  IN_PERSON: "Presencial",
-};
 
 export default function BookingCard({
   selectedSlot = null,
@@ -177,7 +174,7 @@ export default function BookingCard({
         />
         {availableModalities.length === 1 && (
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            *El tutor solo ofrece clases {MODALITY_LABEL[availableModalities[0]].toLowerCase()}
+            *El tutor solo ofrece clases {BOOKING_MODALITY_LABEL[availableModalities[0]].toLowerCase()}
             es para esta materia.
           </Typography>
         )}

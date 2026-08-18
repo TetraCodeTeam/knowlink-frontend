@@ -1,4 +1,4 @@
-import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
+import type { Modality } from "@/modules/student/booking/constants/modality.constants";
 
 export interface BookingSubject {
   id: string;
