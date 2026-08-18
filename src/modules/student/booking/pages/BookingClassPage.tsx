@@ -14,7 +14,7 @@ export default function BookingClassPage() {
         <BookingCalendar selectedSlot={slot} onSelectSlot={setSlot} />
       </Box>
 
-      <BookingCard selectedSlot={slot} />
+      <BookingCard selectedSlot={slot} onCancelSelectedSlot={() => setSlot(null)} />
     </Box>
   );
 }

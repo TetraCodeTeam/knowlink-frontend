@@ -19,6 +19,7 @@ export interface BookingCalendarProps {
 
 export interface BookingCardProps {
   selectedSlot?: BookingSlot | null;
+  onCancelSelectedSlot?: () => void;
 }
 
 export interface BookingSlotSelectionSummaryProps {

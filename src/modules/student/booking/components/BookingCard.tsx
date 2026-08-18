@@ -10,6 +10,8 @@ import { useBookingSubjects } from "@/modules/student/booking/hooks/use-booking-
 import type { BookingCardProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
 import { CheckCircle2, MapPin } from "lucide-react";
+import BookingCountdownTimer from "./BookingTimer";
+import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -22,12 +24,16 @@ const MODALITY_LABEL: Record<Modality, string> = {
   IN_PERSON: "Presencial",
 };
 
-export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
+export default function BookingCard({
+  selectedSlot = null,
+  onCancelSelectedSlot,
+}: BookingCardProps) {
   const [subjectId, setSubjectId] = useState("");
   const [topic, setTopic] = useState("");
   const [modality, setModality] = useState<Modality>("VIRTUAL");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null);
+  const [isExpirationDialogOpen, setIsExpirationDialogOpen] = useState(false);
   const subjects = useBookingSubjects();
 
   const hasSlot = selectedSlot !== null;
@@ -78,6 +84,16 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
 
   const isConfirmedForCurrentSlot = selectedSlot !== null && confirmedBookingId === selectedSlot.id;
 
+  const handleBookingExpired = () => {
+    setIsSubmitting(false);
+    setConfirmedBookingId(null);
+    setSubjectId("");
+    setTopic("");
+    setModality("VIRTUAL");
+    setIsExpirationDialogOpen(true);
+    onCancelSelectedSlot?.();
+  };
+
   return (
     <Paper
       elevation={0}
@@ -94,6 +110,14 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
       <Typography variant="h5" sx={{ fontWeight: 700 }}>
         Reserva una clase
       </Typography>
+
+      {selectedSlot && (
+        <BookingCountdownTimer
+          key={selectedSlot.id}
+          durationSeconds={15 * 60}
+          onExpire={handleBookingExpired}
+        />
+      )}
 
       <BookingSlotSelectionSummary slot={selectedSlot} />
 
@@ -238,6 +262,18 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
       <AppButton appVariant="primary" disabled={!canSubmit} loading={isSubmitting} onClick={handleReserve} fullWidth>
         {isConfirmedForCurrentSlot ? "Reservado" : "Reservar"}
       </AppButton>
+
+      <AppConfirmDialog
+        open={isExpirationDialogOpen}
+        title="Reserva expirada"
+        message="Se canceló tu selección porque se agotó el tiempo para completar la reserva. Elige otro horario para continuar."
+        severity="warning"
+        confirmLabel="Aceptar"
+        cancelLabel="Cerrar"
+        onConfirm={() => setIsExpirationDialogOpen(false)}
+        onCancel={() => setIsExpirationDialogOpen(false)}
+        isPending={false}
+      />
     </Paper>
   );
 }
