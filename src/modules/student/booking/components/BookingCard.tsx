@@ -13,15 +13,9 @@ import { CheckCircle2, MapPin } from "lucide-react";
 import BookingCountdownTimer from "./BookingTimer";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { FeedbackDialog } from "@/shared/components/FeedbackDialog";
+import { currencyFormatter } from "@/shared/utils/currency.utils";
 import { BOOKING_MODALITY_LABEL } from "@/modules/student/booking/constants/modality.constants";
 import { useNavigate } from "react-router-dom";
-
-const currencyFormatter = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
-  maximumFractionDigits: 0,
-});
-
 
 export default function BookingCard({
   selectedSlot = null,
