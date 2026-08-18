@@ -13,6 +13,7 @@ import { CheckCircle2, MapPin } from "lucide-react";
 import BookingCountdownTimer from "./BookingTimer";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { BOOKING_MODALITY_LABEL } from "@/modules/student/booking/constants/modality.constants";
+import { useNavigate } from "react-router-dom";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -29,8 +30,10 @@ export default function BookingCard({
   const [topic, setTopic] = useState("");
   const [modality, setModality] = useState<Modality>("VIRTUAL");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
   const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null);
   const [isExpirationDialogOpen, setIsExpirationDialogOpen] = useState(false);
+  const [isBackDialogOpen, setIsBackDialogOpen] = useState(false);
   const subjects = useBookingSubjects();
 
   const hasSlot = selectedSlot !== null;
@@ -89,6 +92,17 @@ export default function BookingCard({
     setModality("VIRTUAL");
     setIsExpirationDialogOpen(true);
     onCancelSelectedSlot?.();
+  };
+
+  const handleBackConfirm = () => {
+    setIsSubmitting(false);
+    setConfirmedBookingId(null);
+    setSubjectId("");
+    setTopic("");
+    setModality("VIRTUAL");
+    setIsBackDialogOpen(false);
+    onCancelSelectedSlot?.();
+    navigate("/student/home");
   };
 
   return (
@@ -260,6 +274,22 @@ export default function BookingCard({
         {isConfirmedForCurrentSlot ? "Reservado" : "Reservar"}
       </AppButton>
 
+      <AppButton appVariant="outline" onClick={() => setIsBackDialogOpen(true)} fullWidth>
+        Volver
+      </AppButton>
+
+      <AppConfirmDialog
+        open={isBackDialogOpen}
+        title="¿Volver y cancelar la reserva?"
+        message="Si decidís volver, se eliminarán todas las selecciones que hiciste para esta reserva. Esta acción no se puede deshacer."
+        severity="warning"
+        confirmLabel="Volver"
+        cancelLabel="Continuar reservando"
+        onConfirm={handleBackConfirm}
+        onCancel={() => setIsBackDialogOpen(false)}
+        isPending={false}
+      />
+
       <AppConfirmDialog
         open={isExpirationDialogOpen}
         title="Reserva expirada"
@@ -271,6 +301,8 @@ export default function BookingCard({
         onCancel={() => setIsExpirationDialogOpen(false)}
         isPending={false}
       />
+
+    
     </Paper>
   );
 }

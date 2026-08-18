@@ -12,15 +12,15 @@ export default function BookingSlotSelectionSummary({ slot }: BookingSlotSelecti
           alignItems: "center",
           justifyContent: "center",
           gap: 1,
-          py: 4,
-          px: 2,
+          py: 2,
+          px: 1,
           borderRadius: 2,
           bgcolor: "#EEEDFE",
           textAlign: "center",
         }}
       >
-        <CalendarArrowDown size={30} color="#494949" />
-        <Typography variant="body1" sx={{ color: "text.secondary", px: 5 }}>
+        <CalendarArrowDown size={25} color="#494949" />
+        <Typography variant="subtitle2" sx={{ color: "text.secondary", px: 5 }}>
           Selecciona un horario en el calendario para continuar
         </Typography>
       </Box>
