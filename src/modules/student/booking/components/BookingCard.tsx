@@ -12,6 +12,7 @@ import type { Modality } from "@/modules/student/booking/constants/modality.cons
 import { CheckCircle2, MapPin } from "lucide-react";
 import BookingCountdownTimer from "./BookingTimer";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
+import { FeedbackDialog } from "@/shared/components/FeedbackDialog";
 import { BOOKING_MODALITY_LABEL } from "@/modules/student/booking/constants/modality.constants";
 import { useNavigate } from "react-router-dom";
 
@@ -251,24 +252,13 @@ export default function BookingCard({
           </Box>
         )}
 
-      {isConfirmedForCurrentSlot && (
-        <Box
-          sx={{
-            p: 2,
-            borderRadius: 2,
-            bgcolor: "#e8f7ed",
-            border: "1px solid #bfe7cc",
-            color: "#1f6f46",
-          }}
-        >
-          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-            Reserva confirmada
-          </Typography>
-          <Typography variant="body2">
-            Tu clase quedó registrada con éxito. Este es un mock de la confirmación del endpoint.
-          </Typography>
-        </Box>
-      )}
+      <FeedbackDialog
+        open={isConfirmedForCurrentSlot}
+        title="Reserva confirmada"
+        description="Tu clase quedó registrada con éxito."
+        variant="success"
+        onClose={() => navigate("/student/home")}
+      />
 
       <AppButton appVariant="primary" disabled={!canSubmit} loading={isSubmitting} onClick={handleReserve} fullWidth>
         {isConfirmedForCurrentSlot ? "Reservado" : "Reservar"}
@@ -281,10 +271,10 @@ export default function BookingCard({
       <AppConfirmDialog
         open={isBackDialogOpen}
         title="¿Volver y cancelar la reserva?"
-        message="Si decidís volver, se eliminarán todas las selecciones que hiciste para esta reserva. Esta acción no se puede deshacer."
+        message="Si decidís volver, se eliminarán todas las selecciones que hiciste para esta reserva."
         severity="warning"
         confirmLabel="Volver"
-        cancelLabel="Continuar reservando"
+        cancelLabel="Continuar reserva"
         onConfirm={handleBackConfirm}
         onCancel={() => setIsBackDialogOpen(false)}
         isPending={false}
