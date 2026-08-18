@@ -74,7 +74,7 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
   const handleSelectWindow = useCallback(
     (blockId: string, window: ReservationWindow) => {
       onSelectSlot({
-        id: `${blockId}__${window.start.toISOString()}`,
+        id: `${blockId}__${window.start.toISOString()}__${window.end.toISOString()}`,
         date: window.start.toLocaleDateString("es-AR", {
           weekday: "long",
           day: "numeric",
@@ -97,8 +97,8 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         const isThisBlockSelected = selectedSlot?.id.startsWith(`${arg.event.id}__`) ?? false;
         const selectedWindow: ReservationWindow | null = isThisBlockSelected
           ? (() => {
-              const windowStart = new Date(selectedSlot!.id.split("__")[1]);
-              return { start: windowStart, end: new Date(windowStart.getTime() + 60 * 60 * 1000) };
+              const [, windowStartIso, windowEndIso] = selectedSlot!.id.split("__");
+              return { start: new Date(windowStartIso), end: new Date(windowEndIso) };
             })()
           : null;
 

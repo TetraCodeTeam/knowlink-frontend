@@ -27,6 +27,7 @@ export const BOOKING_STATUS_META: Record<BookingStatusKey, BookingLegendItem> = 
   AVAILABLE: {
     label: "Disponible",
     color: "#acb2e4",
+    description: "Mantené presionado y deslizá hacia abajo para reservar varias horas seguidas.",
   },
   SELECTED: {
     label: "Seleccionado",

@@ -35,12 +35,27 @@ export default function AvailabilityBlockContent({
   onSelectWindow,
 }: AvailabilityBlockContentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const dragStartRef = useRef<ReservationWindow | null>(null);
+  const didDragRef = useRef(false);
   const [hoveredWindow, setHoveredWindow] = useState<ReservationWindow | null>(null);
+  const [previewWindow, setPreviewWindow] = useState<ReservationWindow | null>(null);
+  const [isInvalidDrag, setIsInvalidDrag] = useState(false);
 
   const windows = getReservationWindows(blockStart, blockEnd);
 
 
-  const highlightedWindow = selectedWindow ?? (locked ? null : hoveredWindow);
+  const highlightedWindow = selectedWindow ?? (locked ? null : previewWindow ?? hoveredWindow);
+
+  const getSelectionPreview = useCallback(
+    (startWindow: ReservationWindow, endWindow: ReservationWindow): ReservationWindow | null => {
+      const start = new Date(Math.min(startWindow.start.getTime(), endWindow.start.getTime()));
+      const end = new Date(Math.max(startWindow.end.getTime(), endWindow.end.getTime()));
+      const durationMinutes = (end.getTime() - start.getTime()) / (60 * 1000);
+
+      return durationMinutes % 60 === 0 ? { start, end } : null;
+    },
+    []
+  );
 
   const handleMouseMove = useCallback(
     (event: ReactMouseEvent<HTMLDivElement>) => {
@@ -53,21 +68,54 @@ export default function AvailabilityBlockContent({
       const window = getWindowAtRelativePosition(windows, relativeY);
 
       setHoveredWindow(window);
+      if (dragStartRef.current && window) {
+        didDragRef.current = window.start.getTime() !== dragStartRef.current.start.getTime();
+        const preview = getSelectionPreview(dragStartRef.current, window);
+        setPreviewWindow(preview);
+        setIsInvalidDrag(didDragRef.current && preview === null);
+      }
       onHoverWindow(window);
     },
-    [locked, windows, onHoverWindow]
+    [getSelectionPreview, locked, windows, onHoverWindow]
   );
 
   const handleMouseLeave = useCallback(() => {
     if (locked) return;
     setHoveredWindow(null);
+    dragStartRef.current = null;
+    didDragRef.current = false;
+    setPreviewWindow(null);
+    setIsInvalidDrag(false);
     onHoverWindow(null);
   }, [locked, onHoverWindow]);
 
+  const handleMouseDown = useCallback(() => {
+    if (!locked) {
+      dragStartRef.current = hoveredWindow;
+      didDragRef.current = false;
+      setIsInvalidDrag(false);
+    }
+  }, [hoveredWindow, locked]);
+
+  const handleMouseUp = useCallback(() => {
+    if (locked || !dragStartRef.current || !hoveredWindow || !didDragRef.current) return;
+
+    const selection = getSelectionPreview(dragStartRef.current, hoveredWindow);
+    dragStartRef.current = null;
+    setPreviewWindow(null);
+    setIsInvalidDrag(false);
+    if (selection) onSelectWindow(selection);
+  }, [getSelectionPreview, hoveredWindow, locked, onSelectWindow]);
+
   const handleClick = useCallback(() => {
     if (locked) return;
-    if (hoveredWindow) onSelectWindow(hoveredWindow);
-  }, [locked, hoveredWindow, onSelectWindow]);
+    if (didDragRef.current) {
+      didDragRef.current = false;
+      return;
+    }
+    if (hoveredWindow && !previewWindow) onSelectWindow(hoveredWindow);
+    didDragRef.current = false;
+  }, [hoveredWindow, locked, onSelectWindow, previewWindow]);
 
   // Comparar por timestamp (valor), no por referencia de objeto:
   // getReservationWindows() genera un array nuevo en cada render.
@@ -83,12 +131,16 @@ export default function AvailabilityBlockContent({
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       onClick={handleClick}
       sx={{
         position: "relative",
         height: "100%",
         width: "100%",
         cursor: locked ? "default" : "pointer",
+        userSelect: "none",
+        WebkitUserSelect: "none",
         opacity: isDimmedByLock ? 0.4 : 1,
         transition: "opacity 0.15s ease",
       }}
@@ -111,6 +163,23 @@ export default function AvailabilityBlockContent({
         </Typography>
       </Box>
 
+      {isInvalidDrag && (
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            bgcolor: "rgba(255, 255, 255, 0.72)",
+            pointerEvents: "none",
+          }}
+        >
+          <Typography sx={{ px: 1, fontSize: 11, fontWeight: 700, textAlign: "center" }}>
+            Selecciona horas completas
+          </Typography>
+        </Box>
+      )}
+
       {/* Franja de 1h resaltada: ocupa solo su porción proporcional dentro
           del bloque, ya sea por hover o por selección ya confirmada. */}
       {highlightedWindow && highlightIndex >= 0 && (
@@ -120,7 +189,8 @@ export default function AvailabilityBlockContent({
             left: 2,
             right: 2,
             top: `${(highlightIndex / windows.length) * 100}%`,
-            height: `${(1 / windows.length) * 100}%`,
+            height: `${((highlightedWindow.end.getTime() - highlightedWindow.start.getTime()) /
+              (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
             bgcolor: `${BOOKING_STATUS_META.SELECTED.color}CC`,
             border: `2px solid ${BOOKING_STATUS_META.SELECTED.color}`,
             borderRadius: "6px",
