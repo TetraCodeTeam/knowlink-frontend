@@ -6,6 +6,7 @@ export default function BookingPricingRow({
   value,
   formatter,
   emphasized = false,
+  valueColor,
 }: PricingRowProps) {
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -18,8 +19,11 @@ export default function BookingPricingRow({
       >
         {label}
       </Typography>
-      <Typography variant="subtitle1" sx={{ fontWeight: emphasized ? 700 : 500 }}>
-        {value !== undefined ? formatter.format(value) : "-"}
+      <Typography
+        variant="subtitle1"
+        sx={{ color: valueColor, fontWeight: emphasized ? 700 : 500 }}
+      >
+        {typeof value === "number" ? formatter.format(value) : value ?? "-"}
       </Typography>
     </Box>
   );

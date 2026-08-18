@@ -39,7 +39,8 @@ export interface ModalityToggleProps {
 
 export interface PricingRowProps {
   label: string;
-  value?: number;
+  value?: number | string;
   formatter: Intl.NumberFormat;
   emphasized?: boolean;
+  valueColor?: string;
 }

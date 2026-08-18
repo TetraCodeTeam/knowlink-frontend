@@ -9,7 +9,7 @@ import { SERVICE_FEE_RATE } from "@/modules/student/booking/mockdata";
 import { useBookingSubjects } from "@/modules/student/booking/hooks/use-booking-subjects";
 import type { BookingCardProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { Modality } from "@/modules/student/booking/constants/modality.constants";
-import { CheckCircle2, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import BookingCountdownTimer from "./BookingTimer";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { FeedbackDialog } from "@/shared/components/FeedbackDialog";
@@ -219,32 +219,29 @@ export default function BookingCard({
 
       <Divider />
 
-      {pricing && pricing.total === 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 1,
-            p: 1,
-            borderRadius: 3,
-            bgcolor: "#f3fff6",
-            border: "1px solid #c6e6cc",
-          }}
-        >
-          <CheckCircle2 size={18} color="#5ea377" style={{ flexShrink: 0 }} />
-          <Typography variant="body2" sx={{ color: "#5ea377", fontWeight: 600 }}>
-            Esta clase es gratuita
-          </Typography>
-        </Box>
-        ) : (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <BookingPricingRow label="Tarifa por hora" value={pricing?.hourlyRate} formatter={currencyFormatter} />
-            <BookingPricingRow label="Tarifa de servicio (3%)" value={pricing?.serviceFee} formatter={currencyFormatter} />
-            <Divider sx={{ my: 0.5 }} />
-            <BookingPricingRow label="Total" value={pricing?.total} formatter={currencyFormatter} emphasized />
-          </Box>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <BookingPricingRow
+          label="Tarifa por hora"
+          value={pricing?.total === 0 ? "Gratis" : pricing?.hourlyRate}
+          formatter={currencyFormatter}
+          valueColor={pricing?.total === 0 ? "text.secondary" : undefined}
+        />
+        {pricing && pricing.total !== 0 && (
+          <BookingPricingRow
+            label="Tarifa de servicio (3%)"
+            value={pricing.serviceFee}
+            formatter={currencyFormatter}
+          />
         )}
+        <Divider sx={{ my: 0.5 }} />
+        <BookingPricingRow
+          label="Total"
+          value={pricing?.total === 0 ? "Gratis" : pricing?.total}
+          formatter={currencyFormatter}
+          emphasized
+          valueColor={pricing?.total === 0 ? "primary.main" : undefined}
+        />
+      </Box>
 
       <FeedbackDialog
         open={isConfirmedForCurrentSlot}
