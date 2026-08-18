@@ -9,6 +9,7 @@ import { SERVICE_FEE_RATE } from "@/modules/student/booking/mockdata";
 import { useBookingSubjects } from "@/modules/student/booking/hooks/use-booking-subjects";
 import type { BookingCardProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { Modality } from "@/modules/student/booking/interfaces/modalityType";
+import { MapPin } from "lucide-react";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -155,6 +156,34 @@ export default function BookingCard({ selectedSlot = null }: BookingCardProps) {
             *El tutor solo ofrece clases {MODALITY_LABEL[availableModalities[0]].toLowerCase()}
             es para esta materia.
           </Typography>
+        )}
+
+        {/* Si es presencial se muestra la dirección si está definida por el tutor, si no un mensaje de a acordar */}
+        {modality === "IN_PERSON" && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              mt: 0.5,
+              p: 1.5,
+              borderRadius: 2,
+              bgcolor: "#f7f7fb",
+              border: "1px solid #ececf4",
+            }}
+          >
+            <MapPin size={16} color="#8a8aa3" style={{ flexShrink: 0 }} />
+            <Typography
+              variant="body2"
+              sx={{
+                color: selectedSubject?.address ? "#494949" : "text.secondary",
+                fontSize: 14,
+                fontStyle: selectedSubject?.address ? "normal" : "italic",
+              }}
+            >
+              {selectedSubject?.address ?? "Ubicación a coordinar con el tutor"}
+            </Typography>
+          </Box>
         )}
       </Box>
 

@@ -7,6 +7,7 @@ export const MOCK_SUBJECTS: BookingSubject[] = [
     name: "Matemática I",
     hourlyRate: 3500,
     availableModalities: ["IN_PERSON"],
+    address: "Calle Falsa 123, Ciudad, País",
   },
   {
     id: "algoritmos",
@@ -17,7 +18,7 @@ export const MOCK_SUBJECTS: BookingSubject[] = [
   {
     id: "fisica-ii",
     name: "Física II",
-    hourlyRate: 3800,
+    hourlyRate: 0,
     availableModalities: ["VIRTUAL", "IN_PERSON"],
   },
   {

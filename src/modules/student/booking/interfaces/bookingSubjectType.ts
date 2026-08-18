@@ -5,4 +5,5 @@ export interface BookingSubject {
   name: string;
   hourlyRate: number;
   availableModalities: Modality[];
+  address?: string;
 }
