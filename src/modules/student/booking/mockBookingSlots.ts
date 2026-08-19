@@ -24,7 +24,7 @@ const WEEKLY_PATTERN: Array<{
   { slotKey: "c", dayOffset: 2, start: "10:30", end: "12:00", status: "AVAILABLE" },
   { slotKey: "d", dayOffset: 1, start: "16:00", end: "17:00", status: "BLOCKED" },
   { slotKey: "e", dayOffset: 3, start: "15:00", end: "16:30", status: "AVAILABLE" },
-  { slotKey: "f", dayOffset: 4, start: "14:00", end: "15:30", status: "AVAILABLE" },
+  { slotKey: "f", dayOffset: 4, start: "14:00", end: "17:30", status: "AVAILABLE" },
   { slotKey: "g", dayOffset: 4, start: "18:00", end: "19:30", status: "RESERVED" },
 ];
 

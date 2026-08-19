@@ -15,6 +15,12 @@ const PAST_COLOR = BOOKING_STATUS_META.PAST.color;
 export const bookingCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
+  "& .fc-toolbar-title": {
+    fontSize: "1.35rem",
+    textAlign: "center",
+    textTransform: "capitalize",
+  },
+
   "& .fc-event.booking-slot-available": {
     bgcolor: `${AVAILABLE_COLOR} !important`,
     borderColor: `${AVAILABLE_COLOR} !important`,

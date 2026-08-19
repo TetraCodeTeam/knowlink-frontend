@@ -111,16 +111,16 @@ export default function AvailabilityBlockContent({
             position: "absolute",
             left: 2,
             right: 2,
-            top: `${(highlightIndex / windows.length) * 100}%`,
+            top: `${((highlightedWindow.start.getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
             height: `${((highlightedWindow.end.getTime() - highlightedWindow.start.getTime()) /
               (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
             bgcolor: `${BOOKING_STATUS_META.SELECTED.color}CC`,
-            border: `2px solid ${BOOKING_STATUS_META.SELECTED.color}`,
+            border: `1px solid ${BOOKING_STATUS_META.SELECTED.color}`,
             borderRadius: "6px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: `0 2px 8px ${BOOKING_STATUS_META.SELECTED.color}E6`,
+            boxShadow: `0 1px 4px ${BOOKING_STATUS_META.SELECTED.color}ff`,
             pointerEvents: "none",
           }}
         >
