@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/http-client";
+import { httpClient } from "@/shared/lib/httpClient";
 import type { MinNoticeMinutesResponse } from "@/modules/tutor/availability/interfaces/responses/min-notice.interface";
 import type { UpdateMinNoticeRequest } from "@/modules/tutor/availability/interfaces/requests/update-min-notice.interface";
 

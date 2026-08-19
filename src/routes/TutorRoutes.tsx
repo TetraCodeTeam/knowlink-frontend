@@ -3,7 +3,6 @@ import TutorLayout from "@/modules/tutor/layouts/TutorLayout";
 import TutorHomePage from "@/modules/tutor/pages/TutorHomePage";
 import TutorProfilePage from "@/modules/tutor/profile/components/TutorProfilePage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
-import AvailabilityPage from "@/modules/tutor/pages/AvailabilityPage";
 
 export default function TutorRoutes() {
   return (
@@ -17,7 +16,7 @@ export default function TutorRoutes() {
         <Route path="notifications" element={<UnderConstructionPage />} />
         <Route path="requests" element={<UnderConstructionPage />} />
         <Route path="profile" element={<TutorProfilePage />} />
-        <Route path="availability" element={<AvailabilityPage />} />
+        <Route path="availability" element={<UnderConstructionPage />} />
       </Route>
     </Routes>
   );

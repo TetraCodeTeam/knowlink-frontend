@@ -3,7 +3,7 @@ import AuthRoutes from "@/routes/AuthRoutes";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import StudentRoutes from "@/routes/StudentRoutes";
 import TutorRoutes from "@/routes/TutorRoutes";
-import { useAuthStore } from "@/modules/auth/hooks/use-auth-store";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
 const isDevAuthBypassEnabled =
   import.meta.env.DEV && import.meta.env.VITE_AUTH_BYPASS === "true";
@@ -14,12 +14,11 @@ function RoleRedirect() {
 }
 
 function RoleRoute({ allowedRole }: { allowedRole: string }) {
-  const authResponse = useAuthStore((s) => s.authResponse);
-
   if (isDevAuthBypassEnabled) {
     return <Outlet />;
   }
 
+  const authResponse = useAuthStore((s) => s.authResponse);
   if (!authResponse || authResponse.role !== allowedRole) {
     return <Navigate to="/" replace />;
   }

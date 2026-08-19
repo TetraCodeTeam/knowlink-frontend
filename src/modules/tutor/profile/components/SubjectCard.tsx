@@ -1,6 +1,6 @@
 import { Box, Divider, Rating, Typography } from "@mui/material";
 import type { TutorOwnSubject } from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
-import { STAR_COLOR } from "@/modules/tutor/profile/constants/profile-colors.constants";
+import { STAR_COLOR } from "@/modules/tutor/profile/constants/profileColors.constants";
 import { toModalityList } from "@/modules/tutor/profile/utils/profile.utils";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 

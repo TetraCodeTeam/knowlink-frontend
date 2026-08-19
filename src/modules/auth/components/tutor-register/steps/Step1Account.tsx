@@ -16,7 +16,7 @@ import {
 import { Camera } from "lucide-react";
 import { step1Schema, type Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import AppButton from "@/shared/components/AppButton";
-import { useCareers } from "@/modules/tutors/hooks/use-careers";
+import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
 const inputSx = {

@@ -1,4 +1,4 @@
-import { httpClient } from "@/shared/lib/http-client";
+import { httpClient } from "@/shared/lib/httpClient";
 import type { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
 import type { AvailabilityBlockResponse } from "@/modules/tutor/availability/interfaces/responses/availability-block.interface";
 import type { WeekCustomizationResponse } from "@/modules/tutor/availability/interfaces/responses/week-customization.interface";

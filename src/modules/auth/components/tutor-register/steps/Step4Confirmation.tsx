@@ -91,7 +91,7 @@ export default function Step4Confirmation({
                 Biografía
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                &ldquo;{step2.biography}&rdquo;
+                "{step2.biography}"
               </Typography>
             </Box>
           )}

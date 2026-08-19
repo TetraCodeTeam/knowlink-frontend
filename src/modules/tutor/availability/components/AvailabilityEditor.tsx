@@ -17,7 +17,7 @@ import AvailabilityDayHeader from "@/modules/tutor/availability/components/Avail
 import AvailabilityLegend from "@/modules/tutor/availability/components/AvailabilityLegend";
 import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/components/AvailabilityWeekCustomizationBanner";
 import { calendarBaseSx } from "@/shared/styles/calendarBaseSx";
-import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/use-availability-draft";
+import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
 import { isBeforeToday } from "@/shared/utils/calendarDateUtils";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { Trash2 } from "lucide-react";
