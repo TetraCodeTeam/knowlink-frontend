@@ -37,16 +37,23 @@ export function useBookingForm(selectedSlot: BookingCardProps["selectedSlot"]) {
     "IN_PERSON",
   ];
 
+  const durationHours = useMemo(() => {
+    return selectedSlot?.durationHours ?? 1;
+  }, [selectedSlot]);
+
   const pricing = useMemo(() => {
     if (!selectedSubject) return null;
     const hourlyRate = selectedSubject.hourlyRate;
-    const serviceFee = Math.round(hourlyRate * SERVICE_FEE_RATE);
+    const subtotal = hourlyRate * durationHours;
+    const serviceFee = Math.round(subtotal * SERVICE_FEE_RATE);
     return {
       hourlyRate,
+      durationHours,
+      subtotal,
       serviceFee,
-      total: hourlyRate + serviceFee,
+      total: subtotal + serviceFee,
     };
-  }, [selectedSubject]);
+  }, [durationHours, selectedSubject]);
 
   const handleSubjectChange = (nextSubjectId: string) => {
     setValue("subjectId", nextSubjectId, { shouldValidate: true });

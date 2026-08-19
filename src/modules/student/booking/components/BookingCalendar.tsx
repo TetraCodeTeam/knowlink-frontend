@@ -73,6 +73,9 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
   // bloque original + el horario exacto de inicio de la ventana.
   const handleSelectWindow = useCallback(
     (blockId: string, window: ReservationWindow) => {
+      const durationHours =
+        (window.end.getTime() - window.start.getTime()) / (60 * 60 * 1000);
+
       onSelectSlot({
         id: `${blockId}__${window.start.toISOString()}__${window.end.toISOString()}`,
         date: window.start.toLocaleDateString("es-AR", {
@@ -82,6 +85,7 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
         }),
         startTime: window.start.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
         endTime: window.end.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+        durationHours,
       });
     },
     [onSelectSlot]

@@ -30,7 +30,6 @@ export default function AvailabilityBlockContent({
 }: AvailabilityBlockContentProps) {
   const {
     containerRef,
-    windows,
     highlightedWindow,
     highlightIndex,
     isInvalidDrag,

@@ -3,4 +3,5 @@ export interface BookingSlot {
   date: string;
   startTime: string;
   endTime: string;
+  durationHours: number;
 }
