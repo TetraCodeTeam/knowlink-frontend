@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, Divider, MenuItem, Paper, Select, TextField, Typography } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import AppButton from "@/shared/components/AppButton";
 import BookingModalityToggle from "@/modules/student/booking/components/BookingModalityToggle";
 import BookingPricingRow from "@/modules/student/booking/components/BookingPricingRow";
@@ -15,15 +17,13 @@ import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { FeedbackDialog } from "@/shared/components/FeedbackDialog";
 import { currencyFormatter } from "@/shared/utils/currency.utils";
 import { BOOKING_MODALITY_LABEL } from "@/modules/student/booking/constants/modality.constants";
+import { bookingSchema, type BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import { useNavigate } from "react-router-dom";
 
 export default function BookingCard({
   selectedSlot = null,
   onCancelSelectedSlot,
 }: BookingCardProps) {
-  const [subjectId, setSubjectId] = useState("");
-  const [topic, setTopic] = useState("");
-  const [modality, setModality] = useState<Modality>("VIRTUAL");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const [confirmedBookingId, setConfirmedBookingId] = useState<string | null>(null);
@@ -31,7 +31,30 @@ export default function BookingCard({
   const [isBackDialogOpen, setIsBackDialogOpen] = useState(false);
   const subjects = useBookingSubjects();
 
-  const hasSlot = selectedSlot !== null;
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<BookingFormValues>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      bookingSlotId: selectedSlot?.id ?? "",
+      subjectId: "",
+      topic: "",
+      modality: "VIRTUAL",
+    },
+  });
+
+  const subjectId = useWatch({ control, name: "subjectId" });
+  const modality = useWatch({ control, name: "modality" });
+
+  useEffect(() => {
+    setValue("bookingSlotId", selectedSlot?.id ?? "");
+  }, [selectedSlot?.id, setValue]);
+
   const selectedSubject = useMemo(
     () => subjects.find((subject) => subject.id === subjectId) ?? null,
     [subjectId, subjects]
@@ -44,11 +67,11 @@ export default function BookingCard({
 
   const handleSubjectChange = (event: SelectChangeEvent) => {
     const nextSubjectId = event.target.value;
-    setSubjectId(nextSubjectId);
+    setValue("subjectId", nextSubjectId, { shouldValidate: true });
 
     const nextSubject = subjects.find((subject) => subject.id === nextSubjectId);
     if (nextSubject && !nextSubject.availableModalities.includes(modality)) {
-      setModality(nextSubject.availableModalities[0]);
+      setValue("modality", nextSubject.availableModalities[0], { shouldValidate: true });
     }
   };
 
@@ -63,11 +86,8 @@ export default function BookingCard({
     };
   }, [selectedSubject]);
 
-  const canSubmit =
-    hasSlot && subjectId !== "" && topic.trim() !== "" && !isSubmitting && !confirmedBookingId;
-
-  const handleReserve = async () => {
-    if (!selectedSlot || !canSubmit) return;
+  const handleReserve = async (data: BookingFormValues) => {
+    if (!selectedSlot || data.bookingSlotId !== selectedSlot.id || isSubmitting || confirmedBookingId) return;
 
     setIsSubmitting(true);
 
@@ -77,14 +97,14 @@ export default function BookingCard({
     setIsSubmitting(false);
   };
 
+  const canSubmit = !isSubmitting && !confirmedBookingId;
+
   const isConfirmedForCurrentSlot = selectedSlot !== null && confirmedBookingId === selectedSlot.id;
 
   const handleBookingExpired = () => {
     setIsSubmitting(false);
     setConfirmedBookingId(null);
-    setSubjectId("");
-    setTopic("");
-    setModality("VIRTUAL");
+    reset({ bookingSlotId: "", subjectId: "", topic: "", modality: "VIRTUAL" });
     setIsExpirationDialogOpen(true);
     onCancelSelectedSlot?.();
   };
@@ -92,9 +112,7 @@ export default function BookingCard({
   const handleBackConfirm = () => {
     setIsSubmitting(false);
     setConfirmedBookingId(null);
-    setSubjectId("");
-    setTopic("");
-    setModality("VIRTUAL");
+    reset({ bookingSlotId: "", subjectId: "", topic: "", modality: "VIRTUAL" });
     setIsBackDialogOpen(false);
     onCancelSelectedSlot?.();
     navigate("/student/home");
@@ -102,6 +120,8 @@ export default function BookingCard({
 
   return (
     <Paper
+      component="form"
+      onSubmit={handleSubmit(handleReserve)}
       elevation={0}
       sx={{
         width: 350,
@@ -126,31 +146,48 @@ export default function BookingCard({
       )}
 
       <BookingSlotSelectionSummary slot={selectedSlot} />
+      {errors.bookingSlotId && (
+        <Typography variant="caption" sx={{ color: "error.main" }}>
+          {errors.bookingSlotId.message}
+        </Typography>
+      )}
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
           Materia
         </Typography>
-        <Select
-          value={subjectId}
-          onChange={handleSubjectChange}
-          displayEmpty
-          size="small"
-          sx={{ borderRadius: 2, fontSize: "14px", color: "#494949" }}
-        >
-          <MenuItem value="" disabled>
-            Selecciona la materia
-          </MenuItem>
-          {subjects.map((subject) => (
-            <MenuItem
-              key={subject.id}
-              value={subject.id}
-              sx={{ fontSize: "14px", color: "#494949" }}
+        <Controller
+          name="subjectId"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              onChange={handleSubjectChange}
+              displayEmpty
+              size="small"
+              sx={{ borderRadius: 2, fontSize: "14px", color: "#494949" }}
+              error={Boolean(errors.subjectId)}
             >
-              {subject.name}
-            </MenuItem>
-          ))}
-        </Select>
+              <MenuItem value="" disabled>
+                Selecciona la materia
+              </MenuItem>
+              {subjects.map((subject) => (
+                <MenuItem
+                  key={subject.id}
+                  value={subject.id}
+                  sx={{ fontSize: "14px", color: "#494949" }}
+                >
+                  {subject.name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        />
+        {errors.subjectId && (
+          <Typography variant="caption" sx={{ color: "error.main" }}>
+            {errors.subjectId.message}
+          </Typography>
+        )}
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
@@ -158,12 +195,13 @@ export default function BookingCard({
           Tema a tratar
         </Typography>
         <TextField
-          value={topic}
-          onChange={(event) => setTopic(event.target.value)}
+          {...register("topic")}
           placeholder="Ingresa el tema a tratar para que el tutor esté lo más preparado posible"
           multiline
           minRows={3}
           size="small"
+          error={Boolean(errors.topic)}
+          helperText={errors.topic?.message}
           sx={{
             "& .MuiOutlinedInput-root": { borderRadius: 2 },
             "& .MuiInputBase-input::placeholder": { fontSize: "14px" },
@@ -176,11 +214,22 @@ export default function BookingCard({
         <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
           Modalidad
         </Typography>
-        <BookingModalityToggle
-          value={modality}
-          onChange={setModality}
-          availableModalities={availableModalities}
+        <Controller
+          name="modality"
+          control={control}
+          render={({ field }) => (
+            <BookingModalityToggle
+              value={field.value}
+              onChange={field.onChange}
+              availableModalities={availableModalities}
+            />
+          )}
         />
+        {errors.modality && (
+          <Typography variant="caption" sx={{ color: "error.main" }}>
+            {errors.modality.message}
+          </Typography>
+        )}
         {availableModalities.length === 1 && (
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
             *El tutor solo ofrece clases {BOOKING_MODALITY_LABEL[availableModalities[0]].toLowerCase()}
@@ -251,7 +300,13 @@ export default function BookingCard({
         onClose={() => navigate("/student/home")}
       />
 
-      <AppButton appVariant="primary" disabled={!canSubmit} loading={isSubmitting} onClick={handleReserve} fullWidth>
+      <AppButton
+        type="submit"
+        appVariant="primary"
+        disabled={!canSubmit}
+        loading={isSubmitting}
+        fullWidth
+      >
         {isConfirmedForCurrentSlot ? "Reservado" : "Reservar"}
       </AppButton>
 
