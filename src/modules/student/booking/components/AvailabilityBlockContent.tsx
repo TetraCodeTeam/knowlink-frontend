@@ -89,15 +89,30 @@ export default function AvailabilityBlockContent({
         <Box
           sx={{
             position: "absolute",
-            inset: 0,
-            display: "grid",
-            placeItems: "center",
-            bgcolor: "rgba(255, 255, 255, 0.72)",
+            left: "calc(100% + 10px)",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: 190,
+            px: 1.5,
+            py: 1,
+            bgcolor: "#fff8e6",
+            border: "1px solid #e8c56a",
+            borderRadius: 2,
+            boxShadow: "0 4px 12px rgba(91, 72, 20, 0.16)",
+            zIndex: 20,
             pointerEvents: "none",
           }}
         >
-          <Typography sx={{ px: 1, fontSize: 11, fontWeight: 700, textAlign: "center" }}>
-            Selecciona horas completas
+          <Typography
+            sx={{
+              color: "#6b5a1e",
+              fontSize: 12,
+              fontWeight: 700,
+              lineHeight: 1.35,
+              textAlign: "center",
+            }}
+          >
+            Las reservas se realizan por hora completa, no se admite seleccionar medias horas
           </Typography>
         </Box>
       )}
