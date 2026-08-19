@@ -1,4 +1,3 @@
-// Mismo patrón que modules/tutor/availability/constants/availability-legend.constants.ts
 export interface BookingLegendItem {
   label: string;
   color: string;
