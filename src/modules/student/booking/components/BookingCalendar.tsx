@@ -9,7 +9,7 @@ import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalen
 import InfoTooltip from "@/modules/student/booking/components/InfoTooltip";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
-import { useBookingSlots } from "@/modules/student/booking/hooks/use-booking-slots";
+import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";

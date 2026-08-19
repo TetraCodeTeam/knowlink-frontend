@@ -11,3 +11,10 @@ export const bookingSchema = z.object({
 });
 
 export type BookingFormValues = z.infer<typeof bookingSchema>;
+
+export const DEFAULT_BOOKING_FORM_VALUES: BookingFormValues = {
+  bookingSlotId: "",
+  subjectId: "",
+  topic: "",
+  modality: "VIRTUAL",
+};
