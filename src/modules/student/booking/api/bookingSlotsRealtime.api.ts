@@ -1,8 +1,8 @@
 // API de sincronización en tiempo real para recibir cambios de estado de los slots de reserva.
 // Utiliza SSE (Server-Sent Events) para mantener actualizado el calendario cuando otro usuario bloquea, reserva o libera un slot.
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/bookingSlotStatusEventType";
-export type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/bookingSlotStatusEventType";
+import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/booking-slot-status-event.interface";
+export type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/booking-slot-status-event.interface";
 
 const BOOKING_STATUS_EVENT = "knowlink:booking-slot-status";
 const REALTIME_ENABLED = import.meta.env.VITE_BOOKING_REALTIME_ENABLED === "true";

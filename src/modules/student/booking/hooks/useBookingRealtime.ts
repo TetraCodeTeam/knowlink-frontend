@@ -12,7 +12,7 @@ import {
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import { getBookingBlockId } from "@/modules/student/booking/api/booking.api";
-import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/bookingSlotStatusEventType";
+import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/booking-slot-status-event.interface";
 import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
 import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
 
