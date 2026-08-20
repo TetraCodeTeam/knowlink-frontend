@@ -38,6 +38,10 @@ export function useBookingFlow({
     try {
       await onReserveBooking?.(selectedSlot, data);
       setConfirmedBookingId(selectedSlot.id);
+    } catch (error) {
+      await onReleaseBooking?.(selectedSlot).catch(() => undefined);
+      resetDraft();
+      throw error;
     } finally {
       setIsSubmitting(false);
     }

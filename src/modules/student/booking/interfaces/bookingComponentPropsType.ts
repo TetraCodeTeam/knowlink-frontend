@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import type { Modality } from "@/modules/student/booking/constants/modality.constants";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
+import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 
@@ -9,7 +10,7 @@ export interface AvailabilityBlockContentProps {
   blockStart: Date;
   blockEnd: Date;
   selectedWindow: ReservationWindow | null;
-  unavailableWindows: ReservationWindow[];
+  unavailableWindows: BookingUnavailableWindow[];
   minimumNoticeMinutes: number;
   locked: boolean;
   onHoverWindow: (window: ReservationWindow | null) => void;

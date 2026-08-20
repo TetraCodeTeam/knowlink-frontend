@@ -3,7 +3,7 @@
 import { httpClient } from "@/shared/lib/httpClient";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
-import type { BookingRequest } from "@/modules/student/booking/interfaces/requests/booking-request.interface";
+import type { BookingRequest } from "@/modules/student/booking/interfaces/requests/bookingRequest.interface";
 
 //realtime_enabled permite deshabilitar la sincronización y peticiones de back. Cuando se implemente el backend, se puede eliminar esta variable y sus condicionales.
 const REALTIME_ENABLED = import.meta.env.VITE_BOOKING_REALTIME_ENABLED === "true";

@@ -3,7 +3,6 @@ import { Box, Popper, Typography } from "@mui/material";
 
 interface BookingValidationMessageProps {
   message: string;
-  width?: number;
   anchorEl: HTMLElement | null;
 }
 
@@ -25,7 +24,7 @@ export default function BookingValidationMessage({ message, anchorEl }: BookingV
           bgcolor: "#fffcf5",
           border: "1.5px solid #f3e7c9",
           borderRadius: 2,
-          boxShadow: "0 8px 12px e8c56a",
+          boxShadow: "0 2px 6px rgba(248, 204, 91, 0.83)",
         }}
       >
         <Typography

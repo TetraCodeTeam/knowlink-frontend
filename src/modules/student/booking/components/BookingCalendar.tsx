@@ -116,10 +116,7 @@ export default function BookingCalendar({
             blockStart={arg.event.start}
             blockEnd={arg.event.end}
             unavailableWindows={
-              (bookingSlots.find((slot) => slot.id === arg.event.id)?.unavailableWindows ?? []).map((window) => ({
-                start: new Date(window.start),
-                end: new Date(window.end),
-              }))
+              bookingSlots.find((slot) => slot.id === arg.event.id)?.unavailableWindows ?? []
             }
             minimumNoticeMinutes={minimumNoticeMinutes}
             selectedWindow={selectedWindow}

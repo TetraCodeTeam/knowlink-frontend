@@ -38,8 +38,8 @@ export function useAvailabilityBlockInteraction({
     (window: ReservationWindow) =>
       unavailableWindows.some(
         (unavailable) =>
-          unavailable.start.getTime() === window.start.getTime() &&
-          unavailable.end.getTime() === window.end.getTime()
+          new Date(unavailable.start).getTime() === window.start.getTime() &&
+          new Date(unavailable.end).getTime() === window.end.getTime()
       ),
     [unavailableWindows]
   );

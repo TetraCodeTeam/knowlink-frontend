@@ -94,7 +94,6 @@ export default function AvailabilityBlockContent({
       {isInvalidDrag && (
         <BookingValidationMessage
           anchorEl={containerRef.current}
-          width={190}
           message="Las reservas se realizan por hora completa, no se admite seleccionar medias horas"
         />
       )}
@@ -108,16 +107,16 @@ export default function AvailabilityBlockContent({
           del bloque, ya sea por hover o por selección ya confirmada. */}
       {unavailableWindows.map((window) => (
         <Box
-          key={`${window.start.toISOString()}-${window.end.toISOString()}`}
+          key={`${window.start}-${window.end}`}
           sx={{
             position: "absolute",
             left: 2,
             right: 2,
-            top: `${((window.start.getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            height: `${((window.end.getTime() - window.start.getTime()) /
+            top: `${((new Date(window.start).getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
+            height: `${((new Date(window.end).getTime() - new Date(window.start).getTime()) /
               (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            bgcolor: `${BOOKING_STATUS_META.BLOCKED.color}CC`,
-            border: `1px solid ${BOOKING_STATUS_META.BLOCKED.color}`,
+            bgcolor: `${BOOKING_STATUS_META[window.status].color}CC`,
+            border: `1px solid ${BOOKING_STATUS_META[window.status].color}`,
             borderRadius: "6px",
             pointerEvents: "none",
           }}
