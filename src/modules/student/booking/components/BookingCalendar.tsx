@@ -110,6 +110,12 @@ export default function BookingCalendar({ selectedSlot, bookingSlots = [], onSel
           <AvailabilityBlockContent
             blockStart={arg.event.start}
             blockEnd={arg.event.end}
+            unavailableWindows={
+              (bookingSlots.find((slot) => slot.id === arg.event.id)?.unavailableWindows ?? []).map((window) => ({
+                start: new Date(window.start),
+                end: new Date(window.end),
+              }))
+            }
             selectedWindow={selectedWindow}
             locked={selectedSlot !== null}
             onHoverWindow={() => {}}
@@ -131,7 +137,7 @@ export default function BookingCalendar({ selectedSlot, bookingSlots = [], onSel
       }
       return content;
     },
-    [handleSelectWindow, selectedSlot]
+    [bookingSlots, handleSelectWindow, selectedSlot]
   );
 
 

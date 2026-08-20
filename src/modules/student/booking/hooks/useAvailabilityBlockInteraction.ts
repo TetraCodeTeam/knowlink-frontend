@@ -11,12 +11,14 @@ import type { ReservationWindow } from "@/modules/student/booking/interfaces/res
 type UseAvailabilityBlockInteractionProps = Pick<
   AvailabilityBlockContentProps,
   "blockStart" | "blockEnd" | "selectedWindow" | "locked" | "onHoverWindow" | "onSelectWindow"
+  | "unavailableWindows"
 >;
 
 export function useAvailabilityBlockInteraction({
   blockStart,
   blockEnd,
   selectedWindow,
+  unavailableWindows,
   locked,
   onHoverWindow,
   onSelectWindow,
@@ -29,6 +31,16 @@ export function useAvailabilityBlockInteraction({
   const [isInvalidDrag, setIsInvalidDrag] = useState(false);
 
   const windows = useMemo(() => getReservationWindows(blockStart, blockEnd), [blockStart, blockEnd]);
+
+  const isUnavailable = useCallback(
+    (window: ReservationWindow) =>
+      unavailableWindows.some(
+        (unavailable) =>
+          unavailable.start.getTime() === window.start.getTime() &&
+          unavailable.end.getTime() === window.end.getTime()
+      ),
+    [unavailableWindows]
+  );
 
   const getSelectionPreview = useCallback(
     (startWindow: ReservationWindow, endWindow: ReservationWindow): ReservationWindow | null => {
@@ -47,7 +59,8 @@ export function useAvailabilityBlockInteraction({
 
       const rect = containerRef.current.getBoundingClientRect();
       const relativeY = (event.clientY - rect.top) / rect.height;
-      const hovered = getWindowAtRelativePosition(windows, relativeY);
+      const candidate = getWindowAtRelativePosition(windows, relativeY);
+      const hovered = candidate && !isUnavailable(candidate) ? candidate : null;
 
       setHoveredWindow(hovered);
       if (dragStartRef.current && hovered) {
@@ -58,7 +71,7 @@ export function useAvailabilityBlockInteraction({
       }
       onHoverWindow(hovered);
     },
-    [getSelectionPreview, locked, onHoverWindow, windows]
+    [getSelectionPreview, isUnavailable, locked, onHoverWindow, windows]
   );
 
   const handleMouseLeave = useCallback(() => {

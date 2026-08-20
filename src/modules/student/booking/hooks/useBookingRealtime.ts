@@ -1,3 +1,4 @@
+//Hook para manejar la sincronización en tiempo real de los slots de reserva.
 import { useEffect, useState } from "react";
 import {
   holdBookingSlot,
@@ -11,6 +12,8 @@ import {
 } from "@/modules/student/booking/api/bookingSlotsRealtime.api";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
+import { getBookingBlockId } from "@/modules/student/booking/api/booking.api";
+import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
 
 export function useBookingRealtime(tutorId = "mock-tutor") {
@@ -19,7 +22,26 @@ export function useBookingRealtime(tutorId = "mock-tutor") {
   useEffect(() => {
     const applyEvent = (event: BookingSlotStatusEvent) => {
       setBookingSlots((current) =>
-        current.map((slot) => (slot.id === event.slotId ? { ...slot, status: event.status } : slot))
+        current.map((slot) => {
+          if (slot.id !== event.slotId && slot.id !== getBookingBlockId(event.slotId)) return slot;
+          if (!event.windowStart || !event.windowEnd) return { ...slot, status: event.status };
+
+          const nextWindow: BookingUnavailableWindow = {
+            start: event.windowStart,
+            end: event.windowEnd,
+            status: event.status === "AVAILABLE" ? "BLOCKED" : event.status,
+          };
+          const currentWindows = slot.unavailableWindows ?? [];
+          const nextWindows = currentWindows.filter(
+            (window) => window.start !== event.windowStart || window.end !== event.windowEnd
+          );
+
+          return {
+            ...slot,
+            unavailableWindows:
+              event.status === "AVAILABLE" ? nextWindows : [...nextWindows, nextWindow],
+          };
+        })
       );
     };
 
@@ -38,24 +60,44 @@ export function useBookingRealtime(tutorId = "mock-tutor") {
 
   const holdSlot = async (slot: BookingSlot) => {
     const blockId = slot.id.split("__")[0];
-    publishBookingSlotStatus({ slotId: blockId, status: "BLOCKED" });
+    publishBookingSlotStatus({
+      slotId: blockId,
+      status: "BLOCKED",
+      windowStart: slot.startIso,
+      windowEnd: slot.endIso,
+    });
 
     try {
       await holdBookingSlot(tutorId, slot);
     } catch (error) {
-      publishBookingSlotStatus({ slotId: blockId, status: "AVAILABLE" });
+      publishBookingSlotStatus({
+        slotId: blockId,
+        status: "AVAILABLE",
+        windowStart: slot.startIso,
+        windowEnd: slot.endIso,
+      });
       throw error;
     }
   };
 
   const reserveSlot = async (slot: BookingSlot, data: BookingFormValues) => {
     await reserveBooking(tutorId, slot, data);
-    publishBookingSlotStatus({ slotId: slot.id.split("__")[0], status: "RESERVED" });
+    publishBookingSlotStatus({
+      slotId: getBookingBlockId(slot.id),
+      status: "RESERVED",
+      windowStart: slot.startIso,
+      windowEnd: slot.endIso,
+    });
   };
 
   const releaseSlot = async (slot: BookingSlot) => {
     await releaseBookingSlot(tutorId, slot);
-    publishBookingSlotStatus({ slotId: slot.id.split("__")[0], status: "AVAILABLE" });
+    publishBookingSlotStatus({
+      slotId: getBookingBlockId(slot.id),
+      status: "AVAILABLE",
+      windowStart: slot.startIso,
+      windowEnd: slot.endIso,
+    });
   };
 
   return { bookingSlots, holdSlot, reserveSlot, releaseSlot };

@@ -9,6 +9,7 @@ export interface AvailabilityBlockContentProps {
   blockStart: Date;
   blockEnd: Date;
   selectedWindow: ReservationWindow | null;
+  unavailableWindows: ReservationWindow[];
   locked: boolean;
   onHoverWindow: (window: ReservationWindow | null) => void;
   onSelectWindow: (window: ReservationWindow) => void;

@@ -6,6 +6,8 @@ import type { SlotStatus } from "@/modules/student/booking/interfaces/slotDispla
 export interface BookingSlotStatusEvent {
   slotId: string;
   status: SlotStatus;
+  windowStart?: string;
+  windowEnd?: string;
 }
 
 const BOOKING_STATUS_EVENT = "knowlink:booking-slot-status";

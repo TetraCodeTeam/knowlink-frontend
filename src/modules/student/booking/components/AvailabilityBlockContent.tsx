@@ -24,6 +24,7 @@ export default function AvailabilityBlockContent({
   blockStart,
   blockEnd,
   selectedWindow,
+  unavailableWindows,
   locked,
   onHoverWindow,
   onSelectWindow,
@@ -43,6 +44,7 @@ export default function AvailabilityBlockContent({
     blockStart,
     blockEnd,
     selectedWindow,
+    unavailableWindows,
     locked,
     onHoverWindow,
     onSelectWindow,
@@ -116,9 +118,26 @@ export default function AvailabilityBlockContent({
           </Typography>
         </Box>
       )}
-      {/* solo dios y yo sabemos que esto es un tooltip de error que aparece cuando el usuario intenta seleccionar una franja de 30 min en lugar de 1h completa. */}
       {/* Franja de 1h resaltada: ocupa solo su porción proporcional dentro
           del bloque, ya sea por hover o por selección ya confirmada. */}
+      {unavailableWindows.map((window) => (
+        <Box
+          key={`${window.start.toISOString()}-${window.end.toISOString()}`}
+          sx={{
+            position: "absolute",
+            left: 2,
+            right: 2,
+            top: `${((window.start.getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
+            height: `${((window.end.getTime() - window.start.getTime()) /
+              (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
+            bgcolor: `${BOOKING_STATUS_META.BLOCKED.color}CC`,
+            border: `1px solid ${BOOKING_STATUS_META.BLOCKED.color}`,
+            borderRadius: "6px",
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+
       {highlightedWindow && highlightIndex >= 0 && (
         <Box
           sx={{
