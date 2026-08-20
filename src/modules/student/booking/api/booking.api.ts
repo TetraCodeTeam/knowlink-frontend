@@ -3,12 +3,7 @@
 import { httpClient } from "@/shared/lib/httpClient";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
-
-export interface BookingRequest extends BookingFormValues {
-  tutorId: string;
-  start: string;
-  end: string;
-}
+import type { BookingRequest } from "@/modules/student/booking/interfaces/bookingRequestType";
 
 const REALTIME_ENABLED = import.meta.env.VITE_BOOKING_REALTIME_ENABLED === "false";
 
