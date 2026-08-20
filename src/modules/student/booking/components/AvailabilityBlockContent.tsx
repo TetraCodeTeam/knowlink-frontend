@@ -116,7 +116,7 @@ export default function AvailabilityBlockContent({
           </Typography>
         </Box>
       )}
-
+      {/* solo dios y yo sabemos que esto es un tooltip de error que aparece cuando el usuario intenta seleccionar una franja de 30 min en lugar de 1h completa. */}
       {/* Franja de 1h resaltada: ocupa solo su porción proporcional dentro
           del bloque, ya sea por hover o por selección ya confirmada. */}
       {highlightedWindow && highlightIndex >= 0 && (

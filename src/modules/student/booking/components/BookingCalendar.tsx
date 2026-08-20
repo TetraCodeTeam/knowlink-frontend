@@ -9,7 +9,6 @@ import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalen
 import InfoTooltip from "@/modules/student/booking/components/InfoTooltip";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
-import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
@@ -36,9 +35,8 @@ function getSlotStatus(slot: MockBookingSlotEvent): SlotDisplayStatus {
   return "AVAILABLE";
 }
 
-export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingCalendarProps) {
+export default function BookingCalendar({ selectedSlot, bookingSlots = [], onSelectSlot }: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
-  const bookingSlots = useBookingSlots();
 
   // MOCK_BOOKING_SLOTS todavía no viene de una API, pero igual se memoiza:
   // FullCalendar recalcula estado interno cuando cambia la *referencia* de
@@ -78,6 +76,8 @@ export default function BookingCalendar({ selectedSlot, onSelectSlot }: BookingC
 
       onSelectSlot({
         id: `${blockId}__${window.start.toISOString()}__${window.end.toISOString()}`,
+        startIso: window.start.toISOString(),
+        endIso: window.end.toISOString(),
         date: window.start.toLocaleDateString("es-AR", {
           weekday: "long",
           day: "numeric",

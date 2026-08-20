@@ -340,7 +340,8 @@ versión genérica en `shared/components/` (ej. `AppButton`,
 Prefijo obligatorio `VITE_` para que sean accesibles en el cliente:
 
 ```
-VITE_BACKEND_URL=http://localhost:8080   # única variable actual
+VITE_BACKEND_URL=http://localhost:8080
+VITE_BOOKING_REALTIME_ENABLED=false
 ```
 
 Acceso en código: `import.meta.env.VITE_BACKEND_URL`

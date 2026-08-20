@@ -17,6 +17,8 @@ import { useBookingForm } from "@/modules/student/booking/hooks/useBookingForm";
 export default function BookingCard({
   selectedSlot = null,
   onCancelSelectedSlot,
+  onReserveBooking,
+  onReleaseBooking,
 }: BookingCardProps) {
   const bookingForm = useBookingForm(selectedSlot);
   const {
@@ -46,6 +48,8 @@ export default function BookingCard({
     handleFeedbackClose,
   } = useBookingFlow({
     selectedSlot,
+    onReserveBooking,
+    onReleaseBooking,
     onCancelSelectedSlot,
     reset,
   });

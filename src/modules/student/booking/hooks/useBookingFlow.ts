@@ -10,12 +10,16 @@ import {
 
 interface UseBookingFlowProps {
   selectedSlot: BookingCardProps["selectedSlot"];
+  onReserveBooking?: BookingCardProps["onReserveBooking"];
+  onReleaseBooking?: BookingCardProps["onReleaseBooking"];
   onCancelSelectedSlot?: BookingCardProps["onCancelSelectedSlot"];
   reset: UseFormReset<BookingFormValues>;
 }
 
 export function useBookingFlow({
   selectedSlot,
+  onReserveBooking,
+  onReleaseBooking,
   onCancelSelectedSlot,
   reset,
 }: UseBookingFlowProps) {
@@ -31,9 +35,12 @@ export function useBookingFlow({
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 700));
-    setConfirmedBookingId(selectedSlot.id);
-    setIsSubmitting(false);
+    try {
+      await onReserveBooking?.(selectedSlot, data);
+      setConfirmedBookingId(selectedSlot.id);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetDraft = () => {
@@ -43,12 +50,18 @@ export function useBookingFlow({
   };
 
   const handleBookingExpired = () => {
+    if (selectedSlot) {
+      void onReleaseBooking?.(selectedSlot).catch(() => undefined);
+    }
     resetDraft();
     setIsExpirationDialogOpen(true);
     onCancelSelectedSlot?.();
   };
 
   const handleBackConfirm = () => {
+    if (selectedSlot) {
+      void onReleaseBooking?.(selectedSlot).catch(() => undefined);
+    }
     resetDraft();
     setIsBackDialogOpen(false);
     onCancelSelectedSlot?.();
