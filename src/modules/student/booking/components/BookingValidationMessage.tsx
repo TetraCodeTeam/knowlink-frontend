@@ -1,3 +1,4 @@
+//diseño de mensaje se estado en los slots dentro del calendario de reserva. Se usa para mostrar mensajes de validación al usuario, como "selección inválida" o "violación de aviso mínimo".
 import { Box, Popper, Typography } from "@mui/material";
 
 interface BookingValidationMessageProps {
@@ -6,7 +7,7 @@ interface BookingValidationMessageProps {
   anchorEl: HTMLElement | null;
 }
 
-export default function BookingValidationMessage({ message, width = 220, anchorEl }: BookingValidationMessageProps) {
+export default function BookingValidationMessage({ message, anchorEl }: BookingValidationMessageProps) {
   return (
     <Popper
       open={Boolean(anchorEl)}

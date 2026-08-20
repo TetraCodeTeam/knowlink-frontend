@@ -1,3 +1,4 @@
+// Componente que muestra la leyenda de colores del calendario de reserva, indicando el significado de cada color de slot.
 import { Box, Typography } from "@mui/material";
 import { Info } from "lucide-react";
 import { BOOKING_CALENDAR_LEGEND } from "@/modules/student/booking/constants/bookingLegendConstants";

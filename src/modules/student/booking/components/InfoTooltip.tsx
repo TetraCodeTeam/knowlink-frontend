@@ -1,9 +1,8 @@
+//Tooltip que se muestra en el header del calendario de reserva, para explicar al usuario el significado de los distintos colores de los slots.
 import { Tooltip } from "@mui/material";
 import type { InfoTooltipProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 
-// Tooltip para mostrar el motivo por el que un slot no está disponible.
-
-export default function LockedSlotTooltip({ message, children }: InfoTooltipProps) {
+export default function InfoTooltip({ message, children }: InfoTooltipProps) {
   return (
     <Tooltip
       title={message}
