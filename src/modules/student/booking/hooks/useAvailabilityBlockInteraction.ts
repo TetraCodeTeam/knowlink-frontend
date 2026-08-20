@@ -43,14 +43,41 @@ export function useAvailabilityBlockInteraction({
   );
 
   const getSelectionPreview = useCallback(
-    (startWindow: ReservationWindow, endWindow: ReservationWindow): ReservationWindow | null => {
+    (startWindow: ReservationWindow, endWindow: ReservationWindow): ReservationWindow => {
       const start = new Date(Math.min(startWindow.start.getTime(), endWindow.start.getTime()));
       const end = new Date(Math.max(startWindow.end.getTime(), endWindow.end.getTime()));
-      const durationMinutes = (end.getTime() - start.getTime()) / (60 * 1000);
 
-      return durationMinutes % 60 === 0 ? { start, end } : null;
+      return { start, end };
     },
     []
+  );
+
+  const isWholeHourSelection = useCallback((selection: ReservationWindow) => {
+    const durationMinutes = (selection.end.getTime() - selection.start.getTime()) / (60 * 1000);
+
+    return durationMinutes % 60 === 0;
+  }, []);
+
+  const isValidSelection = useCallback(
+    (startWindow: ReservationWindow, endWindow: ReservationWindow) =>
+      isWholeHourSelection(getSelectionPreview(startWindow, endWindow)),
+    [getSelectionPreview, isWholeHourSelection]
+  );
+
+  const isSelectionDifferent = useCallback(
+    (startWindow: ReservationWindow, endWindow: ReservationWindow) =>
+      endWindow.start.getTime() !== startWindow.start.getTime(),
+    []
+  );
+
+  const updateDragPreview = useCallback(
+    (startWindow: ReservationWindow, endWindow: ReservationWindow) => {
+      const preview = getSelectionPreview(startWindow, endWindow);
+      setPreviewWindow(preview);
+      setIsInvalidDrag(isSelectionDifferent(startWindow, endWindow) && !isWholeHourSelection(preview));
+      return preview;
+    },
+    [getSelectionPreview, isSelectionDifferent, isWholeHourSelection]
   );
 
   const handleMouseMove = useCallback(
@@ -64,14 +91,12 @@ export function useAvailabilityBlockInteraction({
 
       setHoveredWindow(hovered);
       if (dragStartRef.current && hovered) {
-        didDragRef.current = hovered.start.getTime() !== dragStartRef.current.start.getTime();
-        const preview = getSelectionPreview(dragStartRef.current, hovered);
-        setPreviewWindow(preview);
-        setIsInvalidDrag(didDragRef.current && preview === null);
+        didDragRef.current = isSelectionDifferent(dragStartRef.current, hovered);
+        updateDragPreview(dragStartRef.current, hovered);
       }
       onHoverWindow(hovered);
     },
-    [getSelectionPreview, isUnavailable, locked, onHoverWindow, windows]
+    [isSelectionDifferent, isUnavailable, locked, onHoverWindow, updateDragPreview, windows]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -97,11 +122,12 @@ export function useAvailabilityBlockInteraction({
     if (locked || !dragStartRef.current || !hoveredWindow || !didDragRef.current) return;
 
     const selection = getSelectionPreview(dragStartRef.current, hoveredWindow);
+    const isValid = isValidSelection(dragStartRef.current, hoveredWindow);
     dragStartRef.current = null;
     setPreviewWindow(null);
     setIsInvalidDrag(false);
-    if (selection) onSelectWindow(selection);
-  }, [getSelectionPreview, hoveredWindow, locked, onSelectWindow]);
+    if (isValid) onSelectWindow(selection);
+  }, [getSelectionPreview, hoveredWindow, isValidSelection, locked, onSelectWindow]);
 
   const handleClick = useCallback(() => {
     if (locked) return;
