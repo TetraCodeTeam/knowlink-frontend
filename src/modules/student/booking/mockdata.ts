@@ -30,3 +30,5 @@ export const MOCK_SUBJECTS: BookingSubject[] = [
 ];
 
 export const SERVICE_FEE_RATE = 0.03;
+
+export const MOCK_MINIMUM_NOTICE_MINUTES = 18 * 60;

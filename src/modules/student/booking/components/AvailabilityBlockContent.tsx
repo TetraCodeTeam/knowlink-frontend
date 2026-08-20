@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import type { AvailabilityBlockContentProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import { BOOKING_STATUS_META } from "@/modules/student/booking/constants/bookingLegendConstants";
 import { useAvailabilityBlockInteraction } from "@/modules/student/booking/hooks/useAvailabilityBlockInteraction";
+import BookingValidationMessage from "@/modules/student/booking/components/BookingValidationMessage";
 
 const timeFormatter = new Intl.DateTimeFormat("es-AR", { hour: "2-digit", minute: "2-digit" });
 
@@ -26,6 +27,7 @@ export default function AvailabilityBlockContent({
   selectedWindow,
   unavailableWindows,
   locked,
+  minimumNoticeMinutes,
   onHoverWindow,
   onSelectWindow,
 }: AvailabilityBlockContentProps) {
@@ -34,6 +36,7 @@ export default function AvailabilityBlockContent({
     highlightedWindow,
     highlightIndex,
     isInvalidDrag,
+    isMinimumNoticeViolation,
     isDimmedByLock,
     handleMouseMove,
     handleMouseLeave,
@@ -46,6 +49,7 @@ export default function AvailabilityBlockContent({
     selectedWindow,
     unavailableWindows,
     locked,
+    minimumNoticeMinutes,
     onHoverWindow,
     onSelectWindow,
   });
@@ -88,35 +92,17 @@ export default function AvailabilityBlockContent({
       </Box>
 
       {isInvalidDrag && (
-        <Box
-          sx={{
-            position: "absolute",
-            left: "calc(100% + 10px)",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: 190,
-            px: 1.5,
-            py: 1,
-            bgcolor: "#fff8e6",
-            border: "1px solid #e8c56a",
-            borderRadius: 2,
-            boxShadow: "0 4px 12px rgba(91, 72, 20, 0.16)",
-            zIndex: 20,
-            pointerEvents: "none",
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#6b5a1e",
-              fontSize: 12,
-              fontWeight: 700,
-              lineHeight: 1.35,
-              textAlign: "center",
-            }}
-          >
-            Las reservas se realizan por hora completa, no se admite seleccionar medias horas
-          </Typography>
-        </Box>
+        <BookingValidationMessage
+          anchorEl={containerRef.current}
+          width={190}
+          message="Las reservas se realizan por hora completa, no se admite seleccionar medias horas"
+        />
+      )}
+      {isMinimumNoticeViolation && (
+        <BookingValidationMessage
+          anchorEl={containerRef.current}
+          message={`Este horario requiere una anticipación mínima de ${minimumNoticeMinutes / 60} horas.`}
+        />
       )}
       {/* Franja de 1h resaltada: ocupa solo su porción proporcional dentro
           del bloque, ya sea por hover o por selección ya confirmada. */}

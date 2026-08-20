@@ -11,7 +11,7 @@ import type { ReservationWindow } from "@/modules/student/booking/interfaces/res
 type UseAvailabilityBlockInteractionProps = Pick<
   AvailabilityBlockContentProps,
   "blockStart" | "blockEnd" | "selectedWindow" | "locked" | "onHoverWindow" | "onSelectWindow"
-  | "unavailableWindows"
+  | "unavailableWindows" | "minimumNoticeMinutes"
 >;
 
 export function useAvailabilityBlockInteraction({
@@ -19,6 +19,7 @@ export function useAvailabilityBlockInteraction({
   blockEnd,
   selectedWindow,
   unavailableWindows,
+  minimumNoticeMinutes,
   locked,
   onHoverWindow,
   onSelectWindow,
@@ -29,6 +30,7 @@ export function useAvailabilityBlockInteraction({
   const [hoveredWindow, setHoveredWindow] = useState<ReservationWindow | null>(null);
   const [previewWindow, setPreviewWindow] = useState<ReservationWindow | null>(null);
   const [isInvalidDrag, setIsInvalidDrag] = useState(false);
+  const [isMinimumNoticeViolation, setIsMinimumNoticeViolation] = useState(false);
 
   const windows = useMemo(() => getReservationWindows(blockStart, blockEnd), [blockStart, blockEnd]);
 
@@ -40,6 +42,14 @@ export function useAvailabilityBlockInteraction({
           unavailable.end.getTime() === window.end.getTime()
       ),
     [unavailableWindows]
+  );
+
+  const violatesMinimumNotice = useCallback(
+    (window: ReservationWindow) => {
+      const noticeDeadline = Date.now() + minimumNoticeMinutes * 60 * 1000;
+      return window.start.getTime() < noticeDeadline;
+    },
+    [minimumNoticeMinutes]
   );
 
   const getSelectionPreview = useCallback(
@@ -60,8 +70,9 @@ export function useAvailabilityBlockInteraction({
 
   const isValidSelection = useCallback(
     (startWindow: ReservationWindow, endWindow: ReservationWindow) =>
-      isWholeHourSelection(getSelectionPreview(startWindow, endWindow)),
-    [getSelectionPreview, isWholeHourSelection]
+      isWholeHourSelection(getSelectionPreview(startWindow, endWindow)) &&
+      !violatesMinimumNotice(getSelectionPreview(startWindow, endWindow)),
+    [getSelectionPreview, isWholeHourSelection, violatesMinimumNotice]
   );
 
   const isSelectionDifferent = useCallback(
@@ -90,13 +101,15 @@ export function useAvailabilityBlockInteraction({
       const hovered = candidate && !isUnavailable(candidate) ? candidate : null;
 
       setHoveredWindow(hovered);
+      setIsMinimumNoticeViolation(hovered ? violatesMinimumNotice(hovered) : false);
       if (dragStartRef.current && hovered) {
         didDragRef.current = isSelectionDifferent(dragStartRef.current, hovered);
-        updateDragPreview(dragStartRef.current, hovered);
+        const preview = updateDragPreview(dragStartRef.current, hovered);
+        setIsMinimumNoticeViolation(violatesMinimumNotice(preview));
       }
       onHoverWindow(hovered);
     },
-    [isSelectionDifferent, isUnavailable, locked, onHoverWindow, updateDragPreview, windows]
+    [isSelectionDifferent, isUnavailable, locked, onHoverWindow, updateDragPreview, violatesMinimumNotice, windows]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -107,6 +120,7 @@ export function useAvailabilityBlockInteraction({
     didDragRef.current = false;
     setPreviewWindow(null);
     setIsInvalidDrag(false);
+    setIsMinimumNoticeViolation(false);
     onHoverWindow(null);
   }, [locked, onHoverWindow]);
 
@@ -115,8 +129,9 @@ export function useAvailabilityBlockInteraction({
       dragStartRef.current = hoveredWindow;
       didDragRef.current = false;
       setIsInvalidDrag(false);
+      setIsMinimumNoticeViolation(hoveredWindow ? violatesMinimumNotice(hoveredWindow) : false);
     }
-  }, [hoveredWindow, locked]);
+  }, [hoveredWindow, locked, violatesMinimumNotice]);
 
   const handleMouseUp = useCallback(() => {
     if (locked || !dragStartRef.current || !hoveredWindow || !didDragRef.current) return;
@@ -126,6 +141,7 @@ export function useAvailabilityBlockInteraction({
     dragStartRef.current = null;
     setPreviewWindow(null);
     setIsInvalidDrag(false);
+    setIsMinimumNoticeViolation(false);
     if (isValid) onSelectWindow(selection);
   }, [getSelectionPreview, hoveredWindow, isValidSelection, locked, onSelectWindow]);
 
@@ -135,9 +151,9 @@ export function useAvailabilityBlockInteraction({
       didDragRef.current = false;
       return;
     }
-    if (hoveredWindow && !previewWindow) onSelectWindow(hoveredWindow);
+    if (hoveredWindow && !previewWindow && !violatesMinimumNotice(hoveredWindow)) onSelectWindow(hoveredWindow);
     didDragRef.current = false;
-  }, [hoveredWindow, locked, onSelectWindow, previewWindow]);
+  }, [hoveredWindow, locked, onSelectWindow, previewWindow, violatesMinimumNotice]);
 
   const highlightedWindow = selectedWindow ?? (locked ? null : previewWindow ?? hoveredWindow);
   const highlightIndex = highlightedWindow
@@ -150,6 +166,7 @@ export function useAvailabilityBlockInteraction({
     highlightedWindow,
     highlightIndex,
     isInvalidDrag,
+    isMinimumNoticeViolation,
     isDimmedByLock: locked && selectedWindow === null,
     handleMouseMove,
     handleMouseLeave,

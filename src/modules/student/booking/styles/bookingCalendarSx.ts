@@ -26,6 +26,11 @@ export const bookingCalendarSx: SxProps<Theme> = {
     borderColor: `${AVAILABLE_COLOR} !important`,
     color: "#1a1a2e !important",
     boxShadow: "none",
+    overflow: "visible !important",
+  },
+
+  "& .fc-event.booking-slot-available:has(.booking-validation-message)": {
+    zIndex: "100 !important",
   },
 
   "& .fc-event.booking-slot-blocked": {

@@ -6,9 +6,9 @@ import type { EventContentArg, DayHeaderContentArg } from "@fullcalendar/core";
 import { Box, Typography } from "@mui/material";
 import { isBeforeNow } from "@/shared/utils/calendarDateUtils";
 import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalendarSx";
-import InfoTooltip from "@/modules/student/booking/components/InfoTooltip";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
+import BookingStatusEventContent from "@/modules/student/booking/components/BookingStatusEventContent";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
@@ -35,7 +35,12 @@ function getSlotStatus(slot: MockBookingSlotEvent): SlotDisplayStatus {
   return "AVAILABLE";
 }
 
-export default function BookingCalendar({ selectedSlot, bookingSlots = [], onSelectSlot }: BookingCalendarProps) {
+export default function BookingCalendar({
+  selectedSlot,
+  bookingSlots = [],
+  minimumNoticeMinutes = 0,
+  onSelectSlot,
+}: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
 
   // MOCK_BOOKING_SLOTS todavía no viene de una API, pero igual se memoiza:
@@ -116,6 +121,7 @@ export default function BookingCalendar({ selectedSlot, bookingSlots = [], onSel
                 end: new Date(window.end),
               }))
             }
+            minimumNoticeMinutes={minimumNoticeMinutes}
             selectedWindow={selectedWindow}
             locked={selectedSlot !== null}
             onHoverWindow={() => {}}
@@ -124,20 +130,14 @@ export default function BookingCalendar({ selectedSlot, bookingSlots = [], onSel
         );
       }
 
-      const content = (
-        <Box sx={{ px: 0.5, py: 0.25, fontSize: 12, fontWeight: 600, height: "100%" }}>
-          {arg.timeText}
-        </Box>
-      );
-
       const legendItem = BOOKING_STATUS_META[status as keyof typeof BOOKING_STATUS_META];
 
       if (legendItem?.description) {
-        return <InfoTooltip message={legendItem.description}>{content}</InfoTooltip>;
+        return <BookingStatusEventContent timeText={arg.timeText} message={legendItem.description} />;
       }
-      return content;
+      return <Box sx={{ px: 0.5, py: 0.25, fontSize: 12, fontWeight: 600, height: "100%" }}>{arg.timeText}</Box>;
     },
-    [bookingSlots, handleSelectWindow, selectedSlot]
+    [bookingSlots, handleSelectWindow, minimumNoticeMinutes, selectedSlot]
   );
 
 

@@ -4,6 +4,7 @@ import BookingCard from "@/modules/student/booking/components/BookingCard";
 import BookingCalendar from "@/modules/student/booking/components/BookingCalendar";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import { useBookingRealtime } from "@/modules/student/booking/hooks/useBookingRealtime";
+import { MOCK_MINIMUM_NOTICE_MINUTES } from "@/modules/student/booking/mockdata";
 
 
 export default function BookingClassPage() {
@@ -22,7 +23,12 @@ export default function BookingClassPage() {
   return (
     <Box sx={{ display: "flex", gap: 4, p: 4, alignItems: "stretch" }}>
       <Box sx={{ flex: 1 }}>
-        <BookingCalendar bookingSlots={bookingSlots} selectedSlot={slot} onSelectSlot={(nextSlot) => void handleSelectSlot(nextSlot)} />
+        <BookingCalendar
+          bookingSlots={bookingSlots}
+          minimumNoticeMinutes={MOCK_MINIMUM_NOTICE_MINUTES}
+          selectedSlot={slot}
+          onSelectSlot={(nextSlot) => void handleSelectSlot(nextSlot)}
+        />
       </Box>
 
       <BookingCard

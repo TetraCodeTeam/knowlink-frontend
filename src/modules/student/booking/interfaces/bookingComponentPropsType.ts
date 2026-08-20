@@ -10,6 +10,7 @@ export interface AvailabilityBlockContentProps {
   blockEnd: Date;
   selectedWindow: ReservationWindow | null;
   unavailableWindows: ReservationWindow[];
+  minimumNoticeMinutes: number;
   locked: boolean;
   onHoverWindow: (window: ReservationWindow | null) => void;
   onSelectWindow: (window: ReservationWindow) => void;
@@ -18,6 +19,7 @@ export interface AvailabilityBlockContentProps {
 export interface BookingCalendarProps {
   selectedSlot: BookingSlot | null;
   bookingSlots?: MockBookingSlotEvent[];
+  minimumNoticeMinutes?: number;
   onSelectSlot: (slot: BookingSlot) => void;
 }
 
