@@ -3,6 +3,9 @@ import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCa
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
+import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
+import { useState } from "react";
+import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 
@@ -38,15 +41,14 @@ const badgeSx = {
 export default function TutorSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authResponse, logout } = useAuthStore();
+  const { authResponse } = useAuthStore();
   const { notificationsCount, requestsCount } = useTutorBadgesStore();
+  const { triggerLogout, isPending: isLoggingOut } = useLogout();
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
-  const handleLogout = () => {
-    logout();
-    navigate("/auth/login");
-  };
+  const handleLogout = () => setIsLogoutOpen(true);
 
   const getBadgeCount = (badge?: NavItem["badge"]) => {
     if (badge === "notifications") return notificationsCount;
@@ -267,6 +269,14 @@ export default function TutorSidebar() {
           </Typography>
         </Box>
       </Box>
+
+      <LogoutDialog
+        open={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+        onConfirm={triggerLogout}
+        isPending={isLoggingOut}
+      />
+      
     </Box>
   );
 }
