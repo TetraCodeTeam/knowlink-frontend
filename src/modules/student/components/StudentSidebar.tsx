@@ -238,10 +238,9 @@ export default function StudentSidebar() {
       <LogoutDialog
         open={isLogoutOpen}
         onClose={() => setIsLogoutOpen(false)}
-        onConfirm={triggerLogout}
+        onConfirm={() => triggerLogout()}
         isPending={isLoggingOut}
       />
-      
     </Box>
   );
 }

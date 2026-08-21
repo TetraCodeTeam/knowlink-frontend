@@ -273,10 +273,9 @@ export default function TutorSidebar() {
       <LogoutDialog
         open={isLogoutOpen}
         onClose={() => setIsLogoutOpen(false)}
-        onConfirm={triggerLogout}
+        onConfirm={() => triggerLogout()}
         isPending={isLoggingOut}
       />
-      
     </Box>
   );
 }
