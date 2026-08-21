@@ -31,6 +31,8 @@ export default function BookingModalityToggle({
             component="button"
             type="button"
             disabled={isDisabled}
+            aria-pressed={isSelected}
+            aria-label={BOOKING_MODALITY_LABEL[option]}
             onClick={() => !isDisabled && onChange(option)}
             sx={{
               flex: 1,
