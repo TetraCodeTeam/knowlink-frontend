@@ -50,7 +50,7 @@ export function useBookingFlow({
   const resetDraft = () => {
     setIsSubmitting(false);
     setConfirmedBookingId(null);
-    reset(DEFAULT_BOOKING_FORM_VALUES);
+    reset({ ...DEFAULT_BOOKING_FORM_VALUES, bookingSlotId: selectedSlot?.id ?? "" });
   };
 
   const handleBookingExpired = () => {
