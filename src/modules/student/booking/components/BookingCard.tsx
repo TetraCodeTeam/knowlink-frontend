@@ -168,8 +168,7 @@ export default function BookingCard({
         )}
         {availableModalities.length === 1 && (
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            *El tutor solo ofrece clases {BOOKING_MODALITY_LABEL[availableModalities[0]].toLowerCase()}
-            es para esta materia.
+            *El tutor solo ofrece clases {BOOKING_MODALITY_LABEL[availableModalities[0]].toLowerCase()} para esta materia.
           </Typography>
         )}
 
