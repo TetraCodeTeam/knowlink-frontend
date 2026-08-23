@@ -59,9 +59,9 @@ export const PersonalDataCard = ({
             Datos Personales
           </Typography>
         </Stack>
-        <AppButton appVariant="soft" size="small" startIcon={<Pencil size={16} color="#5865C8"/>} onClick={onEditProfile}>
+        {/* <AppButton appVariant="soft" size="small" startIcon={<Pencil size={16} color="#5865C8"/>} onClick={onEditProfile}>
           Editar Perfil
-        </AppButton>
+        </AppButton> */}
       </Stack>
 
       <Grid container spacing={2.5}>

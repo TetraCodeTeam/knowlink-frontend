@@ -42,8 +42,8 @@ export const OwnProfilePage = () => {
         profilePictureUrl={profile.profilePictureUrl}
       />
 
-      <Grid container spacing={3}>
-        <Grid size={{ xs:12, md:8}}>
+      {/* <Grid container spacing={3}> */}
+        {/* <Grid size={{ xs:12, md:8}}> */}
              <Stack spacing={3}>
                 <PersonalDataCard
                     email={profile.email}
@@ -56,14 +56,14 @@ export const OwnProfilePage = () => {
                     onAccessTutorMode={handleAccessTutorMode}
                 />
             </Stack>
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
+        {/* </Grid> */}
+        {/* <Grid size={{ xs: 12, md: 4 }}>
           <AccountManagementCard
             onDeactivateAccount={() => console.log("Abrir confirmación de desactivación de cuenta")}
             onDeleteAccount={() => console.log("Abrir confirmación de eliminación de cuenta")}
           />
-        </Grid>
-      </Grid>
+        </Grid> */}
+      {/* </Grid> */}
 
       
     </Stack>
