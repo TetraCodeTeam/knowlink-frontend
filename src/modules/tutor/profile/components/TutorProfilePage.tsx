@@ -13,12 +13,7 @@ import { Mail, Map, Phone } from "lucide-react";
 import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 import { getInitials, getUniqueModalities } from "@/modules/tutor/profile/utils/profile.utils";
 import { SECTION_LABEL_SX } from "@/modules/tutor/profile/styles/profileStyles";
-import {
-  STAR_COLOR,
-  BIO_BG,
-  BIO_BORDER,
-  BIO_TEXT,
-} from "@/modules/tutor/profile/constants/profileColors.constants";
+import { STAR_COLOR, BIO_BG, BIO_BORDER, BIO_TEXT } from "@/modules/tutor/profile/constants/profileColors.constants";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import DataItem from "@/modules/tutor/profile/components/DataItem";
 import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";

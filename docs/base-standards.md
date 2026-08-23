@@ -103,19 +103,50 @@ src/
 │   │   ├── api/              # Funciones axios: loginUser(), registerUser(), etc.
 │   │   ├── components/       # Componentes React del módulo (no páginas)
 │   │   ├── hooks/            # useQuery/useMutation wrappers + Zustand stores del módulo
-│   │   ├── interfaces/       # Types e interfaces TypeScript del módulo
+│   │   ├── interfaces/
+│   │   │   ├── requests/     # Un archivo por tipo de request
+│   │   │   └── responses/    # Un archivo por tipo de response
 │   │   ├── pages/            # Páginas (componentes mapeados a rutas)
 │   │   └── schemas/          # Schemas Zod para validación de formularios
-│   └── users/
-│       └── (misma estructura)
+│   ├── users/
+│   │   └── (misma estructura)
+│   └── tutor/
+│       ├── types/            # Enums del backend, uno por archivo, compartidos entre availability y otros submódulos de tutor
+│       └── availability/     # Submódulos anidados cuando el dominio lo justifica
+│           ├── api/          # Un archivo por recurso, no un único archivo por módulo
+│           ├── components/
+│           ├── constants/    # Datos de dominio: labels, colores, mapeos fijos
+│           ├── hooks/
+│           ├── interfaces/
+│           │   ├── requests/
+│           │   └── responses/
+│           ├── pages/
+│           ├── styles/       # SxProps<Theme> reutilizables para componentes complejos
+│           └── utils/        # Funciones puras (fechas, formateo, comparaciones)
 ├── providers/                # Providers globales: QueryClientProvider, RouterProvider, etc.
 ├── routes/                   # Definición de rutas con react-router-dom v7
 └── shared/
+    ├── components/           # Componentes reutilizables entre módulos: AppButton, AppConfirmDialog
     ├── hooks/                # Hooks y Zustand stores de uso global
     ├── interfaces/           # Interfaces TypeScript compartidas entre módulos
     ├── lib/                  # Configuraciones: instancia Axios (httpClient), constantes
+   ├── styles/                # SxProps<Theme> compartidos: buttonSx.ts, etc.
     └── utils/                # Funciones utilitarias puras
 ```
+
+Los tipos de request/response van en archivos individuales dentro de
+`interfaces/requests/` e `interfaces/responses/`, importados directo
+desde su archivo (`import type { X } from ".../interfaces/requests/x.interface"`).
+No se usa el patrón de barrel (`index.ts`) para reexportar estos tipos.
+
+La forma de estos tipos no es una decisión libre del frontend: debe
+reflejar exactamente el contrato que expone el backend (los `record` de
+`requests`/`responses` en los controllers). Si el backend cambia un
+campo (nombre, tipo, opcionalidad), el archivo correspondiente en
+`interfaces/requests/` o `interfaces/responses/` se actualiza para
+seguirlo — no al revés. Ante cualquier duda sobre la forma real de un
+endpoint, confirmar contra el DTO del backend (o la respuesta real en
+Network) antes de tipar a ciegas.
 
 ---
 
@@ -130,8 +161,8 @@ src/
 | Funciones API | camelCase con verbo | `getTutores`, `createReserva`, `loginUser` |
 | Interfaces / Types | PascalCase, sin prefijo `I` | `Usuario`, `ReservaResponse` |
 | Schemas Zod | camelCase con sufijo `Schema` | `loginSchema`, `crearReservaSchema` |
-| Archivos | kebab-case | `tutor-card.tsx`, `login-page.tsx`, `use-auth-store.ts` |
-| Archivos de barrel | `index.ts` en cada capa |  |
+| Archivos de componentes | PascalCase | `TutorCard.tsx`, `LoginForm.tsx`, `AvailabilityEditor.tsx` |
+| Archivos que no son componentes | kebab-case | `tutor.api.ts`, `use-auth-store.ts`, `login.schema.ts` |
 
 ### Flujo de datos obligatorio
 
@@ -140,6 +171,11 @@ api/ (axios) → hooks/ (useQuery/useMutation) → components/ o pages/
 ```
 
 Nunca llamar axios directamente en un componente o página.
+
+Dentro de cada módulo, todos los endpoints que use ese módulo van en
+**un único archivo** `<modulo>.api.ts` dentro de `api/` — no un archivo
+por endpoint ni por recurso. Ejemplo: `auth/api/auth.api.ts` contiene
+`loginUser`, `registerUser`, `checkAvailability`, etc., todos juntos.
 
 ### Estado
 
@@ -169,17 +205,133 @@ const { register, handleSubmit } = useForm<LoginFormData>({
 });
 ```
 
+---
+
 ### Estilos
 
 - **MUI** para estructura, layout, dialogs, inputs, navegación
-- **Tailwind** para utilidades de espaciado, colores específicos, ajustes rápidos
 - No usar `style={{}}` inline salvo casos absolutamente excepcionales
+
+### Componentes de terceros con estado interno pesado (ej. FullCalendar)
+
+Para componentes de librerías externas que recalculan su estado interno
+cuando cambia la *referencia* de sus props (no solo el valor):
+
+- Toda configuración que no dependa de una variable va como constante
+  fuera del componente (no recreada en cada render).
+- Toda configuración que sí dependa de una variable va envuelta en
+  `useMemo`.
+- Todo callback pasado como prop va envuelto en `useCallback`.
+
+Un objeto/función recreado en cada render puede disparar comportamiento
+inesperado en la librería (ej. reseteo de estado, refetch innecesario)
+aunque el valor no haya cambiado realmente.
+
+Si estas constantes de configuración crecen mucho, extraerlas a
+`<Componente>.config.ts` en la misma carpeta del componente — no a
+`constants/`, que se reserva para datos de dominio reutilizables entre
+componentes, no para configuración de una librería externa.
 
 ### TypeScript
 
 - No usar `any` bajo ningún concepto
 - Tipos de respuestas de API en `interfaces/` del módulo correspondiente
 - Inferir tipos desde schemas Zod (`z.infer<typeof schema>`)
+
+---
+
+### Enums del backend
+
+Los enums de Java (`@Enumerated(EnumType.STRING)`) se representan en el
+frontend como **union types de strings literales**, nunca con la
+palabra reservada `enum` de TypeScript:
+
+```typescript
+// ✅ Correcto
+export type Modality = "VIRTUAL" | "IN_PERSON" | "BOTH";
+
+// ❌ Incorrecto
+export enum Modality { VIRTUAL, IN_PERSON, BOTH }
+```
+
+Cada enum se define **una sola vez**, en `modules/<modulo>/types/`, en
+un archivo por enum (`modality.type.ts`, `compensation-type.type.ts`).
+Si el mismo enum se necesita en más de un módulo, se mueve a
+`shared/types/` — no se copia ni se re-escribe el union inline en cada
+archivo que lo use.
+
+```
+modules/tutor/types/
+├── modality.type.ts           # export type Modality = "VIRTUAL" | "IN_PERSON" | "BOTH";
+└── compensation-type.type.ts  # export type CompensationType = "FREE" | "PAID";
+```
+
+Los `interfaces/requests` y `interfaces/responses` importan el tipo
+desde `types/` en vez de repetir el union:
+
+```typescript
+import type { Modality } from "@/modules/tutor/types/modality.type";
+
+export interface TutorSubjectRequest {
+  subjectName: string;
+  modality: Modality; // no: modality: "VIRTUAL" | "IN_PERSON" | "BOTH";
+  // ...
+}
+```
+
+Los mapeos de UI (labels, íconos, colores por valor del enum) siguen
+viviendo en `constants/`, pero tipando su `Record` contra el union de
+`types/` en vez de un string suelto — así, si el backend agrega un
+valor nuevo al enum y no se actualiza el mapeo de UI, TypeScript tira
+error de compilación en vez de fallar en silencio en runtime:
+
+```typescript
+import type { Modality } from "@/modules/tutor/types/modality.type";
+
+export const MODALITY_LABEL: Record<Modality, string> = {
+  VIRTUAL: "Virtual",
+  IN_PERSON: "Presencial",
+  BOTH: "Virtual y Presencial",
+}; // TS error si falta o sobra alguna clave
+```
+
+---
+
+### Manejo de errores de API
+
+El campo `message` de la respuesta de error del backend es siempre texto
+seguro para mostrar directo al usuario (ver estándar de backend, sección
+"Manejo de errores"). Leerlo así, sin inventar texto propio salvo como
+respaldo final si la API no responde con el formato esperado:
+
+```typescript
+catch (error: unknown) {
+  const message =
+    (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+    "Texto genérico de respaldo si la API no responde con el formato esperado.";
+  toast.error(message); // o setError() si es un campo de formulario
+}
+```
+
+No usar `alert()`. Errores generales van con `toast.error` (sonner);
+errores de un campo específico de un formulario van con `setError` de
+react-hook-form.
+
+---
+
+### Componentes compartidos reutilizables
+
+Ubicación: `shared/components/`. Antes de escribir un botón, diálogo de
+confirmación, o similar dentro de un módulo, revisar si ya existe una
+versión genérica en `shared/components/` (ej. `AppButton`,
+`AppConfirmDialog`) y extenderla en vez de duplicar estilos o lógica.
+
+- `AppButton`: variantes de color (`appVariant`) centralizadas en
+  `shared/styles/buttonSx.ts`. Nunca definir colores de botón con `sx`
+  inline en un componente de módulo.
+- `AppConfirmDialog`: diálogos de confirmación con severidad
+  (`warning`/`danger`) centralizan ícono y color — no pasar un ícono
+  custom por prop salvo necesidad real de un ícono distinto al estándar.
 
 ---
 

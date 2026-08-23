@@ -55,7 +55,7 @@ export default function StudentSidebar() {
       component="nav"
       sx={{
         width: SIDEBAR_WIDTH,
-        minHeight: "100vh",
+        height: "100vh",
         backgroundColor: "#FFFFFF",
         display: "flex",
         flexDirection: "column",
@@ -72,9 +72,13 @@ export default function StudentSidebar() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "48px",
+          justifyContent: "space-evenly",
+          flex: 1,
           width: "100%",
           px: "12px",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": { display: "none" },
+          scrollbarWidth: "none",
         }}
       >
         {navItems.map(({ icon: Icon, label, path, badge }) => {
@@ -133,8 +137,6 @@ export default function StudentSidebar() {
           );
         })}
       </Box>
-
-      <Box sx={{ flex: 1 }} />
 
       <Box sx={{ width: "100%", px: "12px", mb: "8px" }}>
         <Box
