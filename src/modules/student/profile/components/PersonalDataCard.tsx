@@ -51,7 +51,7 @@ export const PersonalDataCard = ({
   onEditProfile,
 }: PersonalDataCardProps) => {
   return (
-    <Paper elevation={0} sx={{ p: 3, borderRadius: 3, height: "100%", border: "0.2px solid #e0e0fa" }}>
+    <Paper elevation={0} sx={{ pt: 3, pb: 4, pr: 3, pl: 3, borderRadius: 3, height: "100%", border: "0.2px solid #e0e0fa" }}>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <IdCard size={28} color="#5865C8"/>
