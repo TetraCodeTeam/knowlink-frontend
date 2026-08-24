@@ -38,7 +38,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
           <FolderLock size={18} color="#5865C8" />
-          <Typography variant="h5" fontWeight={600}>
+          <Typography variant="h5" fontWeight={500}>
             Material Académico
           </Typography>
         </Stack>

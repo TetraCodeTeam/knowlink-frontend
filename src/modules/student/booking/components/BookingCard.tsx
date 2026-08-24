@@ -183,6 +183,8 @@ export default function BookingCard({
               borderRadius: 2,
               bgcolor: "#f7f7fb",
               border: "1px solid #ececf4",
+            }}
+          >
             <Box component="span" sx={{ display: "inline-flex", flexShrink: 0 }}>
               <MapPin size={16} color="#8a8aa3" />
             </Box>
