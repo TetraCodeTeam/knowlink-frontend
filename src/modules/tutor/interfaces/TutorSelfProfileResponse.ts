@@ -11,5 +11,6 @@ export interface TutorSelfProfileResponse {
   address: string | null;
   mercadoPagoLinked: boolean;
   averageRating: number | null;
+  hasStudentProfile: boolean;
   subjects: TutorSubjectResponse[];
 }
