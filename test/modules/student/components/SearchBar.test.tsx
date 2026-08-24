@@ -107,4 +107,36 @@ describe("US-46 / CP-003 — Barra de búsqueda unificada", () => {
       screen.getByText("Cambiá tu rol a alumno para buscar tutores y materias.")
     ).toBeInTheDocument();
   });
+
+  it("CP-003.18 — Al seleccionar una materia, el panel se cierra (navega)", async () => {
+    const user = userEvent.setup();
+    mockedHook.mockImplementation((query: string) =>
+      query.includes("Alge") ? hookResult([tutorAna]) : hookResult([])
+    );
+
+    renderSearchBar();
+    await user.type(screen.getByPlaceholderText(SEARCH_PLACEHOLDER), "Alge");
+
+    expect(await screen.findByText(getTextContent("Álgebra"))).toBeInTheDocument();
+
+    await user.click(screen.getByText(getTextContent("Álgebra")));
+
+    expect(screen.queryByText("Materias")).not.toBeInTheDocument();
+  });
+
+  it("CP-003.19 — Al seleccionar un tutor, el panel se cierra (navega)", async () => {
+    const user = userEvent.setup();
+    mockedHook.mockImplementation((query: string) =>
+      query.includes("Ana") ? hookResult([tutorAna]) : hookResult([])
+    );
+
+    renderSearchBar();
+    await user.type(screen.getByPlaceholderText(SEARCH_PLACEHOLDER), "Ana");
+
+    expect(await screen.findByText(getTextContent("Ana García"))).toBeInTheDocument();
+
+    await user.click(screen.getByText(getTextContent("Ana García")));
+
+    expect(screen.queryByText("Tutores")).not.toBeInTheDocument();
+  });
 });
