@@ -20,7 +20,7 @@ interface ReadOnlyFieldProps {
 
 const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
   <Box>
-    <Typography variant="subtitle1" fontWeight={600} color="#636363" component="p" sx={{ mb: 0.75 }}>
+    <Typography variant="subtitle2" fontWeight={600} color="#636363" component="p" sx={{ mb: 0.75 }}>
       {label}
     </Typography>
     <Stack
@@ -32,8 +32,8 @@ const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
         py: 1,
         borderRadius: 2,
         border: "1px solid",
-        borderColor: "divider",
-        bgcolor: "action.hover",
+        borderColor: "#E0E0FA",
+        bgcolor: "#F4F3FB",
       }}
     >
       <Box sx={{ display: "flex", color: "#636363" }}>{icon}</Box>
@@ -52,10 +52,10 @@ export const PersonalDataCard = ({
 }: PersonalDataCardProps) => {
   return (
     <Paper elevation={0} sx={{ p: 3, borderRadius: 3, height: "100%", border: "0.2px solid #e0e0fa" }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 3 }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <IdCard size={28} color="#5865C8"/>
-          <Typography variant="h5" component="h2" fontWeight={500}>
+          <Typography variant="h6" component="h2" fontWeight={500}>
             Datos Personales
           </Typography>
         </Stack>
@@ -66,13 +66,13 @@ export const PersonalDataCard = ({
 
       <Grid container spacing={2.5}>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <ReadOnlyField icon={<Mail size={20} />} label="Correo Electrónico" value={email} />
+          <ReadOnlyField icon={<Mail size={16} />} label="Correo Electrónico" value={email} />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <ReadOnlyField icon={<Phone size={20} />} label="Número de Celular" value={phoneNumber} />
+          <ReadOnlyField icon={<Phone size={16} />} label="Número de Celular" value={phoneNumber} />
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <ReadOnlyField icon={<GraduationCap size={20} />} label="Carrera Universitaria" value={major} />
+          <ReadOnlyField icon={<GraduationCap size={16} />} label="Carrera Universitaria" value={major} />
         </Grid>
       </Grid>
     </Paper>

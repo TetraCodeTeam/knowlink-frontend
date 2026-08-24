@@ -2,7 +2,7 @@
 import { Box, Typography } from "@mui/material";
 import { Info } from "lucide-react";
 import { BOOKING_CALENDAR_LEGEND } from "@/modules/student/booking/constants/bookingLegendConstants";
-import InfoTooltip from "@/modules/student/booking/components/InfoTooltip";
+import InfoTooltip from "@/shared/components/InfoTooltip";
 
 export default function BookingCalendarLegend() {
   return (

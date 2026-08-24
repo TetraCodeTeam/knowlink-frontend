@@ -1,6 +1,11 @@
-//Tooltip que se muestra en el header del calendario de reserva, para explicar al usuario el significado de los distintos colores de los slots.
+//Tooltip que se muestra para explicar al usuario el significado del componente en el que se posiciona.
 import { Tooltip } from "@mui/material";
-import type { InfoTooltipProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
+import type { ReactElement } from "react";
+
+export interface InfoTooltipProps {
+  message: string;
+  children: ReactElement;
+}
 
 export default function InfoTooltip({ message, children }: InfoTooltipProps) {
   return (

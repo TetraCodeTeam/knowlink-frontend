@@ -26,7 +26,10 @@ export const ProfileHeader = ({
     <Paper
       elevation={0}
       sx={{
-        p: 3,
+        pr: 3,
+        pl: 3,
+        pt: 2,
+        pb: 2,
         borderRadius: 3,
         display: "flex",
         alignItems: "center",
@@ -38,8 +41,8 @@ export const ProfileHeader = ({
           src={profilePictureUrl ?? undefined}
           alt={fullName}
           sx={{
-            width: 100,
-            height: 100,
+            width: 95,
+            height: 95,
             fontSize: "1.5rem",
             fontWeight: 600,
             bgcolor: "primary.main",
@@ -51,7 +54,7 @@ export const ProfileHeader = ({
           <Typography variant="h4" component="h1" fontWeight={500}>
             {fullName}
           </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ mt: 0.5,  }}>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1,  }}>
             {description}
           </Typography>
         </Box>
