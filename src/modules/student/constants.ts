@@ -15,10 +15,10 @@ export const TUTOR_ROLE = "TUTOR";
  * listar todos los tutores que la ofrecen.
  */
 export function buildMateriaTutorsRoute(materiaNombre: string): string {
-  return `/tutores?materia=${encodeURIComponent(materiaNombre)}`;
+  return `/student/tutores?materia=${encodeURIComponent(materiaNombre)}`;
 }
 
 export function buildTutorProfileRoute(tutorId: string): string {
-  return `/tutores/${tutorId}`;
+  return `/student/tutor/${tutorId}`;
 }
 

@@ -7,8 +7,8 @@ import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-searc
  *
  * Contrato real (rama Julian-SalvucciV3 de knowlink-backend):
  *  - Devuelve un array plano de tutores, no { materias, tutores }.
- *  - Matchea únicamente por nombre de materia (findBySubject_NameContainingIgnoreCase),
- *    NO por nombre de tutor. Cada tutor incluye en `subjects` las materias que matchearon.
+ *  - Matchea por nombre de materia (subjectNameContains) y por nombre de tutor
+ *    (findByUser_FullNameContainingIgnoreCase), deduplicados por tutorId.
  *  - Requiere rol STUDENT (@PreAuthorize("hasRole('STUDENT')")); si el usuario está en
  *    modo tutor el backend responde 403.
  */

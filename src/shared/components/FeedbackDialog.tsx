@@ -33,7 +33,7 @@ export function FeedbackDialog({
   onClose,
   variant = "success",
   actionLabel = "Cerrar",
-  }: FeedbackDialogProps) {
+}: FeedbackDialogProps) {
   return (
     <Dialog
       open={open}
