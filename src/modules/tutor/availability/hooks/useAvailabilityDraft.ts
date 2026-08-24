@@ -10,7 +10,8 @@ import {
   getCurrentWeekMonday,
   getWeekEnd,
   toDateStr,
-  isBeforeNow} from "@/shared/utils/calendarDateUtils";
+  isBeforeNow,
+} from "@/shared/utils/calendarDateUtils";
 import { useWeekCustomization } from "@/modules/tutor/availability/hooks/useWeekCustomization";
 import { useRemoveWeekCustomization } from "@/modules/tutor/availability/hooks/useRemoveWeekCustomization";
 import type { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
