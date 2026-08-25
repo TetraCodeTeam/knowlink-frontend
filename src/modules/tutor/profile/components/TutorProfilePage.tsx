@@ -18,7 +18,7 @@ import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import DataItem from "@/modules/tutor/profile/components/DataItem";
 import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";
 import PaymentSection from "@/modules/tutor/profile/components/PaymentSection";
-import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
+import MaterialsSection from "@/modules/tutor/materials/components/MaterialsSection";
 import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
 import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
 import AddSubjectModal from "../../components/AddSubjectModal";
@@ -332,13 +332,10 @@ export default function TutorProfilePage() {
             backgroundColor: "#fff",
             borderRadius: "16px",
             boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
-            minHeight: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            p: "28px 32px",
           }}
         >
-          <UnderConstructionPage />
+          <MaterialsSection />
         </Box>
       )}
       {feedbackDialog}
