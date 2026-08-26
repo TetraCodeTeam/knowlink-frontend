@@ -117,7 +117,7 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
         }}
       >
         Agregar Recurso
-        <IconButton size="small" onClick={handleClose} disabled={isPending}>
+        <IconButton size="small" onClick={handleClose} disabled={isPending} aria-label="Cerrar">
           <X size={20} />
         </IconButton>
       </DialogTitle>
@@ -130,8 +130,10 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
           onChange={(e) => setMaterialName(e.target.value)}
           disabled={isPending}
           fullWidth
-          inputProps={{ style: { fontSize: "16px" } }}
-          InputLabelProps={{ style: { fontSize: "16px" } }}
+          sx={{
+            "& .MuiInputBase-input": { fontSize: "16px" },
+            "& .MuiInputLabel-root": { fontSize: "16px" },
+          }}
         />
 
         {/* Subject dropdown */}
@@ -181,6 +183,7 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
                   setSelectedFile(null);
                 }}
                 disabled={isPending}
+                aria-label="Eliminar archivo"
                 sx={{ position: "absolute", top: 8, right: 8 }}
               >
                 <Trash2 size={18} />
@@ -205,7 +208,7 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
           type="file"
           accept=".pdf,.png,.xlsx"
           onChange={handleInputChange}
-          style={{ display: "none" }}
+          hidden
         />
 
         <Typography sx={{ ...allowedFormatsSx, fontSize: "14px" }}>

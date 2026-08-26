@@ -13,10 +13,11 @@ export default function MaterialsSection() {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { subjects } = useMySubjectsWithCatalogId();
+  const { subjects, isLoading: isSubjectsLoading } = useMySubjectsWithCatalogId();
   const allCatalogSubjectIds = subjects.map((s) => s.catalogSubjectId);
 
-  const { materials, isLoading } = useGetMaterials(allCatalogSubjectIds, selectedCatalogSubjectId);
+  const { materials, isLoading: isMaterialsLoading } = useGetMaterials(allCatalogSubjectIds, selectedCatalogSubjectId);
+  const isLoading = isSubjectsLoading || isMaterialsLoading;
 
   const scroll = (direction: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: direction === "left" ? -120 : 120, behavior: "smooth" });
@@ -44,7 +45,7 @@ export default function MaterialsSection() {
     <Box>
       {/* Filter bar */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 2 }}>
-        <IconButton size="small" onClick={() => scroll("left")}>
+        <IconButton size="small" onClick={() => scroll("left")} aria-label="Desplazar izquierda">
           <ChevronLeft size={18} />
         </IconButton>
 
@@ -74,7 +75,7 @@ export default function MaterialsSection() {
           ))}
         </Box>
 
-        <IconButton size="small" onClick={() => scroll("right")}>
+        <IconButton size="small" onClick={() => scroll("right")} aria-label="Desplazar derecha">
           <ChevronRight size={18} />
         </IconButton>
 
