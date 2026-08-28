@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Box, Divider } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
 import { useLogin } from "@/modules/auth/hooks/useLogin";
+import RoleToggleGroup from "@/shared/components/RoleToggleGroup";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,6 +14,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -128,6 +130,27 @@ export default function LoginForm() {
             {errors.password && (
               <Box component="p" sx={{ color: "#d32f2f", fontSize: 13, mt: "4px", mb: 0 }}>
                 {errors.password.message}
+              </Box>
+            )}
+          </Box>
+
+          <Box>
+            <Box
+              component="label"
+              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+            >
+              Ingresar como
+            </Box>
+            <Controller
+              name="role"
+              control={control}
+              render={({ field }) => (
+                <RoleToggleGroup value={field.value} onChange={field.onChange} showDescription={false} />
+              )}
+            />
+            {errors.role && (
+              <Box component="p" sx={{ color: "#d32f2f", fontSize: 13, mt: "4px", mb: 0 }}>
+                {errors.role.message}
               </Box>
             )}
           </Box>
