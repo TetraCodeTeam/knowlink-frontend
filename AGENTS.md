@@ -48,4 +48,7 @@ refactor: sin nueva funcionalidad
 test: tests
 ci: pipeline
 docs: documentación
+perf: mejoras de rendimiento
+build: cambios de compilación o dependencias
+chore: tareas de mantenimiento
 ```

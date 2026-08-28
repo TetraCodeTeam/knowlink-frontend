@@ -1,11 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap } from "lucide-react";
+import { Home, CalendarClock, Bell, LogOut, GraduationCap, BookOpenCheck, MessageCircleQuestion } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
+import React from "react";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 
@@ -24,9 +25,9 @@ interface NavItem {
 const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/tutor/home" },
   { icon: CalendarClock, label: "Mi agenda", path: "/tutor/availability" },
-  { icon: LayoutGrid, label: "Mis clases", path: "/tutor/classes" },
+  { icon: BookOpenCheck, label: "Mis clases", path: "/tutor/classes" },
   { icon: Bell, label: "Notificaciones", path: "/tutor/notifications", badge: "notifications" },
-  { icon: Headphones, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
+  { icon: MessageCircleQuestion, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
 ];
 
 const badgeSx = {

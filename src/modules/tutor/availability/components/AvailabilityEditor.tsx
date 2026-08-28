@@ -16,9 +16,9 @@ import AppButton from "@/shared/components/AppButton";
 import AvailabilityDayHeader from "@/modules/tutor/availability/components/AvailabilityDayHeader";
 import AvailabilityLegend from "@/modules/tutor/availability/components/AvailabilityLegend";
 import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/components/AvailabilityWeekCustomizationBanner";
-import { availabilityCalendarSx } from "@/modules/tutor/availability/styles/availabilityCalendarSx";
+import { calendarBaseSx } from "@/shared/styles/calendarBaseSx";
 import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
-import { isBeforeToday } from "@/modules/tutor/availability/utils/availability.utils";
+import { isBeforeToday } from "@/shared/utils/calendarDateUtils";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { Trash2 } from "lucide-react";
 
@@ -100,7 +100,7 @@ export default function AvailabilityEditor() {
   if (isLoading) return null;
 
   return (
-    <Box sx={availabilityCalendarSx}>
+    <Box sx={calendarBaseSx}>
       <AvailabilityLegend />
 
       <FullCalendar

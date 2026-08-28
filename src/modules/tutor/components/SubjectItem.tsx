@@ -8,6 +8,7 @@ import {
   TUTOR_STATUS_DISPLAY_NAME,
   PRICE_TAG,
 } from "@/modules/tutor/utils/tutor-tag-mapping";
+import { formatCurrency } from "@/shared/utils/currency.utils";
 import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
 
 interface SubjectRateItemProps {
@@ -16,9 +17,7 @@ interface SubjectRateItemProps {
 
 const formatPrice = (price: number, isFree: boolean) => {
   if (isFree) return "Gratuita";
-  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(
-    price,
-  );
+  return formatCurrency(price);
 };
 
 export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
@@ -38,7 +37,7 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
       }}
     >
       <Box>
-        <Typography variant="h5" fontWeight={520}>
+        <Typography variant="h6" fontWeight={500}>
           {subject.name}
         </Typography>
         <Stack direction="row" spacing={1} alignItems="center" mt={0.5}>
