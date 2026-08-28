@@ -6,16 +6,14 @@ import {
   Button,
   CircularProgress,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { BookSearch, NotebookPen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { registerSchema, type RegisterFormData } from "@/modules/auth/schemas/user-register.schema";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import PasswordField from "@/modules/auth/components/PasswordField";
+import RoleToggleGroup from "@/shared/components/RoleToggleGroup";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -138,59 +136,7 @@ export default function RegisterForm() {
           name="role"
           control={control}
           render={({ field }) => (
-            <ToggleButtonGroup
-              exclusive
-              fullWidth
-              value={field.value}
-              onChange={(_, value) => value && field.onChange(value)}
-              sx={{ gap: 1.5 }}
-            >
-              <ToggleButton
-                value="TUTOR"
-                sx={{
-                  flexDirection: "column",
-                  gap: 0.5,
-                  py: 2,
-                  border: "1px solid #e2e8f0 !important",
-                  borderRadius: "10px !important",
-                  "&.Mui-selected": {
-                    bgcolor: "#eef2ff",
-                    borderColor: "#5B6ED9 !important",
-                  },
-                }}
-              >
-                <NotebookPen size={20} />
-                <Typography fontWeight={700} fontSize={15}>
-                  Tutor
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Ofrecer clases
-                </Typography>
-              </ToggleButton>
-
-              <ToggleButton
-                value="STUDENT"
-                sx={{
-                  flexDirection: "column",
-                  gap: 0.5,
-                  py: 2,
-                  border: "1px solid #e2e8f0 !important",
-                  borderRadius: "10px !important",
-                  "&.Mui-selected": {
-                    bgcolor: "#eef2ff",
-                    borderColor: "#5B6ED9 !important",
-                  },
-                }}
-              >
-                <BookSearch size={20} />
-                <Typography fontWeight={700} fontSize={15}>
-                  Alumno
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Busco tutores para estudiar
-                </Typography>
-              </ToggleButton>
-            </ToggleButtonGroup>
+            <RoleToggleGroup value={field.value} onChange={field.onChange} />
           )}
         />
         {errors.role && (
