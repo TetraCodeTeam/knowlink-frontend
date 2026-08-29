@@ -36,10 +36,10 @@ export const TutorProfilePage = () => {
   };
 
   return (
-    <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 3 }, bgcolor: "#F4F3FB" }}>
+    <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
 
-      <Grid container spacing={2}>
+      <Grid container rowSpacing={2} columnSpacing={{ xs: 2, md: 4 }}>
         <Grid size={{ xs: 12, md: 8 }}>
           <Stack spacing={4}>
             <TutorAboutCard about={tutor.about} />
@@ -48,7 +48,7 @@ export const TutorProfilePage = () => {
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Stack spacing={4}>
+          <Stack spacing={5}>
             <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} />
             <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
           </Stack>

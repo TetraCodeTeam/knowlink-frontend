@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, IconButton, Link, Stack, Typography } from "@mui/material";
-import { Download, FolderLock } from "lucide-react";
+import { Download, FolderLock, FolderOpen } from "lucide-react";
 import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
 
@@ -37,8 +37,8 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
-          <FolderLock size={18} color="#5865C8" />
-          <Typography variant="h5" fontWeight={600}>
+          <FolderOpen size={25} color="#5865C8" />
+          <Typography variant="h5" fontWeight={500}>
             Material Académico
           </Typography>
         </Stack>
@@ -46,7 +46,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
         {!hasConfirmedBooking ? (
           <Box sx={{ textAlign: "center", py: 3 }}>
             <Box sx={{ opacity: 0.5, display: "inline-flex" }}>
-              <FolderLock size={32} color="#5865C8" />
+              <FolderLock size={35} color="#5865C8" />
             </Box>
             <Typography variant="subtitle1" fontWeight={600} mt={1}>
               Material Bloqueado

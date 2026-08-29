@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material";
-import { MessageSquare } from "lucide-react";
+import { MessagesSquare, MessageSquareOff } from "lucide-react";
 import type { TutorReview } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/student/tutorProfile/components/ReviewItem";
 import { useReviewDialogStore } from "@/modules/student/tutorProfile/hooks/useReviewDialogStore";
@@ -22,8 +22,8 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <MessageSquare size={18} color="#5865C8" />
-            <Typography variant="h5" fontWeight={600}>
+            <MessagesSquare size={25} color="#5865C8" />
+            <Typography variant="h5" fontWeight={500}>
               Reseñas
             </Typography>
           </Stack>
@@ -43,12 +43,12 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
         ) : (
           <Box sx={{ textAlign: "center", py: 3 }}>
             <Box sx={{ opacity: 0.5, display: "inline-flex" }}>
-              <MessageSquare size={32} color="#5865C8" />
+              <MessageSquareOff size={35} color="#5865C8" />
             </Box>
-            <Typography variant="h6" fontWeight={550} mt={1}>
+            <Typography variant="subtitle1" fontWeight={600} mt={1}>
               Sin reseñas todavía
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
+            <Typography variant="subtitle2" color="text.secondary">
               Este tutor todavía no recibió reseñas de otros estudiantes.
             </Typography>
           </Box>
