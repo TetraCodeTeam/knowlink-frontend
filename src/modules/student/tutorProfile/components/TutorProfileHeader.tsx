@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, Rating, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardContent, Chip, Rating, Stack, Typography } from "@mui/material";
 import type { TutorProfile } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/student/tutorProfile/utils/tutor-tag-mapping";
 import { CalendarCheck } from "lucide-react";
@@ -11,29 +11,21 @@ interface TutorProfileHeaderProps {
 
 export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProps) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        p: 3,
-        borderRadius: 2,
-        bgcolor: "background.paper",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          justifyContent: "space-between",
-          alignItems: { xs: "flex-start", sm: "center" },
-          gap: 2,
-        }}
-      >
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 72, height: 72 }} />
+    <Card variant="outlined" sx={{ borderRadius: 3 }}>
+      <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3, "&:last-child": { pb: 3 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: { xs: "flex-start", sm: "center" },
+            gap: 2,
+          }}
+        >
+        <Stack direction="row" spacing={3} alignItems="center">
+          <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 100, height: 100 }} />
           <Box>
-            <Typography variant="h4" fontWeight={600}>
+            <Typography variant="h4" fontWeight={500}>
               {tutor.name}
             </Typography>
             <Typography variant="h6" color="#494949" gutterBottom>
@@ -61,24 +53,24 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         </Stack>
 
         <Stack spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
+          <Stack direction="row" spacing={0.5} alignItems="center" flexWrap="nowrap" whiteSpace="nowrap">
             <Rating value={tutor.rating} precision={0.1} readOnly size="small" />
             <Typography variant="h6" fontWeight={600}>
               {tutor.rating}
             </Typography>
-            <Typography variant="h6" color="text.secondary">
+            <Typography variant="h6" color="text.secondary" whiteSpace="nowrap">
               ({tutor.reviewsCount} Reseñas)
             </Typography>
           </Stack>
         </Stack>
-      </Box>
+        </Box>
 
       <AppButton
         appVariant="primary"
         onClick={onReservar}
         startIcon={<CalendarCheck size={18} />}
         sx={{
-          width: "60%",
+          width: "70%",
           mx: "auto",
           mt: 2,
           fontSize: "16px",
@@ -88,6 +80,7 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
       >
         Reservar Sesión
       </AppButton>
-    </Box>
+      </CardContent>
+    </Card>
   );
 };

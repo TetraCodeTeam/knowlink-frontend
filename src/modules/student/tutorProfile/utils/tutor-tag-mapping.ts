@@ -11,7 +11,7 @@ type TutorTag = {
 export const TUTOR_SUBJECT_TAG: TutorTag = {
   bg: "#E0E0FA",
   color: "#494949",
-  fontSize: "18px",
+  fontSize: "17px",
 };
 
 export const TUTOR_STATUS_DISPLAY_NAME = {

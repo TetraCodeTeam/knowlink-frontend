@@ -38,30 +38,32 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
       }}
     >
       <Box>
-        <Typography variant="h5" fontWeight={520}>
+        <Typography variant="h6" fontWeight={600}>
           {subject.name}
         </Typography>
-        <Stack direction="row" spacing={1} alignItems="center" mt={0.5}>
-          <Rating value={subject.rating} precision={0.1} readOnly size="small" />
-          <Typography
-            component="button"
-            type="button"
-            variant="subtitle1"
-            color="primary"
-            onClick={() => openDialog(subject.name)}
-            sx={{
-              cursor: "pointer",
-              textDecoration: "underline",
-              background: "none",
-              border: 0,
-              padding: 0,
-              font: "inherit",
-            }}
-          >
-            ({subject.reviewsCount} Reseñas)
-          </Typography>
-        </Stack>
-        <Stack direction="row" spacing={0.5} mt={0.5} flexWrap="wrap" useFlexGap>
+        <Stack direction="row" spacing={3} alignItems="center" mt={1} flexWrap="wrap" useFlexGap>
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="nowrap" whiteSpace="nowrap">
+            <Rating value={subject.rating} precision={0.1} readOnly size="small" />
+            <Typography
+              component="button"
+              type="button"
+              variant="subtitle1"
+              color="primary"
+              onClick={() => openDialog(subject.name)}
+              sx={{
+                cursor: "pointer",
+                textDecoration: "underline",
+                background: "none",
+                border: 0,
+                padding: 0,
+                font: "inherit",
+                whiteSpace: "nowrap",
+              }}
+            >
+              ({subject.reviewsCount} Reseñas)
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
           {subject.isVerified && (
             <Chip
               icon={<ShieldCheck size={14} />}
@@ -94,10 +96,13 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
                   borderColor: "transparent",
                   fontSize: tag.fontSize,
                   "& .MuiChip-icon": { color: tag.color },
+                  py: 0.5,
+                  px:0.5,
                 }}
               />
             );
           })}
+          </Stack>
         </Stack>
       </Box>
 

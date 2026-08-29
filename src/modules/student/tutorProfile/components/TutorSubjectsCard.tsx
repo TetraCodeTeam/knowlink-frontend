@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
-import { BookOpen } from "lucide-react";
+import { BookOpenText } from "lucide-react";
 import type { TutorSubjectRate } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { SubjectRateItem } from "@/modules/student/tutorProfile/components/SubjectItem";
 import { SubjectsDialog } from "@/modules/student/tutorProfile/components/SubjectsDialog";
@@ -13,12 +13,12 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const previewSubjects = subjectRates.slice(0, 3);
   return (
-    <Card variant="outlined" sx={{ borderRadius: 2 }}>
+    <Card variant="outlined" sx={{ borderRadius: 3 }}>
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <BookOpen size={18} color="#5865C8" />
-            <Typography variant="h5" fontWeight={600}>
+            <BookOpenText size={25} color="#5865C8" />
+            <Typography variant="h5" fontWeight={500}>
               Materias y Tarifas
             </Typography>
           </Stack>
@@ -29,7 +29,7 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
           )}
         </Stack>
 
-        <Stack spacing={1.5}>
+        <Stack spacing={2}>
           {previewSubjects.map((subject) => (
             <SubjectRateItem key={subject.id} subject={subject} />
           ))}
