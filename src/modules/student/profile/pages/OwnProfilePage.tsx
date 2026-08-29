@@ -3,19 +3,12 @@ import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import { AccountManagementCard } from "@/modules/student/profile/components/AccountManagementCard";
 import { PersonalDataCard } from "@/modules/student/profile/components/PersonalDataCard";
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
-import { RoleCard as TutorRoleCard } from "@/shared/components/RoleCard";
+import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
 
 
 export const OwnProfilePage = () => {
   const { data: profile, isLoading, isError } = useMyStudentProfile();
-
-  
-  const handleAccessTutorMode = () => {
-    if (!profile) return;
-
-    console.log(`Acción de rol de tutor para usuario: ${profile.userId}`);
-  };
 
   if (isLoading) {
     return (
@@ -33,8 +26,6 @@ export const OwnProfilePage = () => {
     );
   }
 
-  const tutorRoleStatus = profile.hasTutorProfile ? "ACTIVE" : "NEVER_REGISTERED";
-
   return (
     <Stack spacing={3} sx={{ mx: "auto", pr:5, pl:5, pt:3, pb:3 }}>
       <ProfileHeader
@@ -42,8 +33,6 @@ export const OwnProfilePage = () => {
         profilePictureUrl={profile.profilePictureUrl}
       />
 
-      {/* <Grid container spacing={3}> */}
-        {/* <Grid size={{ xs:12, md:8}}> */}
              <Stack spacing={3}>
                 <PersonalDataCard
                     email={profile.email}
@@ -52,8 +41,8 @@ export const OwnProfilePage = () => {
                     onEditProfile={() => console.log("Navegar a edición de perfil")}
                 />
                 <TutorRoleCard
-                    status={tutorRoleStatus}
-                    onAccessTutorMode={handleAccessTutorMode}
+                    hasTutorProfile={profile.hasTutorProfile}
+                    career={profile.career}
                 />
             </Stack>
         {/* </Grid> */}
