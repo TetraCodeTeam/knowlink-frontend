@@ -47,6 +47,8 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
                   size="small"
                   variant="outlined"
                   sx={{
+                    px: 1,
+                    py:1.8,
                     bgcolor: TUTOR_SUBJECT_TAG.bg,
                     color: TUTOR_SUBJECT_TAG.color,
                     fontSize: TUTOR_SUBJECT_TAG.fontSize,
