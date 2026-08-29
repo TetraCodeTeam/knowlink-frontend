@@ -6,6 +6,10 @@ interface TutorAboutCardProps {
 }
 
 export const TutorAboutCard = ({ about }: TutorAboutCardProps) => {
+  if (!about.trim()) {
+    return null; // No mostrar la tarjeta si no hay información "Sobre Mí"
+  }
+
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
       <CardContent>
