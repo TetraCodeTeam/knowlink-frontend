@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import { BookOpen } from "lucide-react";
-import type { TutorSubjectRate } from "@/modules/tutor/interfaces/tutor.interface";
-import { SubjectRateItem } from "@/modules/tutor/components/SubjectItem";
-import { SubjectsDialog } from "@/modules/tutor/components/SubjectsDialog";
+import type { TutorSubjectRate } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { SubjectRateItem } from "@/modules/student/tutorProfile/components/SubjectItem";
+import { SubjectsDialog } from "@/modules/student/tutorProfile/components/SubjectsDialog";
 
 interface TutorSubjectsCardProps {
   subjectRates: TutorSubjectRate[];

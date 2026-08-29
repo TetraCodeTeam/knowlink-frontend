@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
-import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/TutorSidebar";
+import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/student/tutorProfile/components/components/TutorSidebar";
 
 export default function TutorLayout() {
   return (

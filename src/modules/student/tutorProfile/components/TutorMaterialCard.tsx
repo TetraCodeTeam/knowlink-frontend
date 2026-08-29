@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, IconButton, Link, Stack, Typography } from "@mui/material";
 import { Download, FolderLock } from "lucide-react";
-import type { TutorMaterialItem } from "@/modules/tutor/interfaces/tutor.interface";
-import { FILE_TYPE_ICON } from "@/modules/tutor/utils/material-file-mapping";
+import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
 
 interface TutorMaterialCardProps {
   material: TutorMaterialItem[];

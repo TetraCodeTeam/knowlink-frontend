@@ -1,14 +1,14 @@
 import { Box, Chip, Rating, Typography, Stack } from "@mui/material";
 import { ShieldCheck } from "lucide-react";
-import type { TutorSubjectRate } from "@/modules/tutor/interfaces/tutor.interface";
+import type { TutorSubjectRate } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import {
   MODALITY,
   MODALITY_DISPLAY_NAME,
   TUTOR_STATUS,
   TUTOR_STATUS_DISPLAY_NAME,
   PRICE_TAG,
-} from "@/modules/tutor/utils/tutor-tag-mapping";
-import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
+} from "@/modules/student/tutorProfile/utils/tutor-tag-mapping";
+import { useReviewDialogStore } from "@/modules/student/tutorProfile/hooks/useReviewDialogStore";
 
 interface SubjectRateItemProps {
   subject: TutorSubjectRate;

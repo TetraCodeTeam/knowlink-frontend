@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import { BookOpen, X } from "lucide-react";
-import type { TutorSubjectRate } from "@/modules/tutor/interfaces/tutor.interface";
-import { SubjectRateItem } from "@/modules/tutor/components/SubjectItem";
+import type { TutorSubjectRate } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { SubjectRateItem } from "@/modules/student/tutorProfile/components/SubjectItem";
 
 interface SubjectsDialogProps {
   open: boolean;

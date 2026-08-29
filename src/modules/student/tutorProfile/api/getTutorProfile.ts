@@ -3,8 +3,8 @@ import type {
   TutorSubjectRate,
   TutorReview,
   TutorMaterialItem,
-} from "@/modules/tutor/interfaces/tutor.interface";
-import type { TutorProfileApiResponse } from "@/modules/tutor/interfaces/tutor-api.types";
+} from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import type { TutorProfileApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
 const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => {

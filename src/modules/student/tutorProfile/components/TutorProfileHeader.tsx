@@ -1,6 +1,6 @@
 import { Avatar, Box, Chip, Rating, Stack, Typography } from "@mui/material";
-import type { TutorProfile } from "@/modules/tutor/interfaces/tutor.interface";
-import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/tutor/utils/tutor-tag-mapping";
+import type { TutorProfile } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/student/tutorProfile/utils/tutor-tag-mapping";
 import { CalendarCheck } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 

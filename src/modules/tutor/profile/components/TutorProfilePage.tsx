@@ -21,7 +21,7 @@ import PaymentSection from "@/modules/tutor/profile/components/PaymentSection";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
 import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
-import AddSubjectModal from "../../components/AddSubjectModal";
+import AddSubjectModal from "../../../student/tutorProfile/components/components/AddSubjectModal";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "../../availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";

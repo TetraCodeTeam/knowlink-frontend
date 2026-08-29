@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import AddSubjectModal from "./AddSubjectModal";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
-import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
+import { useAvailableSubjects } from "../../../../tutor/availability/hooks/useAvailableSubjects";
 
 export default function AddSubjectButton() {
   const [openForm, setOpenForm] = useState(false);

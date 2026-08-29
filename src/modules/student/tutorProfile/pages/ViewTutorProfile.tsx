@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { TutorProfileHeader } from "@/modules/tutor/components/TutorProfileHeader";
-import { TutorAboutCard } from "@/modules/tutor/components/TutorAboutCard";
-import { TutorSubjectsCard } from "@/modules/tutor/components/TutorSubjectsCard";
-import { TutorAvailabilityCard } from "@/modules/tutor/components/TutorAvailabilityCard";
-import { TutorMaterialCard } from "@/modules/tutor/components/TutorMaterialCard";
-import { TutorReviewsCard } from "@/modules/tutor/components/TutorReviewsCard";
-import { useTutorProfile } from "@/modules/tutor/hooks/useTutorProfile";
-import { ReviewsDialog } from "@/modules/tutor/components/ReviewsDialog";
+import { TutorProfileHeader } from "@/modules/student/tutorProfile/components/TutorProfileHeader";
+import { TutorAboutCard } from "@/modules/student/tutorProfile/components/TutorAboutCard";
+import { TutorSubjectsCard } from "@/modules/student/tutorProfile/components/TutorSubjectsCard";
+import { TutorAvailabilityCard } from "@/modules/student/tutorProfile/components/TutorAvailabilityCard";
+import { TutorMaterialCard } from "@/modules/student/tutorProfile/components/TutorMaterialCard";
+import { TutorReviewsCard } from "@/modules/student/tutorProfile/components/TutorReviewsCard";
+import { useTutorProfile } from "@/modules/student/tutorProfile/hooks/useTutorProfile";
+import { ReviewsDialog } from "@/modules/student/tutorProfile/components/ReviewsDialog";
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();

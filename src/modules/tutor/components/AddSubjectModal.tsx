@@ -18,9 +18,9 @@ import {
 } from "@mui/material";
 
 import { useEffect, useRef, useState } from "react";
-import { CompensationTypeRequest, ModalityRequest } from "../interfaces/TutorSubjectRequest";
-import { useCreateTutorSubject } from "../hooks/Usecreatetutorsubject";
-import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
+import { CompensationTypeRequest, ModalityRequest } from "../../../../tutor/interfaces/TutorSubjectRequest";
+import { useCreateTutorSubject } from "../../../../tutor/hooks/Usecreatetutorsubject";
+import { useAvailableSubjects } from "../../../../tutor/availability/hooks/useAvailableSubjects";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import { prefetchSuccessAnimation } from "@/shared/components/SuccessAnimation";

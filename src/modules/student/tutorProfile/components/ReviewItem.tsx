@@ -1,5 +1,5 @@
 import { Avatar, Box, Rating, Stack, Typography } from "@mui/material";
-import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
+import type { TutorReview } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 
 interface ReviewItemProps {
   review: TutorReview;

@@ -1,4 +1,4 @@
-import type { Modalidad } from "@/modules/tutor/interfaces/tutor.interface";
+import type { Modalidad } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { LibraryBig, Monitor, ShieldCheck, type LucideIcon } from "lucide-react";
 
 type TutorTag = {

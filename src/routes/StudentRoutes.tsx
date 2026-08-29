@@ -4,7 +4,7 @@ import StudentHomePage from "@/modules/student/pages/StudentHomePage";
 import StudentProfilePage from "@/modules/student/pages/StudentProfilePage";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
-import { TutorProfilePage } from "@/modules/student/pages/ViewTutorProfile";
+import { TutorProfilePage } from "@/modules/student/tutorProfile/pages/ViewTutorProfile";
 
 export default function StudentRoutes() {
   return (
