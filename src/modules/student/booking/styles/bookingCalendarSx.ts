@@ -45,7 +45,7 @@ export const bookingCalendarSx: SxProps<Theme> = {
   "& .fc-event.booking-slot-reserved": {
     bgcolor: `${RESERVED_COLOR} !important`,
     borderColor: `${RESERVED_COLOR} !important`,
-    color: "#4d4d5d !important",
+    color: "#ffffff !important",
     boxShadow: "none",
     cursor: "not-allowed",
     opacity: "1 !important",

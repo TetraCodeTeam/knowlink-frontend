@@ -1,3 +1,37 @@
+const MONTHS_ES = [
+  "enero",
+  "febrero",
+  "marzo",
+  "abril",
+  "mayo",
+  "junio",
+  "julio",
+  "agosto",
+  "septiembre",
+  "octubre",
+  "noviembre",
+  "diciembre",
+];
+
+function capitalize(word: string): string {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+// "24-30 Agosto 2026" (mismo mes) | "27 Jul - 2 Ago 2026" (cruza mes) |
+// "30 Dic 2026 - 5 Ene 2027" (cruza año)
+export function formatWeekRangeTitle(start: Date, end: Date): string {
+  const startMonth = capitalize(MONTHS_ES[start.getMonth()]);
+  const endMonth = capitalize(MONTHS_ES[end.getMonth()]);
+
+  if (start.getFullYear() !== end.getFullYear()) {
+    return `${start.getDate()} ${startMonth} ${start.getFullYear()} - ${end.getDate()} ${endMonth} ${end.getFullYear()}`;
+  }
+  if (start.getMonth() !== end.getMonth()) {
+    return `${start.getDate()} ${startMonth} - ${end.getDate()} ${endMonth} ${end.getFullYear()}`;
+  }
+  return `${start.getDate()}-${end.getDate()} ${startMonth} ${end.getFullYear()}`;
+}
+
 export function getCurrentWeekMonday(): Date {
   const today = new Date();
   const day = today.getDay();
