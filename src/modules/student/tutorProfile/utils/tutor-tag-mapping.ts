@@ -54,8 +54,8 @@ export const MODALITY: Record<ModalityDisplay, TutorTag> = {
 
 export const PRICE_TAG: Record<"FREE" | "PAID", TutorTag> = {
   FREE: {
-    bg: "#E5F8EA",
-    color: "#1F7A3E",
+    bg: "#e0fae4",
+    color: "#88bb96",
     fontSize: "20px",
   },
   PAID: {
