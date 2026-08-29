@@ -42,6 +42,7 @@ function MateriaRow({ materia, query, onClick }: MateriaRowProps) {
       sx={{
         display: "flex",
         alignItems: "center",
+        justifyContent: "flex-start",
         gap: 1.5,
         width: "100%",
         textAlign: "left",

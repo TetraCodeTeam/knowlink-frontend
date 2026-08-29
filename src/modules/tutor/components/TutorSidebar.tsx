@@ -1,8 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, CalendarClock, LayoutGrid, Bell, Headphones, LogOut, GraduationCap, BookOpen, BarChart2 } from "lucide-react";
+import { Home, CalendarClock, Bell, LogOut, GraduationCap, BookOpenCheck, MessageCircleQuestion } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
+import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
+import { useState } from "react";
+import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
+import React from "react";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 
@@ -20,12 +24,10 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/tutor/home" },
-  { icon: CalendarClock, label: "Disponibilidad", path: "/tutor/availability" },
-  { icon: LayoutGrid, label: "Mis clases", path: "/tutor/classes" },
-  { icon: BookOpen, label: "Mi contenido", path: "/tutor/content" },
-  { icon: BarChart2, label: "Panel de estadísticas", path: "/tutor/stats" },
+  { icon: CalendarClock, label: "Mi agenda", path: "/tutor/availability" },
+  { icon: BookOpenCheck, label: "Mis clases", path: "/tutor/classes" },
   { icon: Bell, label: "Notificaciones", path: "/tutor/notifications", badge: "notifications" },
-  { icon: Headphones, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
+  { icon: MessageCircleQuestion, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
 ];
 
 const badgeSx = {
@@ -40,15 +42,14 @@ const badgeSx = {
 export default function TutorSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authResponse, logout } = useAuthStore();
+  const { authResponse } = useAuthStore();
   const { notificationsCount, requestsCount } = useTutorBadgesStore();
+  const { triggerLogout, isPending: isLoggingOut } = useLogout();
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
-  const handleLogout = () => {
-    logout();
-    navigate("/auth/login");
-  };
+  const handleLogout = () => setIsLogoutOpen(true);
 
   const getBadgeCount = (badge?: NavItem["badge"]) => {
     if (badge === "notifications") return notificationsCount;
@@ -64,7 +65,7 @@ export default function TutorSidebar() {
       component="nav"
       sx={{
         width: TUTOR_SIDEBAR_WIDTH,
-        minHeight: "100vh",
+        height: "100vh",
         backgroundColor: SIDEBAR_BG,
         display: "flex",
         flexDirection: "column",
@@ -108,7 +109,7 @@ export default function TutorSidebar() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "24px",
+          justifyContent: "space-evenly",
           width: "100%",
           px: "8px",
           flex: 1,
@@ -269,6 +270,13 @@ export default function TutorSidebar() {
           </Typography>
         </Box>
       </Box>
+
+      <LogoutDialog
+        open={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+        onConfirm={() => triggerLogout()}
+        isPending={isLoggingOut}
+      />
     </Box>
   );
 }

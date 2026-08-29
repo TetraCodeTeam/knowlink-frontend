@@ -12,6 +12,19 @@ Aplicación web para la plataforma KnowLink, construida con React 19 + TypeScrip
 | Variable | Descripción | Valor por defecto |
 |---|---|---|
 | `VITE_BACKEND_URL` | URL base del backend | `http://localhost:8080` |
+| `VITE_BOOKING_REALTIME_ENABLED` | Activa SSE y comandos reales de hold/reserva/liberación | `false` |
+
+### Booking realtime
+
+The booking module stays in mock mode unless `VITE_BOOKING_REALTIME_ENABLED=true`.
+When enabled, it expects these backend contracts:
+
+- `GET /api/v1/tutors/{tutorId}/booking-slots/events` as an SSE stream. Each `data:` message is JSON with `{ "slotId": string, "status": "AVAILABLE" | "BLOCKED" | "RESERVED" }`. `slotId` identifies the calendar availability block.
+- `POST /api/v1/tutors/{tutorId}/booking-slots/hold` with `{ slotId, start, end }`.
+- `DELETE /api/v1/tutors/{tutorId}/booking-slots/hold` with the same fields in the request body.
+- `POST /api/v1/bookings` with `{ bookingSlotId, subjectId, topic, modality, tutorId, start, end }`.
+
+The browser applies `BLOCKED` optimistically when a student selects a window. A successful booking publishes `RESERVED`; expiry or cancellation publishes `AVAILABLE`. SSE remains the authoritative cross-user update, and the client reconnects three seconds after an interrupted stream.
 
 ## Instalación
 

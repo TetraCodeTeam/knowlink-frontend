@@ -4,6 +4,9 @@ import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useStudentBadgesStore } from "@/modules/student/hooks/useStudentBadgesStore";
 import { SIDEBAR_WIDTH } from "@/modules/student/components/StudentTopbar";
+import { useState } from "react";
+import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
+import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
 
 interface NavItem {
   icon: React.ElementType;
@@ -31,15 +34,14 @@ const badgeSx = {
 export default function StudentSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authResponse, logout } = useAuthStore();
+  const { authResponse } = useAuthStore();
   const { notificationsCount, complaintsCount } = useStudentBadgesStore();
+  const { triggerLogout, isPending: isLoggingOut } = useLogout();
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
-  const handleLogout = () => {
-    logout();
-    navigate("/auth/login");
-  };
+  const handleLogout = () => setIsLogoutOpen(true);
 
   const getBadgeCount = (badge?: NavItem["badge"]) => {
     if (badge === "notifications") return notificationsCount;
@@ -55,7 +57,7 @@ export default function StudentSidebar() {
       component="nav"
       sx={{
         width: SIDEBAR_WIDTH,
-        minHeight: "100vh",
+        height: "100vh",
         backgroundColor: "#FFFFFF",
         display: "flex",
         flexDirection: "column",
@@ -72,9 +74,13 @@ export default function StudentSidebar() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "48px",
+          justifyContent: "space-evenly",
+          flex: 1,
           width: "100%",
           px: "12px",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": { display: "none" },
+          scrollbarWidth: "none",
         }}
       >
         {navItems.map(({ icon: Icon, label, path, badge }) => {
@@ -133,8 +139,6 @@ export default function StudentSidebar() {
           );
         })}
       </Box>
-
-      <Box sx={{ flex: 1 }} />
 
       <Box sx={{ width: "100%", px: "12px", mb: "8px" }}>
         <Box
@@ -230,6 +234,13 @@ export default function StudentSidebar() {
           </Typography>
         </Box>
       </Box>
+
+      <LogoutDialog
+        open={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+        onConfirm={() => triggerLogout()}
+        isPending={isLoggingOut}
+      />
     </Box>
   );
 }

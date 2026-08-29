@@ -1,6 +1,6 @@
 import type { SxProps, Theme } from "@mui/material";
 
-export const availabilityCalendarSx: SxProps<Theme> = {
+export const calendarBaseSx: SxProps<Theme> = {
   border: "1px solid #e8e8f0",
   borderRadius: 4,
   p: 3,

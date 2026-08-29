@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import { TutorProfileHeader } from "@/modules/tutor/components/TutorProfileHeader";
 import { TutorAboutCard } from "@/modules/tutor/components/TutorAboutCard";
 import { TutorSubjectsCard } from "@/modules/tutor/components/TutorSubjectsCard";
-import { TutorAvailabilityCard } from "@/modules/tutor/components/TutorAvailabilityCard";
+// import { TutorAvailabilityCard } from "@/modules/tutor/components/TutorAvailabilityCard";
 import { TutorMaterialCard } from "@/modules/tutor/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/tutor/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/tutor/hooks/useTutorProfile";
@@ -32,7 +32,7 @@ export const TutorProfilePage = () => {
   }
 
   const handleReservar = () => {
-    // TODO: conectar con el flujo de reserva (modulo "reservas")
+    navigate("/student/booking");
   };
 
   return (
@@ -49,7 +49,7 @@ export const TutorProfilePage = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={4}>
-            <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} />
+            {/* <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} /> */}
             <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
           </Stack>
         </Grid>
