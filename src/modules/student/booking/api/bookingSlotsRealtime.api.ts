@@ -5,7 +5,6 @@ import type { BookingSlotStatusEvent } from "@/modules/student/booking/interface
 export type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/bookingSlotStatusEvent.interface";
 
 const BOOKING_STATUS_EVENT = "knowlink:booking-slot-status";
-const REALTIME_ENABLED = import.meta.env.VITE_BOOKING_REALTIME_ENABLED === "true";
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
 
 export function publishBookingSlotStatus(event: BookingSlotStatusEvent) {
@@ -17,7 +16,6 @@ export function subscribeToBookingSlotEvents(
   onEvent: (event: BookingSlotStatusEvent) => void,
   onError?: (error: unknown) => void
 ): () => void {
-  if (!REALTIME_ENABLED) return () => undefined;
 
   const controller = new AbortController();
   let reconnectTimer: number | undefined;
