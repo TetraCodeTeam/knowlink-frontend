@@ -32,7 +32,7 @@ export const TutorProfilePage = () => {
   }
 
   const handleReservar = () => {
-    navigate("/student/booking");
+    navigate(`/student/tutor/${tutorId}/booking`);
   };
 
   return (
@@ -50,7 +50,10 @@ export const TutorProfilePage = () => {
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={4}>
             {/* <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} /> */}
-            <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
+            <TutorMaterialCard
+              material={tutor.material}
+              hasConfirmedBooking={tutor.hasConfirmedBooking}
+            />
           </Stack>
         </Grid>
       </Grid>
