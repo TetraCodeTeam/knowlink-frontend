@@ -72,7 +72,7 @@ export default function TutorRegisterWizard({
       }
       return;
     }
-    goTo(4);
+    goTo(3);
   };
 
   const handleConfirm = () => {

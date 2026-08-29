@@ -1,6 +1,5 @@
-import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 
-import { AccountManagementCard } from "@/modules/student/profile/components/AccountManagementCard";
 import { PersonalDataCard } from "@/modules/student/profile/components/PersonalDataCard";
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
@@ -38,7 +37,7 @@ export const OwnProfilePage = () => {
                     email={profile.email}
                     phoneNumber={profile.phoneNumber}
                     major={profile.career}
-                    onEditProfile={() => console.log("Navegar a edición de perfil")}
+                    onEditProfile={() => {}}
                 />
                 <TutorRoleCard
                     hasTutorProfile={profile.hasTutorProfile}

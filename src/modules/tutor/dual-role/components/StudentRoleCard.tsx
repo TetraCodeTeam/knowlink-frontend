@@ -93,7 +93,7 @@ export default function StudentRoleCard({ hasStudentProfile }: StudentRoleCardPr
                 Acceder a la Interfaz de Alumno
               </Typography>
               <Switch
-                checked={false}
+                checked={isSwitching}
                 onChange={() => void handleSwitchToggle()}
                 disabled={isSwitching}
                 sx={{ transform: "scale(1.25)", transformOrigin: "right center" }}

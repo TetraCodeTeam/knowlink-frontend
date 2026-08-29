@@ -11,7 +11,7 @@ export default function TutorRegisterPage() {
   const location = useLocation();
   const isDualRole = (location.state as { startAtStep?: number } | null)?.startAtStep === 2;
   const dualRoleCareer = (location.state as { career?: string } | null)?.career ?? "";
-  const [currentStep, setCurrentStep] = useState(isDualRole ? 2 : 1);
+  const [currentStep, setCurrentStep] = useState(1);
 
   if (!isDualRole && !credentials) {
     return <Navigate to="/auth/register" replace />;
@@ -33,7 +33,7 @@ export default function TutorRegisterPage() {
     >
       <TutorRegisterWizard
         credentials={credentials ?? { email: "", password: "", confirmPassword: "" }}
-        onStepChange={setCurrentStep}
+        onStepChange={isDualRole ? () => {} : setCurrentStep}
         initialStep={isDualRole ? 2 : 1}
         isDualRole={isDualRole}
         dualRoleCareer={dualRoleCareer}

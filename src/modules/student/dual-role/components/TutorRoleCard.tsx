@@ -75,7 +75,7 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
                 Acceder a la Interfaz de Tutor
               </Typography>
               <Switch
-                checked={false}
+                checked={isSwitching}
                 onChange={() => void handleSwitchToggle()}
                 disabled={isSwitching}
                 sx={{ transform: "scale(1.25)", transformOrigin: "right center" }}
