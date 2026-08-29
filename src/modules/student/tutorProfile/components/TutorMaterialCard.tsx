@@ -52,7 +52,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
               Material Bloqueado
             </Typography>
             <Typography variant="subtitle2" color="text.secondary">
-              El material de estudio estará disponible una vez confirmada tu reserva.
+              Reservá y completá una sesión con este tutor para acceder a su material de estudio.
             </Typography>
           </Box>
         ) : (
