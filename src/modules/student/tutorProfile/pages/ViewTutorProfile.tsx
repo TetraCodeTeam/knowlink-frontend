@@ -1,10 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { TutorProfileHeader } from "@/modules/student/tutorProfile/components/TutorProfileHeader";
 import { TutorAboutCard } from "@/modules/student/tutorProfile/components/TutorAboutCard";
 import { TutorSubjectsCard } from "@/modules/student/tutorProfile/components/TutorSubjectsCard";
-import { TutorAvailabilityCard } from "@/modules/student/tutorProfile/components/TutorAvailabilityCard";
+//import { TutorAvailabilityCard } from "@/modules/student/tutorProfile/components/TutorAvailabilityCard";
 import { TutorMaterialCard } from "@/modules/student/tutorProfile/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/student/tutorProfile/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/student/tutorProfile/hooks/useTutorProfile";
@@ -12,7 +13,7 @@ import { ReviewsDialog } from "@/modules/student/tutorProfile/components/Reviews
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { data: tutor, isLoading, isError } = useTutorProfile(tutorId ?? "");
 
   if (isLoading) {
@@ -39,7 +40,7 @@ export const TutorProfilePage = () => {
     <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
 
-      <Grid container rowSpacing={2} columnSpacing={{ xs: 2, md: 4 }}>
+      <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>
           <Stack spacing={4}>
             <TutorAboutCard about={tutor.about} />
@@ -49,7 +50,7 @@ export const TutorProfilePage = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={5}>
-            <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} />
+            {/* <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} /> */}
             <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
           </Stack>
         </Grid>
