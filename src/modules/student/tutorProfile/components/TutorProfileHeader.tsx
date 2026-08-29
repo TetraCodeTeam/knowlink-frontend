@@ -23,7 +23,7 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
           }}
         >
         <Stack direction="row" spacing={3} alignItems="center">
-          <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 100, height: 100 }} />
+          <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 120, height: 120 }} />
           <Box>
             <Typography variant="h4" fontWeight={500}>
               {tutor.name}
@@ -40,7 +40,7 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
                   variant="outlined"
                   sx={{
                     px: 1,
-                    py:1.8,
+                    py:1.5,
                     bgcolor: TUTOR_SUBJECT_TAG.bg,
                     color: TUTOR_SUBJECT_TAG.color,
                     fontSize: TUTOR_SUBJECT_TAG.fontSize,
@@ -54,11 +54,11 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
 
         <Stack spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
           <Stack direction="row" spacing={0.5} alignItems="center" flexWrap="nowrap" whiteSpace="nowrap">
-            <Rating value={tutor.rating} precision={0.1} readOnly size="small" />
+            <Rating value={tutor.rating} precision={0.1} readOnly size="medium" />
             <Typography variant="h6" fontWeight={600}>
               {tutor.rating}
             </Typography>
-            <Typography variant="h6" color="text.secondary" whiteSpace="nowrap">
+            <Typography variant="subtitle1" color="text.secondary" whiteSpace="nowrap">
               ({tutor.reviewsCount} Reseñas)
             </Typography>
           </Stack>

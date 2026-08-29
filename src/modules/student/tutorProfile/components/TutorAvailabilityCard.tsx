@@ -8,7 +8,7 @@ interface TutorAvailabilityCardProps {
 
 export const TutorAvailabilityCard = ({ onVerDisponibilidad }: TutorAvailabilityCardProps) => {
   return (
-    <Card variant="outlined" sx={{ borderRadius: 2 }}>
+    <Card variant="outlined" sx={{ borderRadius: 3 }}>
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
           <Calendar size={25} color="#5865C8"/>

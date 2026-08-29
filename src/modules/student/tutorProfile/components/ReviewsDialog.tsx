@@ -17,7 +17,11 @@ export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
   const filteredReviews = canFilterBySubject && subjectFilter ? reviews.filter((review) => review.subject === subjectFilter) : reviews;
 
   return (
-    <Dialog open={isOpen} onClose={closeDialog} maxWidth="sm" fullWidth scroll="paper">
+    <Dialog open={isOpen} onClose={closeDialog} maxWidth="sm" fullWidth scroll="paper" slotProps={{
+      paper: {
+        sx: { borderRadius: 3 },
+      },
+    }}>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <MessageSquare size={20} color="#5865C8" />
