@@ -23,7 +23,7 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
             </Typography>
           </Stack>
           {subjectRates.length > 3 && (
-            <Button size="medium" onClick={() => setDialogOpen(true)}>
+            <Button size="medium" onClick={() => setDialogOpen(true)} sx={{ textTransform: "none", fontSize: 16 }}>
               Ver Todas
             </Button>
           )}

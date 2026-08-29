@@ -28,7 +28,7 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
             </Typography>
           </Stack>
           {showVerTodas && (
-            <Button size="small" onClick={() => openDialog()}>
+            <Button size="small" onClick={() => openDialog()} sx={{ textTransform: "none", fontSize: 16 }}>
               Ver Todas
             </Button>
           )}
