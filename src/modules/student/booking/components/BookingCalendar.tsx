@@ -2,9 +2,9 @@ import { useCallback, useMemo, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import type { EventContentArg, DayHeaderContentArg } from "@fullcalendar/core";
+import type { EventContentArg, DayHeaderContentArg, DayCellContentArg } from "@fullcalendar/core";
 import { Box, Typography } from "@mui/material";
-import { isBeforeNow } from "@/shared/utils/calendarDateUtils";
+import { isBeforeToday, isBeforeNow } from "@/shared/utils/calendarDateUtils";
 import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalendarSx";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
@@ -13,7 +13,7 @@ import type { ReservationWindow } from "@/modules/student/booking/interfaces/res
 import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { SlotDisplayStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
-import { BOOKING_STATUS_META } from "../constants/bookingLegendConstants";
+import { BOOKING_STATUS_META } from "@/modules/student/booking/constants/bookingLegendConstants";
 
 const PLUGINS = [timeGridPlugin, interactionPlugin];
 const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
@@ -40,6 +40,7 @@ export default function BookingCalendar({
   bookingSlots = [],
   minimumNoticeMinutes = 0,
   onSelectSlot,
+  onDeselectSlot,
 }: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
 
@@ -76,8 +77,7 @@ export default function BookingCalendar({
   // bloque original + el horario exacto de inicio de la ventana.
   const handleSelectWindow = useCallback(
     (blockId: string, window: ReservationWindow) => {
-      const durationHours =
-        (window.end.getTime() - window.start.getTime()) / (60 * 60 * 1000);
+      const durationHours = (window.end.getTime() - window.start.getTime()) / (60 * 60 * 1000);
 
       onSelectSlot({
         id: `${blockId}__${window.start.toISOString()}__${window.end.toISOString()}`,
@@ -123,6 +123,7 @@ export default function BookingCalendar({
             locked={selectedSlot !== null}
             onHoverWindow={() => {}}
             onSelectWindow={(window) => handleSelectWindow(arg.event.id, window)}
+            onDeselectWindow={onDeselectSlot}
           />
         );
       }
@@ -130,81 +131,95 @@ export default function BookingCalendar({
       const legendItem = BOOKING_STATUS_META[status as keyof typeof BOOKING_STATUS_META];
 
       if (legendItem?.description) {
-        return <BookingStatusEventContent timeText={arg.timeText} message={legendItem.description} />;
+        return (
+          <BookingStatusEventContent timeText={arg.timeText} message={legendItem.description} />
+        );
       }
-      return <Box sx={{ px: 0.5, py: 0.25, fontSize: 12, fontWeight: 600, height: "100%" }}>{arg.timeText}</Box>;
+      return (
+        <Box sx={{ px: 0.5, py: 0.25, fontSize: 12, fontWeight: 600, height: "100%" }}>
+          {arg.timeText}
+        </Box>
+      );
     },
-    [bookingSlots, handleSelectWindow, minimumNoticeMinutes, selectedSlot]
+    [bookingSlots, handleSelectWindow, minimumNoticeMinutes, onDeselectSlot, selectedSlot]
   );
 
+  const dayHeaderContent = useCallback(
+    ({ date, isToday }: DayHeaderContentArg) => (
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
+        <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
+          {DAY_LABELS[date.getDay()]}
+        </Typography>
 
-  const dayHeaderContent = useCallback(({ date, isToday }: DayHeaderContentArg) => (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
-      <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
-        {DAY_LABELS[date.getDay()]}
-      </Typography>
-      
-      <Box
-        sx={{
-          width: 32,
-          height: 32,
-          borderRadius: "50%",
-          display: "grid",
-          placeItems: "center",
-          fontWeight: 700,
-          bgcolor: isToday ? "#5B6ED9" : "transparent",
-          color: isToday ? "#fff" : "#1A1A2E",
-          boxShadow: isToday ? "0 4px 10px rgba(91, 110, 217, 0.35)" : "none",
-        }}
-      >
-        {date.getDate()}
+        <Box
+          sx={{
+            width: 32,
+            height: 32,
+            borderRadius: "50%",
+            display: "grid",
+            placeItems: "center",
+            fontWeight: 700,
+            bgcolor: isToday ? "#5B6ED9" : "transparent",
+            color: isToday ? "#fff" : "#1A1A2E",
+            boxShadow: isToday ? "0 4px 10px rgba(91, 110, 217, 0.35)" : "none",
+          }}
+        >
+          {date.getDate()}
+        </Box>
       </Box>
-    </Box>
-  ), []);
+    ),
+    []
+  );
+
+  const dayCellClassNames = useCallback(
+    (arg: DayCellContentArg) => (isBeforeToday(arg.date) ? ["fc-past-day"] : []),
+    []
+  );
 
   return (
-  <Box
-    sx={{
-      ...bookingCalendarSx,
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      minHeight: 0,
-    }}
-  >
     <Box
       sx={{
+        ...bookingCalendarSx,
+        height: "100%",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        mb: 2,
+        flexDirection: "column",
+        minHeight: 0,
       }}
     >
-      <BookingCalendarLegend />
-    </Box>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: 2,
+        }}
+      >
+        <BookingCalendarLegend />
+      </Box>
 
-    <Box sx={{ flex: 1, minHeight: 0 }}>
-      <FullCalendar
-        ref={calendarRef}
-        plugins={PLUGINS}
-        initialView="timeGridWeek"
-        headerToolbar={HEADER_TOOLBAR}
-        titleFormat={TITLE_FORMAT}
-        dayHeaderContent={dayHeaderContent}
-        allDaySlot={false}
-        slotMinTime="08:00:00"
-        slotMaxTime="21:00:00"
-        slotDuration="00:30:00"
-        slotLabelInterval="01:00:00"
-        slotLabelFormat={SLOT_LABEL_FORMAT}
-        selectable={false}
-        events={events}
-        eventContent={eventContent}
-        height="100%"
-        locale="es"
-        firstDay={1}
-      />
+      <Box sx={{ flex: 1, minHeight: 0 }}>
+        <FullCalendar
+          ref={calendarRef}
+          plugins={PLUGINS}
+          initialView="timeGridWeek"
+          headerToolbar={HEADER_TOOLBAR}
+          titleFormat={TITLE_FORMAT}
+          dayHeaderContent={dayHeaderContent}
+          dayCellClassNames={dayCellClassNames}
+          allDaySlot={false}
+          slotMinTime="08:00:00"
+          slotMaxTime="21:00:00"
+          slotDuration="00:30:00"
+          slotLabelInterval="01:00:00"
+          slotLabelFormat={SLOT_LABEL_FORMAT}
+          selectable={false}
+          events={events}
+          eventContent={eventContent}
+          height="100%"
+          locale="es"
+          firstDay={1}
+        />
+      </Box>
     </Box>
-  </Box>
-);
+  );
 }

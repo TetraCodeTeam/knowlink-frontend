@@ -20,7 +20,7 @@ function formatRange(start: Date, end: Date): string {
 // calendario (locked=true), todo bloque deja de reaccionar al mouse: el que
 // tiene la selección queda fijo mostrándola: el resto vuelve a mostrar su
 // rango completo, atenuado, sin hover ni click posible. No hay forma de
-// cambiar de horario sin cancelar la reserva en curso 
+// cambiar de horario sin cancelar la reserva en curso
 export default function AvailabilityBlockContent({
   blockStart,
   blockEnd,
@@ -30,6 +30,7 @@ export default function AvailabilityBlockContent({
   minimumNoticeMinutes,
   onHoverWindow,
   onSelectWindow,
+  onDeselectWindow,
 }: AvailabilityBlockContentProps) {
   const {
     containerRef,
@@ -52,6 +53,7 @@ export default function AvailabilityBlockContent({
     minimumNoticeMinutes,
     onHoverWindow,
     onSelectWindow,
+    onDeselectWindow,
   });
 
   return (
@@ -66,31 +68,13 @@ export default function AvailabilityBlockContent({
         position: "relative",
         height: "100%",
         width: "100%",
-        cursor: locked ? "default" : "pointer",
+        cursor: locked && !selectedWindow ? "default" : "pointer",
         userSelect: "none",
         WebkitUserSelect: "none",
         opacity: isDimmedByLock ? 0.4 : 1,
         transition: "opacity 0.15s ease",
       }}
     >
-      {/* Rango completo del bloque, visible solo sin ninguna franja resaltada */}
-      <Box
-        sx={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          px: 0.5,
-          opacity: highlightIndex >= 0 ? 0 : 1,
-          transition: "opacity 0.1s ease",
-        }}
-      >
-        <Typography sx={{ fontSize: 12, fontWeight: 600 }}>
-          {formatRange(blockStart, blockEnd)}
-        </Typography>
-      </Box>
-
       {isInvalidDrag && (
         <BookingValidationMessage
           anchorEl={containerRef.current}
@@ -113,9 +97,12 @@ export default function AvailabilityBlockContent({
             left: 2,
             right: 2,
             top: `${((new Date(window.start).getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            height: `${((new Date(window.end).getTime() - new Date(window.start).getTime()) /
-              (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            bgcolor: `${BOOKING_STATUS_META[window.status].color}CC`,
+            height: `${
+              ((new Date(window.end).getTime() - new Date(window.start).getTime()) /
+                (blockEnd.getTime() - blockStart.getTime())) *
+              100
+            }%`,
+            bgcolor: BOOKING_STATUS_META[window.status].color,
             border: `1px solid ${BOOKING_STATUS_META[window.status].color}`,
             borderRadius: "6px",
             pointerEvents: "none",
@@ -130,9 +117,12 @@ export default function AvailabilityBlockContent({
             left: 2,
             right: 2,
             top: `${((highlightedWindow.start.getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            height: `${((highlightedWindow.end.getTime() - highlightedWindow.start.getTime()) /
-              (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            bgcolor: `${BOOKING_STATUS_META.SELECTED.color}CC`,
+            height: `${
+              ((highlightedWindow.end.getTime() - highlightedWindow.start.getTime()) /
+                (blockEnd.getTime() - blockStart.getTime())) *
+              100
+            }%`,
+            bgcolor: BOOKING_STATUS_META.SELECTED.color,
             border: `1px solid ${BOOKING_STATUS_META.SELECTED.color}`,
             borderRadius: "6px",
             display: "flex",

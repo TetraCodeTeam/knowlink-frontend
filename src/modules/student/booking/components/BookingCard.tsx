@@ -19,8 +19,9 @@ export default function BookingCard({
   onCancelSelectedSlot,
   onReserveBooking,
   onReleaseBooking,
+  tutorId,
 }: BookingCardProps) {
-  const bookingForm = useBookingForm(selectedSlot);
+  const bookingForm = useBookingForm(tutorId, selectedSlot);
   const {
     control,
     register,
@@ -93,7 +94,7 @@ export default function BookingCard({
           Materia
         </Typography>
         <Controller
-          name="subjectId"
+          name="tutorSubjectId"
           control={control}
           render={({ field }) => (
             <Select
@@ -102,7 +103,7 @@ export default function BookingCard({
               displayEmpty
               size="small"
               sx={{ borderRadius: 2, fontSize: "14px", color: "#494949" }}
-              error={Boolean(errors.subjectId)}
+              error={Boolean(errors.tutorSubjectId)}
             >
               <MenuItem value="" disabled>
                 Selecciona la materia
@@ -119,9 +120,9 @@ export default function BookingCard({
             </Select>
           )}
         />
-        {errors.subjectId && (
+        {errors.tutorSubjectId && (
           <Typography variant="caption" sx={{ color: "error.main" }}>
-            {errors.subjectId.message}
+            {errors.tutorSubjectId.message}
           </Typography>
         )}
       </Box>
@@ -168,7 +169,8 @@ export default function BookingCard({
         )}
         {availableModalities.length === 1 && (
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            *El tutor solo ofrece clases {BOOKING_MODALITY_LABEL[availableModalities[0]].toLowerCase()} para esta materia.
+            *El tutor solo ofrece clases{" "}
+            {BOOKING_MODALITY_LABEL[availableModalities[0]].toLowerCase()} para esta materia.
           </Typography>
         )}
 
@@ -213,7 +215,7 @@ export default function BookingCard({
         />
         {pricing && pricing.total !== 0 && (
           <BookingPricingRow
-            label="Tarifa de servicio (3%)"
+            label={`Tarifa de servicio (${Math.round(pricing.serviceFeeRate * 100)}%)`}
             value={pricing.serviceFee}
             formatter={currencyFormatter}
           />

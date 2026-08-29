@@ -14,6 +14,7 @@ export interface AvailabilityBlockContentProps {
   locked: boolean;
   onHoverWindow: (window: ReservationWindow | null) => void;
   onSelectWindow: (window: ReservationWindow) => void;
+  onDeselectWindow: () => void;
 }
 
 export interface BookingCalendarProps {
@@ -21,6 +22,7 @@ export interface BookingCalendarProps {
   bookingSlots?: MockBookingSlotEvent[];
   minimumNoticeMinutes?: number;
   onSelectSlot: (slot: BookingSlot) => void;
+  onDeselectSlot: () => void;
 }
 
 export interface BookingCardProps {
@@ -28,6 +30,7 @@ export interface BookingCardProps {
   onReserveBooking?: (slot: BookingSlot, data: BookingFormValues) => Promise<void>;
   onReleaseBooking?: (slot: BookingSlot) => Promise<void>;
   onCancelSelectedSlot?: () => void;
+  tutorId: string;
 }
 
 export interface BookingSlotSelectionSummaryProps {

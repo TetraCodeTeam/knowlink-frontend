@@ -1,48 +1,64 @@
-//Hook para manejar la sincronización en tiempo real de los slots de reserva.
-import { useEffect, useState } from "react";
+// Hook para manejar la sincronización en tiempo real de los slots de reserva.
+import { useEffect, useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   holdBookingSlot,
   releaseBookingSlot,
   reserveBooking,
+  getBookingBlockId,
 } from "@/modules/student/booking/api/booking.api";
 import {
   publishBookingSlotStatus,
   subscribeToBookingSlotEvents,
 } from "@/modules/student/booking/api/bookingSlotsRealtime.api";
+import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
-import { getBookingBlockId } from "@/modules/student/booking/api/booking.api";
 import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/bookingSlotStatusEvent.interface";
 import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
-import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
+import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
 
-export function useBookingRealtime(tutorId = "mock-tutor") {
-  const [bookingSlots, setBookingSlots] = useState(useBookingSlots());
+// Clave "slotId|windowStart|windowEnd" -> ventana pisada localmente por un
+// evento (SSE o publicación optimista propia), aplicada por encima de lo
+// que trae la query. `null` significa "liberada" (AVAILABLE).
+type WindowOverrides = Record<string, BookingUnavailableWindow | null>;
+
+export function useBookingRealtime(tutorId: string, from: string, to: string) {
+  const { data, isLoading } = useBookingSlots(tutorId, from, to);
+  const [overrides, setOverrides] = useState<WindowOverrides>({});
+  const queryClient = useQueryClient();
+
+  const bookingSlots: MockBookingSlotEvent[] = useMemo(() => {
+    const baseSlots = data?.slots ?? [];
+
+    return baseSlots.map((slot) => {
+      const relevantOverrides = Object.entries(overrides).filter(([key]) => key.startsWith(`${slot.id}|`));
+      if (relevantOverrides.length === 0) return slot;
+
+      let nextWindows = [...(slot.unavailableWindows ?? [])];
+      for (const [key, override] of relevantOverrides) {
+        const [, windowStart, windowEnd] = key.split("|");
+        nextWindows = nextWindows.filter((w) => !(w.start === windowStart && w.end === windowEnd));
+        if (override) nextWindows.push(override);
+      }
+      return { ...slot, unavailableWindows: nextWindows };
+    });
+  }, [data, overrides]);
 
   useEffect(() => {
     const applyEvent = (event: BookingSlotStatusEvent) => {
-      setBookingSlots((current) =>
-        current.map((slot) => {
-          if (slot.id !== event.slotId && slot.id !== getBookingBlockId(event.slotId)) return slot;
-          if (!event.windowStart || !event.windowEnd) return { ...slot, status: event.status };
+      if (!event.windowStart || !event.windowEnd) return;
 
-          const nextWindow: BookingUnavailableWindow = {
-            start: event.windowStart,
-            end: event.windowEnd,
-            status: event.status === "AVAILABLE" ? "BLOCKED" : event.status,
-          };
-          const currentWindows = slot.unavailableWindows ?? [];
-          const nextWindows = currentWindows.filter(
-            (window) => window.start !== event.windowStart || window.end !== event.windowEnd
-          );
+      const blockId = getBookingBlockId(event.slotId);
+      const key = `${blockId}|${event.windowStart}|${event.windowEnd}`;
 
-          return {
-            ...slot,
-            unavailableWindows:
-              event.status === "AVAILABLE" ? nextWindows : [...nextWindows, nextWindow],
-          };
-        })
-      );
+      setOverrides((current) => ({
+        ...current,
+        [key]:
+          event.status === "AVAILABLE"
+            ? null
+            : { start: event.windowStart!, end: event.windowEnd!, status: event.status },
+      }));
     };
 
     const handleLocalEvent = (event: Event) => {
@@ -59,35 +75,25 @@ export function useBookingRealtime(tutorId = "mock-tutor") {
   }, [tutorId]);
 
   const holdSlot = async (slot: BookingSlot) => {
-    const blockId = slot.id.split("__")[0];
-    publishBookingSlotStatus({
-      slotId: blockId,
-      status: "BLOCKED",
-      windowStart: slot.startIso,
-      windowEnd: slot.endIso,
-    });
-
+    const blockId = getBookingBlockId(slot.id);
+    publishBookingSlotStatus({ slotId: blockId, status: "BLOCKED", windowStart: slot.startIso, windowEnd: slot.endIso });
     try {
       await holdBookingSlot(tutorId, slot);
     } catch (error) {
-      publishBookingSlotStatus({
-        slotId: blockId,
-        status: "AVAILABLE",
-        windowStart: slot.startIso,
-        windowEnd: slot.endIso,
-      });
+      publishBookingSlotStatus({ slotId: blockId, status: "AVAILABLE", windowStart: slot.startIso, windowEnd: slot.endIso });
       throw error;
     }
   };
 
-  const reserveSlot = async (slot: BookingSlot, data: BookingFormValues) => {
-    await reserveBooking(tutorId, slot, data);
+  const reserveSlot = async (slot: BookingSlot, formData: BookingFormValues) => {
+    await reserveBooking(tutorId, slot, formData);
     publishBookingSlotStatus({
       slotId: getBookingBlockId(slot.id),
       status: "RESERVED",
       windowStart: slot.startIso,
       windowEnd: slot.endIso,
     });
+    await queryClient.invalidateQueries({ queryKey: ["booking-calendar", tutorId] });
   };
 
   const releaseSlot = async (slot: BookingSlot) => {
@@ -100,5 +106,12 @@ export function useBookingRealtime(tutorId = "mock-tutor") {
     });
   };
 
-  return { bookingSlots, holdSlot, reserveSlot, releaseSlot };
+  return {
+    bookingSlots,
+    isLoading,
+    minimumNoticeMinutes: data?.minimumNoticeMinutes ?? 0,
+    holdSlot,
+    reserveSlot,
+    releaseSlot,
+  };
 }
