@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardContent, Chip, Rating, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardContent, Chip, Divider, Rating, Stack, Typography } from "@mui/material";
 import type { TutorProfile } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/student/tutorProfile/utils/tutor-tag-mapping";
 import { CalendarCheck } from "lucide-react";
@@ -64,6 +64,8 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
           </Stack>
         </Stack>
         </Box>
+      
+      <Divider sx={{ my: 1, width: "80%", bgcolor: "#EEEEEE", marginX: "auto", borderBottom: "1px", height: "1px" }} />
 
       <AppButton
         appVariant="primary"
@@ -72,7 +74,6 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         sx={{
           width: "70%",
           mx: "auto",
-          mt: 2,
           fontSize: "16px",
           fontWeight: 600,
           borderRadius: 2,
