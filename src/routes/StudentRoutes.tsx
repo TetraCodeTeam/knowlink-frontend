@@ -3,6 +3,7 @@ import StudentLayout from "@/modules/student/layouts/StudentLayout";
 import StudentHomePage from "@/modules/student/pages/StudentHomePage";
 import StudentProfilePage from "@/modules/student/pages/StudentProfilePage";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
+import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import { TutorProfilePage } from "@/modules/student/pages/ViewTutorProfile";
 
@@ -19,6 +20,7 @@ export default function StudentRoutes() {
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
         <Route path="tutor/:tutorId/disponibilidad" element={<UnderConstructionPage />} />
         <Route path="tutores" element={<TutoresPorMateriaPage />} />
+        <Route path="buscar" element={<SearchResultsPage />} />
       </Route>
     </Routes>
   );

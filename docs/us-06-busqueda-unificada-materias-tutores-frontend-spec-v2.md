@@ -1,117 +1,400 @@
-# US-06 · Búsqueda Unificada de Materias y Tutores — SPEC FRONTEND (v2, sobre código existente)
+# US-06 · Búsqueda — SPEC FRONTEND v3 (Enter → pantalla de resultados + límite de sugerencias)
 
-**Repo:** knowlink-frontend · branch base: `julian-salvucci`
+**Repo:** knowlink-frontend
 **Módulo:** `src/modules/student`
-**Story Points:** 5 · **Prioridad:** CRÍTICA
+**Alcance:** extiende el buscador ya implementado (`SearchBar.tsx`, `SearchResultsPanel.tsx`, `TutoresPorMateriaPage.tsx`). No reemplaza nada de lo existente.
 
-> Esta spec **no reescribe** `SearchBar.tsx` ni `SearchResultsPanel.tsx` — ya están implementados y funcionando. Es un **gap-analysis**: qué falta para que la historia cumpla sus 7 criterios de aceptación, tomando el código de la rama como fuente de verdad.
-
----
-
-## 0. Inventario de lo que ya existe (confirmado leyendo el repo)
-
-| Archivo | Estado | Notas |
-|---|---|---|
-| `components/SearchBar.tsx` | ✅ Completo | Input pill, guard de rol tutor (deshabilitado + candado + caption), Popper anclado con `sameWidthModifier`, `ClickAwayListener`, cierre con `Escape`. |
-| `components/SearchResultsPanel.tsx` | ✅ Completo | Dos columnas (Materias/Tutores), estado `loading`, estado vacío con el texto exacto del criterio 6, `highlightMatch`. |
-| `hooks/useSearchTutorsAndMaterias.ts` | ✅ Completo | React Query, **sin debounce** (decisión ya tomada — dispara 1 request por tecla contra `/api/v1/tutors/search/{query}`). |
-| `api/search.api.ts` | ⚠️ Parcial | Pega a `GET /api/v1/tutors/search/{query}`, que **solo matchea por nombre de materia** (`findBySubject_NameContainingIgnoreCase`), no por nombre de tutor. |
-| `constants.ts` (`buildTutorProfileRoute`, `buildMateriaTutorsRoute`) | 🔴 **Roto** | Ver §1 y §2. |
-| `interfaces/tutor-search-result.interface.ts` | ✅ En uso | `TutorSearchResult` + `SubjectSummary` (con `career`). Es el tipo real que consume todo el feature. |
-| `interfaces/materia-search-result.interface.ts` | 🗑️ Muerto | `MateriaSearchResult { materiaId, nombre }` — **cero imports en todo el repo**. |
-| `interfaces/search-results.interface.ts` | 🗑️ Muerto | Redefine `TutorSearchResult` con `subjects: string[]` (forma vieja, incompatible con la actual) — **cero imports en todo el repo**. |
-| Ruta destino de tutor (`StudentRoutes.tsx`) | Existe, pero con otro path | `path="tutor/:tutorId"` montado bajo `/student/*` → path real: **`/student/tutor/:tutorId`**. |
-| Ruta destino de materia (`/tutores?materia=...`) | 🔴 **No existe** | `StudentRoutes.tsx` no tiene ninguna ruta `tutores`. Al día de hoy, clickear una materia navega a una ruta inexistente → 404 / fallback. |
-| `test/.../SearchBar.test.tsx` | ✅ Completo | Cubre placeholder, sugerencias dinámicas, empty state, guard de rol. El CP-003.15 ("matchea por nombre") está **mockeado a nivel hook**, no prueba el contrato real del backend. |
+> Nota de alcance: estos 4 puntos no estaban en los criterios de aceptación originales de US-06 — son una historia derivada (llamémosla **US-06C** internamente hasta que se le asigne ID real en el backlog). Se documenta acá mismo porque extiende directamente los mismos componentes.
 
 ---
 
-## 1. 🔴 Bug — `buildTutorProfileRoute` apunta a una ruta que no existe
+## 0. Requerimientos (tal como se definieron)
 
-**Archivo:** `src/modules/student/constants.ts`
-
-```ts
-// ACTUAL (roto):
-export function buildTutorProfileRoute(tutorId: string): string {
-  return `/tutores/${tutorId}`;
-}
-```
-
-La ruta real registrada en `StudentRoutes.tsx` es `tutor/:tutorId` (singular) montada bajo `/student/*` (ver `RoutesProvider.tsx`). Es decir, el path real es `/student/tutor/:tutorId`, no `/tutores/:id`.
-
-**Fix:**
-
-```ts
-export function buildTutorProfileRoute(tutorId: string): string {
-  return `/student/tutor/${tutorId}`;
-}
-```
-
-✅ Con este fix, "Click en un Tutor" (criterio 4) redirige correctamente a `ViewTutorProfile.tsx` (el componente que exporta `TutorProfilePage`), que ya lee `tutorId` con `useParams()`.
+1. Las sugerencias del dropdown se acotan a **máximo 4** por sección (Materias y Tutores), cada una por separado.
+2. **Enter** durante la escritura → navega a una pantalla nueva de resultados completos ("Materias Relacionadas" / mock Imagen 1).
+3. Esa pantalla tiene un **switch** (Materias / Tutores) que define qué lista se muestra.
+4. **Prioridad de materia sobre tutor**: el switch arranca siempre en "Materias", incluso si no hay resultados — en ese caso se muestra el empty state (con imagen) en la pestaña Materias. Lo mismo aplica a Tutores si esa pestaña no tiene resultados: mismo empty state, no auto-redirige a la otra pestaña.
+5. Al seleccionar una materia desde esa pantalla → navega a `TutoresPorMateriaPage` (ya existe, no se toca) con el nombre exacto de la materia clickeada.
 
 ---
 
-## 2. 🔴 Falta — página y ruta de "Tutores que dictan la materia X" (criterio 3)
+## 1. Nuevo componente compartido: `EmptyState`
 
-Hoy `buildMateriaTutorsRoute` arma `/tutores?materia=${nombre}` pero **no hay ninguna ruta ni página que la resuelva**. Hay que crear ambas cosas.
+No existe hoy ningún componente de estado vacío con ilustración en el repo (el de `SearchResultsPanel` es solo texto). Se crea uno reutilizable porque **este mismo empty state se necesita dos veces en la misma pantalla** (pestaña Materias vacía / pestaña Tutores vacía).
 
-### 2.1 Fix de la constante (alinear con el prefijo `/student`)
+**Asset nuevo:** `src/shared/assets/illustrations/empty-search-results.png` (la ilustración provista: persona con lupa frente a un signo de pregunta).
 
-```ts
-export function buildMateriaTutorsRoute(materiaNombre: string): string {
-  return `/student/tutores?materia=${encodeURIComponent(materiaNombre)}`;
-}
-```
-
-### 2.2 Nueva ruta en `StudentRoutes.tsx`
+**Archivo nuevo:** `src/shared/components/EmptyState.tsx`
 
 ```tsx
-import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
+import type { ReactNode } from "react";
+import { Box, Typography } from "@mui/material";
 
-// dentro de <Route element={<StudentLayout />}>:
-<Route path="tutores" element={<TutoresPorMateriaPage />} />
+interface EmptyStateProps {
+  /** Ilustración a mostrar. Tiene prioridad sobre `icon` si se pasan ambos. */
+  image?: string;
+  imageAlt?: string;
+  /** Fallback cuando no hay ilustración disponible (ej. un ícono de MUI). */
+  icon?: ReactNode;
+  message: string;
+}
+
+export default function EmptyState({ image, imageAlt, icon, message }: EmptyStateProps) {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 2,
+        py: 8,
+        textAlign: "center",
+      }}
+    >
+      {image ? (
+        <Box
+          component="img"
+          src={image}
+          alt={imageAlt ?? ""}
+          sx={{ width: { xs: 180, sm: 220 }, height: "auto" }}
+        />
+      ) : icon ? (
+        <Box
+          sx={{
+            width: 96,
+            height: 96,
+            borderRadius: "50%",
+            backgroundColor: "#EDEBFA",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {icon}
+        </Box>
+      ) : null}
+      <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 320 }}>
+        {message}
+      </Typography>
+    </Box>
+  );
+}
 ```
 
-### 2.3 Nueva página: `src/modules/student/pages/TutoresPorMateriaPage.tsx`
+`image` tiene prioridad sobre `icon` — se deja `icon` como fallback opcional para otros empty states del proyecto que todavía no tengan una ilustración asignada, sin forzar a todos los usos futuros a tener un PNG.
 
-**Dato clave:** no hace falta un endpoint nuevo. El backend ya filtra por nombre de materia en `/api/v1/tutors/search/{query}` — si mandamos el **nombre exacto de la materia** como query, el mismo endpoint devuelve exactamente los tutores que la dictan. Es decir, esta página **reutiliza `useSearchTutorsAndMaterias`**.
+---
+
+## 2. Límite de sugerencias en el dropdown (máx. 4 por sección)
+
+**Archivo:** `src/modules/student/constants.ts` — agregar:
+
+```ts
+export const MAX_SEARCH_SUGGESTIONS = 4;
+```
+
+**Archivo:** `src/modules/student/components/SearchBar.tsx` — el recorte se aplica **solo a lo que se le pasa al panel**, no a los datos que ya vinieron del hook (esos se siguen usando completos en la pantalla de Enter, ver §4):
 
 ```tsx
-import { useMemo } from "react";
+import { MAX_SEARCH_SUGGESTIONS, buildMateriaTutorsRoute, buildTutorProfileRoute, buildSearchResultsRoute, TUTOR_ROLE } from "../constants";
+// ...
+
+<SearchResultsPanel
+  query={inputValue}
+  materias={materias.slice(0, MAX_SEARCH_SUGGESTIONS)}
+  tutors={tutors.slice(0, MAX_SEARCH_SUGGESTIONS)}
+  loading={isFetching}
+  onSelectMateria={handleSelectMateria}
+  onSelectTutor={handleSelectTutor}
+/>
+```
+
+`SearchResultsPanel.tsx` no necesita cambios — ya renderiza lo que le llega, el corte se hace antes.
+
+---
+
+## 3. Extraer la lógica de "materias derivadas de tutores" a un util compartido
+
+Hoy esa lógica vive **inline** dentro de `SearchBar.tsx` (el `useMemo` que dedupea `SubjectSummary` a partir de `tutors`). La nueva pantalla de resultados necesita la misma derivación sobre el mismo array de tutores — para no duplicar código, se extrae.
+
+**Archivo nuevo:** `src/modules/student/utils/derive-materias.ts`
+
+```ts
+import type { SubjectSummary, TutorSearchResult } from "../interfaces/tutor-search-result.interface";
+
+/**
+ * El backend no expone una entidad "materia" separada — solo devuelve tutores
+ * con sus subjects. Esta función deriva la lista de materias únicas a partir
+ * de los tutores que trajo la búsqueda, dedupeando por nombre (case-insensitive).
+ */
+export function deriveMateriasFromTutors(tutors: TutorSearchResult[]): SubjectSummary[] {
+  const seen = new Map<string, SubjectSummary>();
+  for (const tutor of tutors) {
+    for (const subject of tutor.subjects) {
+      const key = subject.name.trim().toLowerCase();
+      if (!seen.has(key)) {
+        seen.set(key, subject);
+      }
+    }
+  }
+  return [...seen.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+```
+
+**`SearchBar.tsx`** — reemplazar el `useMemo` inline por:
+
+```tsx
+import { deriveMateriasFromTutors } from "../utils/derive-materias";
+// ...
+const materias = useMemo(() => deriveMateriasFromTutors(tutors), [tutors]);
+```
+
+---
+
+## 4. Enter → navega a la pantalla de resultados completos
+
+**`constants.ts`** — agregar:
+
+```ts
+export function buildSearchResultsRoute(query: string): string {
+  return `/student/buscar?q=${encodeURIComponent(query)}`;
+}
+```
+
+**`SearchBar.tsx`** — extender el `onKeyDown` existente (hoy solo maneja `Escape`):
+
+```tsx
+onKeyDown={(event) => {
+  if (event.key === "Escape") {
+    setOpen(false);
+    return;
+  }
+  if (event.key === "Enter" && inputValue.trim().length > 0) {
+    event.preventDefault(); // evita submit si el input alguna vez queda dentro de un <form>
+    navigate(buildSearchResultsRoute(inputValue.trim()));
+    setOpen(false);
+  }
+}}
+```
+
+No hace falta nada más en `SearchBar` — el Enter no depende de que el dropdown esté abierto ni de que haya resultados cargados todavía (si el alumno escribe rápido y aprieta Enter antes de que responda el backend, igual navega; la pantalla de destino dispara su propio fetch con el mismo query).
+
+---
+
+## 5. Ruta nueva
+
+**`src/routes/StudentRoutes.tsx`:**
+
+```tsx
+import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
+// ...
+<Route path="buscar" element={<SearchResultsPage />} />
+```
+
+---
+
+## 6. Nuevo componente: switch Materias / Tutores
+
+Pill de dos opciones (mock Imagen 1, arriba a la derecha): ícono de libro + "Materias", ícono de persona + "Tutores", con la opción activa resaltada en violeta.
+
+**Archivo nuevo:** `src/modules/student/components/SearchModeToggle.tsx`
+
+```tsx
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+
+export type SearchMode = "materias" | "tutores";
+
+interface SearchModeToggleProps {
+  value: SearchMode;
+  onChange: (mode: SearchMode) => void;
+}
+
+export default function SearchModeToggle({ value, onChange }: SearchModeToggleProps) {
+  return (
+    <ToggleButtonGroup
+      value={value}
+      exclusive
+      onChange={(_, next: SearchMode | null) => {
+        if (next) onChange(next); // ignora el intento de deseleccionar la única opción activa
+      }}
+      sx={{
+        backgroundColor: "#EDEBFA",
+        borderRadius: "999px",
+        p: 0.5,
+        "& .MuiToggleButton-root": {
+          border: "none",
+          borderRadius: "999px !important",
+          textTransform: "none",
+          px: 2,
+          gap: 0.5,
+          "&.Mui-selected": {
+            backgroundColor: "#5865C8",
+            color: "#fff",
+            "&:hover": { backgroundColor: "#4a54ad" },
+          },
+        },
+      }}
+    >
+      <ToggleButton value="materias" aria-label="Ver materias">
+        <MenuBookOutlinedIcon fontSize="small" /> Materias
+      </ToggleButton>
+      <ToggleButton value="tutores" aria-label="Ver tutores">
+        <PersonOutlineIcon fontSize="small" /> Tutores
+      </ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
+```
+
+---
+
+## 7. Nuevo componente: card de materia (para el grid, no el dropdown)
+
+`MateriaRow` (en `SearchResultsPanel.tsx`) es una fila de dropdown, no una card de grid. Se crea una versión card equivalente al mock (ícono a la izquierda dentro de un cuadrado violeta, nombre en bold, carrera como subtítulo), reusando `getCareerIcon` que ya existe.
+
+**Archivo nuevo:** `src/modules/student/components/MateriaResultCard.tsx`
+
+```tsx
+import { Box, Card, CardActionArea, Typography } from "@mui/material";
+import type { SubjectSummary } from "../interfaces/tutor-search-result.interface";
+import { getCareerIcon } from "../icons/career-icon";
+
+const BRAND_COLOR = "#5865C8";
+const ICON_BOX_BG = "#EDEBFA";
+
+interface MateriaResultCardProps {
+  materia: SubjectSummary;
+  onClick: () => void;
+  highlighted?: boolean;
+}
+
+export default function MateriaResultCard({ materia, onClick, highlighted }: MateriaResultCardProps) {
+  const CareerIcon = getCareerIcon(materia.career);
+
+  return (
+    <Card
+      variant="outlined"
+      sx={{
+        height: "100%",
+        borderColor: highlighted ? BRAND_COLOR : undefined,
+        borderWidth: highlighted ? 2 : 1,
+      }}
+    >
+      <CardActionArea onClick={onClick} sx={{ display: "flex", alignItems: "center", gap: 1.5, p: 2, justifyContent: "flex-start" }}>
+        <Box
+          sx={{
+            width: 40,
+            height: 40,
+            borderRadius: "10px",
+            backgroundColor: ICON_BOX_BG,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <CareerIcon size={20} color={BRAND_COLOR} />
+        </Box>
+        <Box sx={{ minWidth: 0 }}>
+          <Typography variant="body1" sx={{ fontWeight: 600 }} noWrap>
+            {materia.name}
+          </Typography>
+          <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block" }}>
+            {materia.career}
+          </Typography>
+        </Box>
+      </CardActionArea>
+    </Card>
+  );
+}
+```
+
+> Ojo, mismo bug que ya se corrigió en `MateriaRow`/`TutorRow`: `CardActionArea` de MUI también trae `justifyContent: "center"` por defecto. Por eso el `sx` de arriba ya incluye `justifyContent: "flex-start"` explícito — sin eso, esta card va a tener el mismo problema de desalineación que vimos antes.
+
+`highlighted`: en el mock la primera card aparece con borde violeta más marcado — se interpreta como la **materia más cercana a la coincidencia** (primer elemento del array, ya viene ordenado por relevancia desde el backend). Se aplica solo a `materias[0]` cuando hay más de un resultado. Si no se quiere este detalle visual, se puede omitir sin romper nada (prop opcional).
+
+---
+
+## 8. Nueva página: `SearchResultsPage.tsx`
+
+**Archivo nuevo:** `src/modules/student/pages/SearchResultsPage.tsx`
+
+```tsx
+import { useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
-import { buildTutorProfileRoute } from "../constants";
-import TutorResultCard from "../components/TutorResultCard"; // nuevo, ver 2.4
+import { deriveMateriasFromTutors } from "../utils/derive-materias";
+import { buildMateriaTutorsRoute, buildTutorProfileRoute } from "../constants";
+import SearchModeToggle, { type SearchMode } from "../components/SearchModeToggle";
+import MateriaResultCard from "../components/MateriaResultCard";
+import TutorResultCard from "../components/TutorResultCard";
+import EmptyState from "@/shared/components/EmptyState";
+import emptySearchResultsImage from "@/shared/assets/illustrations/empty-search-results.png";
 
-export default function TutoresPorMateriaPage() {
+const EMPTY_MESSAGE = "No se encontraron resultados para tu búsqueda";
+
+export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const materiaNombre = searchParams.get("materia") ?? "";
+  const query = searchParams.get("q") ?? "";
 
-  const { data, isFetching } = useSearchTutorsAndMaterias(materiaNombre);
+  // Siempre arranca en "materias": un alumno tiene más probabilidad de conocer
+  // el nombre de una materia que el de un tutor (regla de negocio de US-06C).
+  const [mode, setMode] = useState<SearchMode>("materias");
+
+  const { data, isFetching } = useSearchTutorsAndMaterias(query);
   const tutores = useMemo(() => (Array.isArray(data) ? data : []), [data]);
+  const materias = useMemo(() => deriveMateriasFromTutors(tutores), [tutores]);
+
+  const title = mode === "materias" ? "Materias Relacionadas" : "Tutores Relacionados";
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
-      <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
-        Tutores que pueden ayudarte en {materiaNombre}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3, flexWrap: "wrap", gap: 2 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+          {title}
+        </Typography>
+        <SearchModeToggle value={mode} onChange={setMode} />
+      </Box>
 
       {isFetching ? (
-        <Typography color="text.secondary">Buscando tutores…</Typography>
+        <Typography color="text.secondary">Buscando…</Typography>
+      ) : mode === "materias" ? (
+        materias.length === 0 ? (
+          <EmptyState
+            image={emptySearchResultsImage}
+            imageAlt="No se encontraron resultados"
+            message={EMPTY_MESSAGE}
+          />
+        ) : (
+          <Grid container spacing={3}>
+            {materias.map((materia, index) => (
+              <Grid key={materia.name} size={{ xs: 12, sm: 6, md: 4 }}>
+                <MateriaResultCard
+                  materia={materia}
+                  highlighted={index === 0 && materias.length > 1}
+                  onClick={() => navigate(buildMateriaTutorsRoute(materia.name))}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )
       ) : tutores.length === 0 ? (
-        <Typography color="text.secondary">
-          No hay tutores disponibles para esta materia todavía.
-        </Typography>
+        <EmptyState
+          image={emptySearchResultsImage}
+          imageAlt="No se encontraron resultados"
+          message={EMPTY_MESSAGE}
+        />
       ) : (
         <Grid container spacing={3}>
           {tutores.map((tutor) => (
             <Grid key={tutor.tutorId} size={{ xs: 12, sm: 6, md: 4 }}>
-              <TutorResultCard
-                tutor={tutor}
-                onClick={() => navigate(buildTutorProfileRoute(tutor.tutorId))}
-              />
+              <TutorResultCard tutor={tutor} onClick={() => navigate(buildTutorProfileRoute(tutor.tutorId))} />
             </Grid>
           ))}
         </Grid>
@@ -121,98 +404,40 @@ export default function TutoresPorMateriaPage() {
 }
 ```
 
-> **Sobre "la primera materia debe ser la más cercana a la búsqueda":** con este enfoque no aplica igual que en el análisis anterior — acá no hay múltiples materias en la página de destino, hay **una** materia (la elegida) y una grilla de tutores. El nombre que se muestra en el header (`materiaNombre`) es literalmente el que el alumno clickeó en el dropdown, así que siempre es exacto, no aproximado. Si en el futuro se agrega tolerancia a variantes de nombre (ej. "Bases de Datos" vs "Sistemas de Bases de Datos Avanzadas"), ahí sí habría que decidir cuál nombre mostrar — **no es necesario para cumplir los criterios de aceptación actuales de US-06**, queda como nota para US-06B si aparece ese caso.
-
-### 2.4 Nuevo componente: `TutorResultCard.tsx`
-
-Card para el grid de la Imagen 2 (avatar, nombre, rating, chips de materias). Puede reusar mucho de `TutorRow` de `SearchResultsPanel.tsx` pero en formato card en vez de fila de dropdown — extraer lo compartido a un helper si conviene, o directamente crear una versión nueva más grande (avatar más grande, chips visibles de `subjects[].name`, sin necesidad de `highlightMatch` porque acá no hay texto de búsqueda activo).
-
-```tsx
-interface TutorResultCardProps {
-  tutor: TutorSearchResult;
-  onClick: () => void;
-}
-```
-
-- Avatar 56px, nombre, rating (mismo patrón que `TutorRow`: `StarIcon` + promedio + cantidad de reseñas, o "Sin reseñas aún").
-- Chips (`Chip` de MUI) con `tutor.subjects.map(s => s.name)`.
-- Card completa clickeable (`CardActionArea` de MUI) → `onClick`.
+**Decisión confirmada con el usuario:** el toggle **siempre** arranca en "Materias", incluso si esa lista viene vacía — en ese caso se muestra el `EmptyState` en la pestaña Materias. Mismo criterio para Tutores: si el alumno cambia manualmente a esa pestaña y no hay resultados, mismo `EmptyState`, sin redirección automática entre pestañas.
 
 ---
 
-## 3. ✅ Backend confirmado (rama `Julian-SalvucciV3`) — el criterio 4 ya se cumple
+## 9. Checklist de lo pedido
 
-**Corrección sobre una versión anterior de esta spec:** se había marcado esto como gap de backend a partir de un comentario desactualizado en `search.api.ts`. Al leer el código real de `knowlink-backend` (rama `Julian-SalvucciV3`) se confirma que **el match por nombre de tutor ya está implementado**:
-
-```java
-// TutorProfileServiceImpl#searchTutor
-List<TutorProfile> nameMatches = tutorProfileRepository
-    .findByUser_FullNameContainingIgnoreCase(query);
-```
-
-Esto se combina (dedupeado por `tutorId`, vía `groupedResults`) con el match por materia (`TutorSearchSpecifications.subjectNameContains`). Hay un test de integración (`TutorSearchControllerTest`) que lo cubre sembrando tutores con nombres distintos y verificando el match. **No hace falta ningún cambio de backend para este punto** — el comentario de `search.api.ts` en el frontend quedó desactualizado y conviene corregirlo/borrarlo para no confundir a quien lea el código después:
-
-```ts
-// ACTUALIZAR el comentario de search.api.ts: ya no es cierto que
-// "Matchea únicamente por nombre de materia, NO por nombre de tutor".
-```
-
-### 3.1 🐛 Bug real encontrado en backend (sí bloqueante, pero de datos, no de contrato)
-
-En `TutorSearchMapper.from()`:
-
-```java
-return new TutorSearchResponse(
-    tutorProfile.getUser().getUserId(),
-    tutorProfile.getUser().getFullName(),
-    tutorProfile.getProfilePictureUrl(),
-    tutorProfile.getAverageRating(),
-    4, // o getTotalReviews() según tu entidad   <-- HARDCODEADO
-    ...
-);
-```
-
-`totalReviews` está fijo en `4` para **todos** los tutores. El frontend (`TutorRow` en `SearchResultsPanel.tsx`) muestra ese número tal cual (`({tutor.totalReviews} Reseñas)`), así que hoy en producción todas las cards del buscador van a decir "(4 Reseñas)" sin importar la realidad. Esto no es un problema de esta spec de frontend, pero **si no se corrige en backend, el frontend va a mostrar un dato incorrecto sin que haya nada mal en su propio código** — vale la pena dejarlo anotado acá para no perderlo de vista al validar la historia. Fix sugerido (spec de backend aparte): usar `ratingRepository.findVisibleByRatedUserId(userId).size()`, mismo patrón que ya usa `TutorProfileServiceImpl` para el perfil completo del tutor.
-
-### 3.2 Nota — filtros de US-06B ya están soportados por el backend
-
-El endpoint `/api/v1/tutors/search/{query}` ya acepta `modality`, `compensation`, `dayOfWeek`, `verifiedOnly` y `minRating` como query params opcionales combinables con AND (`TutorSearchFilters`). El frontend hoy no los envía. Cuando se aborde US-06B, no hace falta tocar backend — alcanza con agregar esos params a `searchTutors()` en `search.api.ts` y la UI de filtros correspondiente.
-
----
-
-## 4. 🗑️ Limpieza — interfaces muertas
-
-Sin ningún `import` en todo el repo (confirmado con grep):
-
-- `src/modules/student/interfaces/materia-search-result.interface.ts`
-- `src/modules/student/interfaces/search-results.interface.ts` (redefine `TutorSearchResult` con una forma vieja e incompatible con `tutor-search-result.interface.ts` — riesgo de que alguien importe el archivo equivocado por error de autocompletado)
-
-**Acción:** eliminar ambos archivos. Si en algún momento el backend empieza a exponer un catálogo de materias con `materiaId` propio (relacionado con US-43), recrear la interfaz en ese momento con el shape real que devuelva el backend, no antes.
-
----
-
-## 5. Checklist de criterios de aceptación (estado real, no aspiracional)
-
-| # | Criterio | Estado |
+| # | Requerimiento | Dónde se resuelve |
 |---|---|---|
-| 1 | Campo único de texto | ✅ Ya implementado |
-| 2 | Resultados mixtos en dos secciones | ✅ Ya implementado |
-| 3 | Click en materia → tutores que la dictan | 🔴 Falta ruta + página (§2) |
-| 4 | Click en tutor → perfil completo / tutores matchean por nombre | 🔴 Ruta rota (§1). El match por nombre en backend ya funciona (§3) |
-| 5 | Sugerencias dinámicas sin confirmar búsqueda | ✅ Ya implementado (sin debounce, por decisión propia) |
-| 6 | Mensaje de "no se encontraron resultados" | ✅ Ya implementado, texto exacto |
-| 7 | Guard de rol (solo alumno activo, tutor bloqueado) | ✅ Ya implementado en frontend — falta confirmar que el backend realmente devuelve 403 con `@PreAuthorize("hasRole('STUDENT')")` cuando corresponde (dice el comentario que sí, no lo tengo verificado end-to-end) |
+| 1 | Sugerencias del dropdown acotadas a 4 por sección | `SearchBar.tsx` (§2), constante `MAX_SEARCH_SUGGESTIONS` |
+| 2 | Enter → pantalla de resultados | `SearchBar.tsx` `onKeyDown` (§4) + ruta `/student/buscar` (§5) |
+| 3 | Click en materia de esa pantalla → `TutoresPorMateriaPage` con la materia seleccionada | `SearchResultsPage.tsx`, reusa `buildMateriaTutorsRoute` ya existente (§8) |
+| 4 | Switch define si se ve Materias o Tutores | `SearchModeToggle.tsx` (§6) + estado `mode` en `SearchResultsPage` (§8) |
+| 5 | Prioridad de materia sobre tutor | Default `mode = "materias"` (§8), fijo, sin auto-redirección |
+| 6 | Empty state con imagen en ambas pestañas | `EmptyState.tsx` (§1), reusado en las dos ramas de `SearchResultsPage` |
 
 ---
 
-## 6. Trabajo a realizar (resumen accionable)
+## 10. Testing
 
-1. Fix `buildTutorProfileRoute` → `/student/tutor/${tutorId}` (constants.ts).
-2. Fix `buildMateriaTutorsRoute` → agregar prefijo `/student` (constants.ts).
-3. Crear `TutoresPorMateriaPage.tsx` + registrar ruta `tutores` en `StudentRoutes.tsx`.
-4. Crear `TutorResultCard.tsx` para el grid de esa página.
-5. Eliminar `materia-search-result.interface.ts` y `search-results.interface.ts`.
-6. Actualizar/borrar el comentario desactualizado en `search.api.ts` que dice que el backend "NO" matchea por nombre de tutor (§3). Avisar a backend del bug de `totalReviews` hardcodeado en `TutorSearchMapper` (§3.1) — no bloquea el frontend, pero conviene que quede trackeado.
-7. Tests nuevos:
-   - `TutoresPorMateriaPage.test.tsx`: título muestra el nombre de la materia del query param, grid renderiza `TutorResultCard` por cada tutor, estado vacío, click navega con la ruta corregida.
-   - Actualizar/agregar test de `SearchBar` que verifique que al clickear una materia se llama a `navigate` con `/student/tutores?materia=...` (hoy no hay ningún test que cubra la navegación, solo el render de resultados).
+- `SearchBar.test.tsx`: agregar caso — al presionar Enter con texto no vacío, se llama a `navigate` con `/student/buscar?q=...` y se cierra el panel (`setOpen(false)`); Enter con input vacío no navega.
+- Nuevo test de recorte: con más de 4 materias/tutores en la respuesta mockeada, `SearchResultsPanel` recibe como máximo 4 de cada uno (verificar props pasadas, no hace falta contar DOM nodes si ya hay un test de render que lo cubra indirectamente).
+- `SearchResultsPage.test.tsx` (nuevo):
+  - Arranca en modo "materias" por default.
+  - Con materias vacías → renderiza `EmptyState` con el texto exacto.
+  - Cambiando el toggle a "tutores" con tutores vacíos → mismo `EmptyState`.
+  - Click en una `MateriaResultCard` → `navigate` llamado con `buildMateriaTutorsRoute(nombre)`.
+  - Click en un `TutorResultCard` (modo tutores) → `navigate` llamado con `buildTutorProfileRoute(tutorId)`.
+  - La primera card de materias tiene el borde `highlighted` cuando hay 2+ materias; no lo tiene si hay una sola.
+- `MateriaResultCard.test.tsx` (nuevo, opcional pero recomendado dado el bug ya visto con `justifyContent`): snapshot/regla de estilo que confirme `justifyContent: "flex-start"` presente, para no repetir el bug de alineación.
+
+---
+
+## 11. Fuera de alcance
+
+- Filtros adicionales en `SearchResultsPage` (rating, modalidad) — corresponde a US-06B.
+- Persistir el `mode` elegido entre búsquedas distintas (hoy siempre resetea a "materias" al entrar con un `q` nuevo).
+- Optimización del PNG (compresión / conversión a SVG o WebP) — se usó el archivo tal cual se proveyó, sin procesar.
