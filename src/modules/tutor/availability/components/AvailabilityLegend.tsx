@@ -3,7 +3,7 @@ import { AVAILABILITY_LEGEND } from "@/modules/tutor/availability/constants/avai
 
 export default function AvailabilityLegend() {
   return (
-    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", mb: 2 }}>
+    <Box sx={{ display: "flex",justifyContent: "center", alignItems: "center", gap: 3, flexWrap: "wrap", mb: 2 }}>
       {AVAILABILITY_LEGEND.map((item) => (
         <Box key={item.label} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
