@@ -10,6 +10,8 @@ interface TutorProfileHeaderProps {
 }
 
 export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProps) => {
+  const avatarInitial = tutor.name.trim().charAt(0).toUpperCase();
+
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
       <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3, "&:last-child": { pb: 3 } }}>
@@ -23,7 +25,9 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
           }}
         >
         <Stack direction="row" spacing={3} alignItems="center">
-          <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 120, height: 120 }} />
+          <Avatar src={tutor.avatarUrl ?? undefined} alt={tutor.name} sx={{ width: 120, height: 120 }}>
+            {avatarInitial}
+          </Avatar>
           <Box>
             <Typography variant="h4" fontWeight={500}>
               {tutor.name}
