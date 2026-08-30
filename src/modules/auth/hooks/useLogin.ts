@@ -11,31 +11,24 @@ const ROLE_REDIRECT: Record<string, string> = {
   TUTOR: "/tutor/home",
 };
 
-const ROLE_LABEL: Record<string, string> = {
-  STUDENT: "Alumno",
-  TUTOR: "Tutor",
-};
-
 export function useLogin() {
   const { login } = useAuthStore();
   const navigate = useNavigate();
 
   const { isPending, mutate } = useMutation({
     mutationKey: [AUTH_LOGIN_KEY],
-    mutationFn: ({ email, password }: LoginFormValues) => loginUser({ email, password }),
-    onSuccess: (authResponse, variables) => {
-      if (authResponse.role !== variables.role) {
-        toast.error(
-          `Esta cuenta está registrada como ${ROLE_LABEL[authResponse.role] ?? authResponse.role}. Selecciona ese rol para continuar.`,
-        );
-        return;
-      }
+    mutationFn: ({ email, password, role }: LoginFormValues) =>
+      loginUser({ email, password, ...(role ? { targetRole: role } : {}) }),
+    onSuccess: (authResponse) => {
       login(authResponse);
       const destination = ROLE_REDIRECT[authResponse.role] ?? "/student/home";
       navigate(destination, { replace: true });
     },
-    onError: () => {
-      toast.error("Credenciales incorrectas");
+    onError: (error) => {
+      const errorMessage =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "Credenciales incorrectas";
+      toast.error(errorMessage);
     },
   });
 
