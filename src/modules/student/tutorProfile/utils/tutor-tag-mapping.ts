@@ -60,7 +60,7 @@ export const PRICE_TAG: Record<"FREE" | "PAID", TutorTag> = {
   },
   PAID: {
     bg: "#E0E0FA",
-    color: "#3A48AD",
+    color: "#6c71b1",
     fontSize: "20px",
   },
 };
