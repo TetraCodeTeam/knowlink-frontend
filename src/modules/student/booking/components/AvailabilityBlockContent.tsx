@@ -56,6 +56,8 @@ export default function AvailabilityBlockContent({
     onDeselectWindow,
   });
 
+  const canInteract = Boolean(highlightedWindow);
+
   return (
     <Box
       ref={containerRef}
@@ -68,7 +70,7 @@ export default function AvailabilityBlockContent({
         position: "relative",
         height: "100%",
         width: "100%",
-        cursor: locked && !selectedWindow ? "default" : "pointer",
+        cursor: canInteract ? "pointer" : "default",
         userSelect: "none",
         WebkitUserSelect: "none",
         opacity: isDimmedByLock ? 0.4 : 1,
@@ -89,26 +91,41 @@ export default function AvailabilityBlockContent({
       )}
       {/* Franja de 1h resaltada: ocupa solo su porción proporcional dentro
           del bloque, ya sea por hover o por selección ya confirmada. */}
-      {unavailableWindows.map((window) => (
-        <Box
-          key={`${window.start}-${window.end}`}
-          sx={{
-            position: "absolute",
-            left: 2,
-            right: 2,
-            top: `${((new Date(window.start).getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
-            height: `${
-              ((new Date(window.end).getTime() - new Date(window.start).getTime()) /
-                (blockEnd.getTime() - blockStart.getTime())) *
-              100
-            }%`,
-            bgcolor: BOOKING_STATUS_META[window.status].color,
-            border: `1px solid ${BOOKING_STATUS_META[window.status].color}`,
-            borderRadius: "6px",
-            pointerEvents: "none",
-          }}
-        />
-      ))}
+      {unavailableWindows.map((window) => {
+        const windowStart = new Date(window.start);
+        const windowEnd = new Date(window.end);
+        return (
+          <Box
+            key={`${window.start}-${window.end}`}
+            sx={{
+              position: "absolute",
+              left: 2,
+              right: 2,
+              top: `${((windowStart.getTime() - blockStart.getTime()) / (blockEnd.getTime() - blockStart.getTime())) * 100}%`,
+              height: `${
+                ((windowEnd.getTime() - windowStart.getTime()) /
+                  (blockEnd.getTime() - blockStart.getTime())) *
+                100
+              }%`,
+              bgcolor: BOOKING_STATUS_META[window.status].color,
+              border: `1px solid ${BOOKING_STATUS_META[window.status].color}`,
+              borderRadius: "6px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
+            <Typography
+              noWrap
+              sx={{ fontSize: 11, fontWeight: 700, color: "#fff", textAlign: "center", px: 0.5 }}
+            >
+              {formatRange(windowStart, windowEnd)}
+            </Typography>
+          </Box>
+        );
+      })}
 
       {highlightedWindow && highlightIndex >= 0 && (
         <Box

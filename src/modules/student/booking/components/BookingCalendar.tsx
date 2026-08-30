@@ -1,23 +1,33 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import type { EventContentArg, DayHeaderContentArg, DayCellContentArg } from "@fullcalendar/core";
+import type {
+  EventContentArg,
+  DayHeaderContentArg,
+  DayCellContentArg,
+  DatesSetArg,
+} from "@fullcalendar/core";
 import { Box, Typography } from "@mui/material";
-import { isBeforeToday, isBeforeNow } from "@/shared/utils/calendarDateUtils";
+import {
+  isBeforeToday,
+  isBeforeNow,
+  toDateStr,
+  formatWeekRangeTitle,
+  toLocalDateTimeStr,
+} from "@/shared/utils/calendarDateUtils";
 import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalendarSx";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
 import BookingStatusEventContent from "@/modules/student/booking/components/BookingStatusEventContent";
+import CalendarNavHeader from "@/shared/components/CalendarNavHeader";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
-import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
+import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/bookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { SlotDisplayStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
 import { BOOKING_STATUS_META } from "@/modules/student/booking/constants/bookingLegendConstants";
 
 const PLUGINS = [timeGridPlugin, interactionPlugin];
-const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
-const TITLE_FORMAT = { month: "long" as const, year: "numeric" as const };
 const SLOT_LABEL_FORMAT = {
   hour: "2-digit" as const,
   minute: "2-digit" as const,
@@ -25,10 +35,7 @@ const SLOT_LABEL_FORMAT = {
 };
 const DAY_LABELS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
 
-// Única fuente de verdad de "¿se puede tomar este slot?", consultada tanto
-// para pintar el evento (classNames) como para permitir el click
-// (handleEventClick). Evita que ambos criterios se desincronicen.
-function getSlotStatus(slot: MockBookingSlotEvent): SlotDisplayStatus {
+function getSlotStatus(slot: BookingSlotEvent): SlotDisplayStatus {
   if (isBeforeNow(new Date(slot.end))) return "PAST";
   if (slot.status === "BLOCKED") return "BLOCKED";
   if (slot.status === "RESERVED") return "RESERVED";
@@ -41,14 +48,16 @@ export default function BookingCalendar({
   minimumNoticeMinutes = 0,
   onSelectSlot,
   onDeselectSlot,
+  onViewedRangeChange,
 }: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
+  const [rangeLabel, setRangeLabel] = useState("");
+  const [viewedRange, setViewedRange] = useState<{ start: string; end: string }>({
+    start: "",
+    end: "",
+  });
 
-  // MOCK_BOOKING_SLOTS todavía no viene de una API, pero igual se memoiza:
-  // FullCalendar recalcula estado interno cuando cambia la *referencia* de
-  // `events`, no solo su valor, así que conviene mantener la disciplina
-  // desde ahora para cuando esto pase a venir de useQuery.
-  const events = useMemo(
+  const slotEvents = useMemo(
     () =>
       bookingSlots.map((slot) => {
         const status = getSlotStatus(slot);
@@ -71,10 +80,28 @@ export default function BookingCalendar({
     [bookingSlots]
   );
 
-  // El id de un slot reservable ahora identifica una VENTANA de 1h dentro de
-  // un bloque de disponibilidad, no el bloque completo (un mismo bloque
-  // largo puede ofrecer varias ventanas distintas). Se compone del id del
-  // bloque original + el horario exacto de inicio de la ventana.
+  // Franja que sombrea desde la medianoche del día de hoy hasta el instante
+  // actual, para orientar visualmente al alumno sobre "dónde está parado" en
+  // la semana — mismo patrón que ya usa el calendario de disponibilidad del
+  // tutor. Solo se agrega si la semana visible incluye el día de hoy.
+  const nowOverlayEvent = useMemo(() => {
+    const todayStr = toDateStr(new Date());
+    const isViewingToday = todayStr >= viewedRange.start && todayStr <= viewedRange.end;
+    if (!isViewingToday) return null;
+
+    return {
+      start: `${todayStr}T00:00:00`,
+      end: toLocalDateTimeStr(new Date()), // antes: new Date().toISOString().slice(0, 19)
+      display: "background",
+      classNames: ["fc-past-now"],
+    };
+  }, [viewedRange]);
+
+  const events = useMemo(
+    () => (nowOverlayEvent ? [...slotEvents, nowOverlayEvent] : slotEvents),
+    [slotEvents, nowOverlayEvent]
+  );
+
   const handleSelectWindow = useCallback(
     (blockId: string, window: ReservationWindow) => {
       const durationHours = (window.end.getTime() - window.start.getTime()) / (60 * 60 * 1000);
@@ -129,7 +156,6 @@ export default function BookingCalendar({
       }
 
       const legendItem = BOOKING_STATUS_META[status as keyof typeof BOOKING_STATUS_META];
-
       if (legendItem?.description) {
         return (
           <BookingStatusEventContent timeText={arg.timeText} message={legendItem.description} />
@@ -150,7 +176,6 @@ export default function BookingCalendar({
         <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
           {DAY_LABELS[date.getDay()]}
         </Typography>
-
         <Box
           sx={{
             width: 32,
@@ -176,6 +201,19 @@ export default function BookingCalendar({
     []
   );
 
+  const handleDatesSetInternal = useCallback(
+    (arg: DatesSetArg) => {
+      const inclusiveEnd = new Date(arg.end);
+      inclusiveEnd.setDate(inclusiveEnd.getDate() - 1);
+      setRangeLabel(formatWeekRangeTitle(arg.start, inclusiveEnd));
+
+      const range = { start: toDateStr(arg.start), end: toDateStr(inclusiveEnd) };
+      setViewedRange(range);
+      onViewedRangeChange(range); // 👈 nuevo
+    },
+    [onViewedRangeChange]
+  );
+
   return (
     <Box
       sx={{
@@ -186,29 +224,28 @@ export default function BookingCalendar({
         minHeight: 0,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: 2,
-        }}
-      >
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 2 }}>
         <BookingCalendarLegend />
       </Box>
+
+      <CalendarNavHeader
+        label={rangeLabel}
+        onPrev={() => calendarRef.current?.getApi().prev()}
+        onNext={() => calendarRef.current?.getApi().next()}
+      />
 
       <Box sx={{ flex: 1, minHeight: 0 }}>
         <FullCalendar
           ref={calendarRef}
           plugins={PLUGINS}
           initialView="timeGridWeek"
-          headerToolbar={HEADER_TOOLBAR}
-          titleFormat={TITLE_FORMAT}
+          headerToolbar={false}
+          datesSet={handleDatesSetInternal}
           dayHeaderContent={dayHeaderContent}
           dayCellClassNames={dayCellClassNames}
           allDaySlot={false}
           slotMinTime="08:00:00"
-          slotMaxTime="21:00:00"
+          slotMaxTime="23:00:00"
           slotDuration="00:30:00"
           slotLabelInterval="01:00:00"
           slotLabelFormat={SLOT_LABEL_FORMAT}
