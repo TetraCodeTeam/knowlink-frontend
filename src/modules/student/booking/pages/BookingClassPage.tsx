@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import BookingCard from "@/modules/student/booking/components/BookingCard";
@@ -13,11 +13,21 @@ export default function BookingClassPage() {
   const { tutorId = "" } = useParams<{ tutorId: string }>();
   const [slot, setSlot] = useState<BookingSlot | null>(null);
 
-  const monday = getCurrentWeekMonday();
-  const from = toDateStr(monday);
-  const rangeEnd = getWeekEnd(monday);
-  rangeEnd.setDate(rangeEnd.getDate() + WEEKS_AHEAD * 7);
-  const to = toDateStr(rangeEnd);
+  const currentMonday = useMemo(() => getCurrentWeekMonday(), []);
+  const fixedFrom = toDateStr(currentMonday);
+  const fixedTo = useMemo(() => {
+    const rangeEnd = getWeekEnd(currentMonday);
+    rangeEnd.setDate(rangeEnd.getDate() + WEEKS_AHEAD * 7);
+    return toDateStr(rangeEnd);
+  }, [currentMonday]);
+
+  // Rango real a consultar: el fijo inicial, o el que abarque la semana que
+  // el alumno esté mirando en este momento, lo que sea más amplio — mismo
+  // criterio que ya usamos en useAvailabilityDraft del lado del tutor.
+  const [viewedRange, setViewedRange] = useState({ start: fixedFrom, end: fixedTo });
+
+  const from = viewedRange.start < fixedFrom ? viewedRange.start : fixedFrom;
+  const to = viewedRange.end > fixedTo ? viewedRange.end : fixedTo;
 
   const { bookingSlots, minimumNoticeMinutes, holdSlot, reserveSlot, releaseSlot } =
     useBookingRealtime(tutorId, from, to);
@@ -36,8 +46,7 @@ export default function BookingClassPage() {
     try {
       await releaseSlot(slot);
     } catch {
-      // liberar es best-effort — si falla igual limpiamos la selección local,
-      // el hold del lado del servidor va a expirar solo a los 15 min.
+      // liberar es best-effort — si falla igual limpiamos la selección local
     } finally {
       setSlot(null);
     }
@@ -52,6 +61,7 @@ export default function BookingClassPage() {
           selectedSlot={slot}
           onSelectSlot={(nextSlot) => void handleSelectSlot(nextSlot)}
           onDeselectSlot={() => void handleDeselectSlot()}
+          onViewedRangeChange={setViewedRange}
         />
       </Box>
       <BookingCard

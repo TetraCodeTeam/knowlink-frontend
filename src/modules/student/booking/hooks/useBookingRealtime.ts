@@ -16,7 +16,7 @@ import type { BookingFormValues } from "@/modules/student/booking/schemas/bookin
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/bookingSlotStatusEvent.interface";
 import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
-import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
+import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/bookingSlotEventType";
 
 // Clave "slotId|windowStart|windowEnd" -> ventana pisada localmente por un
 // evento (SSE o publicación optimista propia), aplicada por encima de lo
@@ -28,7 +28,7 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
   const [overrides, setOverrides] = useState<WindowOverrides>({});
   const queryClient = useQueryClient();
 
-  const bookingSlots: MockBookingSlotEvent[] = useMemo(() => {
+  const bookingSlots: BookingSlotEvent[] = useMemo(() => {
     const baseSlots = data?.slots ?? [];
 
     return baseSlots.map((slot) => {
