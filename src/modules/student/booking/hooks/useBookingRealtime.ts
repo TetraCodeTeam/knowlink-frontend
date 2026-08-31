@@ -32,7 +32,9 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
     const baseSlots = data?.slots ?? [];
 
     return baseSlots.map((slot) => {
-      const relevantOverrides = Object.entries(overrides).filter(([key]) => key.startsWith(`${slot.id}|`));
+      const relevantOverrides = Object.entries(overrides).filter(([key]) =>
+        key.startsWith(`${slot.id}|`)
+      );
       if (relevantOverrides.length === 0) return slot;
 
       let nextWindows = [...(slot.unavailableWindows ?? [])];
@@ -52,13 +54,16 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
       const blockId = getBookingBlockId(event.slotId);
       const key = `${blockId}|${event.windowStart}|${event.windowEnd}`;
 
-      setOverrides((current) => ({
-        ...current,
-        [key]:
-          event.status === "AVAILABLE"
-            ? null
-            : { start: event.windowStart!, end: event.windowEnd!, status: event.status },
-      }));
+      setOverrides((current) => {
+        if (event.status === "AVAILABLE") {
+          const { [key]: _removed, ...rest } = current;
+          return rest;
+        }
+        return {
+          ...current,
+          [key]: { start: event.windowStart!, end: event.windowEnd!, status: event.status },
+        };
+      });
     };
 
     const handleLocalEvent = (event: Event) => {
@@ -76,11 +81,21 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
 
   const holdSlot = async (slot: BookingSlot) => {
     const blockId = getBookingBlockId(slot.id);
-    publishBookingSlotStatus({ slotId: blockId, status: "BLOCKED", windowStart: slot.startIso, windowEnd: slot.endIso });
+    publishBookingSlotStatus({
+      slotId: blockId,
+      status: "BLOCKED",
+      windowStart: slot.startIso,
+      windowEnd: slot.endIso,
+    });
     try {
       await holdBookingSlot(tutorId, slot);
     } catch (error) {
-      publishBookingSlotStatus({ slotId: blockId, status: "AVAILABLE", windowStart: slot.startIso, windowEnd: slot.endIso });
+      publishBookingSlotStatus({
+        slotId: blockId,
+        status: "AVAILABLE",
+        windowStart: slot.startIso,
+        windowEnd: slot.endIso,
+      });
       throw error;
     }
   };
