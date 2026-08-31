@@ -12,11 +12,16 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import { buildMateriaTutorsRoute, buildTutorProfileRoute, TUTOR_ROLE } from "../constants";
+import {
+  buildMateriaTutorsRoute,
+  buildSearchResultsRoute,
+  buildTutorProfileRoute,
+  MAX_SEARCH_SUGGESTIONS,
+  TUTOR_ROLE,
+} from "../constants";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
-import { SubjectSummary } from "../interfaces/tutor-search-result.interface";
+import { deriveMateriasFromTutors } from "../utils/derive-materias";
 import SearchResultsPanel from "./SearchResultsPanel";
-
 
 const SEARCH_BAR_PLACEHOLDER = "Busca tutores, materias";
 const SEARCH_BAR_MAX_WIDTH = 760;
@@ -69,21 +74,7 @@ export default function SearchBar() {
   const { data, isFetching } = useSearchTutorsAndMaterias(inputValue);
   const tutors = useMemo(() => (Array.isArray(data) ? data : []), [data]);
 
-  // El backend solo matchea por nombre de materia (ver search.api.ts), así
-  // que las "Materias" se derivan de las subjects que cada tutor trajo como
-  // coincidencia, deduplicadas por nombre (case-insensitive).
-  const materias = useMemo(() => {
-    const seen = new Map<string, SubjectSummary>();
-    for (const tutor of tutors) {
-      for (const subject of tutor.subjects) {
-        const key = subject.name.trim().toLowerCase();
-        if (!seen.has(key)) {
-          seen.set(key, subject);
-        }
-      }
-    }
-    return [...seen.values()].sort((a, b) => a.name.localeCompare(b.name));
-  }, [tutors]);
+  const materias = useMemo(() => deriveMateriasFromTutors(tutors), [tutors]);
 
   const showPanel = open && inputValue.trim().length > 0;
 
@@ -138,7 +129,15 @@ export default function SearchBar() {
           onChange={(event) => setInputValue(event.target.value)}
           onFocus={() => setOpen(true)}
           onKeyDown={(event) => {
-            if (event.key === "Escape") setOpen(false);
+            if (event.key === "Escape") {
+              setOpen(false);
+              return;
+            }
+            if (event.key === "Enter" && inputValue.trim().length > 0) {
+              event.preventDefault();
+              navigate(buildSearchResultsRoute(inputValue.trim()));
+              setOpen(false);
+            }
           }}
           placeholder={SEARCH_BAR_PLACEHOLDER}
           aria-label={SEARCH_BAR_PLACEHOLDER}
@@ -162,8 +161,8 @@ export default function SearchBar() {
         >
           <SearchResultsPanel
             query={inputValue}
-            materias={materias}
-            tutors={tutors}
+            materias={materias.slice(0, MAX_SEARCH_SUGGESTIONS)}
+            tutors={tutors.slice(0, MAX_SEARCH_SUGGESTIONS)}
             loading={isFetching}
             onSelectMateria={handleSelectMateria}
             onSelectTutor={handleSelectTutor}

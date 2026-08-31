@@ -3,7 +3,7 @@ import type { Modality } from "@/modules/student/booking/constants/modality.cons
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
-import type { MockBookingSlotEvent } from "@/modules/student/booking/interfaces/mockBookingSlotEventType";
+import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/bookingSlotEventType";
 
 export interface AvailabilityBlockContentProps {
   blockStart: Date;
@@ -14,13 +14,16 @@ export interface AvailabilityBlockContentProps {
   locked: boolean;
   onHoverWindow: (window: ReservationWindow | null) => void;
   onSelectWindow: (window: ReservationWindow) => void;
+  onDeselectWindow: () => void;
 }
 
 export interface BookingCalendarProps {
   selectedSlot: BookingSlot | null;
-  bookingSlots?: MockBookingSlotEvent[];
+  bookingSlots?: BookingSlotEvent[];
   minimumNoticeMinutes?: number;
   onSelectSlot: (slot: BookingSlot) => void;
+  onDeselectSlot: () => void;
+  onViewedRangeChange: (range: { start: string; end: string }) => void;
 }
 
 export interface BookingCardProps {
@@ -28,6 +31,7 @@ export interface BookingCardProps {
   onReserveBooking?: (slot: BookingSlot, data: BookingFormValues) => Promise<void>;
   onReleaseBooking?: (slot: BookingSlot) => Promise<void>;
   onCancelSelectedSlot?: () => void;
+  tutorId: string;
 }
 
 export interface BookingSlotSelectionSummaryProps {

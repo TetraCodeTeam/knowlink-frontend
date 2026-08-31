@@ -15,7 +15,7 @@ export const BOOKING_STATUS_META: Record<BookingStatusKey, BookingLegendItem> = 
   },
   RESERVED: {
     label: "Reservado",
-    color: "#b3b5c0",
+    color: "#64748b",
     description: "Reservado por otro estudiante. Este horario ya no está disponible.",
   },
   PAST: {

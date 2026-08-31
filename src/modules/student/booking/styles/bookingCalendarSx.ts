@@ -15,6 +15,13 @@ const PAST_COLOR = BOOKING_STATUS_META.PAST.color;
 export const bookingCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
+  "& .fc-bg-event.fc-past-now": {
+    bgcolor: "rgba(138, 138, 163, 0.1) !important",
+    borderBottom: "2px solid #5B6ED9",
+    pointerEvents: "none",
+    zIndex: "5 !important",
+  },
+
   "& .fc-toolbar-title": {
     fontSize: "1.35rem",
     textAlign: "center",
@@ -45,7 +52,7 @@ export const bookingCalendarSx: SxProps<Theme> = {
   "& .fc-event.booking-slot-reserved": {
     bgcolor: `${RESERVED_COLOR} !important`,
     borderColor: `${RESERVED_COLOR} !important`,
-    color: "#4d4d5d !important",
+    color: "#ffffff !important",
     boxShadow: "none",
     cursor: "not-allowed",
     opacity: "1 !important",

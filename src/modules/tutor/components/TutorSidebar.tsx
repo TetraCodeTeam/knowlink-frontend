@@ -6,7 +6,6 @@ import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
-import React from "react";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 

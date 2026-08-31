@@ -1,6 +1,9 @@
 import { Avatar, Box, Card, CardActionArea, Chip, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import type { TutorSearchResult } from "../interfaces/tutor-search-result.interface";
+import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
+
+const BRAND_COLOR = "#5865C8";
+const ICON_BOX_BG = "#EDEBFA";
 
 interface TutorResultCardProps {
   tutor: TutorSearchResult;
@@ -16,14 +19,23 @@ export default function TutorResultCard({ tutor, onClick }: TutorResultCardProps
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1.5 }}>
           <Avatar
             src={tutor.photoProfile ?? undefined}
-            sx={{ width: 56, height: 56, flexShrink: 0 }}
+            sx={{
+              width: 56,
+              height: 56,
+              flexShrink: 0,
+              backgroundColor: ICON_BOX_BG,
+              color: BRAND_COLOR,
+              fontWeight: 600,
+            }}
           >
             {tutor.fullName.charAt(0).toUpperCase()}
           </Avatar>
+
           <Box sx={{ minWidth: 0 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 600 }} noWrap>
               {tutor.fullName}
             </Typography>
+
             {hasRating ? (
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                 <StarIcon sx={{ color: "#FBBF24", fontSize: 16 }} />
@@ -44,9 +56,21 @@ export default function TutorResultCard({ tutor, onClick }: TutorResultCardProps
             )}
           </Box>
         </Box>
+
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
           {tutor.subjects.map((subject) => (
-            <Chip key={subject.name} label={subject.name} size="small" variant="outlined" />
+            <Chip
+              key={subject.name}
+              label={subject.name}
+              size="small"
+              variant="outlined"
+              sx={{
+                backgroundColor: ICON_BOX_BG,
+                color: BRAND_COLOR,
+                borderColor: BRAND_COLOR,
+                fontWeight: 500,
+              }}
+            />
           ))}
         </Box>
       </CardActionArea>
