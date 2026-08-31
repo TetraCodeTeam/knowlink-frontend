@@ -18,7 +18,7 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
           <Stack direction="row" spacing={1} alignItems="center">
             <BookOpen size={18} color="#5865C8" />
-            <Typography variant="h5" fontWeight={600}>
+            <Typography variant="h5" fontWeight={500}>
               Materias y Tarifas
             </Typography>
           </Stack>

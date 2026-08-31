@@ -37,6 +37,7 @@ export interface TutorProfileApiResponse {
   biography: string | null;
   career: string | null;
   profilePictureUrl: string | null;
+  address: string | null; // 👈 nuevo
   verified: boolean;
   averageRating: number | null;
   subjects: TutorSubjectApiResponse[];

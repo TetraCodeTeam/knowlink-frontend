@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
-import { buildTutorProfileRoute } from "../constants";
-import TutorResultCard from "../components/TutorResultCard";
+import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
+import { buildTutorProfileRoute } from "@/modules/student/constants";
+import TutorResultCard from "@/modules/student/components/TutorResultCard";
 
 export default function TutoresPorMateriaPage() {
   const [searchParams] = useSearchParams();

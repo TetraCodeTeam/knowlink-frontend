@@ -3,13 +3,15 @@ import { toast } from "sonner";
 import { useAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useAvailabilityBlocks";
 import { useSaveAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useSaveAvailabilityBlocks";
 import {
+  getEarliestSelectableTime,
+  normalizeBlocks,
+} from "@/modules/tutor/availability/utils/availability.utils";
+import {
   getCurrentWeekMonday,
   getWeekEnd,
   toDateStr,
   isBeforeNow,
-  getEarliestSelectableTime,
-  normalizeBlocks,
-} from "@/modules/tutor/availability/utils/availability.utils";
+} from "@/shared/utils/calendarDateUtils";
 import { useWeekCustomization } from "@/modules/tutor/availability/hooks/useWeekCustomization";
 import { useRemoveWeekCustomization } from "@/modules/tutor/availability/hooks/useRemoveWeekCustomization";
 import type { AvailabilityBlockRequest } from "@/modules/tutor/availability/interfaces/requests/availability-block.interface";
