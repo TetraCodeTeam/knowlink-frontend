@@ -29,7 +29,7 @@ export default function TutoresPorMateriaPage() {
       ) : (
         <Grid container spacing={3}>
           {tutores.map((tutor) => (
-            <Grid key={tutor.tutorId} size={{ xs: 12, sm: 6, md: 4 }}>
+            <Grid key={tutor.tutorId} size={{ xs: 12, sm: 6, md: 4 }} sx={{ borderRadius: 1 }}>
               <TutorResultCard
                 tutor={tutor}
                 onClick={() => navigate(buildTutorProfileRoute(tutor.tutorId))}
