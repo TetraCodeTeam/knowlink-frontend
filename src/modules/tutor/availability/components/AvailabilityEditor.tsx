@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -19,7 +19,7 @@ import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/co
 import CalendarNavHeader from "@/shared/components/CalendarNavHeader";
 import { calendarBaseSx } from "@/shared/styles/calendarBaseSx";
 import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
-import { isBeforeToday, formatWeekRangeTitle } from "@/shared/utils/calendarDateUtils";
+import { isBeforeToday, formatWeekRangeTitle, toDateStr, getCurrentWeekMonday } from "@/shared/utils/calendarDateUtils";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { Trash2 } from "lucide-react";
 
@@ -60,8 +60,6 @@ export default function AvailabilityEditor() {
     cancelClearWeek,
     isInheritedRepeat,
   } = useAvailabilityDraft();
-
-  const validRange = useMemo(() => ({ start: currentMondayStr }), [currentMondayStr]);
 
   const handleSelect = useCallback(
     (info: DateSelectArg) => {
@@ -119,7 +117,7 @@ export default function AvailabilityEditor() {
         plugins={PLUGINS}
         initialView="timeGridWeek"
         initialDate={currentMondayStr}
-        validRange={validRange}
+        validRange={{ start: toDateStr(getCurrentWeekMonday()) }}
         headerToolbar={false}
         datesSet={handleDatesSetInternal}
         dayHeaderContent={dayHeaderContent}
