@@ -23,4 +23,5 @@ export interface TutorOwnProfileResponse {
   averageRating: number | null;
   biography: string | null;
   subjects: TutorOwnSubject[];
+  hasStudentProfile: boolean;
 }
