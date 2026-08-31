@@ -19,7 +19,7 @@ export default function StudentRoutes() {
         <Route path="profile" element={<OwnProfilePage />} />
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
         <Route path="tutor/:tutorId/disponibilidad" element={<UnderConstructionPage />} />
-        <Route path="tutor/:tutorId/booking" element={<BookingPreviewPage />} />{" "}
+        <Route path="tutor/:tutorId/booking" element={<BookingPreviewPage />} />
         <Route path="tutores" element={<TutoresPorMateriaPage />} />
       </Route>
     </Routes>

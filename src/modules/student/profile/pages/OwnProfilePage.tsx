@@ -1,6 +1,4 @@
-import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
-
-import { AccountManagementCard } from "@/modules/student/profile/components/AccountManagementCard";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { PersonalDataCard } from "@/modules/student/profile/components/PersonalDataCard";
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import { RoleCard as TutorRoleCard } from "@/shared/components/RoleCard";

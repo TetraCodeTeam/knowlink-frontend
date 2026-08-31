@@ -1,6 +1,6 @@
 import { Avatar, Box, Card, CardActionArea, Chip, Typography } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
-import type { TutorSearchResult } from "../interfaces/tutor-search-result.interface";
+import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
 
 interface TutorResultCardProps {
   tutor: TutorSearchResult;

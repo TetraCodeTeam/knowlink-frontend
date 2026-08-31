@@ -4,7 +4,7 @@ import { httpClient } from "@/shared/lib/httpClient";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import type { BookingRequest } from "@/modules/student/booking/interfaces/requests/bookingRequest.interface";
-import { BookingCalendarApiResponse } from "../interfaces/responses/bookingCalendar.interface";
+import type { BookingCalendarApiResponse } from "@/modules/student/booking/interfaces/responses/bookingCalendar.interface";
 
 export function getBookingBlockId(slotId: string): string {
   return slotId.split("__")[0];
