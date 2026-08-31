@@ -22,3 +22,8 @@ export function buildTutorProfileRoute(tutorId: string): string {
   return `/student/tutor/${tutorId}`;
 }
 
+export function buildSearchResultsRoute(query: string): string {
+  return `/student/buscar?q=${encodeURIComponent(query)}`;
+}
+
+export const MAX_SEARCH_SUGGESTIONS = 4;
