@@ -5,7 +5,7 @@ import { OwnProfilePage } from "@/modules/student/profile/pages/OwnProfilePage";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
 import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
-import { TutorProfilePage } from "@/modules/student/pages/ViewTutorProfile";
+import { TutorProfilePage } from "@/modules/student/tutorProfile/pages/ViewTutorProfile";
 import BookingPreviewPage from "@/modules/student/booking/pages/BookingClassPage";
 
 export default function StudentRoutes() {

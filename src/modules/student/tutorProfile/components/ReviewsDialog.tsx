@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import { MessageSquare, X } from "lucide-react";
-import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
-import { ReviewItem } from "@/modules/tutor/components/ReviewItem";
-import { useReviewDialogStore } from "@/modules/tutor/hooks/useReviewDialogStore";
-import { SubjectFilterBar } from "@/modules/tutor/components/SubjectFilterBar";
+import type { TutorReview } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { ReviewItem } from "@/modules/student/tutorProfile/components/ReviewItem";
+import { useReviewDialogStore } from "@/modules/student/tutorProfile/hooks/useReviewDialogStore";
+import { SubjectFilterBar } from "@/modules/student/tutorProfile/components/SubjectFilterBar";
 
 interface ReviewsDialogProps {
   reviews: TutorReview[];
@@ -17,7 +17,11 @@ export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
   const filteredReviews = canFilterBySubject && subjectFilter ? reviews.filter((review) => review.subject === subjectFilter) : reviews;
 
   return (
-    <Dialog open={isOpen} onClose={closeDialog} maxWidth="sm" fullWidth scroll="paper">
+    <Dialog open={isOpen} onClose={closeDialog} maxWidth="sm" fullWidth scroll="paper" slotProps={{
+      paper: {
+        sx: { borderRadius: 3 },
+      },
+    }}>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <MessageSquare size={20} color="#5865C8" />

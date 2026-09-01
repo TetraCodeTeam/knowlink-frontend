@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import { BookOpen, X } from "lucide-react";
-import type { TutorSubjectRate } from "@/modules/tutor/interfaces/tutor.interface";
-import { SubjectRateItem } from "@/modules/tutor/components/SubjectItem";
+import type { TutorSubjectRate } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { SubjectRateItem } from "@/modules/student/tutorProfile/components/SubjectItem";
 
 interface SubjectsDialogProps {
   open: boolean;
@@ -11,11 +11,15 @@ interface SubjectsDialogProps {
 
 export const SubjectsDialog = ({ open, onClose, subjectRates }: SubjectsDialogProps) => {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth slotProps={{
+      paper: {
+        sx: { borderRadius: 3 },
+      },
+    }}>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <BookOpen size={20} color="#5865C8" />
-          <Typography variant="h6" fontWeight={600}>
+          <BookOpen size={25} color="#5865C8" />
+          <Typography variant="h6" fontWeight={500}>
             Materias y Tarifas
           </Typography>
         </Stack>
