@@ -100,7 +100,7 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     name: api.fullName,
     avatarUrl: api.profilePictureUrl ?? null,
     rating: api.averageRating ?? 0,
-    address: api.address ?? null, // 👈 nuevo
+    address: api.address ?? null, 
     reviewsCount: reviewsApi.length,
     subjects: subjects.map((m) => m.subjectName),
     about: api.biography ?? "",

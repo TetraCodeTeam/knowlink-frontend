@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { TutorProfileHeader } from "@/modules/student/tutorProfile/components/TutorProfileHeader";
@@ -11,6 +11,7 @@ import { ReviewsDialog } from "@/modules/student/tutorProfile/components/Reviews
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
+  const navigate = useNavigate();
   const { data: tutor, isLoading, isError } = useTutorProfile(tutorId ?? "");
 
   if (isLoading) {
