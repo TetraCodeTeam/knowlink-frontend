@@ -30,7 +30,7 @@ export const TutorProfilePage = () => {
   }
 
   const handleReservar = () => {
-    // TODO: conectar con el flujo de reserva (modulo "reservas")
+    navigate(`/student/tutor/${tutorId}/booking`);
   };
 
   return (

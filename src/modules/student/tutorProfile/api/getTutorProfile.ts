@@ -3,6 +3,7 @@ import type {
   TutorSubjectRate,
   TutorReview,
   TutorMaterialItem,
+  RawModality,
 } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import type { TutorProfileApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
@@ -71,6 +72,8 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     price: m.pricePerHour ?? 0,
     isFree: m.compensationType === "FREE" || !m.pricePerHour,
     modalities: normalizeModality(m.modality),
+    rawModality: m.modality as RawModality,
+
     isVerified: isSubjectVerified(m.verificationStatus, api.verified),
   }));
 
@@ -97,6 +100,7 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     name: api.fullName,
     avatarUrl: api.profilePictureUrl ?? null,
     rating: api.averageRating ?? 0,
+    address: api.address ?? null, // 👈 nuevo
     reviewsCount: reviewsApi.length,
     subjects: subjects.map((m) => m.subjectName),
     about: api.biography ?? "",

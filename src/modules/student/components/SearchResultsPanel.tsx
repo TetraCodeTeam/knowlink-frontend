@@ -7,7 +7,6 @@ import { SubjectSummary, TutorSearchResult } from "../interfaces/tutor-search-re
 import { getCareerIcon } from "../icons/career-icon";
 import { highlightMatch } from "./highlight-match";
 
-
 const BRAND_COLOR = "#5865C8";
 const ICON_BOX_BG = "#EDEBFA";
 
@@ -91,20 +90,34 @@ function TutorRow({ tutor, query, onClick }: TutorRowProps) {
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 1.5,
+        justifyContent: "flex-start",
+        alignSelf: "flex-start",
         width: "100%",
+        gap: 1.5,
         textAlign: "left",
         borderRadius: 2,
         padding: 0.5,
       }}
     >
-      <Avatar src={tutor.photoProfile ?? undefined} sx={{ width: 40, height: 40, flexShrink: 0 }}>
+      <Avatar
+        src={tutor.photoProfile ?? undefined}
+        sx={{
+          width: 40,
+          height: 40,
+          flexShrink: 0,
+          backgroundColor: ICON_BOX_BG,
+          color: BRAND_COLOR,
+          fontWeight: 600,
+        }}
+      >
         {tutor.fullName.charAt(0).toUpperCase()}
       </Avatar>
+
       <Box sx={{ minWidth: 0 }}>
         <Typography variant="body2" sx={{ color: "text.primary", fontWeight: 500 }} noWrap>
           {highlightMatch(tutor.fullName, query)}
         </Typography>
+
         {hasRating ? (
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <StarIcon sx={{ color: "#FBBF24", fontSize: 16 }} />
@@ -193,15 +206,32 @@ export default function SearchResultsPanel({
             </Box>
           )}
 
-          {hasMaterias && hasTutors && <Divider orientation="vertical" flexItem sx={{ my: 3 }} />}
+          {hasMaterias && hasTutors && <Divider orientation="vertical" flexItem sx={{ my: 1 }} />}
 
           {hasTutors && (
-            <Box sx={{ flex: 1, p: 3, minWidth: 0, maxHeight: 420, overflowY: "auto" }}>
+            <Box
+              sx={{
+                flex: 1,
+                p: 3,
+                minWidth: 0,
+                maxHeight: 420,
+                overflowY: "auto",
+                width: 0,
+              }}
+            >
               <SectionHeader
                 icon={<PersonOutlineIcon sx={{ color: "text.secondary" }} />}
                 label="Tutores"
               />
-              <Stack spacing={2} sx={{ mt: 2 }}>
+
+              <Stack
+                spacing={2}
+                sx={{
+                  mt: 2,
+                  width: "100%",
+                  alignItems: "stretch",
+                }}
+              >
                 {tutors.map((tutor) => (
                   <TutorRow
                     key={tutor.tutorId}

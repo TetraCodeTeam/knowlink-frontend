@@ -18,13 +18,14 @@ import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import DataItem from "@/modules/tutor/profile/components/DataItem";
 import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";
 import PaymentSection from "@/modules/tutor/profile/components/PaymentSection";
-import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
+import MaterialsSection from "@/modules/tutor/materials/components/MaterialsSection";
 import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
 import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
 import AddSubjectModal from "@/modules/tutor/components/AddSubjectModal";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";
+import StudentRoleCard from "@/modules/tutor/dual-role/components/StudentRoleCard";
 
 export default function TutorProfilePage() {
   const queryClient = useQueryClient();
@@ -200,13 +201,14 @@ export default function TutorProfilePage() {
 
       {/* ── Tab: Personal information ────────────────────────────── */}
       {activeTab === 0 && (
-        <Box
-          sx={{
-            backgroundColor: "#fff",
-            borderRadius: "16px",
-            boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
-          }}
-        >
+        <>
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              borderRadius: "16px",
+              boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
+            }}
+          >
           <Box sx={{ display: "flex", alignItems: "stretch", p: "36px 40px" }}>
             <Box sx={{ flex: "0 0 40%", pr: "16px" }}>
               <Typography sx={{ ...SECTION_LABEL_SX, mb: "26px" }}>Datos personales</Typography>
@@ -266,6 +268,10 @@ export default function TutorProfilePage() {
             </Box>
           </Box>
         </Box>
+        <Box sx={{ mt: 2 }}>
+          <StudentRoleCard hasStudentProfile={profile.hasStudentProfile} />
+        </Box>
+        </>
       )}
 
       {/* ── Tab: Subjects ────────────────────────────────────────── */}
@@ -332,13 +338,10 @@ export default function TutorProfilePage() {
             backgroundColor: "#fff",
             borderRadius: "16px",
             boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
-            minHeight: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            p: "28px 32px",
           }}
         >
-          <UnderConstructionPage />
+          <MaterialsSection />
         </Box>
       )}
       {feedbackDialog}

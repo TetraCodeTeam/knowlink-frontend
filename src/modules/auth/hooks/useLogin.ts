@@ -6,8 +6,8 @@ import { loginUser } from "@/modules/auth/api/auth.api";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
 const ROLE_REDIRECT: Record<string, string> = {
-  STUDENT: "/student/home",
-  TUTOR: "/tutor/home",
+  STUDENT: "/student/profile",
+  TUTOR: "/tutor/profile",
 };
 
 export function useLogin() {

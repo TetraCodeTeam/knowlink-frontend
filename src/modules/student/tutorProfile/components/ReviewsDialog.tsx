@@ -44,7 +44,7 @@ export const ReviewsDialog = ({ reviews }: ReviewsDialogProps) => {
           {filteredReviews.length > 0 ? (
             filteredReviews.map((review) => <ReviewItem key={review.id} review={review} showSubject={false} />)
           ) : (
-            <Typography variant="body2" color="text.secondary" textAlign="center" py={3}>
+            <Typography variant="subtitle2" color="text.secondary" textAlign="center" py={3}>
               No hay reseñas para esta materia todavía.
             </Typography>
           )}
