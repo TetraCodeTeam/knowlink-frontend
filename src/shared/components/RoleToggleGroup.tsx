@@ -21,10 +21,11 @@ export default function RoleToggleGroup({
 }: RoleToggleGroupProps) {
   return (
     <ToggleButtonGroup
+      aria-label="Seleccionar rol"
       exclusive
       fullWidth
       value={value}
-      onChange={(_, newValue) => newValue && onChange(newValue)}
+      onChange={(_, newValue: Role | null) => newValue && onChange(newValue)}
       sx={{ gap: 1.5 }}
     >
       {(Object.entries(ROLE_CONTENT) as [Role, (typeof ROLE_CONTENT)[Role]][]).map(
