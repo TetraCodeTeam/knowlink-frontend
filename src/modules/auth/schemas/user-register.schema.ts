@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ROLE_VALUES } from "@/shared/types/role.type";
 
 export const registerSchema = z
   .object({
@@ -11,7 +12,7 @@ export const registerSchema = z
         "Usá mayúsculas, minúsculas y un carácter especial"
       ),
     confirmPassword: z.string().min(1, "Debés confirmar la contraseña"),
-    role: z.enum(["STUDENT", "TUTOR"], { error: "El rol es obligatorio" }),
+    role: z.enum(ROLE_VALUES, { error: "El rol es obligatorio" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",

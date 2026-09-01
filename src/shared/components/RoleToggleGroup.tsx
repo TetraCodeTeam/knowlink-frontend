@@ -1,7 +1,6 @@
 import { BookSearch, NotebookPen } from "lucide-react";
 import { ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-
-export type Role = "TUTOR" | "STUDENT";
+import type { Role } from "@/shared/types/role.type";
 
 const ROLE_CONTENT: Record<Role, { icon: typeof NotebookPen; label: string; description: string }> = {
   TUTOR: { icon: NotebookPen, label: "Tutor", description: "Ofrecer clases" },

@@ -1,10 +1,11 @@
 import { create } from "zustand";
+import type { Role } from "@/shared/types/role.type";
 
 interface RegistrationCredentials {
   email: string;
   password: string;
   confirmPassword: string;
-  role: "STUDENT" | "TUTOR";
+  role: Role;
 }
 
 interface RegistrationStore {
