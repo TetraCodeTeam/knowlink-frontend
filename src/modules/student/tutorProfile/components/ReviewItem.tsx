@@ -1,5 +1,5 @@
 import { Avatar, Box, Rating, Stack, Typography } from "@mui/material";
-import type { TutorReview } from "@/modules/tutor/interfaces/tutor.interface";
+import type { TutorReview } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 
 interface ReviewItemProps {
   review: TutorReview;
@@ -37,7 +37,7 @@ export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
             {review.subject}
           </Typography>
         )}
-        <Typography variant="subtitle1">"{review.comment}"</Typography>
+        <Typography variant="subtitle1">&quot;{review.comment}&quot;</Typography>
       </Box>
     </Box>
   );

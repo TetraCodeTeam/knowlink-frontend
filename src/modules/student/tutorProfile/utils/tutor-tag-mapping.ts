@@ -1,4 +1,4 @@
-import type { Modalidad } from "@/modules/tutor/interfaces/tutor.interface";
+import type { Modalidad } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { LibraryBig, Monitor, ShieldCheck, type LucideIcon } from "lucide-react";
 
 type TutorTag = {
@@ -11,7 +11,7 @@ type TutorTag = {
 export const TUTOR_SUBJECT_TAG: TutorTag = {
   bg: "#E0E0FA",
   color: "#494949",
-  fontSize: "18px",
+  fontSize: "17px",
 };
 
 export const TUTOR_STATUS_DISPLAY_NAME = {
@@ -54,13 +54,13 @@ export const MODALITY: Record<ModalityDisplay, TutorTag> = {
 
 export const PRICE_TAG: Record<"FREE" | "PAID", TutorTag> = {
   FREE: {
-    bg: "#E5F8EA",
-    color: "#1F7A3E",
+    bg: "#e0fae4",
+    color: "#88bb96",
     fontSize: "20px",
   },
   PAID: {
     bg: "#E0E0FA",
-    color: "#3A48AD",
+    color: "#6c71b1",
     fontSize: "20px",
   },
 };

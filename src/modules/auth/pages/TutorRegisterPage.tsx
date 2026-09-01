@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
 import RegistrationStepper from "@/modules/auth/components/RegistrationStepper";
 import TutorRegisterWizard from "@/modules/auth/components/tutor-register/TutorRegisterWizard";
@@ -8,9 +8,12 @@ import { Box } from "@mui/material";
 
 export default function TutorRegisterPage() {
   const [credentials] = useState(() => useRegistrationStore.getState().credentials);
+  const location = useLocation();
+  const isDualRole = (location.state as { startAtStep?: number } | null)?.startAtStep === 2;
+  const dualRoleCareer = (location.state as { career?: string } | null)?.career ?? "";
   const [currentStep, setCurrentStep] = useState(1);
 
-  if (!credentials) {
+  if (!isDualRole && !credentials) {
     return <Navigate to="/auth/register" replace />;
   }
 
@@ -26,15 +29,14 @@ export default function TutorRegisterPage() {
   return (
     <AuthLayout
       illustration={illustration}
-      stepper={<RegistrationStepper currentStep={currentStep} totalSteps={4} />}
+      stepper={<RegistrationStepper currentStep={currentStep} totalSteps={isDualRole ? 1 : 3} />}
     >
       <TutorRegisterWizard
-        credentials={{
-          email: credentials.email,
-          password: credentials.password,
-          confirmPassword: credentials.confirmPassword,
-        }}
-        onStepChange={setCurrentStep}
+        credentials={credentials ?? { email: "", password: "", confirmPassword: "" }}
+        onStepChange={isDualRole ? () => {} : setCurrentStep}
+        initialStep={isDualRole ? 2 : 1}
+        isDualRole={isDualRole}
+        dualRoleCareer={dualRoleCareer}
       />
     </AuthLayout>
   );

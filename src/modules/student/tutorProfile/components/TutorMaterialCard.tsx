@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, IconButton, Link, Stack, Typography } from "@mui/material";
-import { Download, FolderLock } from "lucide-react";
-import type { TutorMaterialItem } from "@/modules/tutor/interfaces/tutor.interface";
-import { FILE_TYPE_ICON } from "@/modules/tutor/utils/material-file-mapping";
+import { Download, FolderLock, FolderOpen } from "lucide-react";
+import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
 
 interface TutorMaterialCardProps {
   material: TutorMaterialItem[];
@@ -34,10 +34,10 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
   const groupedMaterial = groupBySubject(material);
 
   return (
-    <Card variant="outlined" sx={{ borderRadius: 2 }}>
+    <Card variant="outlined" sx={{ borderRadius: 3 }}>
       <CardContent>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
-          <FolderLock size={18} color="#5865C8" />
+          <FolderOpen size={25} color="#5865C8" />
           <Typography variant="h5" fontWeight={500}>
             Material Académico
           </Typography>
@@ -46,13 +46,13 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
         {!hasConfirmedBooking ? (
           <Box sx={{ textAlign: "center", py: 3 }}>
             <Box sx={{ opacity: 0.5, display: "inline-flex" }}>
-              <FolderLock size={32} color="#5865C8" />
+              <FolderLock size={35} color="#5865C8" />
             </Box>
             <Typography variant="subtitle1" fontWeight={600} mt={1}>
               Material Bloqueado
             </Typography>
             <Typography variant="subtitle2" color="text.secondary">
-              El material de estudio estará disponible una vez confirmada tu reserva.
+              Reservá y completá una sesión con este tutor para acceder a su material de estudio.
             </Typography>
           </Box>
         ) : (

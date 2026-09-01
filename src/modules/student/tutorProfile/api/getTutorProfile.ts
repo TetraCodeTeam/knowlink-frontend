@@ -4,8 +4,8 @@ import type {
   TutorReview,
   TutorMaterialItem,
   RawModality,
-} from "@/modules/tutor/interfaces/tutor.interface";
-import type { TutorProfileApiResponse } from "@/modules/tutor/interfaces/tutor-api.types";
+} from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import type { TutorProfileApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
 const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => {
@@ -100,7 +100,7 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     name: api.fullName,
     avatarUrl: api.profilePictureUrl ?? null,
     rating: api.averageRating ?? 0,
-    address: api.address ?? null, // 👈 nuevo
+    address: api.address ?? null, 
     reviewsCount: reviewsApi.length,
     subjects: subjects.map((m) => m.subjectName),
     about: api.biography ?? "",

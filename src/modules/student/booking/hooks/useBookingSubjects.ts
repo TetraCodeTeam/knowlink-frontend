@@ -3,8 +3,8 @@
 import { useQuery } from "@tanstack/react-query";
 import type { BookingSubject } from "@/modules/student/booking/interfaces/bookingSubjectType";
 import type { Modality } from "@/modules/student/booking/constants/modality.constants";
-import type { RawModality } from "@/modules/tutor/interfaces/tutor.interface";
-import { getTutorProfile } from "@/modules/tutor/api/getTutorProfile";
+import type { RawModality } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { getTutorProfile } from "@/modules/student/tutorProfile/api/getTutorProfile";
 
 function toAvailableModalities(raw: RawModality): Modality[] {
   if (raw === "BOTH") return ["VIRTUAL", "IN_PERSON"];
