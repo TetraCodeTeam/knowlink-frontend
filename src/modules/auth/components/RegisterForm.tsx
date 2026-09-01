@@ -5,9 +5,11 @@ import {
   Box,
   Button,
   CircularProgress,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
+import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { registerSchema, type RegisterFormData } from "@/modules/auth/schemas/user-register.schema";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
@@ -79,7 +81,7 @@ export default function RegisterForm() {
       {/* Email */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
-          Email*
+          Correo electrónico*
         </Typography>
         <TextField
           placeholder="usuario@gmail.com"
@@ -89,6 +91,13 @@ export default function RegisterForm() {
           {...register("email")}
           error={!!errors.email}
           helperText={errors.email?.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Mail size={17} color="#AAAAAA" />
+              </InputAdornment>
+            ),
+          }}
           sx={inputSx}
         />
       </Box>
@@ -99,7 +108,7 @@ export default function RegisterForm() {
           Contraseña*
         </Typography>
         <PasswordField
-          placeholder="••••••••"
+          placeholder="••••••••••••"
           fullWidth
           size="medium"
           {...register("password")}
@@ -107,6 +116,13 @@ export default function RegisterForm() {
           helperText={
             errors.password?.message ?? "Usá mayúsculas, minúsculas y un carácter especial."
           }
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Lock size={17} color="#AAAAAA" />
+              </InputAdornment>
+            ),
+          }}
           sx={inputSx}
         />
       </Box>
@@ -123,6 +139,13 @@ export default function RegisterForm() {
           {...register("confirmPassword")}
           error={!!errors.confirmPassword}
           helperText={errors.confirmPassword?.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Lock size={17} color="#AAAAAA" />
+              </InputAdornment>
+            ),
+          }}
           sx={inputSx}
         />
       </Box>
@@ -135,9 +158,7 @@ export default function RegisterForm() {
         <Controller
           name="role"
           control={control}
-          render={({ field }) => (
-            <RoleToggleGroup value={field.value} onChange={field.onChange} />
-          )}
+          render={({ field }) => <RoleToggleGroup value={field.value} onChange={field.onChange} />}
         />
         {errors.role && (
           <Typography variant="caption" color="error" mt={0.5} display="block">
@@ -166,7 +187,9 @@ export default function RegisterForm() {
           ? "Verificando..."
           : selectedRole === "TUTOR"
             ? "→ Continuar como tutor"
-            : "→ Crear cuenta y continuar"}
+            : selectedRole === "STUDENT"
+              ? "→ Continuar como alumno"
+              : "→ Crear cuenta y continuar"}
       </Button>
     </Box>
   );

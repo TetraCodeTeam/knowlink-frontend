@@ -11,20 +11,30 @@ interface RoleToggleGroupProps {
   value: Role | undefined;
   onChange: (value: Role) => void;
   showDescription?: boolean;
+  allowDeselect?: boolean;
+  onClear?: () => void;
 }
 
 export default function RoleToggleGroup({
   value,
   onChange,
   showDescription = true,
+  allowDeselect = false,
+  onClear,
 }: RoleToggleGroupProps) {
   return (
     <ToggleButtonGroup
       aria-label="Seleccionar rol"
       exclusive
       fullWidth
-      value={value}
-      onChange={(_, newValue: Role | null) => newValue && onChange(newValue)}
+      value={value ?? null}
+      onChange={(_, newValue: Role | null) => {
+        if (newValue !== null) {
+          onChange(newValue);
+        } else if (allowDeselect) {
+          onClear?.();
+        }
+      }}
       sx={{ gap: 1.5 }}
     >
       {(Object.entries(ROLE_CONTENT) as [Role, (typeof ROLE_CONTENT)[Role]][]).map(

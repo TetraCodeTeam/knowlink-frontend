@@ -3,7 +3,7 @@ import { ROLE_VALUES } from "@/shared/types/role.type";
 
 export const registerSchema = z
   .object({
-    email: z.string().min(1, "El email es obligatorio").email("El email debe ser válido"),
+    email: z.string().min(1, "El email es obligatorio").email("El email no es válido"),
     password: z
       .string()
       .min(8, "La contraseña debe tener al menos 8 caracteres")
