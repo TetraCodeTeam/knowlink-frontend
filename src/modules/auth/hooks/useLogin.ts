@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { AUTH_LOGIN_KEY } from "@/modules/auth/constants";
 import { loginUser } from "@/modules/auth/api/auth.api";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import type { LoginFormValues } from "@/modules/auth/schemas/login.schema";
 
 const ROLE_REDIRECT: Record<string, string> = {
   STUDENT: "/student/profile",
@@ -16,14 +17,18 @@ export function useLogin() {
 
   const { isPending, mutate } = useMutation({
     mutationKey: [AUTH_LOGIN_KEY],
-    mutationFn: loginUser,
+    mutationFn: ({ email, password, role }: LoginFormValues) =>
+      loginUser({ email, password, ...(role ? { targetRole: role } : {}) }),
     onSuccess: (authResponse) => {
       login(authResponse);
       const destination = ROLE_REDIRECT[authResponse.role] ?? "/student/home";
       navigate(destination, { replace: true });
     },
-    onError: () => {
-      toast.error("Credenciales incorrectas");
+    onError: (error) => {
+      const errorMessage =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "Credenciales incorrectas";
+      toast.error(errorMessage);
     },
   });
 
