@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight, Upload } from "lucide-react";
 import { useMySubjectsWithCatalogId } from "@/modules/tutor/materials/hooks/useMySubjectsWithCatalogId";
@@ -11,6 +11,7 @@ import { uploadButtonSx } from "@/modules/tutor/materials/styles/materialsStyles
 export default function MaterialsSection() {
   const [selectedCatalogSubjectId, setSelectedCatalogSubjectId] = useState<string | undefined>();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [hasSubjectOverflow, setHasSubjectOverflow] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { subjects, isLoading: isSubjectsLoading } = useMySubjectsWithCatalogId();
@@ -18,6 +19,24 @@ export default function MaterialsSection() {
 
   const { materials, isLoading: isMaterialsLoading } = useGetMaterials(allCatalogSubjectIds, selectedCatalogSubjectId);
   const isLoading = isSubjectsLoading || isMaterialsLoading;
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkOverflow = () => {
+      setHasSubjectOverflow(el.scrollWidth > el.clientWidth);
+    };
+
+    checkOverflow();
+    const observer = new ResizeObserver(checkOverflow);
+    observer.observe(el);
+    window.addEventListener("resize", checkOverflow);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", checkOverflow);
+    };
+  }, [subjects]);
 
   const scroll = (direction: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: direction === "left" ? -120 : 120, behavior: "smooth" });
@@ -45,9 +64,11 @@ export default function MaterialsSection() {
     <Box>
       {/* Filter bar */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 2 }}>
-        <IconButton size="small" onClick={() => scroll("left")} aria-label="Desplazar izquierda">
-          <ChevronLeft size={18} />
-        </IconButton>
+        {hasSubjectOverflow && (
+          <IconButton size="small" onClick={() => scroll("left")} aria-label="Desplazar izquierda">
+            <ChevronLeft size={18} />
+          </IconButton>
+        )}
 
         <Box
           ref={scrollRef}
@@ -56,6 +77,7 @@ export default function MaterialsSection() {
             gap: 2,
             overflowX: "auto",
             flex: 1,
+            minWidth: 0,
             "&::-webkit-scrollbar": { display: "none" },
             scrollbarWidth: "none",
           }}
@@ -75,9 +97,11 @@ export default function MaterialsSection() {
           ))}
         </Box>
 
-        <IconButton size="small" onClick={() => scroll("right")} aria-label="Desplazar derecha">
-          <ChevronRight size={18} />
-        </IconButton>
+        {hasSubjectOverflow && (
+          <IconButton size="small" onClick={() => scroll("right")} aria-label="Desplazar derecha">
+            <ChevronRight size={18} />
+          </IconButton>
+        )}
 
         <Button startIcon={<Upload size={15} />} onClick={() => setIsUploadOpen(true)} sx={uploadButtonSx}>
           Subir recurso

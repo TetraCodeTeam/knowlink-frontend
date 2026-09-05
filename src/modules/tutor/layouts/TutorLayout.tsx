@@ -10,6 +10,7 @@ export default function TutorLayout() {
         component="main"
         sx={{
           flex: 1,
+          minWidth: 0,
           marginLeft: `${TUTOR_SIDEBAR_WIDTH}px`,
           minHeight: "100vh",
         }}
