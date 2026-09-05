@@ -9,6 +9,8 @@ interface MaterialCardProps {
 
 export default function MaterialCard({ material }: MaterialCardProps) {
   const { icon: Icon, bgColor, iconColor } = getFileIconAndColor(material.format);
+  const fileExtension = material.originalFileName.split(".").pop()?.toUpperCase() || "";
+  const displayName = `${material.name}.${fileExtension}`;
 
   return (
     <Box sx={materialRowSx}>
@@ -27,7 +29,7 @@ export default function MaterialCard({ material }: MaterialCardProps) {
           whiteSpace: "nowrap",
         }}
       >
-        {material.name}
+        {displayName}
       </Typography>
     </Box>
   );
