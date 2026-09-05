@@ -124,7 +124,7 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: "12px !important" }}>
         {/* Material name */}
         <Box>
-          <Typography sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
+          <Typography id="material-name-label" sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
             Nombre del material*
           </Typography>
           <TextField
@@ -133,6 +133,7 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
             disabled={isPending}
             fullWidth
             placeholder="Ingresá el nombre del material"
+            inputProps={{ "aria-labelledby": "material-name-label" }}
             sx={{
               "& .MuiInputBase-input": { fontSize: "16px" },
             }}
@@ -141,11 +142,12 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
 
         {/* Subject dropdown */}
         <Box>
-          <Typography sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
+          <Typography id="subject-select-label" sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
             Materia*
           </Typography>
           <FormControl fullWidth>
             <Select
+              labelId="subject-select-label"
               value={selectedCatalogSubjectId}
               onChange={(e) => setSelectedCatalogSubjectId(e.target.value)}
               disabled={isPending}

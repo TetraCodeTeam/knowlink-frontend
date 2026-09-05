@@ -36,7 +36,7 @@ export default function MaterialsSection() {
       observer.disconnect();
       window.removeEventListener("resize", checkOverflow);
     };
-  }, [subjects]);
+  }, [subjects, selectedCatalogSubjectId]);
 
   const scroll = (direction: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: direction === "left" ? -120 : 120, behavior: "smooth" });
