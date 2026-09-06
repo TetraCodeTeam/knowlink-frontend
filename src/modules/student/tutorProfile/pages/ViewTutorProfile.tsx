@@ -31,7 +31,7 @@ export const TutorProfilePage = () => {
   }
 
   const handleBook = () => {
-    navigate(/student/tutor//booking);
+    navigate(`/student/tutor/${tutorId}/booking`);
   };
 
   return (
