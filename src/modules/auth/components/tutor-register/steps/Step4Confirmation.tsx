@@ -8,7 +8,6 @@ import AppButton from "@/shared/components/AppButton";
 interface Step4Props {
   step1: Step1Data;
   step2: Step2Data;
-  mpLinked: boolean;
   isPending: boolean;
   onConfirm: () => void;
   onBack: () => void;
@@ -28,7 +27,6 @@ const MODALITY_ICON: Record<string, React.ElementType> = {
 export default function Step4Confirmation({
   step1,
   step2,
-  mpLinked,
   isPending,
   onConfirm,
   onBack,
@@ -161,53 +159,6 @@ export default function Step4Confirmation({
                 </Typography>
               </Box>
             )}
-        </CardContent>
-      </Card>
-
-      {/* Mercado Pago */}
-      <Card elevation={0} sx={{ border: "1px solid #e2e8f0", borderRadius: 3 }}>
-        <CardContent>
-          <Typography
-            variant="body2"
-            fontWeight={700}
-            mb={1.5}
-            textTransform="uppercase"
-            letterSpacing={0.5}
-          >
-            Mercado pago
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-            <Typography variant="body2" fontWeight={500}>
-              Estado de vinculación
-            </Typography>
-            <Chip
-              label={mpLinked ? "Vinculado" : "No vinculado"}
-              size="small"
-              sx={{
-                bgcolor: mpLinked ? "#dcfce7" : "#fef9c3",
-                color: mpLinked ? "#16a34a" : "#854d0e",
-              }}
-            />
-          </Box>
-          {!mpLinked && (
-            <Box
-              sx={{
-                mt: 1,
-                p: 1.5,
-                bgcolor: "#faf3e8",
-                border: "1px solid #f0e4d0",
-                borderRadius: 2,
-              }}
-            >
-              <Typography
-                variant="caption"
-                sx={{ color: "#7a5c2e", display: "block", textAlign: "center" }}
-              >
-                No podrás recibir reservas pagas hasta que vincules tu cuenta de Mercado Pago. Podés
-                hacerlo después desde tu perfil.
-              </Typography>
-            </Box>
-          )}
         </CardContent>
       </Card>
 

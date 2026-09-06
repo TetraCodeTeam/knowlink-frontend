@@ -55,8 +55,8 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
   const availableSubjectOptions = basic ? basicSubjects : careerSubjects;
   const subjectsLoading = basic ? basicLoading : careerLoading;
 
-  // Si "Básica" no tiene materias disponibles pero "Carrera" sí, arrancamos
-  // mostrando la categoría que realmente tiene opciones para elegir.
+  // Si "BÃ¡sica" no tiene materias disponibles pero "Carrera" sÃ­, arrancamos
+  // mostrando la categorÃ­a que realmente tiene opciones para elegir.
   const autoSwitchedRef = useRef(false);
 
   useEffect(() => {
@@ -76,8 +76,8 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
 
   const { mutate, isPending } = useCreateTutorSubject();
 
-  // Cuando cambia el listado disponible (toggle Básica, o llega la carrera propia),
-  // aseguramos que la materia seleccionada sea una opción válida.
+  // Cuando cambia el listado disponible (toggle BÃ¡sica, o llega la carrera propia),
+  // aseguramos que la materia seleccionada sea una opciÃ³n vÃ¡lida.
 
   useEffect(() => {
     if (!availableSubjectOptions?.length) {
@@ -122,9 +122,9 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
         onSuccess: () => {
           onSuccess();
           openFeedbackDialog({
-            title: "¡Materia registrada exitosamente!",
+            title: "Â¡Materia registrada exitosamente!",
             description:
-              "Tu nueva materia está lista. Recuerda mantener tu disponibilidad actualizada para que los estudiantes puedan reservar sus sesiones.",
+              "Tu nueva materia estÃ¡ lista. Recuerda mantener tu disponibilidad actualizada para que los estudiantes puedan reservar sus sesiones.",
             variant: "success",
             actionLabel: "Volver a mi perfil",
           });
@@ -178,7 +178,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
               <Stack direction="row" spacing={2} alignItems="center">
                 <FormControlLabel
                   control={<Switch checked={basic} onChange={(e) => setBasic(e.target.checked)} />}
-                  label="Básica"
+                  label="BÃ¡sica"
                 />
 
                 <Select
@@ -257,7 +257,7 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
               </Typography>
 
               <Typography color="text.secondary">
-                Para procesar la compensación de tus sesiones pagas, asegurate de tener tu cuenta de
+                Para procesar la compensaciÃ³n de tus sesiones pagas, asegurate de tener tu cuenta de
                 Mercado Pago correctamente vinculada en tu perfil.
               </Typography>
             </Box>

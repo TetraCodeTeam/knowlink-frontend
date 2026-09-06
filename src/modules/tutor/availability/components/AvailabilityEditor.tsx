@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -16,14 +16,13 @@ import AppButton from "@/shared/components/AppButton";
 import AvailabilityDayHeader from "@/modules/tutor/availability/components/AvailabilityDayHeader";
 import AvailabilityLegend from "@/modules/tutor/availability/components/AvailabilityLegend";
 import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/components/AvailabilityWeekCustomizationBanner";
-import { availabilityCalendarSx } from "@/modules/tutor/availability/styles/availabilityCalendarSx";
+import CalendarNavHeader from "@/shared/components/CalendarNavHeader";
+import { calendarBaseSx } from "@/shared/styles/calendarBaseSx";
 import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
-import { isBeforeToday } from "@/modules/tutor/availability/utils/availability.utils";
+import { isBeforeToday, formatWeekRangeTitle } from "@/shared/utils/calendarDateUtils";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { Trash2 } from "lucide-react";
 
-const HEADER_TOOLBAR = { left: "prev,next", center: "title", right: "" };
-const TITLE_FORMAT = { month: "short" as const, day: "numeric" as const, year: "numeric" as const };
 const SLOT_LABEL_FORMAT = {
   hour: "2-digit" as const,
   minute: "2-digit" as const,
@@ -33,6 +32,7 @@ const PLUGINS = [timeGridPlugin, interactionPlugin];
 
 export default function AvailabilityEditor() {
   const calendarRef = useRef<FullCalendar>(null);
+  const [rangeLabel, setRangeLabel] = useState("");
 
   const {
     isLoading,
@@ -81,7 +81,12 @@ export default function AvailabilityEditor() {
   );
 
   const handleDatesSetInternal = useCallback(
-    (arg: DatesSetArg) => handleDatesSet(arg.start),
+    (arg: DatesSetArg) => {
+      const inclusiveEnd = new Date(arg.end);
+      inclusiveEnd.setDate(inclusiveEnd.getDate() - 1); // FullCalendar da el fin exclusivo
+      setRangeLabel(formatWeekRangeTitle(arg.start, inclusiveEnd));
+      handleDatesSet(arg.start);
+    },
     [handleDatesSet]
   );
 
@@ -100,8 +105,14 @@ export default function AvailabilityEditor() {
   if (isLoading) return null;
 
   return (
-    <Box sx={availabilityCalendarSx}>
+    <Box sx={calendarBaseSx}>
       <AvailabilityLegend />
+
+      <CalendarNavHeader
+        label={rangeLabel}
+        onPrev={() => calendarRef.current?.getApi().prev()}
+        onNext={() => calendarRef.current?.getApi().next()}
+      />
 
       <FullCalendar
         ref={calendarRef}
@@ -109,8 +120,7 @@ export default function AvailabilityEditor() {
         initialView="timeGridWeek"
         initialDate={currentMondayStr}
         validRange={validRange}
-        headerToolbar={HEADER_TOOLBAR}
-        titleFormat={TITLE_FORMAT}
+        headerToolbar={false}
         datesSet={handleDatesSetInternal}
         dayHeaderContent={dayHeaderContent}
         dayCellClassNames={dayCellClassNames}
@@ -141,11 +151,7 @@ export default function AvailabilityEditor() {
             <Switch checked={effectiveRepeatWeekly} onChange={(_, val) => setRepeatWeekly(val)} />
           </Box>
           {isInheritedRepeat && (
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ display: "block", mt: 0.5 }}
-            >
+            <Typography variant="body2" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
               Este horario se repite porque configuraste repetición en una semana anterior.
             </Typography>
           )}

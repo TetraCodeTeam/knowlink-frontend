@@ -4,9 +4,12 @@ import type { Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import type { Step2Data } from "@/modules/auth/schemas/tutor-register.schema";
 import Step1Account from "@/modules/auth/components/tutor-register/steps/Step1Account";
 import Step2AcademicProfile from "@/modules/auth/components/tutor-register/steps/Step2AcademicProfile";
-import Step3MercadoPago from "@/modules/auth/components/tutor-register/steps/Step3MercadoPago";
 import Step4Confirmation from "@/modules/auth/components/tutor-register/steps/Step4Confirmation";
 import { useTutorRegister } from "@/modules/auth/hooks/useTutorRegister";
+import { useActivateTutorRole } from "@/modules/student/dual-role/hooks/useActivateTutorRole";
+import RoleRedirectDialog from "@/modules/student/dual-role/components/RoleRedirectDialog";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { toast } from "sonner";
 
 interface Credentials {
   email: string;
@@ -17,19 +20,27 @@ interface Credentials {
 interface TutorRegisterWizardProps {
   credentials: Credentials;
   onStepChange: (step: number) => void;
+  initialStep?: number;
+  isDualRole?: boolean;
+  dualRoleCareer?: string;
 }
 
 export default function TutorRegisterWizard({
   credentials,
   onStepChange,
+  initialStep = 1,
+  isDualRole = false,
+  dualRoleCareer = "",
 }: TutorRegisterWizardProps) {
   const navigate = useNavigate();
-  const { mutate, isPending } = useTutorRegister();
+  const { logout } = useAuthStore();
+  const { mutate: registerTutor, isPending: isRegistering } = useTutorRegister();
+  const { mutateAsync: activateTutorRole } = useActivateTutorRole();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(initialStep);
   const [step1Data, setStep1Data] = useState<Partial<Step1Data>>({});
   const [step2Data, setStep2Data] = useState<Partial<Step2Data>>({});
-  const [mpLinked] = useState(false);
+  const [showRedirectDialog, setShowRedirectDialog] = useState(false);
 
   const goTo = (next: number) => {
     setStep(next);
@@ -41,19 +52,33 @@ export default function TutorRegisterWizard({
     goTo(2);
   };
 
-  const handleStep2Next = (data: Step2Data) => {
+  const handleStep2Next = async (data: Step2Data) => {
     setStep2Data(data);
+    if (isDualRole) {
+      try {
+        await activateTutorRole({
+          biography: data.biography ?? "",
+          address: data.address ?? "",
+          subjects: data.subjects.map((s) => ({
+            subjectName: s.subjectName,
+            modality: s.modality,
+            compensationType: s.compensationType,
+            pricePerHour: s.compensationType === "FREE" ? undefined : (s.pricePerHour ?? undefined),
+          })),
+        });
+        setShowRedirectDialog(true);
+      } catch {
+        toast.error("No se pudo activar el rol de tutor");
+      }
+      return;
+    }
     goTo(3);
   };
-
-  const handleStep3Next = () => goTo(4);
-  const handleStep3Skip = () => goTo(4);
 
   const handleConfirm = () => {
     const s1 = step1Data as Step1Data;
     const s2 = step2Data as Step2Data;
-
-    mutate({
+    registerTutor({
       ...credentials,
       firstName: s1.firstName,
       lastName: s1.lastName,
@@ -85,22 +110,22 @@ export default function TutorRegisterWizard({
 
   if (step === 2) {
     return (
-      <Step2AcademicProfile
-        career={step1Data.career || ""}
-        defaultValues={step2Data}
-        onNext={handleStep2Next}
-        onBack={() => goTo(1)}
-      />
-    );
-  }
-
-  if (step === 3) {
-    return (
-      <Step3MercadoPago
-        onNext={handleStep3Next}
-        onBack={() => goTo(2)}
-        onSkip={handleStep3Skip}
-      />
+      <>
+        <Step2AcademicProfile
+          career={isDualRole ? dualRoleCareer : (step1Data.career || "")}
+          defaultValues={step2Data}
+          onNext={(data) => void handleStep2Next(data)}
+          onBack={() => (isDualRole ? navigate(-1) : goTo(1))}
+        />
+        <RoleRedirectDialog
+          open={showRedirectDialog}
+          variant="activation"
+          onRedirect={() => {
+            logout();
+            navigate("/auth/login", { replace: true });
+          }}
+        />
+      </>
     );
   }
 
@@ -108,10 +133,10 @@ export default function TutorRegisterWizard({
     <Step4Confirmation
       step1={step1Data as Step1Data}
       step2={step2Data as Step2Data}
-      mpLinked={mpLinked}
-      isPending={isPending}
+      isPending={isRegistering}
       onConfirm={handleConfirm}
-      onBack={() => goTo(3)}
+      onBack={() => goTo(2)}
     />
   );
 }
+

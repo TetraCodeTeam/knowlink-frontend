@@ -1,22 +1,26 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { Box, Divider } from "@mui/material";
+import { Mail, Lock } from "lucide-react";
+import { Box, Divider, InputAdornment, TextField } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
 import { useLogin } from "@/modules/auth/hooks/useLogin";
+import PasswordField from "@/modules/auth/components/PasswordField";
+import RoleToggleGroup from "@/shared/components/RoleToggleGroup";
 
 export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
   const { mutate, isPending } = useLogin();
 
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
+
+  const selectedRole = watch("role");
 
   return (
     <>
@@ -29,105 +33,80 @@ export default function LoginForm() {
               component="label"
               sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
             >
-              Correo Electrónico
+              Correo Electrónico*
             </Box>
-            <Box sx={{ position: "relative" }}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  left: 14,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#AAAAAA",
-                  display: "flex",
-                  pointerEvents: "none",
-                }}
-              >
-                <Mail size={17} />
-              </Box>
-              <input
-                type="email"
-                placeholder="correo@ejemplo.com"
-                className="kl-input"
-                aria-label="Correo electrónico"
-                autoComplete="email"
-                style={{
-                  padding: "14px 14px 14px 45px",
-                  fontSize: "15px",
-                  borderColor: errors.email ? "#d32f2f" : undefined,
-                }}
-                {...register("email")}
-              />
-            </Box>
-            {errors.email && (
-              <Box component="p" sx={{ color: "#d32f2f", fontSize: 13, mt: "4px", mb: 0 }}>
-                {errors.email.message}
-              </Box>
-            )}
+            <TextField
+              type="email"
+              placeholder="correo@ejemplo.com"
+              fullWidth
+              size="medium"
+              autoComplete="email"
+              aria-label="Correo electrónico"
+              {...register("email")}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Mail size={17} color="#AAAAAA" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={inputSx}
+            />
           </Box>
 
           {/* ─── Contraseña ─── */}
           <Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: "6px" }}>
-              <Box
-                component="label"
-                sx={{ fontSize: 14, fontWeight: 500, color: "#333", fontFamily: "Inter, sans-serif" }}
-              >
-                Contraseña
-              </Box>
+            <Box
+              component="label"
+              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+            >
+              Contraseña*
             </Box>
-            <Box sx={{ position: "relative" }}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  left: 14,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#AAAAAA",
-                  display: "flex",
-                  pointerEvents: "none",
-                }}
-              >
-                <Lock size={17} />
-              </Box>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••••••"
-                className="kl-input"
-                aria-label="Contraseña"
-                autoComplete="current-password"
-                style={{
-                  padding: "14px 45px 14px 45px",
-                  fontSize: "15px",
-                  borderColor: errors.password ? "#d32f2f" : undefined,
-                }}
-                {...register("password")}
-              />
-              <Box
-                component="button"
-                type="button"
-                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                onClick={() => setShowPassword(!showPassword)}
-                sx={{
-                  position: "absolute",
-                  right: 14,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#AAAAAA",
-                  display: "flex",
-                  p: 0,
-                  "&:hover": { color: "#666" },
-                }}
-              >
-                {showPassword ? <Eye size={17} /> : <EyeOff size={17} />}
-              </Box>
+            <PasswordField
+              placeholder="••••••••••••"
+              fullWidth
+              size="medium"
+              autoComplete="current-password"
+              aria-label="Contraseña"
+              {...register("password")}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock size={17} color="#AAAAAA" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={inputSx}
+            />
+          </Box>
+
+          {/* ─── Rol ─── */}
+          <Box>
+            <Box
+              component="label"
+              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+            >
+              Quiero ingresar como
             </Box>
-            {errors.password && (
+            <Controller
+              name="role"
+              control={control}
+              render={({ field }) => (
+                <RoleToggleGroup
+                  value={field.value}
+                  onChange={field.onChange}
+                  allowDeselect
+                  onClear={() => field.onChange(undefined)}
+                />
+              )}
+            />
+            {errors.role && (
               <Box component="p" sx={{ color: "#d32f2f", fontSize: 13, mt: "4px", mb: 0 }}>
-                {errors.password.message}
+                {errors.role.message}
               </Box>
             )}
           </Box>
@@ -153,7 +132,13 @@ export default function LoginForm() {
               "&:hover:not(:disabled)": { backgroundColor: "#4a54b4" },
             }}
           >
-            {isPending ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {isPending
+              ? "Iniciando sesión..."
+              : selectedRole === "TUTOR"
+                ? "Ingresar como tutor"
+                : selectedRole === "STUDENT"
+                  ? "Ingresar como alumno"
+                  : "Iniciar Sesión"}
           </Box>
         </Box>
       </Box>
@@ -163,3 +148,9 @@ export default function LoginForm() {
     </>
   );
 }
+
+const inputSx = {
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "10px",
+  },
+};

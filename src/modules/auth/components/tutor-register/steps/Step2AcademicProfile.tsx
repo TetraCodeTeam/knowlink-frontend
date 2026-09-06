@@ -229,7 +229,10 @@ export default function Step2AcademicProfile({
                     render={({ field: f }) => (
                       <Switch
                         checked={f.value === "FREE"}
-                        onChange={(_, val) => f.onChange(val ? "FREE" : "PAID")}
+                        onChange={(_, val) => {
+                          f.onChange(val ? "FREE" : "PAID");
+                          setValue(`subjects.${index}.pricePerHour`, null);
+                        }}
                         size="small"
                         sx={{ "& .MuiSwitch-thumb": { bgcolor: "#4361ee" } }}
                       />

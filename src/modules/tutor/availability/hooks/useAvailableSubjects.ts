@@ -1,10 +1,10 @@
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
 import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
-import { useMyTutorProfile } from "@/modules/tutor/hooks/useMyTutorProfile";
+import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 
 /**
- * Materias básicas y de la carrera propia, excluyendo las que el tutor
+ * Materias bÃ¡sicas y de la carrera propia, excluyendo las que el tutor
  * ya tiene cargadas como Tutor_Subject (evita duplicados / 409).
  */
 export function useAvailableSubjects() {
