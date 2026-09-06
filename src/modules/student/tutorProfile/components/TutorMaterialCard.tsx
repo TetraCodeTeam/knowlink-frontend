@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Box, Card, CardContent, IconButton, Link, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, IconButton, Stack, Typography } from "@mui/material";
 import { Download, FolderLock, FolderOpen } from "lucide-react";
 
 import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
@@ -10,6 +10,7 @@ import { TutorMaterialModal } from "@/modules/student/tutorProfile/components/Tu
 interface TutorMaterialCardProps {
   material: TutorMaterialItem[];
   hasConfirmedBooking: boolean;
+  onDownload: (materialId: string) => void | Promise<void>;
 }
 
 const formatFileSize = (sizeMB: number) => {
@@ -24,7 +25,7 @@ const formatMaterialMetadata = (item: TutorMaterialItem) => {
   return item.fileType;
 };
 
-export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMaterialCardProps) => {
+export const TutorMaterialCard = ({ material, hasConfirmedBooking, onDownload }: TutorMaterialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialSubject, setModalInitialSubject] = useState<string | undefined>(undefined);
 
@@ -120,8 +121,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
                             </Box>
                           </Stack>
                           <IconButton
-                            component={Link}
-                            href={item.fileUrl}
+                            onClick={() => void onDownload(item.id)}
                             size="small"
                             aria-label={`Descargar ${item.title}`}
                           >
@@ -161,6 +161,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking }: TutorMateri
               onClose={() => setIsModalOpen(false)}
               material={material}
               initialSubject={modalInitialSubject}
+              onDownload={onDownload}
             />
           </>
         )}

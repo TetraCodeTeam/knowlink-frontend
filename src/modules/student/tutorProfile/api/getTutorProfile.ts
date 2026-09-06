@@ -6,6 +6,7 @@ import type {
   RawModality,
 } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import type { TutorProfileApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
+import type { TutorMaterialApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
 const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => {
@@ -22,10 +23,8 @@ const isSubjectVerified = (
   return verificationStatus === "ACTIVE";
 };
 
-const MATERIAL_FALLBACK_SUBJECT = "Material general";
-
-const inferFileType = (name: string, fileUrl: string): TutorMaterialItem["fileType"] => {
-  const normalizedSource = `${name}.${fileUrl}`.toUpperCase();
+const inferFileType = (format: string, fileName: string | null): TutorMaterialItem["fileType"] => {
+  const normalizedSource = `${format}.${fileName ?? ""}`.toUpperCase();
 
   if (normalizedSource.includes(".XLSX") || normalizedSource.includes(".XLS")) {
     return "XLSX";
@@ -51,10 +50,22 @@ const inferFileType = (name: string, fileUrl: string): TutorMaterialItem["fileTy
   return "PDF";
 };
 
+const bytesToMegabytes = (sizeInBytes: number | null) =>
+  sizeInBytes ? sizeInBytes / (1024 * 1024) : 0;
+
+export const mapTutorMaterials = (materials: TutorMaterialApiResponse[]): TutorMaterialItem[] =>
+  materials.map((material) => ({
+    id: material.id,
+    title: material.name,
+    subject: material.subjectName,
+    fileUrl: material.downloadUrl ?? "",
+    fileType: inferFileType(material.format, material.originalFileName),
+    fileSizeMB: bytesToMegabytes(material.sizeInBytes),
+  }));
+
 function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
   const subjects = api.subjects ?? [];
   const reviewsApi = api.reviews ?? [];
-  const materialsApi = api.materials ?? [];
 
   const reviewsBySubject = reviewsApi.reduce<Record<string, number>>((acc, review) => {
     const key = review.subjectName?.trim();
@@ -86,15 +97,6 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     comment: r.comment ?? "",
   }));
 
-  const material: TutorMaterialItem[] = materialsApi.map((m, i) => ({
-    id: `material-${i}`,
-    title: m.name,
-    subject: MATERIAL_FALLBACK_SUBJECT,
-    fileUrl: m.fileUrl,
-    fileType: inferFileType(m.name, m.fileUrl),
-    fileSizeMB: 0,
-  }));
-
   return {
     id: api.id,
     name: api.fullName,
@@ -106,8 +108,8 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     about: api.biography ?? "",
     subjectRates,
     reviews,
-    material,
-    hasConfirmedBooking: materialsApi.length > 0,
+    material: [],
+    hasConfirmedBooking: false,
   };
 }
 
@@ -116,4 +118,25 @@ export const getTutorProfile = async (tutorId: string): Promise<TutorProfile> =>
     `/api/v1/tutors/${tutorId}/profile`
   );
   return mapTutorProfile(data);
+};
+
+export const checkTutorMaterialAccess = async (tutorId: string): Promise<boolean> => {
+  const { data } = await httpClient.get<{ accesoHabilitado: boolean }>(
+    `/api/v1/materials/tutores/${tutorId}/acceso`
+  );
+  return data.accesoHabilitado;
+};
+
+export const getAccessibleTutorMaterials = async (
+  tutorId: string
+): Promise<TutorMaterialApiResponse[]> => {
+  const { data } = await httpClient.get<TutorMaterialApiResponse[]>(
+    `/api/v1/materials/tutores/${tutorId}/materiales`
+  );
+  return data;
+};
+
+export const getMaterialDownloadUrl = async (materialId: string): Promise<string> => {
+  const { data } = await httpClient.get<string>(`/api/v1/materials/${materialId}/download`);
+  return data;
 };

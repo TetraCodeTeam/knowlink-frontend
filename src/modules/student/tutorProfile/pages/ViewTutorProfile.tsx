@@ -8,6 +8,7 @@ import { TutorMaterialCard } from "@/modules/student/tutorProfile/components/Tut
 import { TutorReviewsCard } from "@/modules/student/tutorProfile/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/student/tutorProfile/hooks/useTutorProfile";
 import { ReviewsDialog } from "@/modules/student/tutorProfile/components/ReviewsDialog";
+import { getMaterialDownloadUrl } from "@/modules/student/tutorProfile/api/getTutorProfile";
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
@@ -34,6 +35,11 @@ export const TutorProfilePage = () => {
     navigate(`/student/tutor/${tutorId}/booking`);
   };
 
+  const handleDownload = async (materialId: string) => {
+    const downloadUrl = await getMaterialDownloadUrl(materialId);
+    window.open(downloadUrl, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
@@ -48,7 +54,11 @@ export const TutorProfilePage = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={5}>
-            <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
+            <TutorMaterialCard
+              material={tutor.material}
+              hasConfirmedBooking={tutor.hasConfirmedBooking}
+              onDownload={handleDownload}
+            />
           </Stack>
         </Grid>
       </Grid>

@@ -20,6 +20,7 @@ interface TutorMaterialModalProps {
   onClose: () => void;
   material: TutorMaterialItem[];
   initialSubject?: string;
+  onDownload: (materialId: string) => void | Promise<void>;
 }
 
 const ALL_SUBJECTS_FILTER = "Todos";
@@ -42,7 +43,7 @@ const formatMaterialMetadata = (item: TutorMaterialItem) => {
  * A diferencia de la card resumen, este modal nunca trunca: muestra
  * todos los ítems de la materia seleccionada sin límite.
  */
-export const TutorMaterialModal = ({ open, onClose, material }: TutorMaterialModalProps) => {
+export const TutorMaterialModal = ({ open, onClose, material, onDownload }: TutorMaterialModalProps) => {
   const [selectedSubject, setSelectedSubject] = useState<string>(ALL_SUBJECTS_FILTER);
 
   const groupedMaterial = useMemo(() => groupBySubject(material), [material]);
@@ -122,8 +123,7 @@ export const TutorMaterialModal = ({ open, onClose, material }: TutorMaterialMod
                         </Box>
                       </Stack>
                       <Button
-                        component="a"
-                        href={item.fileUrl}
+                        onClick={() => void onDownload(item.id)}
                         variant="contained"
                         size="small"
                         disableElevation
