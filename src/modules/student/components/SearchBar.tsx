@@ -13,14 +13,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import {
-  buildMateriaTutorsRoute,
+  buildSubjectTutorsRoute,
   buildSearchResultsRoute,
   buildTutorProfileRoute,
   MAX_SEARCH_SUGGESTIONS,
   TUTOR_ROLE,
 } from "../constants";
-import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
-import { deriveMateriasFromTutors } from "../utils/derive-materias";
+import { useSearchTutorsAndSubjects } from "../hooks/useSearchTutorsAndSubjects";
+import { deriveSubjectsFromTutors } from "../utils/derive-subjects";
 import SearchResultsPanel from "./SearchResultsPanel";
 
 const SEARCH_BAR_PLACEHOLDER = "Busca tutores, materias";
@@ -71,15 +71,15 @@ export default function SearchBar() {
 
   // Se dispara una solicitud por cada carácter ingresado (sin debounce),
   // según lo pedido: GET /api/v1/tutors/search/{query}.
-  const { data, isFetching } = useSearchTutorsAndMaterias(inputValue);
+  const { data, isFetching } = useSearchTutorsAndSubjects(inputValue);
   const tutors = useMemo(() => (Array.isArray(data) ? data : []), [data]);
 
-  const materias = useMemo(() => deriveMateriasFromTutors(tutors), [tutors]);
+  const subjects = useMemo(() => deriveSubjectsFromTutors(tutors), [tutors]);
 
   const showPanel = open && inputValue.trim().length > 0;
 
-  const handleSelectMateria = (nombre: string) => {
-    navigate(buildMateriaTutorsRoute(nombre));
+  const handleSelectSubject = (name: string) => {
+    navigate(buildSubjectTutorsRoute(name));
     setOpen(false);
   };
 
@@ -161,10 +161,10 @@ export default function SearchBar() {
         >
           <SearchResultsPanel
             query={inputValue}
-            materias={materias.slice(0, MAX_SEARCH_SUGGESTIONS)}
+            subjects={subjects.slice(0, MAX_SEARCH_SUGGESTIONS)}
             tutors={tutors.slice(0, MAX_SEARCH_SUGGESTIONS)}
             loading={isFetching}
-            onSelectMateria={handleSelectMateria}
+            onSelectSubject={handleSelectSubject}
             onSelectTutor={handleSelectTutor}
           />
         </Popper>

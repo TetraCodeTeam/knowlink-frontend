@@ -23,6 +23,7 @@ src/modules/{modulo}/components/ o pages/ → consume el hook
 - Estado cliente: Zustand store en `hooks/` del módulo o `shared/hooks/`
 - Tipos inferidos de Zod: `z.infer<typeof miSchema>`
 - Toasts: `sonner`
+- El código implementado (clases, métodos, variables, comentarios y logs) debe estar escrito en inglés, a excepción de los mensajes de texto dirigidos al usuario final (errores de validación, notificaciones, contenido de UI).
 
 ### Lo que nunca debe hacer
 

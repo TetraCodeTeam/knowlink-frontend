@@ -1,19 +1,18 @@
-import type { ReactNode } from "react";
 import { Avatar, Box, ButtonBase, Divider, Paper, Stack, Typography } from "@mui/material";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import StarIcon from "@mui/icons-material/Star";
-import { SubjectSummary, TutorSearchResult } from "../interfaces/tutor-search-result.interface";
 import { getCareerIcon } from "../icons/career-icon";
 import { highlightMatch } from "./highlight-match";
+import type {
+  SectionHeaderProps,
+  SubjectRowProps,
+  TutorRowProps,
+  SearchResultsPanelProps,
+} from "./interfaces/student-components.interface";
 
 const BRAND_COLOR = "#5865C8";
 const ICON_BOX_BG = "#EDEBFA";
-
-interface SectionHeaderProps {
-  icon: ReactNode;
-  label: string;
-}
 
 function SectionHeader({ icon, label }: SectionHeaderProps) {
   return (
@@ -26,14 +25,8 @@ function SectionHeader({ icon, label }: SectionHeaderProps) {
   );
 }
 
-interface MateriaRowProps {
-  materia: SubjectSummary;
-  query: string;
-  onClick: () => void;
-}
-
-function MateriaRow({ materia, query, onClick }: MateriaRowProps) {
-  const CareerIcon = getCareerIcon(materia.career);
+function SubjectRow({ subject, query, onClick }: SubjectRowProps) {
+  const CareerIcon = getCareerIcon(subject.career);
 
   return (
     <ButtonBase
@@ -65,20 +58,14 @@ function MateriaRow({ materia, query, onClick }: MateriaRowProps) {
       </Box>
       <Box sx={{ minWidth: 0 }}>
         <Typography variant="body2" sx={{ color: BRAND_COLOR, fontWeight: 500 }} noWrap>
-          {highlightMatch(materia.name, query)}
+          {highlightMatch(subject.name, query)}
         </Typography>
         <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block" }}>
-          {materia.career}
+          {subject.career}
         </Typography>
       </Box>
     </ButtonBase>
   );
-}
-
-interface TutorRowProps {
-  tutor: TutorSearchResult;
-  query: string;
-  onClick: () => void;
 }
 
 function TutorRow({ tutor, query, onClick }: TutorRowProps) {
@@ -141,26 +128,17 @@ function TutorRow({ tutor, query, onClick }: TutorRowProps) {
   );
 }
 
-export interface SearchResultsPanelProps {
-  query: string;
-  materias: SubjectSummary[];
-  tutors: TutorSearchResult[];
-  loading: boolean;
-  onSelectMateria: (nombre: string) => void;
-  onSelectTutor: (tutorId: string) => void;
-}
-
 export default function SearchResultsPanel({
   query,
-  materias,
+  subjects,
   tutors,
   loading,
-  onSelectMateria,
+  onSelectSubject,
   onSelectTutor,
 }: SearchResultsPanelProps) {
-  const hasMaterias = materias.length > 0;
+  const hasSubjects = subjects.length > 0;
   const hasTutors = tutors.length > 0;
-  const hasResults = hasMaterias || hasTutors;
+  const hasResults = hasSubjects || hasTutors;
 
   return (
     <Paper
@@ -187,26 +165,26 @@ export default function SearchResultsPanel({
         </Box>
       ) : (
         <Box sx={{ display: "flex" }}>
-          {hasMaterias && (
+          {hasSubjects && (
             <Box sx={{ flex: 1, p: 3, minWidth: 0, maxHeight: 420, overflowY: "auto" }}>
               <SectionHeader
                 icon={<MenuBookOutlinedIcon sx={{ color: "text.secondary" }} />}
                 label="Materias"
               />
               <Stack spacing={2} sx={{ mt: 2 }}>
-                {materias.map((materia) => (
-                  <MateriaRow
-                    key={materia.name}
-                    materia={materia}
+                {subjects.map((subject) => (
+                  <SubjectRow
+                    key={subject.name}
+                    subject={subject}
                     query={query}
-                    onClick={() => onSelectMateria(materia.name)}
+                    onClick={() => onSelectSubject(subject.name)}
                   />
                 ))}
               </Stack>
             </Box>
           )}
 
-          {hasMaterias && hasTutors && <Divider orientation="vertical" flexItem sx={{ my: 1 }} />}
+          {hasSubjects && hasTutors && <Divider orientation="vertical" flexItem sx={{ my: 1 }} />}
 
           {hasTutors && (
             <Box

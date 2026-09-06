@@ -31,13 +31,13 @@ export const TutorProfilePage = () => {
     );
   }
 
-  const handleReservar = () => {
+  const handleBook = () => {
     // TODO: conectar con el flujo de reserva (modulo "reservas")
   };
 
   return (
     <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 3 }, bgcolor: "#F4F3FB" }}>
-      <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
+      <TutorProfileHeader tutor={tutor} onBook={handleBook} />
 
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>
@@ -49,7 +49,7 @@ export const TutorProfilePage = () => {
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={4}>
-            <TutorAvailabilityCard onVerDisponibilidad={() => navigate("disponibilidad")} />
+            <TutorAvailabilityCard onViewAvailability={() => navigate("disponibilidad")} />
             <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
           </Stack>
         </Grid>

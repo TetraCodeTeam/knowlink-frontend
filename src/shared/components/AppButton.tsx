@@ -1,20 +1,14 @@
 import { Button, CircularProgress } from "@mui/material";
-import type { ButtonProps, SxProps, Theme } from "@mui/material";
-import type { ReactNode } from "react";
+import type { SxProps, Theme } from "@mui/material";
 import {
   primaryButtonSx,
   softButtonSx,
   softDangerButtonSx,
   outlineButtonSx,
 } from "@/shared/styles/buttonSx";
+import type { AppButtonProps, AppButtonVariant } from "./interfaces/shared-components.interface";
 
-type AppButtonVariant = "primary" | "soft" | "soft-danger" | "outline";
-
-interface AppButtonProps extends Omit<ButtonProps, "variant" | "color"> {
-  appVariant?: AppButtonVariant;
-  loading?: boolean;
-  children: ReactNode;
-}
+export type { AppButtonProps, AppButtonVariant } from "./interfaces/shared-components.interface";
 
 const variantStyles: Record<AppButtonVariant, SxProps<Theme>> = {
   primary: primaryButtonSx,

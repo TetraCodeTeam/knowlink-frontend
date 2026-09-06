@@ -1,22 +1,16 @@
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
-import type { SubjectSummary } from "../interfaces/tutor-search-result.interface";
 import { getCareerIcon } from "../icons/career-icon";
+import type { SubjectResultCardProps } from "./interfaces/student-components.interface";
 
 const BRAND_COLOR = "#5865C8";
 const ICON_BOX_BG = "#EDEBFA";
 
-interface MateriaResultCardProps {
-  materia: SubjectSummary;
-  onClick: () => void;
-  highlighted?: boolean;
-}
-
-export default function MateriaResultCard({
-  materia,
+export default function SubjectResultCard({
+  subject,
   onClick,
   highlighted,
-}: MateriaResultCardProps) {
-  const CareerIcon = getCareerIcon(materia.career);
+}: SubjectResultCardProps) {
+  const CareerIcon = getCareerIcon(subject.career);
 
   return (
     <Card
@@ -53,10 +47,10 @@ export default function MateriaResultCard({
         </Box>
         <Box sx={{ minWidth: 0 }}>
           <Typography variant="body1" sx={{ fontWeight: 600 }} noWrap>
-            {materia.name}
+            {subject.name}
           </Typography>
           <Typography variant="caption" color="text.secondary" noWrap sx={{ display: "block" }}>
-            {materia.career}
+            {subject.career}
           </Typography>
         </Box>
       </CardActionArea>

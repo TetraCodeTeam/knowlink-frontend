@@ -14,8 +14,8 @@ export const TUTOR_ROLE = "TUTOR";
  * de destino debería volver a llamar a /api/v1/tutors/search/{nombre} para
  * listar todos los tutores que la ofrecen.
  */
-export function buildMateriaTutorsRoute(materiaNombre: string): string {
-  return `/student/tutores?materia=${encodeURIComponent(materiaNombre)}`;
+export function buildSubjectTutorsRoute(subjectName: string): string {
+  return `/student/tutores?materia=${encodeURIComponent(subjectName)}`;
 }
 
 export function buildTutorProfileRoute(tutorId: string): string {

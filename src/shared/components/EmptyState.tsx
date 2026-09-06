@@ -1,14 +1,5 @@
-import type { ReactNode } from "react";
 import { Box, Typography } from "@mui/material";
-
-interface EmptyStateProps {
-  /** Ilustración a mostrar. Tiene prioridad sobre `icon` si se pasan ambos. */
-  image?: string;
-  imageAlt?: string;
-  /** Fallback cuando no hay ilustración disponible (ej. un ícono de MUI). */
-  icon?: ReactNode;
-  message: string;
-}
+import type { EmptyStateProps } from "./interfaces/shared-components.interface";
 
 export default function EmptyState({ image, imageAlt, icon, message }: EmptyStateProps) {
   return (

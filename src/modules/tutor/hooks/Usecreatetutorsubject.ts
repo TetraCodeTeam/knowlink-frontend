@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { TutorSubjectRequest } from "../interfaces/TutorSubjectRequest";
-import { createTutorSubject } from "../api/Tutorsubject.api";
+import { createTutorSubject } from "../api/tutorSubject.api";
 
 export function useCreateTutorSubject() {
   const queryClient = useQueryClient();

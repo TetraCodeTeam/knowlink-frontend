@@ -1,15 +1,10 @@
 import { Avatar, Box, Chip, Rating, Stack, Typography } from "@mui/material";
-import type { TutorProfile } from "@/modules/tutor/interfaces/tutor.interface";
 import { getSubjectDisplayName, TUTOR_SUBJECT_TAG } from "@/modules/tutor/utils/tutor-tag-mapping";
 import { CalendarCheck } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
+import type { TutorProfileHeaderProps } from "./interfaces/tutor-public-profile.interface";
 
-interface TutorProfileHeaderProps {
-  tutor: TutorProfile;
-  onReservar: () => void;
-}
-
-export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProps) => {
+export const TutorProfileHeader = ({ tutor, onBook }: TutorProfileHeaderProps) => {
   return (
     <Box
       sx={{
@@ -73,7 +68,7 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
 
       <AppButton
         appVariant="primary"
-        onClick={onReservar}
+        onClick={onBook}
         startIcon={<CalendarCheck size={18} />}
         sx={{
           width: "60%",

@@ -1,12 +1,9 @@
 import { Card, CardContent, Stack, Typography } from "@mui/material";
 import { Calendar, CalendarCheck } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
+import type { TutorAvailabilityCardProps } from "./interfaces/tutor-public-profile.interface";
 
-interface TutorAvailabilityCardProps {
-  onVerDisponibilidad: () => void;
-}
-
-export const TutorAvailabilityCard = ({ onVerDisponibilidad }: TutorAvailabilityCardProps) => {
+export const TutorAvailabilityCard = ({ onViewAvailability }: TutorAvailabilityCardProps) => {
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
       <CardContent>
@@ -20,7 +17,7 @@ export const TutorAvailabilityCard = ({ onVerDisponibilidad }: TutorAvailability
           appVariant="primary"
           startIcon={<CalendarCheck size={18} color="#fff" />}
           fullWidth
-          onClick={onVerDisponibilidad}
+          onClick={onViewAvailability}
           sx={{ borderRadius: 1, fontWeight: 600 }}
         >
           Ver Disponibilidad Completa

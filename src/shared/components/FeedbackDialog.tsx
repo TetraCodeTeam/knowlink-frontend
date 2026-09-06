@@ -1,19 +1,9 @@
-import { ReactNode } from "react";
 import { Button, Dialog, DialogContent, IconButton, Stack, Typography } from "@mui/material";
 import { X } from "lucide-react";
 import { SuccessAnimation } from "./SuccessAnimation";
+import type { FeedbackDialogProps, FeedbackDialogVariant } from "./interfaces/shared-components.interface";
 
-export type FeedbackDialogVariant = "success" | "error" | "warning" | "info";
-
-interface FeedbackDialogProps {
-  open: boolean;
-  title: string;
-  icon?: ReactNode;
-  description: string;
-  onClose: () => void;
-  variant?: FeedbackDialogVariant;
-  actionLabel?: string;
-}
+export type { FeedbackDialogVariant } from "./interfaces/shared-components.interface";
 
 const buttonColorByVariant: Record<
   FeedbackDialogVariant,

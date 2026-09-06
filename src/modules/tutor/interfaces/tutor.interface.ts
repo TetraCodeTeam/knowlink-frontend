@@ -1,4 +1,4 @@
-export type Modalidad = "Presencial" | "Virtual";
+export type Modality = "Presencial" | "Virtual";
 
 export interface TutorSubjectRate {
   id: string;
@@ -7,7 +7,7 @@ export interface TutorSubjectRate {
   reviewsCount: number;
   price: number;
   isFree: boolean;
-  modalities: Modalidad[];
+  modalities: Modality[];
   isVerified: boolean;
 }
 

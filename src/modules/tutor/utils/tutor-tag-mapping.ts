@@ -1,4 +1,4 @@
-import type { Modalidad } from "@/modules/tutor/interfaces/tutor.interface";
+import type { Modality } from "@/modules/tutor/interfaces/tutor.interface";
 import { LibraryBig, Monitor, ShieldCheck, type LucideIcon } from "lucide-react";
 
 type TutorTag = {
@@ -32,7 +32,7 @@ export const TUTOR_STATUS: Record<TutorStatusDisplay, TutorTag> = {
 export const MODALITY_DISPLAY_NAME = {
   Presencial: "Presencial",
   Virtual: "Virtual",
-} as const satisfies Record<Modalidad, string>;
+} as const satisfies Record<Modality, string>;
 
 export type ModalityDisplay =
   (typeof MODALITY_DISPLAY_NAME)[keyof typeof MODALITY_DISPLAY_NAME];

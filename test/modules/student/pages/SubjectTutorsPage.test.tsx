@@ -1,32 +1,32 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
-import { tutorAna, tutorCarlos } from "../../../fixtures/busqueda/tutoresDePrueba";
+import SubjectTutorsPage from "@/modules/student/pages/SubjectTutorsPage";
+import { tutorAna, tutorCarlos } from "../../../fixtures/search/testTutors";
 
-vi.mock("@/modules/student/hooks/useSearchTutorsAndMaterias", () => ({
-  useSearchTutorsAndMaterias: vi.fn(),
+vi.mock("@/modules/student/hooks/useSearchTutorsAndSubjects", () => ({
+  useSearchTutorsAndSubjects: vi.fn(),
 }));
 
-import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
+import { useSearchTutorsAndSubjects } from "@/modules/student/hooks/useSearchTutorsAndSubjects";
 
-const mockedHook = vi.mocked(useSearchTutorsAndMaterias);
+const mockedHook = vi.mocked(useSearchTutorsAndSubjects);
 
-type HookResult = ReturnType<typeof useSearchTutorsAndMaterias>;
+type HookResult = ReturnType<typeof useSearchTutorsAndSubjects>;
 
 function hookResult(data: unknown[], isFetching = false): HookResult {
   return { data, isFetching } as unknown as HookResult;
 }
 
-function renderPage(materiaNombre = "Álgebra") {
+function renderPage(subjectName = "Álgebra") {
   return render(
-    <MemoryRouter initialEntries={[`/student/tutores?materia=${encodeURIComponent(materiaNombre)}`]}>
-      <TutoresPorMateriaPage />
+    <MemoryRouter initialEntries={[`/student/tutores?materia=${encodeURIComponent(subjectName)}`]}>
+      <SubjectTutorsPage />
     </MemoryRouter>
   );
 }
 
-describe("TutoresPorMateriaPage", () => {
+describe("SubjectTutorsPage", () => {
   beforeEach(() => {
     mockedHook.mockReset();
   });
