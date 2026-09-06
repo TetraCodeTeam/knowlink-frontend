@@ -24,6 +24,7 @@ src/modules/{modulo}/components/ o pages/ → consume el hook
 - Tipos inferidos de Zod: `z.infer<typeof miSchema>`
 - Toasts: `sonner`
 - El código implementado (clases, métodos, variables, comentarios y logs) debe estar escrito en inglés, a excepción de los mensajes de texto dirigidos al usuario final (errores de validación, notificaciones, contenido de UI).
+- Las interfaces (props, tipos de datos, etc.) no deben declararse dentro del archivo del componente. Deben definirse en archivos separados (por ejemplo ComponentName.types.ts o dentro de una carpeta types/) y luego importarse en el componente.
 
 ### Lo que nunca debe hacer
 
