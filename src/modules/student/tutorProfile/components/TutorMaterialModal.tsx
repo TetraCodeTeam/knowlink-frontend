@@ -1,0 +1,146 @@
+import { useMemo, useState } from "react";
+import { Download, FolderOpen, X } from "lucide-react";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+
+import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
+import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
+import { groupBySubject } from "@/modules/student/tutorProfile/utils/materialTruncation";
+
+interface TutorMaterialModalProps {
+  open: boolean;
+  onClose: () => void;
+  material: TutorMaterialItem[];
+  initialSubject?: string;
+}
+
+const ALL_SUBJECTS_FILTER = "Todos";
+
+const formatFileSize = (sizeMB: number) => {
+  return sizeMB % 1 === 0 ? `${sizeMB} MB` : `${sizeMB.toString().replace(".", ",")} MB`;
+};
+
+const formatMaterialMetadata = (item: TutorMaterialItem) => {
+  if (item.fileSizeMB > 0) {
+    return `${item.fileType} · ${formatFileSize(item.fileSizeMB)}`;
+  }
+  return item.fileType;
+};
+
+/**
+ * Modal con la lista completa de materiales del tutor, filtrable por
+ * materia 
+ *
+ * A diferencia de la card resumen, este modal nunca trunca: muestra
+ * todos los ítems de la materia seleccionada sin límite.
+ */
+export const TutorMaterialModal = ({ open, onClose, material }: TutorMaterialModalProps) => {
+  const [selectedSubject, setSelectedSubject] = useState<string>(ALL_SUBJECTS_FILTER);
+
+  const groupedMaterial = useMemo(() => groupBySubject(material), [material]);
+  const subjectNames = useMemo(() => Object.keys(groupedMaterial), [groupedMaterial]);
+
+  const visibleSubjects =
+    selectedSubject === ALL_SUBJECTS_FILTER ? subjectNames : [selectedSubject];
+
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ px: 3, pt: 2.5, pb: 1.5 }}
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <FolderOpen size={22} color="#5865C8" />
+          <Typography variant="h6" fontWeight={600}>
+            Material Académico
+          </Typography>
+        </Stack>
+        <IconButton size="small" onClick={onClose} aria-label="Cerrar">
+          <X size={20} />
+        </IconButton>
+      </Stack>
+
+      <Stack direction="row" spacing={1} sx={{ px: 3, pb: 2, flexWrap: "wrap", rowGap: 1 }}>
+        <Chip
+          label={ALL_SUBJECTS_FILTER}
+          onClick={() => setSelectedSubject(ALL_SUBJECTS_FILTER)}
+          color={selectedSubject === ALL_SUBJECTS_FILTER ? "primary" : "default"}
+          variant={selectedSubject === ALL_SUBJECTS_FILTER ? "filled" : "outlined"}
+        />
+        {subjectNames.map((subject) => (
+          <Chip
+            key={subject}
+            label={subject}
+            onClick={() => setSelectedSubject(subject)}
+            color={selectedSubject === subject ? "primary" : "default"}
+            variant={selectedSubject === subject ? "filled" : "outlined"}
+          />
+        ))}
+      </Stack>
+
+      <DialogContent dividers sx={{ maxHeight: 420 }}>
+        <Stack spacing={2}>
+          {visibleSubjects.map((subject) => (
+            <Box key={subject}>
+              <Typography variant="subtitle2" color="text.secondary" mb={1}>
+                {subject}
+              </Typography>
+              <Stack spacing={1}>
+                {groupedMaterial[subject].map((item) => {
+                  const FileIcon = FILE_TYPE_ICON[item.fileType];
+                  return (
+                    <Box
+                      key={item.id}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: "#F4F3FB",
+                      }}
+                    >
+                      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
+                        <FileIcon size={20} color="#5865C8" />
+                        <Box sx={{ minWidth: 0 }}>
+                          <Typography variant="subtitle1" fontWeight={600} noWrap>
+                            {item.title}
+                          </Typography>
+                          <Typography variant="subtitle2" color="text.secondary">
+                            {formatMaterialMetadata(item)}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                      <Button
+                        component="a"
+                        href={item.fileUrl}
+                        variant="contained"
+                        size="small"
+                        disableElevation
+                        endIcon={<Download size={16} />}
+                        sx={{ textTransform: "none", borderRadius: 2, flexShrink: 0 }}
+                        aria-label={`Descargar ${item.title}`}
+                      >
+                        Descargar
+                      </Button>
+                    </Box>
+                  );
+                })}
+              </Stack>
+            </Box>
+          ))}
+        </Stack>
+      </DialogContent>
+    </Dialog>
+  );
+};
