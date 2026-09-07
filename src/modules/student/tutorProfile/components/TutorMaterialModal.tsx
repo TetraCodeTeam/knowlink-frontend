@@ -96,7 +96,7 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
               <Typography variant="subtitle1" color="#494949" mb={1} fontWeight={550}>
                 {subject}
               </Typography>
-              <Stack spacing={1}>
+              <Stack spacing={2}>
                 {groupedMaterial[subject].map((item) => {
                   const FileIcon = FILE_TYPE_ICON[item.fileType];
                   return (
@@ -109,6 +109,7 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
                         p: 1.5,
                         borderRadius: 3,
                         bgcolor: "#F4F3FB",
+                        border: "1px solid #E0E0FA",
                       }}
                     >
                       <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>

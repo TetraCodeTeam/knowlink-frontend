@@ -34,6 +34,7 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
         p: 2,
         borderRadius: 3,
         bgcolor: "#F4F3FB",
+        border: "1px solid #E0E0FA",
       }}
     >
       <Box>
