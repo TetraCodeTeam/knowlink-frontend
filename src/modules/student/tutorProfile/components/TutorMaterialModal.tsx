@@ -51,6 +51,17 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
 
   const visibleSubjects =
     selectedSubject === ALL_SUBJECTS_FILTER ? subjectNames : [selectedSubject];
+  
+    const getSubjectChipSx = (isSelected: boolean) => ({
+    bgcolor: isSelected ? "#C7C8FF" : "#E0E0FA",
+    color: "#3A48AD",
+    fontWeight: 600,
+    borderRadius: 3,
+    fontSize:"16px",
+    "&:hover": {
+      bgcolor: "#DAD9FA",
+    },
+  });
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -71,23 +82,32 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
         </IconButton>
       </Stack>
 
-      <Stack direction="row" spacing={2} sx={{ px: 3, pb: 2, flexWrap: "wrap", rowGap: 1 }}>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          px: 3,
+          py: 2,
+          flexWrap: "wrap",
+          rowGap: 1,
+          bgcolor: "#F4F3FB",
+          border: "1px solid #E0E0FA",
+        }}
+      >
         <Chip
-          label={ALL_SUBJECTS_FILTER}
-          onClick={() => setSelectedSubject(ALL_SUBJECTS_FILTER)}
-          color={selectedSubject === ALL_SUBJECTS_FILTER ? "primary" : "default"}
-          variant={selectedSubject === ALL_SUBJECTS_FILTER ? "filled" : "outlined"}
-        />
-        {subjectNames.map((subject) => (
-          <Chip
-            key={subject}
-            label={subject}
-            onClick={() => setSelectedSubject(subject)}
-            color={selectedSubject === subject ? "primary" : "default"}
-            variant={selectedSubject === subject ? "filled" : "outlined"}
-          />
-        ))}
-      </Stack>
+                label={ALL_SUBJECTS_FILTER}
+                onClick={() => setSelectedSubject(ALL_SUBJECTS_FILTER)}
+                sx={getSubjectChipSx(selectedSubject === ALL_SUBJECTS_FILTER)}
+              />
+              {subjectNames.map((subject) => (
+                <Chip
+                  key={subject}
+                  label={subject}
+                  onClick={() => setSelectedSubject(subject)}
+                  sx={getSubjectChipSx(selectedSubject === subject)}
+                />
+              ))}
+            </Stack>
 
       <DialogContent dividers sx={{ maxHeight: 420 }}>
         <Stack spacing={2}>
