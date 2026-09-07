@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Download, FolderOpen, X } from "lucide-react";
 import {
   Box,
@@ -38,26 +38,40 @@ const formatMaterialMetadata = (item: TutorMaterialItem) => {
 
 /**
  * Modal con la lista completa de materiales del tutor, filtrable por
- * materia 
+ * materia
  *
  * A diferencia de la card resumen, este modal nunca trunca: muestra
  * todos los ítems de la materia seleccionada sin límite.
  */
-export const TutorMaterialModal = ({ open, onClose, material, onDownload }: TutorMaterialModalProps) => {
+export const TutorMaterialModal = ({
+  open,
+  onClose,
+  material,
+  initialSubject,
+  onDownload,
+}: TutorMaterialModalProps) => {
   const [selectedSubject, setSelectedSubject] = useState<string>(ALL_SUBJECTS_FILTER);
 
   const groupedMaterial = useMemo(() => groupBySubject(material), [material]);
   const subjectNames = useMemo(() => Object.keys(groupedMaterial), [groupedMaterial]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    setSelectedSubject(
+      initialSubject && subjectNames.includes(initialSubject) ? initialSubject : ALL_SUBJECTS_FILTER
+    );
+  }, [initialSubject, open, subjectNames]);
+
   const visibleSubjects =
     selectedSubject === ALL_SUBJECTS_FILTER ? subjectNames : [selectedSubject];
-  
-    const getSubjectChipSx = (isSelected: boolean) => ({
+
+  const getSubjectChipSx = (isSelected: boolean) => ({
     bgcolor: isSelected ? "#C7C8FF" : "#E0E0FA",
     color: "#3A48AD",
     fontWeight: 600,
     borderRadius: 3,
-    fontSize:"16px",
+    fontSize: "16px",
     "&:hover": {
       bgcolor: "#DAD9FA",
     },
@@ -95,19 +109,19 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
         }}
       >
         <Chip
-                label={ALL_SUBJECTS_FILTER}
-                onClick={() => setSelectedSubject(ALL_SUBJECTS_FILTER)}
-                sx={getSubjectChipSx(selectedSubject === ALL_SUBJECTS_FILTER)}
-              />
-              {subjectNames.map((subject) => (
-                <Chip
-                  key={subject}
-                  label={subject}
-                  onClick={() => setSelectedSubject(subject)}
-                  sx={getSubjectChipSx(selectedSubject === subject)}
-                />
-              ))}
-            </Stack>
+          label={ALL_SUBJECTS_FILTER}
+          onClick={() => setSelectedSubject(ALL_SUBJECTS_FILTER)}
+          sx={getSubjectChipSx(selectedSubject === ALL_SUBJECTS_FILTER)}
+        />
+        {subjectNames.map((subject) => (
+          <Chip
+            key={subject}
+            label={subject}
+            onClick={() => setSelectedSubject(subject)}
+            sx={getSubjectChipSx(selectedSubject === subject)}
+          />
+        ))}
+      </Stack>
 
       <DialogContent dividers sx={{ maxHeight: 420 }}>
         <Stack spacing={2}>
