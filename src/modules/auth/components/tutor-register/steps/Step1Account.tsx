@@ -39,7 +39,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
   const {
     register,
     handleSubmit,
-    setValue,
     control,
     formState: { errors },
     setError,
@@ -58,7 +57,6 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
 
     const url = URL.createObjectURL(file);
     setAvatarPreview(url);
-    setValue("profilePictureUrl", url);
   };
 
   const handleAccountSubmit = async (data: Step1Data) => {

@@ -3,10 +3,12 @@ import { PersonalDataCard } from "@/modules/student/profile/components/PersonalD
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
+import { useUploadStudentProfilePicture } from "@/modules/student/profile/hooks/useUploadStudentProfilePicture";
 
 
 export const OwnProfilePage = () => {
   const { data: profile, isLoading, isError } = useMyStudentProfile();
+  const uploadMutation = useUploadStudentProfilePicture();
 
   if (isLoading) {
     return (
@@ -29,6 +31,8 @@ export const OwnProfilePage = () => {
       <ProfileHeader
         fullName={profile.fullName}
         profilePictureUrl={profile.profilePictureUrl}
+        onPictureChange={(file) => uploadMutation.mutate(file)}
+        isUploading={uploadMutation.isPending}
       />
 
              <Stack spacing={3}>
@@ -43,16 +47,6 @@ export const OwnProfilePage = () => {
                     career={profile.career}
                 />
             </Stack>
-        {/* </Grid> */}
-        {/* <Grid size={{ xs: 12, md: 4 }}>
-          <AccountManagementCard
-            onDeactivateAccount={() => console.log("Abrir confirmación de desactivación de cuenta")}
-            onDeleteAccount={() => console.log("Abrir confirmación de eliminación de cuenta")}
-          />
-        </Grid> */}
-      {/* </Grid> */}
-
-      
     </Stack>
   );
 };

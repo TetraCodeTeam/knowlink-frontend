@@ -1,9 +1,8 @@
-import { IdCard, Mail, Phone, Pencil, GraduationCap } from "lucide-react";
+import { IdCard, Mail, Phone, GraduationCap } from "lucide-react";
 import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 
 
 import { ReactNode } from "react";
-import AppButton from "@/shared/components/AppButton";
 
 interface PersonalDataCardProps {
   email: string;
@@ -48,7 +47,7 @@ export const PersonalDataCard = ({
   email,
   phoneNumber,
   major,
-  onEditProfile,
+  onEditProfile: _onEditProfile,
 }: PersonalDataCardProps) => {
   return (
     <Paper elevation={0} sx={{ pt: 3, pb: 4, pr: 3, pl: 3, borderRadius: 3, height: "100%", border: "0.2px solid #e0e0fa" }}>

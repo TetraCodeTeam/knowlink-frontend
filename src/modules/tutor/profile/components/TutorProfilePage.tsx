@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Avatar,
+  Badge,
   Box,
   CircularProgress,
   Divider,
+  IconButton,
   Rating,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
-import { Mail, Map, Phone } from "lucide-react";
+import { Camera, Mail, Map, Phone } from "lucide-react";
 import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 import { getInitials, getUniqueModalities } from "@/modules/tutor/profile/utils/profile.utils";
 import { SECTION_LABEL_SX } from "@/modules/tutor/profile/styles/profileStyles";
@@ -26,6 +28,7 @@ import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";
 import StudentRoleCard from "@/modules/tutor/dual-role/components/StudentRoleCard";
+import { useUploadTutorProfilePicture } from "@/modules/tutor/profile/hooks/useUploadTutorProfilePicture";
 
 export default function TutorProfilePage() {
   const queryClient = useQueryClient();
@@ -34,6 +37,8 @@ export default function TutorProfilePage() {
   const [openAddSubject, setOpenAddSubject] = useState(false);
   const { hasAvailableSubjects, isLoading: subjectsLoading } = useAvailableSubjects();
   const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
+  const uploadMutation = useUploadTutorProfilePicture();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubjectAdded = () => {
     setOpenAddSubject(false);
@@ -53,6 +58,13 @@ export default function TutorProfilePage() {
     }
 
     setOpenAddSubject(true);
+  };
+
+  const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    uploadMutation.mutate(file);
+    e.target.value = "";
   };
 
   if (isLoading) {
@@ -91,19 +103,48 @@ export default function TutorProfilePage() {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: "28px", p: "28px 32px" }}>
-          <Avatar
-            src={profile.profilePictureUrl ?? undefined}
-            sx={{
-              width: 120,
-              height: 120,
-              fontSize: "40px",
-              fontWeight: 600,
-              bgcolor: "#4C5CB5",
-              flexShrink: 0,
-            }}
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={
+              <IconButton
+                size="small"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadMutation.isPending}
+                sx={{
+                  bgcolor: "#4C5CB5",
+                  color: "#fff",
+                  width: 28,
+                  height: 28,
+                  "&:hover": { bgcolor: "#3A4A9A" },
+                }}
+              >
+                <Camera size={16} />
+              </IconButton>
+            }
           >
-            {initials}
-          </Avatar>
+            <Avatar
+              src={profile.profilePictureUrl ?? undefined}
+              sx={{
+                width: 120,
+                height: 120,
+                fontSize: "40px",
+                fontWeight: 600,
+                bgcolor: "#4C5CB5",
+                flexShrink: 0,
+                opacity: uploadMutation.isPending ? 0.5 : 1,
+              }}
+            >
+              {initials}
+            </Avatar>
+          </Badge>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+            onChange={handlePictureChange}
+          />
 
           <Box>
             <Typography
