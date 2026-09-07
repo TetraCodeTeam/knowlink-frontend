@@ -71,7 +71,7 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
         </IconButton>
       </Stack>
 
-      <Stack direction="row" spacing={1} sx={{ px: 3, pb: 2, flexWrap: "wrap", rowGap: 1 }}>
+      <Stack direction="row" spacing={2} sx={{ px: 3, pb: 2, flexWrap: "wrap", rowGap: 1 }}>
         <Chip
           label={ALL_SUBJECTS_FILTER}
           onClick={() => setSelectedSubject(ALL_SUBJECTS_FILTER)}
@@ -93,7 +93,7 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
         <Stack spacing={2}>
           {visibleSubjects.map((subject) => (
             <Box key={subject}>
-              <Typography variant="subtitle2" color="text.secondary" mb={1}>
+              <Typography variant="subtitle1" color="#494949" mb={1} fontWeight={550}>
                 {subject}
               </Typography>
               <Stack spacing={1}>
@@ -107,7 +107,7 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
                         alignItems: "center",
                         justifyContent: "space-between",
                         p: 1.5,
-                        borderRadius: 2,
+                        borderRadius: 3,
                         bgcolor: "#F4F3FB",
                       }}
                     >
@@ -128,7 +128,7 @@ export const TutorMaterialModal = ({ open, onClose, material, onDownload }: Tuto
                         size="small"
                         disableElevation
                         endIcon={<Download size={16} />}
-                        sx={{ textTransform: "none", borderRadius: 2, flexShrink: 0 }}
+                        sx={{ textTransform: "none", borderRadius: 3, flexShrink: 0 }}
                         aria-label={`Descargar ${item.title}`}
                       >
                         Descargar
