@@ -26,7 +26,9 @@ interface TutorMaterialModalProps {
 const ALL_SUBJECTS_FILTER = "Todos";
 
 const formatFileSize = (sizeMB: number) => {
-  return sizeMB % 1 === 0 ? `${sizeMB} MB` : `${sizeMB.toString().replace(".", ",")} MB`;
+  return sizeMB % 1 === 0
+    ? `${sizeMB} MB`
+    : `${sizeMB.toFixed(2).replace(/\.0+$/, "").replace(".", ",")} MB`;
 };
 
 const formatMaterialMetadata = (item: TutorMaterialItem) => {
