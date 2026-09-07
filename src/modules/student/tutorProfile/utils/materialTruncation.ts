@@ -1,6 +1,6 @@
 import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 
-const MAX_SUBJECTS_PREVIEW = 3;
+const MAX_SUBJECTS_PREVIEW = 2;
 const MAX_ITEMS_PER_SUBJECT_PREVIEW = 3;
 
 export type GroupedMaterial = Record<string, TutorMaterialItem[]>;
@@ -36,7 +36,7 @@ interface MaterialPreview {
  * Regla de truncamiento para la card resumen (no aplica al modal
  * "Ver Todo"/"Ver más", que siempre muestra todo sin límite dentro
  * de la materia filtrada):
- * - Máximo 3 materias visibles → exceso dispara "Ver Todo" general.
+ * - Máximo 2 materias visibles → exceso dispara "Ver Todo" general.
  * - Máximo 3 ítems por materia visible → exceso dispara un "Ver más"
  *   propio de esa materia, independiente de cuántas materias haya
  *   en total.

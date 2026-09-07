@@ -12,7 +12,7 @@ export const TutorAboutCard = ({ about }: TutorAboutCardProps) => {
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 2 }}>
-      <CardContent>
+      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
           <User size={25} color="#5865C8"/>
           <Typography variant="h5" fontWeight={500}>

@@ -14,7 +14,7 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
   const previewSubjects = subjectRates.slice(0, 3);
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
-      <CardContent>
+      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
           <Stack direction="row" spacing={1} alignItems="center">
             <BookOpenText size={25} color="#5865C8" />

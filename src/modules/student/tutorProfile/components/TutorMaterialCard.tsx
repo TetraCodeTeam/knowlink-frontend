@@ -42,7 +42,7 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking, onDownload }:
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
-      <CardContent>
+      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
         <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
           <FolderOpen size={25} color="#5865C8" />
           <Typography variant="h5" fontWeight={500}>
@@ -72,8 +72,9 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking, onDownload }:
                     alignItems="center"
                     justifyContent="space-between"
                     mb={1}
+                    mt={2}
                   >
-                    <Typography variant="subtitle1" color="text.secondary">
+                    <Typography variant="subtitle1" color="#494949" fontWeight={550}>
                       {subject}
                     </Typography>
                     {subjectsWithMoreItems.includes(subject) && (
@@ -105,14 +106,14 @@ export const TutorMaterialCard = ({ material, hasConfirmedBooking, onDownload }:
                             alignItems: "center",
                             justifyContent: "space-between",
                             p: 1.5,
-                            borderRadius: 1,
+                            borderRadius: 3,
                             bgcolor: "#F4F3FB",
                           }}
                         >
                           <Stack direction="row" spacing={1.5} alignItems="center">
                             <FileIcon size={20} color="#5865C8" />
                             <Box>
-                              <Typography variant="subtitle1" fontWeight={600}>
+                              <Typography variant="subtitle1" fontWeight={550}>
                                 {item.title}
                               </Typography>
                               <Typography variant="subtitle2" color="text.secondary">
