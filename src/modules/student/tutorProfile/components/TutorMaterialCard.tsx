@@ -4,7 +4,11 @@ import { Download, FolderLock, FolderOpen } from "lucide-react";
 
 import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
-import { buildMaterialPreview, groupBySubject } from "@/modules/student/tutorProfile/utils/materialTruncation";
+import { formatMaterialMetadata } from "@/modules/student/tutorProfile/utils/materialFormatting";
+import {
+  buildMaterialPreview,
+  groupBySubject,
+} from "@/modules/student/tutorProfile/utils/materialTruncation";
 import { TutorMaterialModal } from "@/modules/student/tutorProfile/components/TutorMaterialModal";
 
 interface TutorMaterialCardProps {
@@ -13,19 +17,11 @@ interface TutorMaterialCardProps {
   onDownload: (materialId: string) => void | Promise<void>;
 }
 
-const formatFileSize = (sizeMB: number) => {
-  return sizeMB % 1 === 0 ? `${sizeMB} MB` : `${sizeMB.toString().replace(".", ",")} MB`;
-};
-
-const formatMaterialMetadata = (item: TutorMaterialItem) => {
-  if (item.fileSizeMB > 0) {
-    return `${item.fileType} · ${formatFileSize(item.fileSizeMB)}`;
-  }
-
-  return item.fileType;
-};
-
-export const TutorMaterialCard = ({ material, hasConfirmedBooking, onDownload }: TutorMaterialCardProps) => {
+export const TutorMaterialCard = ({
+  material,
+  hasConfirmedBooking,
+  onDownload,
+}: TutorMaterialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialSubject, setModalInitialSubject] = useState<string | undefined>(undefined);
 

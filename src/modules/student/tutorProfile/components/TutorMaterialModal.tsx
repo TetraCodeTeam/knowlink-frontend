@@ -13,6 +13,7 @@ import {
 
 import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
+import { formatMaterialMetadata } from "@/modules/student/tutorProfile/utils/materialFormatting";
 import { groupBySubject } from "@/modules/student/tutorProfile/utils/materialTruncation";
 
 interface TutorMaterialModalProps {
@@ -24,19 +25,6 @@ interface TutorMaterialModalProps {
 }
 
 const ALL_SUBJECTS_FILTER = "Todos";
-
-const formatFileSize = (sizeMB: number) => {
-  return sizeMB % 1 === 0
-    ? `${sizeMB} MB`
-    : `${sizeMB.toFixed(2).replace(/\.0+$/, "").replace(".", ",")} MB`;
-};
-
-const formatMaterialMetadata = (item: TutorMaterialItem) => {
-  if (item.fileSizeMB > 0) {
-    return `${item.fileType} · ${formatFileSize(item.fileSizeMB)}`;
-  }
-  return item.fileType;
-};
 
 /**
  * Modal con la lista completa de materiales del tutor, filtrable por
