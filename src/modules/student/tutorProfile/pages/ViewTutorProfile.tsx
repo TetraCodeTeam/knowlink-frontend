@@ -7,13 +7,14 @@ import { TutorSubjectsCard } from "@/modules/student/tutorProfile/components/Tut
 import { TutorMaterialCard } from "@/modules/student/tutorProfile/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/student/tutorProfile/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/student/tutorProfile/hooks/useTutorProfile";
+import { useTutorMaterialDownload } from "@/modules/student/tutorProfile/hooks/useTutorMaterialDownload";
 import { ReviewsDialog } from "@/modules/student/tutorProfile/components/ReviewsDialog";
-import { getMaterialDownloadUrl } from "@/modules/student/tutorProfile/api/getTutorProfile";
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
   const navigate = useNavigate();
   const { data: tutor, isLoading, isError } = useTutorProfile(tutorId ?? "");
+  const { downloadMaterial } = useTutorMaterialDownload();
 
   if (isLoading) {
     return (
@@ -35,11 +36,6 @@ export const TutorProfilePage = () => {
     navigate(`/student/tutor/${tutorId}/booking`);
   };
 
-  const handleDownload = async (materialId: string) => {
-    const downloadUrl = await getMaterialDownloadUrl(materialId);
-    window.open(downloadUrl, "_blank", "noopener,noreferrer");
-  };
-
   return (
     <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
@@ -57,7 +53,7 @@ export const TutorProfilePage = () => {
             <TutorMaterialCard
               material={tutor.material}
               hasConfirmedBooking={tutor.hasConfirmedBooking}
-              onDownload={handleDownload}
+              onDownload={downloadMaterial}
             />
           </Stack>
         </Grid>
