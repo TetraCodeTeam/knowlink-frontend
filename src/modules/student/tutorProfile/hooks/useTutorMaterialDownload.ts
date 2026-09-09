@@ -10,6 +10,7 @@ export const useTutorMaterialDownload = () => {
         return;
       }
       window.open(downloadUrl, "_blank", "noopener,noreferrer");
+    } catch (error: unknown) {
       const message =
         (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
         "No se pudo descargar el material. Intentá de nuevo.";
