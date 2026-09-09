@@ -5,8 +5,7 @@ import type {
   TutorMaterialItem,
   RawModality,
 } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
-import type { TutorProfileApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
-import type { TutorMaterialApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
+import type { TutorMaterialAccessApiResponse, TutorMaterialApiResponse, TutorProfileApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
 const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => {
