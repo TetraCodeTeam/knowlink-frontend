@@ -10,8 +10,10 @@ export const useTutorProfile = (tutorId: string) => {
   return useQuery({
     queryKey: ["tutorProfile", tutorId],
     queryFn: async () => {
-      const profile = await getTutorProfile(tutorId);
-      const hasConfirmedBooking = await checkTutorMaterialAccess(tutorId);
+      const [profile, hasConfirmedBooking] = await Promise.all([
+        getTutorProfile(tutorId),
+        checkTutorMaterialAccess(tutorId),
+      ]);
       const materials = hasConfirmedBooking
         ? mapTutorMaterials(await getAccessibleTutorMaterials(tutorId))
         : [];
