@@ -31,13 +31,14 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
-        p: 1.5,
-        borderRadius: 1,
+        p: 2,
+        borderRadius: 3,
         bgcolor: "#F4F3FB",
+        border: "1px solid #E0E0FA",
       }}
     >
       <Box>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography variant="h6" fontWeight={500}>
           {subject.name}
         </Typography>
         <Stack direction="row" spacing={3} alignItems="center" mt={1} flexWrap="wrap" useFlexGap>
