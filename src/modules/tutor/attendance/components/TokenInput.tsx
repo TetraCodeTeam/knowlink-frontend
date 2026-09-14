@@ -116,7 +116,16 @@ export const SessionCodeInput = forwardRef<SessionCodeInputHandle, SessionCodeIn
                 sx: { textAlign: "center", fontSize: "1.5rem", fontWeight: 600, p: 1.25 },
               },
             }}
-            sx={{ width: 52, borderRadius: 10 }}
+            sx={{ width: 52, "& .MuiOutlinedInput-root": { borderRadius: 3,  bgcolor: "#EEEDFE",
+              "& fieldset": {
+                borderColor: "#C7C8FF",
+              },
+              "&:hover fieldset": {
+                borderColor: "#bbbdff",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#b2b4fd",
+              },} }}
           />
         ))}
       </Box>

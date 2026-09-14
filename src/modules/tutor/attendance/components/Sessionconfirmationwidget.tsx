@@ -4,6 +4,7 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 
 import { useDraggablePosition } from "@/modules/tutor/attendance/hooks/useDraggablePosition";
 import { useSessionConfirmationStore } from "@/modules/tutor/attendance/hooks/useSessionConfirmationStore";
+import CountdownTimer from "@/shared/components/CountdownTimer";
 import {
   SessionCodeInput,
   type SessionCodeInputHandle,
@@ -22,8 +23,7 @@ const DEFAULT_ERROR_MESSAGE =
 
 /**
  * Se monta UNA sola vez en el layout raíz de la app (fuera del
- * router), no por pantalla — ver nota de montaje al final del
- * archivo. Se muestra/oculta según `pending` del store global, así
+ * router), no por pantalla. Se muestra/oculta según `pending` del store global, así
  * que persiste visualmente aunque el usuario navegue entre rutas.
  */
 export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidgetProps) => {
@@ -103,19 +103,20 @@ export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidg
         </Typography>
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-          Tu alumno recibe un código de 4 dígitos antes de la clase. Pedíselo al empezar para
-          confirmar que la sesión se está dictando y así habilitar el cobro.
+          Pídele al alumno el código de 4 dígitos para confirmar la clase
         </Typography>
       </Box>
 
-      <SessionCodeInput
-        ref={codeInputRef}
-        onComplete={(code) => {
-          setEnteredCode(code);
-          setIsCodeComplete(true);
-        }}
-        disabled={isConfirming}
-      />
+      <Box sx={{ mb: 2 }}>
+        <SessionCodeInput
+          ref={codeInputRef}
+          onComplete={(code) => {
+            setEnteredCode(code);
+            setIsCodeComplete(true);
+          }}
+          disabled={isConfirming}
+        />
+      </Box>
 
       {errorMessage && (
         <Typography
@@ -130,30 +131,16 @@ export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidg
         </Typography>
       )}
 
-      <Typography
-        variant="caption"
-        sx={{
-          display: "block",
-          mt: 2,
-          mb: 2,
-          color: "#B98900",
-          bgcolor: "#FDF3DA",
-          borderRadius: 2,
-          py: 0.75,
-        }}
-      >
-        Tenés hasta las {pending.deadlineLabel} para confirmar la clase
-      </Typography>
+      <Box sx={{ mt: 4, mb: 1 }}>
+        <CountdownTimer
+          expiresAt={pending.expiresAt}
+          label="Tiempo para confirmar"
+          onExpire={clearConfirmation}
+          backgroundColor="#EEEDFE"
+          borderColor="#909dff62"
+        />
+      </Box>
 
-      <Button
-        variant="contained"
-        fullWidth
-        disabled={!isCodeComplete || isConfirming}
-        onClick={() => void handleCodeComplete()}
-        sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
-      >
-        {isConfirming ? "Confirmando..." : "Confirmar"}
-      </Button>
     </Paper>
   );
 };

@@ -12,6 +12,7 @@ export default function TutorHomePage() {
         onClick={() =>
           openConfirmation({
             sessionId: "test-session-123",
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
             deadlineLabel: "23:00 hs",
           })
         }

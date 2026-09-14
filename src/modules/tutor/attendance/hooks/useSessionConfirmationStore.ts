@@ -2,8 +2,9 @@ import { create } from "zustand";
 
 export interface PendingSessionConfirmation {
   sessionId: string;
+  expiresAt: string;
   /** Texto ya formateado por el backend/caller, ej. "18:10 hs". No se
-   * recalcula en vivo — ver discusión en el chat sobre esta decisión. */
+   * recalcula en vivo; el countdown usa expiresAt como fuente de verdad. */
   deadlineLabel: string;
 }
 
