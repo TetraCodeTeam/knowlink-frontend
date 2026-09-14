@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/TutorSidebar";
+import { SessionConfirmationWidget } from "@/modules/tutor/attendance/components/Sessionconfirmationwidget";
 
 export default function TutorLayout() {
   return (
@@ -17,6 +18,11 @@ export default function TutorLayout() {
       >
         <Outlet />
       </Box>
+      <SessionConfirmationWidget
+        onConfirm={async ({ sessionId, code }) => {
+          console.log("Attendance confirmation pending backend integration", { sessionId, code });
+        }}
+      />
     </Box>
   );
 }
