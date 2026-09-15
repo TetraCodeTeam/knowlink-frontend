@@ -9,49 +9,46 @@ const bookedCurrent = AGENDA_BLOCK_COLOR.booked.current;
 const bookedPast = AGENDA_BLOCK_COLOR.booked.past;
 
 /**
- * Extiende calendarBaseSx. IMPORTANTE: calendarBaseSx define
- * ".fc-event" con bgcolor/borderColor en "!important" — eso pisaría
- * cualquier color que le pongamos a los bloques de esta pantalla si
- * dependiéramos solo de props del evento (backgroundColor/borderColor
- * en el EventInput, que FullCalendar aplica como estilo inline, de
- * menor especificidad que un !important en clase). Por eso acá los 4
- * combos de color se fuerzan también con !important sobre selectores
- * más específicos (".fc-event.fc-block-xxx"), y dejan de pasarse como
- * prop del evento en el mapper.
+ * Extiende calendarBaseSx. calendarBaseSx expone el color/borde/sombra del
+ * evento como CSS vars (--fc-event-bg/border/color/shadow) con default
+ * genérico; acá se pisan esas vars por clase en vez de repetir
+ * bgcolor/borderColor con !important, así no hay pelea de especificidad
+ * con el default y las demás pantallas que usan calendarBaseSx (ej.
+ * AvailabilityEditor) no se ven afectadas.
  */
 export const weeklyAgendaCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
   "& .fc-event.fc-block-available-current": {
-    bgcolor: `${availableCurrent.bg} !important`,
-    borderColor: `${availableCurrent.border} !important`,
-    color: `${availableCurrent.text} !important`,
-    borderStyle: `${availableCurrent.borderStyle} !important`,
-    borderWidth: "1.5px !important",
-    boxShadow: "none !important",
+    "--fc-event-bg": availableCurrent.bg,
+    "--fc-event-border": availableCurrent.border,
+    "--fc-event-color": availableCurrent.text,
+    "--fc-event-shadow": "none",
+    borderStyle: availableCurrent.borderStyle,
+    borderWidth: "1.5px",
   },
   "& .fc-event.fc-block-available-past": {
-    bgcolor: `${availablePast.bg} !important`,
-    borderColor: `${availablePast.border} !important`,
-    color: `${availablePast.text} !important`,
-    borderStyle: `${availablePast.borderStyle} !important`,
-    borderWidth: "1.5px !important",
-    boxShadow: "none !important",
+    "--fc-event-bg": availablePast.bg,
+    "--fc-event-border": availablePast.border,
+    "--fc-event-color": availablePast.text,
+    "--fc-event-shadow": "none",
+    borderStyle: availablePast.borderStyle,
+    borderWidth: "1.5px",
     cursor: "not-allowed",
   },
   "& .fc-event.fc-block-booked-current": {
-    bgcolor: `${bookedCurrent.bg} !important`,
-    borderColor: `${bookedCurrent.border} !important`,
-    color: `${bookedCurrent.text} !important`,
-    borderStyle: `${bookedCurrent.borderStyle} !important`,
-    borderWidth: "1px !important",
+    "--fc-event-bg": bookedCurrent.bg,
+    "--fc-event-border": bookedCurrent.border,
+    "--fc-event-color": bookedCurrent.text,
+    borderStyle: bookedCurrent.borderStyle,
+    borderWidth: "1px",
   },
   "& .fc-event.fc-block-booked-past": {
-    bgcolor: `${bookedPast.bg} !important`,
-    borderColor: `${bookedPast.border} !important`,
-    color: `${bookedPast.text} !important`,
-    borderStyle: `${bookedPast.borderStyle} !important`,
-    borderWidth: "1px !important",
+    "--fc-event-bg": bookedPast.bg,
+    "--fc-event-border": bookedPast.border,
+    "--fc-event-color": bookedPast.text,
+    borderStyle: bookedPast.borderStyle,
+    borderWidth: "1px",
     cursor: "not-allowed",
   },
 
