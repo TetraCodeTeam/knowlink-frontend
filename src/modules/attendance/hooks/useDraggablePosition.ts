@@ -17,6 +17,7 @@ interface UseDraggablePositionOptions {
   /** Posición inicial. Si se omite, arranca en (24, 24) — esquina
    * superior izquierda con un margen chico. */
   initialPosition?: Position;
+  horizontalAnchor?: "left" | "right";
 }
 
 /**
@@ -36,6 +37,7 @@ export const useDraggablePosition = (
 ) => {
   const [position, setPosition] = useState<Position>(options?.initialPosition ?? { x: 24, y: 24 });
   const [isDragging, setIsDragging] = useState(false);
+  const horizontalAnchor = options?.horizontalAnchor ?? "left";
 
   // Guarda el offset entre el punto donde se hizo click/touch y la
   // esquina superior izquierda del elemento, para que el drag no
@@ -100,9 +102,15 @@ export const useDraggablePosition = (
       // Evita el scroll de la página en touch mientras se arrastra.
       if ("touches" in event) event.preventDefault();
 
+      const el = elementRef.current;
+      if (!el) return;
+
       const point = getClientPoint(event);
       const next = {
-        x: point.x - dragOffsetRef.current.x,
+        x:
+          horizontalAnchor === "right"
+            ? window.innerWidth - (point.x - dragOffsetRef.current.x) - el.offsetWidth
+            : point.x - dragOffsetRef.current.x,
         y: point.y - dragOffsetRef.current.y,
       };
       setPosition(clampToViewport(next));
@@ -121,7 +129,7 @@ export const useDraggablePosition = (
       window.removeEventListener("touchmove", handleMove);
       window.removeEventListener("touchend", handleEnd);
     };
-  }, [isDragging, clampToViewport]);
+  }, [isDragging, clampToViewport, elementRef, horizontalAnchor]);
 
   // Re-clampea si la ventana cambia de tamaño con el widget ya movido,
   // para que no quede parcial o totalmente fuera de la vista.

@@ -1,7 +1,11 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import StudentSidebar from "@/modules/student/components/StudentSidebar";
-import StudentTopbar, { SIDEBAR_WIDTH, TOPBAR_HEIGHT } from "@/modules/student/components/StudentTopbar";
+import StudentTopbar, {
+  SIDEBAR_WIDTH,
+  TOPBAR_HEIGHT,
+} from "@/modules/student/components/StudentTopbar";
+import { StudentTokenWidget } from "@/modules/attendance/components/StudentTokenWidget";
 
 export default function StudentLayout() {
   return (
@@ -27,6 +31,7 @@ export default function StudentLayout() {
           <Outlet />
         </Box>
       </Box>
+      <StudentTokenWidget />
     </Box>
   );
 }
