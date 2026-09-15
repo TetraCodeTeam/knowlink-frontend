@@ -2,13 +2,13 @@ import { useRef, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { Box, Button, Paper, Typography } from "@mui/material";
 
-import { useDraggablePosition } from "@/modules/tutor/attendance/hooks/useDraggablePosition";
-import { useSessionConfirmationStore } from "@/modules/tutor/attendance/hooks/useSessionConfirmationStore";
+import { useDraggablePosition } from "@/modules/attendance/hooks/useDraggablePosition";
+import { useSessionConfirmationStore } from "@/modules/attendance/hooks/useSessionConfirmationStore";
 import CountdownTimer from "@/shared/components/CountdownTimer";
 import {
   SessionCodeInput,
   type SessionCodeInputHandle,
-} from "@/modules/tutor/attendance/components/TokenInput";
+} from "@/modules/attendance/components/TokenInput";
 
 interface SessionConfirmationWidgetProps {
   /** Ya resuelto contra el backend (verificar código, marcar sesión
@@ -141,6 +141,15 @@ export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidg
         />
       </Box>
 
+      <Button
+        variant="contained"
+        fullWidth
+        disabled={!isCodeComplete || isConfirming}
+        onClick={() => void handleCodeComplete()}
+        sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
+      >
+        {isConfirming ? "Confirmando..." : "Confirmar"}
+      </Button>
     </Paper>
   );
 };

@@ -1,4 +1,4 @@
-import { useSessionConfirmationStore } from "@/modules/tutor/attendance/hooks/useSessionConfirmationStore";
+import { useSessionConfirmationStore } from "@/modules/attendance/hooks/useSessionConfirmationStore";
 import { Box, Button } from "@mui/material";
 
 export default function TutorHomePage() {
