@@ -76,16 +76,13 @@ export function mapBookedSessionsToEvents(sessions: BookedSessionResponse[]): Ev
 }
 
 /**
- * Background event que sombrea las horas ya transcurridas del día actual
- * dentro de la semana visible (desde el inicio de la franja horaria hasta
- * ahora). FullCalendar no tiene una prop nativa para esto —nowIndicator
- * solo dibuja la línea—, así que se modela como un evento de fondo aparte.
- * Si "ahora" no cae dentro de la semana visible, no se genera nada.
+ * Background event que sombrea desde la medianoche de hoy hasta el instante
+ * actual, con la línea de "ahora" dibujada como borde inferior (mismo
+ * patrón que useAvailabilityDraft/BookingCalendar, vía la clase compartida
+ * "fc-unavailable-now" de calendarBaseSx). Si "ahora" no cae dentro de la
+ * semana visible, no se genera nada.
  */
-export function buildPastTimeShadingEvent(
-  weekStart: Date,
-  slotMinTime: string
-): EventInput | null {
+export function buildPastTimeShadingEvent(weekStart: Date): EventInput | null {
   const now = new Date();
   const weekEnd = new Date(weekStart);
   weekEnd.setDate(weekStart.getDate() + 7);
@@ -98,9 +95,9 @@ export function buildPastTimeShadingEvent(
   return {
     id: "past-time-shading",
     display: "background",
-    start: `${todayIso}T${slotMinTime}`,
+    start: `${todayIso}T00:00:00`,
     end: now.toISOString(),
-    backgroundColor: "rgba(168, 168, 168, 0.12)",
+    classNames: ["fc-unavailable-now"],
   };
 }
 

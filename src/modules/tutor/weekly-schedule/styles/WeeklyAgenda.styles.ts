@@ -52,15 +52,6 @@ export const weeklyAgendaCalendarSx: SxProps<Theme> = {
     cursor: "not-allowed",
   },
 
-  // Línea de "ahora" nativa: gris en vez del rojo default.
-  "& .fc-timegrid-now-indicator-line": {
-    borderColor: "#999999 !important",
-    borderWidth: "1.5px !important",
-  },
-  "& .fc-timegrid-now-indicator-arrow": {
-    display: "none",
-  },
-
   // Contenido custom del evento (ver eventContent en el componente).
   "& .fc-event .agenda-event-content": {
     display: "flex",

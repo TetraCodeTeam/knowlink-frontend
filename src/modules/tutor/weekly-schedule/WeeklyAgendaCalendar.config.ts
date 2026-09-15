@@ -23,7 +23,6 @@ export const WEEKLY_AGENDA_CALENDAR_CONFIG = {
   eventStartEditable: false,
   eventDurationEditable: false,
   height: "auto" as const,
-  // Línea de "ahora" nativa; el sombreado de horas pasadas se agrega
-  // aparte como background event (ver buildPastTimeShadingEvent).
-  nowIndicator: true,
+  // Sin nowIndicator nativo: la línea de "ahora" se dibuja como borde
+  // inferior del background event de sombreado (ver buildPastTimeShadingEvent).
 };
