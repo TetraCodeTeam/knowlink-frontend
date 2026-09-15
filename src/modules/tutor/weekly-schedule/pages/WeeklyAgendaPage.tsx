@@ -1,4 +1,4 @@
-import { IconButton, Stack, Typography } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { useWeeklyAgenda } from "@/modules/tutor/weekly-schedule/hooks/useWeeklyAgenda";
@@ -47,17 +47,17 @@ export function WeeklyAgendaPage() {
   const nextSession = findNextSession(data.bookedSessions);
 
   return (
-    <Stack spacing={3} sx={{ p: { xs: 2, md: 3 } }}>
-      <Typography variant="overline" color="text.secondary">
-        Mi agenda → semana
-      </Typography>
+    <Stack  sx={{ p: { xs: 2, md: 5 } }}>
 
-      <AgendaSummaryCards
-        confirmedBookings={confirmedBookings}
-        freeBlocks={freeBlocks}
-        nextSession={nextSession}
-      />
+      <Box sx={{ mb: 6 }}>
+        <AgendaSummaryCards
+          confirmedBookings={confirmedBookings}
+          freeBlocks={freeBlocks}
+          nextSession={nextSession}
+        />
+      </Box>
 
+      <Box sx={{ mb: 2 }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
         <Stack direction="row" alignItems="center" spacing={1.5} sx={agendaToolbarChipSx}>
           <Typography variant="h6" fontWeight={700}>
@@ -76,6 +76,7 @@ export function WeeklyAgendaPage() {
 
         <AgendaLegend />
       </Stack>
+      </Box>
 
       <WeeklyAgendaCalendar
         weekStart={weekStart}
