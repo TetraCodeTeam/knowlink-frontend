@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import { Box } from "@mui/material";
 import BookingCard from "@/modules/student/booking/components/BookingCard";
 import BookingCalendar from "@/modules/student/booking/components/BookingCalendar";
@@ -36,7 +37,11 @@ export default function BookingClassPage() {
     try {
       await holdSlot(nextSlot);
       setSlot(nextSlot);
-    } catch {
+    } catch (error: unknown) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "No se pudo seleccionar este horario. Intentá nuevamente.";
+      toast.error(message);
       setSlot(null);
     }
   };
