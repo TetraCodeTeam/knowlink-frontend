@@ -103,6 +103,7 @@ export function WeeklyAgendaCalendar({
       </Stack>
 
       <FullCalendar
+        key={weekStart.toISOString()}
         {...WEEKLY_AGENDA_CALENDAR_CONFIG}
         initialDate={weekStart}
         events={events}
