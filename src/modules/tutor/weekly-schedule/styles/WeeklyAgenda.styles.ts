@@ -85,13 +85,13 @@ export const agendaToolbarChipSx: SxProps<Theme> = {
 export const agendaSummaryCardSx: SxProps<Theme> = {
   display: "flex",
   flexDirection: "column",
-  gap: 1.5,
-  border: "1px solid #ececf4",
+  gap: 0.5,
+  border: "1px solid #F4F2FF",
   borderRadius: 4,
   px: 2.5,
   py: 2,
   bgcolor: "#fff",
-  boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
   flex: 1,
 };
 
@@ -100,7 +100,7 @@ export const agendaStatChipSx = (chipBg: string): SxProps<Theme> => ({
   color: "text.secondary",
   fontWeight: 500,
   border: "none",
-  "& .MuiChip-label": { px: 1.25 },
+  "& .MuiChip-label": { px: 1.25, fontSize:"14px" },
 });
 
 export const agendaStatIconBoxSx = (iconBg: string): SxProps<Theme> => ({

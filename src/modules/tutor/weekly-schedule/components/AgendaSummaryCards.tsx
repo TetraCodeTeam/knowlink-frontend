@@ -23,7 +23,7 @@ function StatChip({ label, dotColor, chipBg }: { label: string; dotColor: string
       icon={
         <Box
           component="span"
-          sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: dotColor, ml: "8px !important" }}
+          sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: dotColor, ml: "8px !important" }}
         />
       }
       label={label}
@@ -41,7 +41,7 @@ export function AgendaSummaryCards({
   const nextSessionColor = AGENDA_STAT_COLOR.nextSession;
 
   return (
-    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+    <Stack direction={{ xs: "column", sm: "row" }} spacing={4.5} sx={{bgcolor:"#ffffff4d", borderRadius: 3, px: 2, py: 2,}}>
       <Box sx={agendaSummaryCardSx}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <StatChip label="Esta semana" dotColor={bookingsColor.dot} chipBg={bookingsColor.chipBg} />
@@ -53,7 +53,7 @@ export function AgendaSummaryCards({
           <Typography variant="h4" fontWeight={700}>
             {confirmedBookings}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="h6" color="text.secondary">
             Reservas confirmadas
           </Typography>
         </Stack>
@@ -74,7 +74,7 @@ export function AgendaSummaryCards({
           <Typography variant="h4" fontWeight={700}>
             {freeBlocks}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="h6" color="text.secondary">
             Bloques libres
           </Typography>
         </Stack>
@@ -93,16 +93,16 @@ export function AgendaSummaryCards({
         </Stack>
         {nextSession ? (
           <Box>
-            <Typography variant="body1" fontWeight={700} lineHeight={1.3}>
+            <Typography variant="h6" fontWeight={700} lineHeight={1.3}>
               {nextSession.subjectName}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="subtitle1" color="text.secondary">
               {nextSession.dateLabel} • {nextSession.timeLabel}
             </Typography>
           </Box>
         ) : (
-          <Typography variant="body2" color="text.secondary">
-            Sin próximas clases
+          <Typography variant="h6" color="text.secondary">
+            Aún no hay clases agendadas
           </Typography>
         )}
       </Box>

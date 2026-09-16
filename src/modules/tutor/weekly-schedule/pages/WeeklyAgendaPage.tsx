@@ -1,27 +1,13 @@
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Box, Stack, Typography } from "@mui/material";
 
 import { useWeeklyAgenda } from "@/modules/tutor/weekly-schedule/hooks/useWeeklyAgenda";
 import { AgendaSummaryCards } from "@/modules/tutor/weekly-schedule/components/AgendaSummaryCards";
-import { AgendaLegend } from "@/modules/tutor/weekly-schedule/components/AgendaLegend";
 import { WeeklyAgendaCalendar } from "@/modules/tutor/weekly-schedule/components/WeeklyAgendaCalendar";
 import {
   countConfirmedBookings,
   countFreeBlocks,
   findNextSession,
 } from "@/modules/tutor/weekly-schedule/utils/weekly-agenda.utils";
-import { agendaToolbarChipSx } from "@/modules/tutor/weekly-schedule/styles/WeeklyAgenda.styles";
-
-const MONTH_LABELS = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
-];
-
-function buildWeekRangeLabel(weekStart: Date): string {
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 6);
-  return `${weekStart.getDate()} - ${weekEnd.getDate()} ${MONTH_LABELS[weekEnd.getMonth()].slice(0, 3)}`;
-}
 
 export function WeeklyAgendaPage() {
   const { data, isLoading, isError, weekStart, goToPreviousWeek, goToNextWeek } = useWeeklyAgenda();
@@ -47,9 +33,8 @@ export function WeeklyAgendaPage() {
   const nextSession = findNextSession(data.bookedSessions);
 
   return (
-    <Stack  sx={{ p: { xs: 2, md: 5 } }}>
-
-      <Box sx={{ mb: 6 }}>
+    <Stack spacing={5} sx={{ p: { xs: 2, md: 3 }, pr: { xs: 2, md: 6 }, pl: { xs: 2, md: 6 } }}>
+      <Box sx={{ mb: 5 }}>
         <AgendaSummaryCards
           confirmedBookings={confirmedBookings}
           freeBlocks={freeBlocks}
@@ -57,31 +42,12 @@ export function WeeklyAgendaPage() {
         />
       </Box>
 
-      <Box sx={{ mb: 2 }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
-        <Stack direction="row" alignItems="center" spacing={1.5} sx={agendaToolbarChipSx}>
-          <Typography variant="h6" fontWeight={700}>
-            {MONTH_LABELS[weekStart.getMonth()]} {weekStart.getFullYear()}
-          </Typography>
-          <IconButton size="small" onClick={goToPreviousWeek} aria-label="Semana anterior">
-            <ChevronLeft size={18} />
-          </IconButton>
-          <Typography variant="body2" color="text.secondary">
-            {buildWeekRangeLabel(weekStart)}
-          </Typography>
-          <IconButton size="small" onClick={goToNextWeek} aria-label="Semana siguiente">
-            <ChevronRight size={18} />
-          </IconButton>
-        </Stack>
-
-        <AgendaLegend />
-      </Stack>
-      </Box>
-
       <WeeklyAgendaCalendar
         weekStart={weekStart}
         availabilityBlocks={data.availabilityBlocks}
         bookedSessions={data.bookedSessions}
+        onPreviousWeek={goToPreviousWeek}
+        onNextWeek={goToNextWeek}
       />
     </Stack>
   );
