@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FullCalendar from "@fullcalendar/react";
-import type { EventContentArg, EventInput } from "@fullcalendar/core";
+import type { DayCellContentArg, EventContentArg, EventInput } from "@fullcalendar/core";
 
 import type {
   AvailabilityBlockResponse,
@@ -16,6 +16,7 @@ import {
 import { WEEKLY_AGENDA_CALENDAR_CONFIG } from "@/modules/tutor/weekly-schedule/WeeklyAgendaCalendar.config";
 import { weeklyAgendaCalendarSx } from "@/modules/tutor/weekly-schedule/styles/WeeklyAgenda.styles";
 import { AgendaLegend } from "@/modules/tutor/weekly-schedule/components/AgendaLegend";
+import { isBeforeToday } from "@/shared/utils/calendarDateUtils";
 
 const MONTH_LABELS = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -54,13 +55,18 @@ export function WeeklyAgendaCalendar({
   onNextWeek,
 }: WeeklyAgendaCalendarProps) {
   const events = useMemo<EventInput[]>(() => {
-  const shading = buildPastTimeShadingEvent(weekStart);
-  return [
-    ...mapAvailabilityBlocksToEvents(availabilityBlocks, weekStart),
-    ...mapBookedSessionsToEvents(bookedSessions),
-    ...(shading ? [shading] : []),
-  ];
-}, [availabilityBlocks, bookedSessions, weekStart]);
+    const shading = buildPastTimeShadingEvent(weekStart);
+    return [
+      ...mapAvailabilityBlocksToEvents(availabilityBlocks, weekStart),
+      ...mapBookedSessionsToEvents(bookedSessions),
+      ...(shading ? [shading] : []),
+    ];
+  }, [availabilityBlocks, bookedSessions, weekStart]);
+
+  const dayCellClassNames = useCallback(
+    (arg: DayCellContentArg) => (isBeforeToday(arg.date) ? ["fc-agenda-past-day"] : []),
+    []
+  );
 
   return (
     <Box sx={weeklyAgendaCalendarSx}>
@@ -101,6 +107,7 @@ export function WeeklyAgendaCalendar({
         initialDate={weekStart}
         events={events}
         eventContent={renderEventContent}
+        dayCellClassNames={dayCellClassNames}
       />
     </Box>
   );

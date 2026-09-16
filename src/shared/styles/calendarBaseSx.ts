@@ -68,6 +68,9 @@ export const calendarBaseSx: SxProps<Theme> = {
     cursor: "pointer",
     transition: "opacity 0.15s ease",
   },
+  "& .fc-event-main": {
+    color: "var(--fc-event-text-color, inherit)",
+  },
   "& .fc-event:hover": {
     opacity: 0.85,
   },
