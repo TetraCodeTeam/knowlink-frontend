@@ -49,6 +49,11 @@ export function toDateStr(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
+export function dayOfWeekFromDate(date: string): number {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day).getDay();
+}
+
 export function getWeekEnd(weekMonday: Date): Date {
   const end = new Date(weekMonday);
   end.setDate(end.getDate() + 6);
