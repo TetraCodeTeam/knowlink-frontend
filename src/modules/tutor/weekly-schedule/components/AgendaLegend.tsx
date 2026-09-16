@@ -9,7 +9,7 @@ export function AgendaLegend() {
       {AGENDA_LEGEND_ITEMS.map((item) => (
         <Stack key={item.label} direction="row" alignItems="center" spacing={0.75}>
           <Box component="span" sx={agendaLegendDotSx(item.color)} />
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             {item.label}
           </Typography>
         </Stack>

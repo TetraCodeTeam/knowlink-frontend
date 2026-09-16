@@ -56,8 +56,8 @@ export const AGENDA_BLOCK_COLOR: Record<AgendaBlockKind, { current: AgendaBlockC
 
 /** Leyenda de la grilla (US-52): 3 estados visibles para el tutor. */
 export const AGENDA_LEGEND_ITEMS = [
-  { label: "Disponibles", color: AGENDA_BLOCK_COLOR.available.current.border },
-  { label: "Finalizadas", color: AGENDA_BLOCK_COLOR.available.past.border },
+  { label: "Disponibles", color: AGENDA_BLOCK_COLOR.available.current.bg },
+  { label: "Finalizadas", color: AGENDA_BLOCK_COLOR.available.past.bg },
   { label: "Reservadas", color: AGENDA_BLOCK_COLOR.booked.current.bg },
 ] as const;
 

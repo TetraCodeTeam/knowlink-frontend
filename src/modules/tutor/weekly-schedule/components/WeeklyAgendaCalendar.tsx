@@ -79,17 +79,17 @@ export function WeeklyAgendaCalendar({
           px: 2,
           py: 1,
         }}>
-          <Typography variant="h6" fontWeight={700}>
+          <Typography variant="h5" fontWeight={500}>
             {MONTH_LABELS[weekStart.getMonth()]} {weekStart.getFullYear()}
           </Typography>
           <IconButton size="small" onClick={onPreviousWeek} aria-label="Semana anterior">
-            <ChevronLeft size={18} />
+            <ChevronLeft size={20} />
           </IconButton>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             {buildWeekRangeLabel(weekStart)}
           </Typography>
           <IconButton size="small" onClick={onNextWeek} aria-label="Semana siguiente">
-            <ChevronRight size={18} />
+            <ChevronRight size={20} />
           </IconButton>
         </Stack>
 

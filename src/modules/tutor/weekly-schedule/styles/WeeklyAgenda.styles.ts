@@ -69,7 +69,7 @@ export const weeklyAgendaCalendarSx: SxProps<Theme> = {
   },
 } as SxProps<Theme>;
 
-/** Chip blanco contenedor para fecha, navegación de semana y leyenda (US-52). */
+/** Chip blanco contenedor para fecha, navegación de semana y leyenda */
 export const agendaToolbarChipSx: SxProps<Theme> = {
   display: "flex",
   alignItems: "center",
@@ -115,9 +115,9 @@ export const agendaStatIconBoxSx = (iconBg: string): SxProps<Theme> => ({
 });
 
 export const agendaLegendDotSx = (color: string): SxProps<Theme> => ({
-  width: 10,
-  height: 10,
-  borderRadius: "50%",
+  width: 15,
+  height: 15,
+  borderRadius: "30%",
   bgcolor: color,
   display: "inline-block",
 });
