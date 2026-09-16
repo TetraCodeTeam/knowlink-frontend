@@ -43,7 +43,7 @@ export const AGENDA_BLOCK_COLOR: Record<AgendaBlockKind, { current: AgendaBlockC
       bg: "rgba(88, 101, 200, 0.6)",
       border: "rgba(63, 76, 174, 0.3)",
       borderStyle: "solid",
-      text: "#ffffff",
+      text: "#555555",
     },
     past: {
       bg: "rgba(168, 168, 168, 0.6)",

@@ -4,7 +4,6 @@ import type {
   AvailabilityBlockResponse,
   BookedSessionResponse,
 } from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda.interface";
-import { AGENDA_BLOCK_COLOR } from "@/modules/tutor/weekly-schedule/constants/weekly-agenda.constants";
 
 /** Devuelve la fecha concreta (dentro de la semana visible) para un dayOfWeek recurrente. */
 function resolveDateForDayOfWeek(weekStart: Date, dayOfWeek: number): Date {
