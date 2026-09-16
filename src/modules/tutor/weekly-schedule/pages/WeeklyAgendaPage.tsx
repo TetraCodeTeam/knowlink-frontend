@@ -6,8 +6,8 @@ import { WeeklyAgendaCalendar } from "@/modules/tutor/weekly-schedule/components
 import {
   countConfirmedBookings,
   countFreeBlocks,
-  findNextSession,
-} from "@/modules/tutor/weekly-schedule/utils/weekly-agenda.utils";
+} from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaSummary.utils";
+import { findNextSession } from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaNextSession.utils";
 
 export function WeeklyAgendaPage() {
   const { data, isLoading, isError, weekStart, goToPreviousWeek, goToNextWeek } = useWeeklyAgenda();

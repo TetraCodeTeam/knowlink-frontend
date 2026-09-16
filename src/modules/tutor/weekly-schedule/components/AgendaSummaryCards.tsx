@@ -5,9 +5,9 @@ import {
   agendaSummaryCardSx,
   agendaStatChipSx,
   agendaStatIconBoxSx,
-} from "@/modules/tutor/weekly-schedule/styles/WeeklyAgenda.styles";
+} from "@/modules/tutor/weekly-schedule/styles/weeklyAgendaSummary.styles";
 import { AGENDA_STAT_COLOR } from "@/modules/tutor/weekly-schedule/constants/statics.constants";
-import type { NextSessionInfo } from "@/modules/tutor/weekly-schedule/utils/weekly-agenda.utils";
+import type { NextSessionInfo } from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaNextSession.utils";
 
 interface AgendaSummaryCardsProps {
   confirmedBookings: number;

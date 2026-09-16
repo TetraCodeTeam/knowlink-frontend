@@ -67,6 +67,22 @@ export function isBeforeNow(date: Date): boolean {
   return date.getTime() < Date.now();
 }
 
+export function resolveDateForDayOfWeek(weekStart: Date, dayOfWeek: number): Date {
+  const monday = new Date(weekStart);
+  const mondayDow = monday.getDay() === 0 ? 7 : monday.getDay();
+  const targetDow = dayOfWeek === 0 ? 7 : dayOfWeek;
+  const result = new Date(monday);
+  result.setDate(monday.getDate() + targetDow - mondayDow);
+  return result;
+}
+
+export function isBeforeNowAtTime(date: Date, time: string): boolean {
+  const [hours, minutes] = time.split(":").map(Number);
+  const candidate = new Date(date);
+  candidate.setHours(hours, minutes, 0, 0);
+  return isBeforeNow(candidate);
+}
+
 export function toLocalDateTimeStr(date: Date): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");

@@ -1,7 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
 
 import { AGENDA_LEGEND_ITEMS } from "@/modules/tutor/weekly-schedule/constants/weekly-agenda.constants";
-import { agendaLegendDotSx, agendaToolbarChipSx } from "@/modules/tutor/weekly-schedule/styles/WeeklyAgenda.styles";
+import {
+  agendaLegendDotSx,
+  agendaToolbarChipSx,
+} from "@/modules/tutor/weekly-schedule/styles/weeklyAgendaLegend.styles";
 
 export function AgendaLegend() {
   return (

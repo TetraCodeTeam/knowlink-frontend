@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import type { WeeklyAgendaResponse } from "@/modules/tutor/availability/interfaces/responses/weekly-agenda.interface";
+import { toDateStr } from "@/shared/utils/calendarDateUtils";
 
 /**
  * Devuelve el lunes de la semana que contiene `date`.
@@ -12,10 +13,6 @@ function getWeekStart(date: Date): Date {
   result.setDate(result.getDate() - (dow - 1));
   result.setHours(0, 0, 0, 0);
   return result;
-}
-
-function toIsoDate(date: Date): string {
-  return date.toISOString().slice(0, 10);
 }
 
 /**
@@ -72,7 +69,7 @@ export function useWeeklyAgenda(initialDate: Date = new Date()) {
   const [referenceDate, setReferenceDate] = useState(initialDate);
 
   const weekStart = useMemo(() => getWeekStart(referenceDate), [referenceDate]);
-  const weekStartIso = toIsoDate(weekStart);
+  const weekStartIso = toDateStr(weekStart);
 
   const query = useQuery({
     queryKey: ["weekly-agenda", weekStartIso],

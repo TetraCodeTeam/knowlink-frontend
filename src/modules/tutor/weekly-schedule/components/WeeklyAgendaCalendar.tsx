@@ -12,9 +12,9 @@ import {
   mapAvailabilityBlocksToEvents,
   mapBookedSessionsToEvents,
   buildPastTimeShadingEvent,
-} from "@/modules/tutor/weekly-schedule/utils/weekly-agenda.utils";
+} from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaEvents.utils";
 import { WEEKLY_AGENDA_CALENDAR_CONFIG } from "@/modules/tutor/weekly-schedule/WeeklyAgendaCalendar.config";
-import { weeklyAgendaCalendarSx } from "@/modules/tutor/weekly-schedule/styles/WeeklyAgenda.styles";
+import { weeklyAgendaCalendarSx } from "@/modules/tutor/weekly-schedule/styles/weeklyAgendaCalendar.styles";
 import { AgendaLegend } from "@/modules/tutor/weekly-schedule/components/AgendaLegend";
 import { isBeforeToday } from "@/shared/utils/calendarDateUtils";
 
