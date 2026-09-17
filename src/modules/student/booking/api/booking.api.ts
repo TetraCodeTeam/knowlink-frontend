@@ -1,6 +1,6 @@
 // API de comandos de reserva: mantiene los slots temporalmente bloqueados, confirma reservas y libera bloqueos.
 // Estas funciones encapsulan las solicitudes HTTP que conectarán el flujo de booking con el backend.
-import { httpClient } from "@/shared/lib/httpClient";
+import { httpClient, rawHttpClient } from "@/shared/lib/httpClient";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import type { BookingRequest } from "@/modules/student/booking/interfaces/requests/bookingRequest.interface";
@@ -11,7 +11,7 @@ export function getBookingBlockId(slotId: string): string {
 }
 
 export async function holdBookingSlot(tutorId: string, slot: BookingSlot): Promise<void> {
-  await httpClient.post(`/api/v1/tutors/${encodeURIComponent(tutorId)}/booking-slots/hold`, {
+  await rawHttpClient.post(`/api/v1/tutors/${encodeURIComponent(tutorId)}/booking-slots/hold`, {
     slotId: getBookingBlockId(slot.id),
     start: slot.startIso,
     end: slot.endIso,
@@ -29,7 +29,7 @@ export async function reserveBooking(
     start: slot.startIso,
     end: slot.endIso,
   };
-  await httpClient.post("/api/v1/bookings", request);
+  await rawHttpClient.post("/api/v1/bookings", request);
 }
 
 export async function releaseBookingSlot(tutorId: string, slot: BookingSlot): Promise<void> {

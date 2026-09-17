@@ -8,6 +8,7 @@ import {
   DEFAULT_BOOKING_FORM_VALUES,
   type BookingFormValues,
 } from "@/modules/student/booking/schemas/booking.schema";
+import { getErrorMessage } from "@/shared/utils/errors";
 
 interface UseBookingFlowProps {
   selectedSlot: BookingCardProps["selectedSlot"];
@@ -44,10 +45,7 @@ export function useBookingFlow({
       await onReserveBooking?.(selectedSlot, data);
       setConfirmedBookingId(selectedSlot.id);
     } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "No se pudo completar la reserva. Intentá nuevamente.";
-      toast.error(message); 
+      toast.error(getErrorMessage(error, "No se pudo completar la reserva. Intentá nuevamente."));
       await onReleaseBooking?.(selectedSlot).catch(() => undefined);
       resetDraft();
     } finally {

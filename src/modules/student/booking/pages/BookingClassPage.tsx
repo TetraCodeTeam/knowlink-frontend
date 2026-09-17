@@ -7,6 +7,7 @@ import BookingCalendar from "@/modules/student/booking/components/BookingCalenda
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import { useBookingRealtime } from "@/modules/student/booking/hooks/useBookingRealtime";
 import { getCurrentWeekMonday, getWeekEnd, toDateStr } from "@/shared/utils/calendarDateUtils";
+import { getErrorMessage } from "@/shared/utils/errors";
 
 const WEEKS_AHEAD = 3;
 
@@ -38,10 +39,9 @@ export default function BookingClassPage() {
       await holdSlot(nextSlot);
       setSlot(nextSlot);
     } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "No se pudo seleccionar este horario. Intentá nuevamente.";
-      toast.error(message);
+      toast.error(
+        getErrorMessage(error, "No se pudo seleccionar este horario. Intentá nuevamente.")
+      );
       setSlot(null);
     }
   };
