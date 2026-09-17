@@ -7,6 +7,7 @@ import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import { TutorProfilePage } from "@/modules/student/tutorProfile/pages/ViewTutorProfile";
 import BookingPreviewPage from "@/modules/student/booking/pages/BookingClassPage";
+import StudentClassHistoryPage from "@/modules/student/pages/StudentClassHistoryPage";
 
 export default function StudentRoutes() {
   return (
@@ -14,7 +15,7 @@ export default function StudentRoutes() {
       <Route element={<StudentLayout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
-        <Route path="classes" element={<UnderConstructionPage />} />
+        <Route path="classes" element={<StudentClassHistoryPage />} />
         <Route path="notifications" element={<UnderConstructionPage />} />
         <Route path="complaints" element={<UnderConstructionPage />} />
         <Route path="profile" element={<OwnProfilePage />} />
