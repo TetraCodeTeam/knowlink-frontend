@@ -1,18 +1,34 @@
 import { Box, Typography } from "@mui/material";
 import { Monitor, Building2 } from "lucide-react";
 import { VIRTUAL_BG, PRESENTIAL_BG } from "@/modules/tutor/profile/constants/profileColors.constants";
+import type { Modality } from "@/modules/tutor/types/modality.type";
+
+export type ModalityChipSize = "sm" | "md";
 
 interface ModalityChipProps {
-  modality: "VIRTUAL" | "IN_PERSON";
+  modality: Modality;
   /** Cuando se usa como selector: si este chip es el elegido. Por defecto true (uso de solo lectura). */
   selected?: boolean;
   /** Si se provee, el chip se vuelve clickeable (uso como selector). */
   onClick?: () => void;
+  /** "sm" para usos compactos (ej. junto a un nombre). Por defecto "md". */
+  size?: ModalityChipSize;
 }
 
-export default function ModalityChip({ modality, selected = true, onClick }: ModalityChipProps) {
+const SIZE_STYLES: Record<ModalityChipSize, { iconSize: number; px: string; py: string; fontSize: string }> = {
+  md: { iconSize: 22, px: "18px", py: "10px", fontSize: "17px" },
+  sm: { iconSize: 16, px: "12px", py: "6px", fontSize: "0.85rem" },
+};
+
+export default function ModalityChip({
+  modality,
+  selected = true,
+  onClick,
+  size = "md",
+}: ModalityChipProps) {
   const isVirtual = modality === "VIRTUAL";
   const interactive = !!onClick;
+  const { iconSize, px, py, fontSize } = SIZE_STYLES[size];
 
   return (
     <Box
@@ -34,8 +50,8 @@ export default function ModalityChip({ modality, selected = true, onClick }: Mod
         display: "inline-flex",
         alignItems: "center",
         gap: "8px",
-        px: "18px",
-        py: "10px",
+        px,
+        py,
         borderRadius: "20px",
         backgroundColor: isVirtual ? VIRTUAL_BG : PRESENTIAL_BG,
         cursor: interactive ? "pointer" : "default",
@@ -45,8 +61,8 @@ export default function ModalityChip({ modality, selected = true, onClick }: Mod
         transition: "opacity 0.15s ease, border-color 0.15s ease",
       }}
     >
-      {isVirtual ? <Monitor size={22} /> : <Building2 size={22} />}
-      <Typography sx={{ fontSize: "17px", fontWeight: 500, color: "#333" }}>
+      {isVirtual ? <Monitor size={iconSize} /> : <Building2 size={iconSize} />}
+      <Typography sx={{ fontSize, fontWeight: 500, color: "#333" }}>
         {isVirtual ? "Virtual" : "Presencial"}
       </Typography>
     </Box>
