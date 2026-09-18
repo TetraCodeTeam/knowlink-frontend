@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import { Box } from "@mui/material";
 import BookingCard from "@/modules/student/booking/components/BookingCard";
 import BookingCalendar from "@/modules/student/booking/components/BookingCalendar";
 import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
 import { useBookingRealtime } from "@/modules/student/booking/hooks/useBookingRealtime";
 import { getCurrentWeekMonday, getWeekEnd, toDateStr } from "@/shared/utils/calendarDateUtils";
+import { getErrorMessage } from "@/shared/utils/errors";
 
 const WEEKS_AHEAD = 3;
 
@@ -36,7 +38,10 @@ export default function BookingClassPage() {
     try {
       await holdSlot(nextSlot);
       setSlot(nextSlot);
-    } catch {
+    } catch (error: unknown) {
+      toast.error(
+        getErrorMessage(error, "No se pudo seleccionar este horario. Intentá nuevamente.")
+      );
       setSlot(null);
     }
   };
