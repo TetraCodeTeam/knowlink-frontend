@@ -18,7 +18,7 @@ interface ClassHistoryCardProps {
 
 export default function ClassHistoryCard({ item, role, category }: ClassHistoryCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const { detail, isLoading } = useBookingDetail(item.bookingId, expanded);
+  const { detail, isLoading, isError } = useBookingDetail(item.bookingId, expanded);
 
   return (
     <Box sx={cardContainerSx}>
@@ -67,8 +67,12 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
       {expanded && (
         <>
           <Divider sx={{ my: "16px" }} />
-          {isLoading || !detail ? (
+          {isLoading ? (
             <Typography sx={{ fontSize: "0.95rem", color: "#888" }}>Cargando detalle...</Typography>
+          ) : isError || !detail ? (
+            <Typography sx={{ fontSize: "0.95rem", color: "#c0392b" }}>
+              No se pudo cargar el detalle. Intentá de nuevo.
+            </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>

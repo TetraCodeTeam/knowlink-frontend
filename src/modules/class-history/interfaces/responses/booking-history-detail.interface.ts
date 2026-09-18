@@ -1,4 +1,4 @@
-import type { Modality } from "@/modules/tutor/profile/components/ModalityChip";
+import type { Modality } from "@/modules/tutor/types/modality.type";
 
 export interface BookingHistoryDetail {
     bookingId: string;

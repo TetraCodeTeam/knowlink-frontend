@@ -15,7 +15,7 @@ interface ClassHistoryPageProps {
 
 export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
   const [category, setCategory] = useState<BookingHistoryCategory>("RESERVED");
-  const { items, hasNext, goToNextPage, resetPage, isLoading, isFetching } = useBookingHistory(
+  const { items, hasNext, goToNextPage, resetPage, isLoading, isFetching, isError } = useBookingHistory(
     role,
     category
   );
@@ -42,6 +42,10 @@ export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: "48px" }}>
           <CircularProgress sx={{ color: "#4C5CB5" }} />
+        </Box>
+      ) : isError ? (
+        <Box textAlign="center" py="48px">
+          <Typography color="error">No se pudo cargar el historial de clases.</Typography>
         </Box>
       ) : items.length === 0 ? (
         <ClassHistoryEmptyState />

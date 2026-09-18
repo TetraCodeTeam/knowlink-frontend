@@ -37,8 +37,11 @@ export default function VirtualLinkBox({
     setError(null);
     try {
       await saveVirtualLink({ virtualSessionLink: trimmed });
-    } catch {
-      setError("No se pudo guardar el link. Intentá de nuevo.");
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "No se pudo guardar el link. Intentá de nuevo.";
+      setError(message);
     }
   };
 
@@ -87,9 +90,12 @@ export default function VirtualLinkBox({
       )}
 
       {editable && (
-        <Typography sx={{ fontSize: "0.78rem", color: "#666", mt: "8px" }}>
-          Podés actualizar el link hasta {VIRTUAL_LINK_EDIT_WINDOW_MINUTES} minutos antes de la clase
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "6px", mt: "8px" }}>
+          <Info size={14} color="#666" />
+          <Typography sx={{ fontSize: "0.78rem", color: "#666" }}>
+            Podés actualizar el link hasta {VIRTUAL_LINK_EDIT_WINDOW_MINUTES} minutos antes de la clase
+          </Typography>
+        </Box>
       )}
     </Box>
   );

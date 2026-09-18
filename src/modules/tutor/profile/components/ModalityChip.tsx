@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { Monitor, Building2 } from "lucide-react";
 import { VIRTUAL_BG, PRESENTIAL_BG } from "@/modules/tutor/profile/constants/profileColors.constants";
+import type { Modality } from "@/modules/tutor/types/modality.type";
 
-export type Modality = "VIRTUAL" | "IN_PERSON";
 export type ModalityChipSize = "sm" | "md";
 
 interface ModalityChipProps {

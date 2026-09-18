@@ -96,5 +96,5 @@ export function isWithinVirtualLinkEditWindow(
   const classStart = new Date(`${sessionDate}T${startTime}`);
   const now = new Date();
   const minutesUntilStart = (classStart.getTime() - now.getTime()) / 60000;
-  return minutesUntilStart > editWindowMinutes || minutesUntilStart > 0;
+  return minutesUntilStart > editWindowMinutes;
 }

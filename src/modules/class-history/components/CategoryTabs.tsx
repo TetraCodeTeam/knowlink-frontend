@@ -17,11 +17,12 @@ export default function CategoryTabs({ activeCategory, onChange }: CategoryTabsP
                     key={category}
                     fullWidth
                     onClick={() => onChange(category)}
+                    aria-pressed={activeCategory === category}
                     sx={categoryTabSx(activeCategory === category)}
                 >
                     {label}
                 </Button>
-            ))} 
+            ))}
         </Box>
     );
 }
