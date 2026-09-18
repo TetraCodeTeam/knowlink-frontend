@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { Timer } from "lucide-react";
 
 interface BookingCountdownTimerProps {
-  durationSeconds?: number; // default: 15 min
+  expiresAt: string; 
   onExpire?: () => void;
 }
 
@@ -13,25 +13,24 @@ function formatTime(totalSeconds: number): string {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export default function BookingCountdownTimer({
-  durationSeconds = 15 * 60,
-  onExpire,
-}: BookingCountdownTimerProps) {
-  const [secondsLeft, setSecondsLeft] = useState(durationSeconds);
+function computeSecondsLeft(expiresAt: string): number {
+  return Math.max(0, Math.floor((new Date(expiresAt).getTime() - Date.now()) / 1000));
+}
+
+export default function BookingCountdownTimer({ expiresAt, onExpire }: BookingCountdownTimerProps) {
+  const [secondsLeft, setSecondsLeft] = useState(() => computeSecondsLeft(expiresAt));
   const hasExpiredRef = useRef(false);
 
-  // Un solo interval montado una vez; no depende de secondsLeft para no
-  // reiniciarse cada segundo.
+  // Recalcula contra el reloj real en cada tick, no decrementa un contador
+  // local — así funciona igual para una selección recién hecha (15 min
+  // completos) que para una restaurada al volver a entrar (con lo que
+  // quede real del hold), sin duplicar el "15 min" como constante propia
+  // del front desincronizada de BookingConstants.HOLD_MINUTES del backend.
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setSecondsLeft((prev) => (prev <= 1 ? 0 : prev - 1));
-    }, 1000);
-
+    const intervalId = setInterval(() => setSecondsLeft(computeSecondsLeft(expiresAt)), 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [expiresAt]);
 
-  // Efecto separado que solo observa cuándo llega a 0, para disparar
-  // onExpire una única vez en dónde se cancela la reserva.
   useEffect(() => {
     if (secondsLeft === 0 && !hasExpiredRef.current) {
       hasExpiredRef.current = true;
@@ -40,18 +39,7 @@ export default function BookingCountdownTimer({
   }, [secondsLeft, onExpire]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 1,
-        px: 1.5,
-        py: 1,
-        borderRadius: 2,
-        bgcolor: "#C7C8FF",
-      }}
-    >
+    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, px: 1.5, py: 1, borderRadius: 2, bgcolor: "#C7C8FF" }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <Timer size={22} color="#5865C8" />
         <Typography variant="subtitle1" sx={{ color: "#3A48AD", fontWeight: 600 }}>

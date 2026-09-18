@@ -88,7 +88,7 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
       windowEnd: slot.endIso,
     });
     try {
-      await holdBookingSlot(tutorId, slot);
+      return await holdBookingSlot(tutorId, slot); 
     } catch (error) {
       publishBookingSlotStatus({
         slotId: blockId,

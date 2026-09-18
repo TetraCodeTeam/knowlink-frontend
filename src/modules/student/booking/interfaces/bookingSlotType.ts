@@ -6,4 +6,5 @@ export interface BookingSlot {
   startTime: string;
   endTime: string;
   durationHours: number;
+  expiresAt: string;
 }
