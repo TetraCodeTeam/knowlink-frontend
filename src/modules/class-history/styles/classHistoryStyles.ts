@@ -74,3 +74,34 @@ export const virtualLinkBoxSx = (editable: boolean): SxProps<Theme> => ({
     backgroundColor: editable ? "#EEEDFE" : "#F7F7FB",
     border: `1px solid ${editable ? "#C1BFE7" : "#E5E5F0"}`,
 });
+
+export const cancelDialogIconWrapperSx = (bgColor: string): SxProps<Theme> => ({
+    width: 60,
+    height: 60,
+    borderRadius: "50%",
+    bgcolor: bgColor,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    mb: 2,
+});
+
+export const cancelBookingSummaryBoxSx: SxProps<Theme> = {
+    mt: "16px",
+    mb: "8px",
+    width: "100%",
+    borderRadius: "10px",
+    p: "14px 16px",
+    backgroundColor: "#F7F7FB",
+    border: "1px solid #E5E5F0",
+    textAlign: "left",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+};
+
+export const cancelBookingSummaryRowSx: SxProps<Theme> = {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+};
