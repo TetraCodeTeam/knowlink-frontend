@@ -2,7 +2,12 @@ import { useCallback, useMemo } from "react";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FullCalendar from "@fullcalendar/react";
-import type { DayCellContentArg, EventContentArg, EventInput } from "@fullcalendar/core";
+import type {
+  DayCellContentArg,
+  DayHeaderContentArg,
+  EventContentArg,
+  EventInput,
+} from "@fullcalendar/core";
 
 import type {
   AvailabilityBlockResponse,
@@ -22,6 +27,7 @@ const MONTH_LABELS = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
+const DAY_LABELS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
 
 function buildWeekRangeLabel(weekStart: Date): string {
   const weekEnd = new Date(weekStart);
@@ -62,6 +68,32 @@ export function WeeklyAgendaCalendar({
       ...(shading ? [shading] : []),
     ];
   }, [availabilityBlocks, bookedSessions, weekStart]);
+
+  const dayHeaderContent = useCallback(
+    ({ date, isToday }: DayHeaderContentArg) => (
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
+        <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
+          {DAY_LABELS[date.getDay()]}
+        </Typography>
+        <Box
+          sx={{
+            width: 32,
+            height: 32,
+            borderRadius: "50%",
+            display: "grid",
+            placeItems: "center",
+            fontWeight: 700,
+            bgcolor: isToday ? "#5B6ED9" : "transparent",
+            color: isToday ? "#fff" : "#1A1A2E",
+            boxShadow: isToday ? "0 4px 10px rgba(91, 110, 217, 0.35)" : "none",
+          }}
+        >
+          {date.getDate()}
+        </Box>
+      </Box>
+    ),
+    []
+  );
 
   const dayCellClassNames = useCallback(
     (arg: DayCellContentArg) => (isBeforeToday(arg.date) ? ["fc-agenda-past-day"] : []),
@@ -108,6 +140,7 @@ export function WeeklyAgendaCalendar({
         initialDate={weekStart}
         events={events}
         eventContent={renderEventContent}
+        dayHeaderContent={dayHeaderContent}
         dayCellClassNames={dayCellClassNames}
       />
     </Box>

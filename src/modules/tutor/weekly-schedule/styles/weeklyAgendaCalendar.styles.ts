@@ -11,6 +11,11 @@ const bookedPast = AGENDA_BLOCK_COLOR.booked.past;
 export const weeklyAgendaCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
+  "& .fc-day-today": {
+    backgroundColor: "rgba(91, 110, 217, 0.03) !important",
+    boxShadow: "inset 0 0 0 1px rgba(91, 110, 217, 0.12)",
+  },
+
   "& .fc-agenda-past-day": {
     bgcolor: "#f7f7fb !important",
   },
@@ -55,15 +60,21 @@ export const weeklyAgendaCalendarSx: SxProps<Theme> = {
   "& .fc-event .agenda-event-content": {
     display: "flex",
     flexDirection: "column",
-    lineHeight: 1.3,
-    padding: "2px 4px",
+    justifyContent: "center",
+    gap: "2px",
+    lineHeight: 1.15,
+    padding: "3px 6px 4px",
+    width: "100%",
+    height: "100%",
   },
   "& .fc-event .agenda-event-time": {
-    fontSize: "0.7rem",
-    opacity: 0.85,
+    fontSize: "0.68rem",
+    lineHeight: 1.2,
+    opacity: 0.9,
   },
   "& .fc-event .agenda-event-title": {
-    fontSize: "0.8rem",
+    fontSize: "0.75rem",
+    lineHeight: 1.2,
     fontWeight: 600,
   },
 };
