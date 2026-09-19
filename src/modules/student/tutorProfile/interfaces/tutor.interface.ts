@@ -9,7 +9,7 @@ export interface TutorSubjectRate {
   price: number;
   isFree: boolean;
   modalities: Modalidad[]; // para mostrar chips — no tocar, ya se usa en otro lado
-  rawModality: RawModality; // 👈 nuevo — para lógica de negocio (booking)
+  rawModality: RawModality; // para lógica de negocio (booking)
   isVerified: boolean;
 }
 

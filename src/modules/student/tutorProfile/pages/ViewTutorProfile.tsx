@@ -7,12 +7,14 @@ import { TutorSubjectsCard } from "@/modules/student/tutorProfile/components/Tut
 import { TutorMaterialCard } from "@/modules/student/tutorProfile/components/TutorMaterialCard";
 import { TutorReviewsCard } from "@/modules/student/tutorProfile/components/TutorReviewsCard";
 import { useTutorProfile } from "@/modules/student/tutorProfile/hooks/useTutorProfile";
+import { useTutorMaterialDownload } from "@/modules/student/tutorProfile/hooks/useTutorMaterialDownload";
 import { ReviewsDialog } from "@/modules/student/tutorProfile/components/ReviewsDialog";
 
 export const TutorProfilePage = () => {
   const { tutorId } = useParams();
   const navigate = useNavigate();
   const { data: tutor, isLoading, isError } = useTutorProfile(tutorId ?? "");
+  const { downloadMaterial } = useTutorMaterialDownload();
 
   if (isLoading) {
     return (
@@ -35,20 +37,24 @@ export const TutorProfilePage = () => {
   };
 
   return (
-    <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
+    <Stack spacing={3} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
 
-      <Grid container spacing={2}>
+      <Grid container columnSpacing={4} rowSpacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <Stack spacing={4}>
+          <Stack spacing={3}>
             <TutorAboutCard about={tutor.about} />
             <TutorSubjectsCard subjectRates={tutor.subjectRates} />
             <TutorReviewsCard reviews={tutor.reviews} />
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Stack spacing={5}>
-            <TutorMaterialCard material={tutor.material} hasConfirmedBooking={tutor.hasConfirmedBooking} />
+          <Stack >
+            <TutorMaterialCard
+              material={tutor.material}
+              hasConfirmedBooking={tutor.hasConfirmedBooking}
+              onDownload={downloadMaterial}
+            />
           </Stack>
         </Grid>
       </Grid>

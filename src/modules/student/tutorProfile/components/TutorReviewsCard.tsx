@@ -19,7 +19,7 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
-      <CardContent>
+      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
           <Stack direction="row" spacing={1} alignItems="center">
             <MessagesSquare size={25} color="#5865C8" />

@@ -26,9 +26,21 @@ export interface TutorAvailabilityApiResponse {
 }
 
 export interface TutorMaterialApiResponse {
+  id: string;
   name: string;
-  fileUrl: string;
-  uploadedAt: string; // ISO string from LocalDateTime
+  originalFileName: string | null;
+  subjectId: string;
+  subjectName: string;
+  tutorId: string;
+  tutorName: string;
+  format: string;
+  downloadUrl: string | null;
+  uploadedAt: string;
+  sizeInBytes: number | null;
+}
+
+export interface TutorMaterialAccessApiResponse {
+  accesoHabilitado: boolean;
 }
 
 export interface TutorProfileApiResponse {

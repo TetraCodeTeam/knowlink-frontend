@@ -7,7 +7,6 @@ import {
   DialogTitle,
   FormControl,
   IconButton,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -124,39 +123,52 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
 
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: "12px !important" }}>
         {/* Material name */}
-        <TextField
-          label="Nombre del material*"
-          value={materialName}
-          onChange={(e) => setMaterialName(e.target.value)}
-          disabled={isPending}
-          fullWidth
-          sx={{
-            "& .MuiInputBase-input": { fontSize: "16px" },
-            "& .MuiInputLabel-root": { fontSize: "16px" },
-          }}
-        />
+        <Box>
+          <Typography id="material-name-label" sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
+            Nombre del material*
+          </Typography>
+          <TextField
+            value={materialName}
+            onChange={(e) => setMaterialName(e.target.value)}
+            disabled={isPending}
+            fullWidth
+            placeholder="Ingresá el nombre del material"
+            inputProps={{ "aria-labelledby": "material-name-label" }}
+            sx={{
+              "& .MuiInputBase-input": { fontSize: "16px" },
+            }}
+          />
+        </Box>
 
         {/* Subject dropdown */}
-        <FormControl fullWidth>
-          <InputLabel sx={{ fontSize: "16px" }}>Materia*</InputLabel>
-          <Select
-            value={selectedCatalogSubjectId}
-            label="Materia*"
-            onChange={(e) => setSelectedCatalogSubjectId(e.target.value)}
-            disabled={isPending}
-            sx={{ fontSize: "16px" }}
-          >
-            {subjects.map((subject) => (
-              <MenuItem
-                key={subject.tutorSubjectId}
-                value={subject.catalogSubjectId}
-                sx={{ fontSize: "16px" }}
-              >
-                {subject.subjectName}
+        <Box>
+          <Typography id="subject-select-label" sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
+            Materia*
+          </Typography>
+          <FormControl fullWidth>
+            <Select
+              labelId="subject-select-label"
+              value={selectedCatalogSubjectId}
+              onChange={(e) => setSelectedCatalogSubjectId(e.target.value)}
+              disabled={isPending}
+              sx={{ fontSize: "16px" }}
+              displayEmpty
+            >
+              <MenuItem value="" disabled>
+                Seleccionar materia
               </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+              {subjects.map((subject) => (
+                <MenuItem
+                  key={subject.tutorSubjectId}
+                  value={subject.catalogSubjectId}
+                  sx={{ fontSize: "16px" }}
+                >
+                  {subject.subjectName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
 
         {/* Drop area */}
         <Box
