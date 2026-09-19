@@ -12,3 +12,5 @@ export const CATEGORY_TABS: { category: BookingHistoryCategory; label: string }[
 export const EMPTY_STATE_MESSAGE = "No hay registros de clases para mostrar en esta sección";
 
 export const VIRTUAL_LINK_EDIT_WINDOW_MINUTES = 10;
+
+export const CANCELLATION_FULL_REFUND_WINDOW_HOURS = 12;

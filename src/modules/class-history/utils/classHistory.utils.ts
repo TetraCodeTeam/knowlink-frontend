@@ -98,3 +98,19 @@ export function isWithinVirtualLinkEditWindow(
   const minutesUntilStart = (classStart.getTime() - now.getTime()) / 60000;
   return minutesUntilStart > editWindowMinutes;
 }
+
+export function formatSessionDateLabel(sessionDate: string): string {
+  const date = new Date(`${sessionDate}T00:00:00`);
+  return `${DAY_NAMES[date.getDay()]} ${date.getDate()}/${date.getMonth() + 1}`;
+}
+
+export function hasFullRefundCancellationWindow(
+  sessionDate: string,
+  startTime: string,
+  windowHours: number
+): boolean {
+  const classStart = new Date(`${sessionDate}T${startTime}`);
+  const now = new Date();
+  const hoursUntilStart = (classStart.getTime() - now.getTime()) / (1000 * 60 * 60);
+  return hoursUntilStart >= windowHours;
+}

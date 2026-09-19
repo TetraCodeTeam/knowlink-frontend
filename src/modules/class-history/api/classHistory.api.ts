@@ -33,3 +33,7 @@ export async function updateVirtualLink(
   );
   return response.data;
 }
+
+export async function cancelBooking(bookingId: string): Promise<void> {
+  await httpClient.post(`/api/v1/bookings/${bookingId}/cancellations`);
+}
