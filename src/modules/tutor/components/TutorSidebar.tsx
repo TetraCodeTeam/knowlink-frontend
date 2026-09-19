@@ -6,6 +6,7 @@ import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
+import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 
@@ -45,6 +46,7 @@ export default function TutorSidebar() {
   const { notificationsCount, requestsCount } = useTutorBadgesStore();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const { data: profile } = useMyTutorProfile();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -198,7 +200,7 @@ export default function TutorSidebar() {
           }}
         >
           <Avatar
-            src={undefined}
+            src={profile?.profilePictureUrl ?? undefined}
             sx={{
               width: 38,
               height: 38,
