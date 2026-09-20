@@ -6,8 +6,11 @@ import StudentTopbar, {
   TOPBAR_HEIGHT,
 } from "@/modules/student/components/StudentTopbar";
 import { StudentTokenWidget } from "@/modules/attendance/components/StudentTokenWidget";
+import { useAutoShowStudentToken } from "@/modules/attendance/hooks/useAutoShowStudentToken";
 
 export default function StudentLayout() {
+  useAutoShowStudentToken();
+
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#F4F3FB" }}>
       <StudentSidebar />

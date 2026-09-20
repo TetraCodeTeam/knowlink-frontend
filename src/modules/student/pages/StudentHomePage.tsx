@@ -1,9 +1,6 @@
-import { Box, Button } from "@mui/material";
-import { useStudentTokenStore } from "@/modules/attendance/hooks/useStudentTokenStore";
+import { Box } from "@mui/material";
 
 export default function StudentHomePage() {
-  const showToken = useStudentTokenStore((state) => state.showToken);
-
   return (
     <Box
       sx={{
@@ -11,18 +8,6 @@ export default function StudentHomePage() {
         backgroundColor: "#F4F3FB",
         p: 3,
       }}
-    >
-      <Button
-        variant="contained"
-        onClick={() =>
-          showToken({
-            sessionId: "test-session-123",
-            code: "4827",
-          })
-        }
-      >
-        Mostrar token de prueba
-      </Button>
-    </Box>
+    />
   );
 }

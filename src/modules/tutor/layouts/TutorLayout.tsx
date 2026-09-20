@@ -2,8 +2,12 @@ import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/TutorSidebar";
 import { SessionConfirmationWidget } from "@/modules/attendance/components/Sessionconfirmationwidget";
+import { confirmSessionAttendance } from "@/modules/attendance/api/attendance.api";
+import { useAutoOpenSessionConfirmation } from "@/modules/attendance/hooks/useAutoOpenSessionConfirmation";
 
 export default function TutorLayout() {
+  useAutoOpenSessionConfirmation();
+
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#E6E4F2" }}>
       <TutorSidebar />
@@ -19,9 +23,7 @@ export default function TutorLayout() {
         <Outlet />
       </Box>
       <SessionConfirmationWidget
-        onConfirm={async ({ sessionId, code }) => {
-          console.log("Attendance confirmation pending backend integration", { sessionId, code });
-        }}
+        onConfirm={({ sessionId, code }) => confirmSessionAttendance(sessionId, code)}
       />
     </Box>
   );
