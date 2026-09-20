@@ -28,10 +28,7 @@ export interface BookedSessionResponse {
 
 /**
  * Respuesta combinada que consume la pantalla de agenda semanal.
- * NOTA: por ahora se arma en el frontend pegando availability + reservas
- * por separado (el tutor va a conectar el endpoint real más adelante);
- * este tipo ya representa la forma final esperada para no romper el
- * resto del código cuando se conecte el fetch de verdad.
+ * Corresponde al resultado mapeado desde el endpoint semanal del backend.
  */
 export interface WeeklyAgendaResponse {
   weekStart: string; // "YYYY-MM-DD", lunes de la semana visible
