@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getBookingHistory } from "@/modules/class-history/api/classHistory.api";
 import { HISTORY_PAGE_SIZE } from "@/modules/class-history/constants/classHistory.constants";
@@ -8,7 +8,7 @@ import type { BookingRole } from "@/modules/class-history/types/booking-role.typ
 
 export function useBookingHistory(role: BookingRole, category: BookingHistoryCategory) {
   const [page, setPage] = useState(0);
-  const [accumulated, setAccumulated] = useState<BookingHistoryItem[]>([]);
+  const [pagesContent, setPagesContent] = useState<Record<number, BookingHistoryItem[]>>({});
 
   const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ["bookingHistory", role, category, page],
@@ -18,16 +18,25 @@ export function useBookingHistory(role: BookingRole, category: BookingHistoryCat
 
   useEffect(() => {
     if (!data) return;
-    setAccumulated((prev) => (page === 0 ? data.content : [...prev, ...data.content]));
+    setPagesContent((prev) => ({ ...prev, [page]: data.content }));
   }, [data, page]);
+
+  const items = useMemo(
+    () =>
+      Object.keys(pagesContent)
+        .map(Number)
+        .sort((a, b) => a - b)
+        .flatMap((loadedPage) => pagesContent[loadedPage]),
+    [pagesContent]
+  );
 
   const resetPage = () => {
     setPage(0);
-    setAccumulated([]);
+    setPagesContent({});
   };
 
   return {
-    items: accumulated,
+    items,
     hasNext: data?.hasNext ?? false,
     page,
     goToNextPage: () => setPage((p) => p + 1),

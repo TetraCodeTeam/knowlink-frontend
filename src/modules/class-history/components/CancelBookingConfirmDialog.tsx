@@ -35,7 +35,7 @@ function getRefundMessage(role: BookingRole, isFullRefund: boolean): string {
     return "El importe abonado será reintegrado automáticamente al alumno.";
   }
   return isFullRefund
-    ? `Al cancelar con más de ${CANCELLATION_FULL_REFUND_WINDOW_HOURS} horas de anticipación, el importe abonado se te reintegrará automáticamente.`
+    ? `Al cancelar con ${CANCELLATION_FULL_REFUND_WINDOW_HOURS} horas o más de anticipación, el importe abonado se te reintegrará automáticamente.`
     : `Al cancelar con menos de ${CANCELLATION_FULL_REFUND_WINDOW_HOURS} horas de anticipación, el importe abonado no podrá ser reintegrado.`;
 }
 
