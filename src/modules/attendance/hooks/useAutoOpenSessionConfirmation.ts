@@ -4,8 +4,7 @@ import { useEligibleConfirmationBooking } from "@/modules/attendance/hooks/useEl
 
 /**
  * Abre automáticamente el widget de confirmación del tutor apenas se
- * habilita la ventana de confirmación de una clase (sin botón manual).
- * Montar una sola vez en el layout raíz del tutor.
+ * habilita la ventana de confirmación de una clase.
  */
 export function useAutoOpenSessionConfirmation() {
   const eligibleBooking = useEligibleConfirmationBooking("TUTOR");

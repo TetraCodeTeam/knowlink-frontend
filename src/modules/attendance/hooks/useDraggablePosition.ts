@@ -22,7 +22,7 @@ interface UseDraggablePositionOptions {
 
 /**
  * Hook genérico para arrastre libre de un elemento con position:
- * fixed. No asume nada sobre el contenido — solo expone la posición
+ * fixed. Expone la posición
  * actual y los handlers a enganchar en el elemento que actúa de
  * "agarradera" (drag handle).
  *

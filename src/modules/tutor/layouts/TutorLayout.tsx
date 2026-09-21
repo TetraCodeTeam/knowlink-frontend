@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/TutorSidebar";
-import { SessionConfirmationWidget } from "@/modules/attendance/components/Sessionconfirmationwidget";
+import { SessionConfirmationWidget } from "@/modules/attendance/components/TutorSessionconfirmationwidget";
 import { confirmSessionAttendance } from "@/modules/attendance/api/attendance.api";
 import { useAutoOpenSessionConfirmation } from "@/modules/attendance/hooks/useAutoOpenSessionConfirmation";
 

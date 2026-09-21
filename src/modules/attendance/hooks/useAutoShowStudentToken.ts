@@ -5,8 +5,7 @@ import { getSessionConfirmationToken } from "@/modules/attendance/api/attendance
 
 /**
  * Muestra automáticamente el widget de token del alumno apenas se habilita
- * la ventana de confirmación de una clase (sin botón manual). Montar una
- * sola vez en el layout raíz del alumno.
+ * la ventana de confirmación de una clase.
  */
 export function useAutoShowStudentToken() {
   const eligibleBooking = useEligibleConfirmationBooking("STUDENT");
