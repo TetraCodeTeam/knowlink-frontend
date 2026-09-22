@@ -11,10 +11,10 @@ export function useAutoOpenSessionConfirmation() {
   const pending = useSessionConfirmationStore((state) => state.pending);
   // `eligibleBooking` sigue viniendo del último fetch cacheado hasta el
   // próximo poll, así que puede seguir marcando como elegible una reserva
-  // recién confirmada (o vencida). `resolvedBookingIds` vive en el store
-  // global (no en un ref local) para no perderse si este componente se
-  // remonta antes del próximo refetch.
-  const resolvedBookingIds = useSessionConfirmationStore((state) => state.resolvedBookingIds);
+  // recién confirmada (o vencida). `isResolved` consulta el Map con TTL
+  // del store global (no un ref local) para no perderse si este
+  // componente se remonta antes del próximo refetch.
+  const isResolved = useSessionConfirmationStore((state) => state.isResolved);
   const openConfirmation = useSessionConfirmationStore((state) => state.openConfirmation);
   const clearConfirmation = useSessionConfirmationStore((state) => state.clearConfirmation);
 
@@ -24,7 +24,7 @@ export function useAutoOpenSessionConfirmation() {
       return;
     }
 
-    if (resolvedBookingIds.has(eligibleBooking.bookingId)) return;
+    if (isResolved(eligibleBooking.bookingId)) return;
 
     if (pending?.sessionId !== eligibleBooking.bookingId) {
       openConfirmation({
@@ -36,5 +36,5 @@ export function useAutoOpenSessionConfirmation() {
         }),
       });
     }
-  }, [eligibleBooking, pending, resolvedBookingIds, openConfirmation, clearConfirmation]);
+  }, [eligibleBooking, pending, isResolved, openConfirmation, clearConfirmation]);
 }

@@ -53,7 +53,7 @@ export async function getUpcomingConfirmableBookings(
 ): Promise<UpcomingConfirmableBooking[]> {
   const { data } = await httpClient.get<{ content: UpcomingConfirmableBooking[] }>(
     "/api/v1/bookings/mine",
-    { params: { role, category: "BOOKED", page: 0, size: 50 } }
+    { params: { role, category: "RESERVED", page: 0, size: 50 } }
   );
   return data.content;
 }

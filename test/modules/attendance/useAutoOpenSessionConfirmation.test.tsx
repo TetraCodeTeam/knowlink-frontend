@@ -51,7 +51,7 @@ function renderWithClient(client: QueryClient) {
 describe("useAutoOpenSessionConfirmation — remount tras confirmar (bug de reapertura)", () => {
   beforeEach(() => {
     useAuthStore.setState({ isAuthenticated: true });
-    useSessionConfirmationStore.setState({ pending: null, resolvedBookingIds: new Set() });
+    useSessionConfirmationStore.setState({ pending: null, resolvedBookingIds: new Map() });
     mockedGetBookings.mockReset();
   });
 
@@ -70,7 +70,7 @@ describe("useAutoOpenSessionConfirmation — remount tras confirmar (bug de reap
     act(() => {
       useSessionConfirmationStore.getState().clearConfirmation();
     });
-    expect(useSessionConfirmationStore.getState().resolvedBookingIds.has("booking-1")).toBe(true);
+    expect(useSessionConfirmationStore.getState().isResolved("booking-1")).toBe(true);
 
     // El layout raíz se remonta (ej. cambio de ruta) antes de que llegue
     // el próximo poll: react-query sigue sirviendo la misma data cacheada,
