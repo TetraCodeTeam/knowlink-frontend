@@ -18,8 +18,8 @@ export interface UpcomingConfirmableBooking {
 }
 
 function extractErrorMessage(error: unknown, fallback: string): string {
-  const message = (error as { response?: { data?: ApiErrorPayload } })?.response?.data?.message;
-  return message ?? fallback;
+  const payload = (error as { response?: { data?: ApiErrorPayload } })?.response?.data;
+  return payload?.message ?? payload?.detail ?? fallback;
 }
 
 export async function confirmSessionAttendance(bookingId: string, code: string): Promise<void> {
@@ -53,7 +53,7 @@ export async function getUpcomingConfirmableBookings(
 ): Promise<UpcomingConfirmableBooking[]> {
   const { data } = await httpClient.get<{ content: UpcomingConfirmableBooking[] }>(
     "/api/v1/bookings/mine",
-    { params: { role, category: "RESERVED", page: 0, size: 50 } }
+    { params: { role, category: "BOOKED", page: 0, size: 50 } }
   );
   return data.content;
 }
