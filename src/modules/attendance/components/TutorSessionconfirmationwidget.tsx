@@ -131,7 +131,7 @@ export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidg
         </Typography>
       )}
 
-      <Box sx={{ mt: 4, mb: 1 }}>
+      <Box sx={{ mt: 3, mb: 3} }>
         <CountdownTimer
           expiresAt={pending.expiresAt}
           label="Tiempo para confirmar"
@@ -146,7 +146,7 @@ export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidg
         fullWidth
         disabled={!isCodeComplete || isConfirming}
         onClick={() => void handleCodeComplete()}
-        sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
+        sx={{ textTransform: "none", borderRadius: 2, py: 1, }}
       >
         {isConfirming ? "Confirmando..." : "Confirmar"}
       </Button>
