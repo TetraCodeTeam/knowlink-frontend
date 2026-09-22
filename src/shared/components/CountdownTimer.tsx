@@ -37,9 +37,10 @@ export default function CountdownTimer({
   textColor = "#3A48AD",
   onExpire,
 }: CountdownTimerProps) {
-  const [deadline, setDeadline] = useState(() => resolveDeadline(durationSeconds, expiresAt));
+  const initialDeadline = resolveDeadline(durationSeconds, expiresAt);
+  const [deadline, setDeadline] = useState(initialDeadline);
   const [secondsLeft, setSecondsLeft] = useState(() =>
-    Math.max(0, Math.ceil((deadline - Date.now()) / 1000))
+    Math.max(0, Math.ceil((initialDeadline - Date.now()) / 1000))
   );
   const hasExpiredRef = useRef(false);
 
