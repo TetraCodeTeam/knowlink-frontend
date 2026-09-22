@@ -25,7 +25,8 @@ export interface SessionCodeInputHandle {
  * Comportamiento esperado (estándar en este tipo de componente, ej.
  * verificación de 2FA):
  * - Escribir un dígito avanza automáticamente al siguiente casillero.
- * - Backspace en un casillero vacío retrocede al anterior y lo borra.
+ * - Backspace en un casillero vacío retrocede al anterior sin borrarlo;
+ *   un segundo Backspace ahí sí lo borra (evita el doble-borrado en cascada).
  * - Pegar un código completo (ej. copiado de un SMS) lo distribuye
  *   en todos los casilleros de una.
  * - onComplete se dispara solo cuando los `length` casilleros tienen
@@ -72,13 +73,11 @@ export const SessionCodeInput = forwardRef<SessionCodeInputHandle, SessionCodeIn
     };
 
     const handleKeyDown = (index: number, event: KeyboardEvent<HTMLElement>) => {
+      // Backspace en un casillero vacío solo mueve el foco al anterior;
+      // borrar su contenido queda para un segundo Backspace explícito
+      // sobre ese casillero, ya con contenido (patrón estándar de OTP).
       if (event.key === "Backspace" && !digits[index] && index > 0) {
         inputRefs.current[index - 1]?.focus();
-        setDigits((prev) => {
-          const next = [...prev];
-          next[index - 1] = "";
-          return next;
-        });
       }
     };
 
