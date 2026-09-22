@@ -113,7 +113,6 @@ export const SessionCodeInput = forwardRef<SessionCodeInputHandle, SessionCodeIn
                 inputMode: "numeric",
                 maxLength: 1,
                 "aria-label": `Dígito ${index + 1} de ${length}`,
-                sx: { textAlign: "center", fontSize: "1.5rem", fontWeight: 600, p: 1.25 },
               },
             }}
             sx={{
@@ -130,6 +129,12 @@ export const SessionCodeInput = forwardRef<SessionCodeInputHandle, SessionCodeIn
                 "&.Mui-focused fieldset": {
                   borderColor: "#b2b4fd",
                 },
+              },
+              "& .MuiOutlinedInput-input": {
+                textAlign: "center",
+                fontSize: "1.5rem",
+                fontWeight: 600,
+                p: 1.25,
               },
             }}
           />
