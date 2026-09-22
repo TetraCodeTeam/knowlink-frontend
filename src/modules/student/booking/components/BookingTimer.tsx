@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { Timer } from "lucide-react";
+import CountdownTimer from "@/shared/components/CountdownTimer";
 
 interface BookingCountdownTimerProps {
   expiresAt: string;
@@ -41,27 +39,14 @@ export default function BookingCountdownTimer({ expiresAt, onExpire }: BookingCo
   }, [secondsLeft, onExpire]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 1,
-        px: 1.5,
-        py: 1,
-        borderRadius: 2,
-        bgcolor: "#C7C8FF",
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Timer size={22} color="#5865C8" />
-        <Typography variant="subtitle1" sx={{ color: "#3A48AD", fontWeight: 600 }}>
-          Tiempo Restante
-        </Typography>
-      </Box>
-      <Typography variant="subtitle1" sx={{ color: "#3A48AD", fontWeight: 700 }}>
-        {formatTime(secondsLeft)}
-      </Typography>
-    </Box>
+    <CountdownTimer
+      durationSeconds={durationSeconds}
+      label="Tiempo restante"
+      backgroundColor={backgroundColor}
+      borderColor={borderColor}
+      strokeColor={strokeColor}
+      textColor={textColor}
+      onExpire={onExpire}
+    />
   );
 }
