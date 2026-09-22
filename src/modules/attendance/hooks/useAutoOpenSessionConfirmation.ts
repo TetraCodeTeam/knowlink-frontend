@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSessionConfirmationStore } from "@/modules/attendance/hooks/useSessionConfirmationStore";
 import { useEligibleConfirmationBooking } from "@/modules/attendance/hooks/useEligibleConfirmationBooking";
 
@@ -9,24 +9,14 @@ import { useEligibleConfirmationBooking } from "@/modules/attendance/hooks/useEl
 export function useAutoOpenSessionConfirmation() {
   const eligibleBooking = useEligibleConfirmationBooking("TUTOR");
   const pending = useSessionConfirmationStore((state) => state.pending);
-  const openConfirmation = useSessionConfirmationStore((state) => state.openConfirmation);
-  const clearConfirmation = useSessionConfirmationStore((state) => state.clearConfirmation);
-
   // `eligibleBooking` sigue viniendo del último fetch cacheado hasta el
   // próximo poll, así que puede seguir marcando como elegible una reserva
-  // recién confirmada (o vencida). Guardamos acá las que ya se resolvieron
-  // para no reabrir el popup con esos datos stale.
-  const resolvedBookingIdsRef = useRef<Set<string>>(new Set());
-  const previousPendingSessionIdRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (pending) {
-      previousPendingSessionIdRef.current = pending.sessionId;
-    } else if (previousPendingSessionIdRef.current) {
-      resolvedBookingIdsRef.current.add(previousPendingSessionIdRef.current);
-      previousPendingSessionIdRef.current = null;
-    }
-  }, [pending]);
+  // recién confirmada (o vencida). `resolvedBookingIds` vive en el store
+  // global (no en un ref local) para no perderse si este componente se
+  // remonta antes del próximo refetch.
+  const resolvedBookingIds = useSessionConfirmationStore((state) => state.resolvedBookingIds);
+  const openConfirmation = useSessionConfirmationStore((state) => state.openConfirmation);
+  const clearConfirmation = useSessionConfirmationStore((state) => state.clearConfirmation);
 
   useEffect(() => {
     if (!eligibleBooking) {
@@ -34,7 +24,7 @@ export function useAutoOpenSessionConfirmation() {
       return;
     }
 
-    if (resolvedBookingIdsRef.current.has(eligibleBooking.bookingId)) return;
+    if (resolvedBookingIds.has(eligibleBooking.bookingId)) return;
 
     if (pending?.sessionId !== eligibleBooking.bookingId) {
       openConfirmation({
@@ -46,5 +36,5 @@ export function useAutoOpenSessionConfirmation() {
         }),
       });
     }
-  }, [eligibleBooking, pending, openConfirmation, clearConfirmation]);
+  }, [eligibleBooking, pending, resolvedBookingIds, openConfirmation, clearConfirmation]);
 }

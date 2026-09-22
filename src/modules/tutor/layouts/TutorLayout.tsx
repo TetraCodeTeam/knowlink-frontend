@@ -1,12 +1,14 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/TutorSidebar";
-import { SessionConfirmationWidget } from "@/modules/attendance/components/TutorSessionconfirmationwidget";
+import { TutorSessionConfirmationWidget } from "@/modules/attendance/components/TutorSessionconfirmationwidget";
 import { confirmSessionAttendance } from "@/modules/attendance/api/attendance.api";
 import { useAutoOpenSessionConfirmation } from "@/modules/attendance/hooks/useAutoOpenSessionConfirmation";
 
 export default function TutorLayout() {
   useAutoOpenSessionConfirmation();
+  const queryClient = useQueryClient();
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#E6E4F2" }}>
@@ -22,8 +24,13 @@ export default function TutorLayout() {
       >
         <Outlet />
       </Box>
-      <SessionConfirmationWidget
-        onConfirm={({ sessionId, code }) => confirmSessionAttendance(sessionId, code)}
+      <TutorSessionConfirmationWidget
+        onConfirm={async ({ sessionId, code }) => {
+          await confirmSessionAttendance(sessionId, code);
+          // Evita que el próximo poll siga trayendo esta reserva como
+          // "elegible" con datos stale del último fetch.
+          void queryClient.invalidateQueries({ queryKey: ["attendance-upcoming-bookings", "TUTOR"] });
+        }}
       />
     </Box>
   );

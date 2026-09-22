@@ -26,7 +26,7 @@ const DEFAULT_ERROR_MESSAGE =
  * router), no por pantalla. Se muestra/oculta según `pending` del store global, así
  * que persiste visualmente aunque el usuario navegue entre rutas.
  */
-export const SessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidgetProps) => {
+export const TutorSessionConfirmationWidget = ({ onConfirm }: SessionConfirmationWidgetProps) => {
   const paperRef = useRef<HTMLDivElement>(null);
   const codeInputRef = useRef<SessionCodeInputHandle>(null);
   const pending = useSessionConfirmationStore((state) => state.pending);
