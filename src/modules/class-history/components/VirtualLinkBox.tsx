@@ -5,7 +5,7 @@ import AppButton from "@/shared/components/AppButton";
 import { useUpdateVirtualLink } from "@/modules/class-history/hooks/useUpdateVirtualLink";
 import { virtualLinkBoxSx } from "@/modules/class-history/styles/classHistoryStyles";
 import { VIRTUAL_LINK_EDIT_WINDOW_MINUTES } from "@/modules/class-history/constants/classHistory.constants";
-import { isValidUrl } from "@/modules/class-history/utils/classHistory.utils";
+import { normalizeVirtualLink } from "@/modules/class-history/utils/classHistory.utils";
 
 interface VirtualLinkBoxProps {
   bookingId: string;
@@ -30,13 +30,14 @@ export default function VirtualLinkBox({
       setError("Ingresá un link para la videollamada");
       return;
     }
-    if (!isValidUrl(trimmed)) {
+    const normalizedLink = normalizeVirtualLink(trimmed);
+    if (!normalizedLink) {
       setError("Ingresá un link válido, por ejemplo: https://meet.google.com/xxx-xxxx-xxx");
       return;
     }
     setError(null);
     try {
-      await saveVirtualLink({ virtualSessionLink: trimmed });
+      await saveVirtualLink({ virtualSessionLink: normalizedLink });
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
