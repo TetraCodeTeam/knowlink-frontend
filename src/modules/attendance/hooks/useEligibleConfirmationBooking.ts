@@ -38,9 +38,12 @@ function computeRefetchInterval(bookings: UpcomingConfirmableBooking[] | undefin
 
 /**
  * De las reservas activas del usuario, devuelve la primera cuya ventana de
- * confirmación por token ya está abierta: desde 5 minutos antes del inicio
- * de la clase (mismo lead time que usa el backend para generar el token)
- * hasta que el código vence del lado del servidor.
+ * confirmación por token ya está abierta.
+ * - Alumno: desde 5 minutos antes del inicio (mismo lead time que usa el
+ *   backend para generar el token), para poder mostrarle el código.
+ * - Tutor: recién desde el inicio de la clase, ya que hasta entonces solo
+ *   puede ingresar el código (criterio 3 de la issue de US-41).
+ * En ambos casos, hasta que el código vence del lado del servidor.
  */
 export function useEligibleConfirmationBooking(role: Role): EligibleConfirmationBooking | null {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -69,11 +72,12 @@ export function useEligibleConfirmationBooking(role: Role): EligibleConfirmation
 
       const sessionStart = getSessionStartMs(booking);
       const expiresAt = new Date(booking.confirmationTokenExpiresAt).getTime();
+      const windowStart = role === "TUTOR" ? sessionStart : sessionStart - CONFIRMATION_LEAD_TIME_MS;
 
-      if (now >= sessionStart - CONFIRMATION_LEAD_TIME_MS && now < expiresAt) {
+      if (now >= windowStart && now < expiresAt) {
         return { bookingId: booking.bookingId, expiresAt: booking.confirmationTokenExpiresAt };
       }
     }
     return null;
-  }, [data, now]);
+  }, [data, now, role]);
 }
