@@ -13,7 +13,10 @@ import {
 } from "@/modules/student/booking/api/bookingSlotsRealtime.api";
 import { useBookingSlots } from "@/modules/student/booking/hooks/useBookingSlots";
 import type { BookingFormValues } from "@/modules/student/booking/schemas/booking.schema";
-import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
+import type {
+  BookingSlot,
+  SelectableSlot,
+} from "@/modules/student/booking/interfaces/bookingSlotType";
 import type { BookingSlotStatusEvent } from "@/modules/student/booking/interfaces/responses/bookingSlotStatusEvent.interface";
 import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
 import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/bookingSlotEventType";
@@ -79,7 +82,7 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
     };
   }, [tutorId]);
 
-  const holdSlot = async (slot: BookingSlot) => {
+  const holdSlot = async (slot: SelectableSlot) => {
     const blockId = getBookingBlockId(slot.id);
     publishBookingSlotStatus({
       slotId: blockId,
@@ -88,7 +91,7 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
       windowEnd: slot.endIso,
     });
     try {
-      await holdBookingSlot(tutorId, slot);
+      return await holdBookingSlot(tutorId, slot);
     } catch (error) {
       publishBookingSlotStatus({
         slotId: blockId,

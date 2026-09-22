@@ -1,4 +1,7 @@
-import type { BookingSlot } from "@/modules/student/booking/interfaces/bookingSlotType";
+import type {
+  BookingSlot,
+  SelectableSlot,
+} from "@/modules/student/booking/interfaces/bookingSlotType";
 import type { Modality } from "@/modules/student/booking/constants/modality.constants";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 import type { BookingUnavailableWindow } from "@/modules/student/booking/interfaces/bookingUnavailableWindowType";
@@ -21,7 +24,8 @@ export interface BookingCalendarProps {
   selectedSlot: BookingSlot | null;
   bookingSlots?: BookingSlotEvent[];
   minimumNoticeMinutes?: number;
-  onSelectSlot: (slot: BookingSlot) => void;
+  disabled?: boolean;
+  onSelectSlot: (slot: SelectableSlot) => void;
   onDeselectSlot: () => void;
   onViewedRangeChange: (range: { start: string; end: string }) => void;
 }

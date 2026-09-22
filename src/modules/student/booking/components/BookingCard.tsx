@@ -77,7 +77,7 @@ export default function BookingCard({
       {selectedSlot && (
         <BookingCountdownTimer
           key={selectedSlot.id}
-          durationSeconds={15 * 60}
+          expiresAt={selectedSlot.expiresAt} 
           onExpire={handleBookingExpired}
         />
       )}
