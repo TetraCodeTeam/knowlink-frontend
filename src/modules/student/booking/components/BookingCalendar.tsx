@@ -26,6 +26,7 @@ import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/book
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { SlotDisplayStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
 import { BOOKING_STATUS_META } from "@/modules/student/booking/constants/bookingLegendConstants";
+import { buildSelectableSlot } from "@/modules/student/booking/utils/bookingSlotFormat";
 
 const PLUGINS = [timeGridPlugin, interactionPlugin];
 const SLOT_LABEL_FORMAT = {
@@ -46,6 +47,7 @@ export default function BookingCalendar({
   selectedSlot,
   bookingSlots = [],
   minimumNoticeMinutes = 0,
+  disabled = false,
   onSelectSlot,
   onDeselectSlot,
   onViewedRangeChange,
@@ -104,21 +106,7 @@ export default function BookingCalendar({
 
   const handleSelectWindow = useCallback(
     (blockId: string, window: ReservationWindow) => {
-      const durationHours = (window.end.getTime() - window.start.getTime()) / (60 * 60 * 1000);
-
-      onSelectSlot({
-        id: `${blockId}__${window.start.toISOString()}__${window.end.toISOString()}`,
-        startIso: window.start.toISOString(),
-        endIso: window.end.toISOString(),
-        date: window.start.toLocaleDateString("es-AR", {
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-        }),
-        startTime: window.start.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
-        endTime: window.end.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
-        durationHours,
-      });
+      onSelectSlot(buildSelectableSlot(blockId, window));
     },
     [onSelectSlot]
   );
@@ -147,7 +135,7 @@ export default function BookingCalendar({
             }
             minimumNoticeMinutes={minimumNoticeMinutes}
             selectedWindow={selectedWindow}
-            locked={selectedSlot !== null}
+            locked={selectedSlot !== null || disabled}
             onHoverWindow={() => {}}
             onSelectWindow={(window) => handleSelectWindow(arg.event.id, window)}
             onDeselectWindow={onDeselectSlot}

@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { Timer } from "lucide-react";
 
 interface BookingCountdownTimerProps {
-  expiresAt: string; 
+  expiresAt: string;
   onExpire?: () => void;
 }
 
@@ -14,7 +14,9 @@ function formatTime(totalSeconds: number): string {
 }
 
 function computeSecondsLeft(expiresAt: string): number {
-  return Math.max(0, Math.floor((new Date(expiresAt).getTime() - Date.now()) / 1000));
+  const remainingMs = new Date(expiresAt).getTime() - Date.now();
+  if (!Number.isFinite(remainingMs)) return 0;
+  return Math.max(0, Math.floor(remainingMs / 1000));
 }
 
 export default function BookingCountdownTimer({ expiresAt, onExpire }: BookingCountdownTimerProps) {
@@ -39,7 +41,18 @@ export default function BookingCountdownTimer({ expiresAt, onExpire }: BookingCo
   }, [secondsLeft, onExpire]);
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, px: 1.5, py: 1, borderRadius: 2, bgcolor: "#C7C8FF" }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 1,
+        px: 1.5,
+        py: 1,
+        borderRadius: 2,
+        bgcolor: "#C7C8FF",
+      }}
+    >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <Timer size={22} color="#5865C8" />
         <Typography variant="subtitle1" sx={{ color: "#3A48AD", fontWeight: 600 }}>

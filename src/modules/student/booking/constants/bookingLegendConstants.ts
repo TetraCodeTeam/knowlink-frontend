@@ -29,7 +29,7 @@ export const BOOKING_STATUS_META: Record<BookingStatusKey, BookingLegendItem> = 
     description: "Mantené presionado y deslizá hacia abajo para reservar varias horas seguidas.",
   },
   SELECTED: {
-    label: "Reservado por vos",
+    label: "Seleccionado por vos",
     color: "#5865C8",
     description:
       "Es el horario que seleccionaste. Tenés tiempo limitado para confirmarlo antes de que expire.",
