@@ -18,8 +18,8 @@ export interface UpcomingConfirmableBooking {
 }
 
 function extractErrorMessage(error: unknown, fallback: string): string {
-  const message = (error as { response?: { data?: ApiErrorPayload } })?.response?.data?.message;
-  return message ?? fallback;
+  const payload = (error as { response?: { data?: ApiErrorPayload } })?.response?.data;
+  return payload?.message ?? payload?.detail ?? fallback;
 }
 
 export async function confirmSessionAttendance(bookingId: string, code: string): Promise<void> {
