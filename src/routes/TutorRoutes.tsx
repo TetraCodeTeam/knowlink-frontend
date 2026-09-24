@@ -3,6 +3,7 @@ import TutorLayout from "@/modules/tutor/layouts/TutorLayout";
 import TutorHomePage from "@/modules/tutor/pages/TutorHomePage";
 import TutorProfilePage from "@/modules/tutor/profile/components/TutorProfilePage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
+import TutorClassHistoryPage from "@/modules/tutor/pages/TutorClassHistoryPage";
 import { WeeklyAgendaPage } from "@/modules/tutor/weekly-schedule/pages/WeeklyAgendaPage";
 
 export default function TutorRoutes() {
@@ -11,7 +12,7 @@ export default function TutorRoutes() {
       <Route element={<TutorLayout />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<TutorHomePage />} />
-        <Route path="classes" element={<UnderConstructionPage />} />
+        <Route path="classes" element={<TutorClassHistoryPage />} />
         <Route path="content" element={<UnderConstructionPage />} />
         <Route path="stats" element={<UnderConstructionPage />} />
         <Route path="notifications" element={<UnderConstructionPage />} />
