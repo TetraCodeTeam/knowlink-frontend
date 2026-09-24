@@ -57,12 +57,19 @@ export const calendarBaseSx: SxProps<Theme> = {
     borderRadius: "8px",
     border: "none",
   },
+  // Colores del evento expuestos como CSS vars con default: las pantallas
+  // que consumen calendarBaseSx pueden pisarlas por clase (ver
+  // WeeklyAgenda.styles.ts) sin pelear con !important/especificidad.
   "& .fc-event": {
-    bgcolor: "#5B6ED9 !important",
-    borderColor: "#5B6ED9 !important",
-    boxShadow: "0 2px 4px rgba(91, 110, 217, 0.25)",
+    bgcolor: "var(--fc-event-bg, #5B6ED9)",
+    borderColor: "var(--fc-event-border, #5B6ED9)",
+    color: "var(--fc-event-color, inherit)",
+    boxShadow: "var(--fc-event-shadow, 0 2px 4px rgba(91, 110, 217, 0.25))",
     cursor: "pointer",
     transition: "opacity 0.15s ease",
+  },
+  "& .fc-event-main": {
+    color: "var(--fc-event-text-color, inherit)",
   },
   "& .fc-event:hover": {
     opacity: 0.85,
