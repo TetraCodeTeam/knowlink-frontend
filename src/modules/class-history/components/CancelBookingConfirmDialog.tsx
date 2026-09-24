@@ -6,19 +6,22 @@ import {
   cancelBookingSummaryBoxSx,
   cancelBookingSummaryRowSx,
 } from "@/modules/class-history/styles/classHistoryStyles";
-import { CANCELLATION_FULL_REFUND_WINDOW_HOURS } from "@/modules/class-history/constants/classHistory.constants";
 import {
   formatSessionDateLabel,
   formatTime,
 } from "@/modules/class-history/utils/classHistory.utils";
 import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/responses/booking-history-detail.interface";
+import type { CancellationPreview } from "@/modules/class-history/interfaces/responses/cancellation-preview.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
+import type { RefundPolicy } from "@/modules/class-history/types/refund-policy.type";
 
 interface CancelBookingConfirmDialogProps {
   open: boolean;
   detail: BookingHistoryDetail;
   role: BookingRole;
-  isFullRefund: boolean;
+  preview: CancellationPreview | undefined;
+  isPreviewLoading: boolean;
+  isPreviewError: boolean;
   isPending: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -30,28 +33,34 @@ function getNoticeMessage(role: BookingRole): string {
     : "Esta acción no se puede deshacer. El tutor recibirá una notificación con la cancelación.";
 }
 
-function getRefundMessage(role: BookingRole, isFullRefund: boolean): string {
-  if (role === "TUTOR") {
-    return "El importe abonado será reintegrado automáticamente al alumno.";
+function getRefundMessage(role: BookingRole, refundPolicy: RefundPolicy): string {
+  switch (refundPolicy) {
+    case "REFUND_TOTAL_STUDENT":
+      return role === "TUTOR"
+        ? "El importe abonado será reintegrado automáticamente al alumno."
+        : "El importe abonado se te reintegrará automáticamente.";
+    case "TRANSFER_TOTAL_TUTOR":
+      return "El importe abonado no podrá ser reintegrado, ya que la clase se cancela con poca anticipación.";
   }
-  return isFullRefund
-    ? `Al cancelar con ${CANCELLATION_FULL_REFUND_WINDOW_HOURS} horas o más de anticipación, el importe abonado se te reintegrará automáticamente.`
-    : `Al cancelar con menos de ${CANCELLATION_FULL_REFUND_WINDOW_HOURS} horas de anticipación, el importe abonado no podrá ser reintegrado.`;
 }
 
 export default function CancelBookingConfirmDialog({
   open,
   detail,
   role,
-  isFullRefund,
+  preview,
+  isPreviewLoading,
+  isPreviewError,
   isPending,
   onConfirm,
   onCancel,
 }: CancelBookingConfirmDialogProps) {
+  const canConfirm = !isPreviewLoading && !isPreviewError && !!preview;
+
   return (
     <Dialog
       open={open}
-      onClose={onCancel}
+      onClose={isPending ? undefined : onCancel}
       maxWidth="xs"
       fullWidth
       PaperProps={{ sx: { borderRadius: 4, textAlign: "center", pt: 1 } }}
@@ -71,9 +80,21 @@ export default function CancelBookingConfirmDialog({
           {getNoticeMessage(role)}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" mt={1}>
-          {getRefundMessage(role, isFullRefund)}
-        </Typography>
+        {isPreviewLoading ? (
+          <Typography variant="body2" color="text.secondary" mt={1}>
+            Cargando información de reembolso...
+          </Typography>
+        ) : isPreviewError || !preview ? (
+          <Typography variant="body2" color="error" mt={1}>
+            No se pudo cargar la información de reembolso. Intentá de nuevo.
+          </Typography>
+        ) : (
+          preview.amount > 0 && (
+            <Typography variant="body2" color="text.secondary" mt={1}>
+              {getRefundMessage(role, preview.refundPolicy)}
+            </Typography>
+          )
+        )}
 
         <Box sx={cancelBookingSummaryBoxSx}>
           <Box sx={cancelBookingSummaryRowSx}>
@@ -110,7 +131,13 @@ export default function CancelBookingConfirmDialog({
         <AppButton appVariant="outline" onClick={onCancel} disabled={isPending} fullWidth>
           Volver
         </AppButton>
-        <AppButton appVariant="soft-danger" onClick={onConfirm} loading={isPending} fullWidth>
+        <AppButton
+          appVariant="soft-danger"
+          onClick={onConfirm}
+          loading={isPending}
+          disabled={!canConfirm}
+          fullWidth
+        >
           Cancelar clase
         </AppButton>
       </DialogActions>

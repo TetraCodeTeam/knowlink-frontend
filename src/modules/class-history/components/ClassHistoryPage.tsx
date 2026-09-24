@@ -15,17 +15,11 @@ interface ClassHistoryPageProps {
 
 export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
   const [category, setCategory] = useState<BookingHistoryCategory>("RESERVED");
-  const { items, hasNext, goToNextPage, resetPage, isLoading, isFetching, isError } = useBookingHistory(
-    role,
-    category
-  );
-
-  const handleCategoryChange = (next: BookingHistoryCategory) => {
-    setCategory(next);
-    resetPage();
-  };
+  const { items, hasNext, goToNextPage, isLoading, isFetchingNextPage, isError } =
+    useBookingHistory(role, category);
 
   const dateGroups = groupByDate(items);
+  const hasItems = items.length > 0;
 
   return (
     <Box
@@ -37,17 +31,17 @@ export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
         boxSizing: "border-box",
       }}
     >
-      <CategoryTabs activeCategory={category} onChange={handleCategoryChange} />
+      <CategoryTabs activeCategory={category} onChange={setCategory} />
 
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: "48px" }}>
           <CircularProgress sx={{ color: "#4C5CB5" }} />
         </Box>
-      ) : isError ? (
+      ) : isError && !hasItems ? (
         <Box textAlign="center" py="48px">
           <Typography color="error">No se pudo cargar el historial de clases.</Typography>
         </Box>
-      ) : items.length === 0 ? (
+      ) : !hasItems ? (
         <ClassHistoryEmptyState />
       ) : (
         <>
@@ -55,12 +49,39 @@ export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
             <ClassDateGroup key={group.sessionDate} group={group} role={role} category={category} />
           ))}
 
-          {hasNext && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: "12px" }}>
-              <AppButton appVariant="outline" onClick={goToNextPage} loading={isFetching}>
-                Cargar más
+          {isError ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "8px",
+                mt: "12px",
+              }}
+            >
+              <Typography color="error" sx={{ fontSize: "0.9rem" }}>
+                No se pudieron cargar más clases.
+              </Typography>
+              <AppButton
+                appVariant="outline"
+                onClick={() => void goToNextPage()}
+                loading={isFetchingNextPage}
+              >
+                Reintentar
               </AppButton>
             </Box>
+          ) : (
+            hasNext && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: "12px" }}>
+                <AppButton
+                  appVariant="outline"
+                  onClick={() => void goToNextPage()}
+                  loading={isFetchingNextPage}
+                >
+                  Cargar más
+                </AppButton>
+              </Box>
+            )
           )}
         </>
       )}
