@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";
+import { queryClient } from "@/shared/lib/queryClient";
 
 interface AuthStore {
   authResponse?: AuthResponse;
@@ -15,11 +16,15 @@ export const useAuthStore = create<AuthStore>()(
       authResponse: undefined,
       isAuthenticated: false,
 
-      login: (authResponse: AuthResponse) =>
-        set({ authResponse, isAuthenticated: true }),
+      login: (authResponse: AuthResponse) => {
+        queryClient.clear();
+        set({ authResponse, isAuthenticated: true });
+      },
 
-      logout: () =>
-        set({ authResponse: undefined, isAuthenticated: false }),
+      logout: () => {
+        queryClient.clear();
+        set({ authResponse: undefined, isAuthenticated: false });
+      },
     }),
     {
       name: "knowlink-auth",

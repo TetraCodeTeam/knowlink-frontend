@@ -1,9 +1,16 @@
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import StudentSidebar from "@/modules/student/components/StudentSidebar";
-import StudentTopbar, { SIDEBAR_WIDTH, TOPBAR_HEIGHT } from "@/modules/student/components/StudentTopbar";
+import StudentTopbar, {
+  SIDEBAR_WIDTH,
+  TOPBAR_HEIGHT,
+} from "@/modules/student/components/StudentTopbar";
+import { StudentTokenWidget } from "@/modules/attendance/components/StudentTokenWidget";
+import { useAutoShowStudentToken } from "@/modules/attendance/hooks/useAutoShowStudentToken";
 
 export default function StudentLayout() {
+  useAutoShowStudentToken();
+
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#F4F3FB" }}>
       <StudentSidebar />
@@ -27,6 +34,7 @@ export default function StudentLayout() {
           <Outlet />
         </Box>
       </Box>
+      <StudentTokenWidget />
     </Box>
   );
 }

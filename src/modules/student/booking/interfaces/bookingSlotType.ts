@@ -1,4 +1,4 @@
-export interface BookingSlot {
+export interface SelectableSlot {
   id: string;
   startIso: string;
   endIso: string;
@@ -6,4 +6,8 @@ export interface BookingSlot {
   startTime: string;
   endTime: string;
   durationHours: number;
+}
+
+export interface BookingSlot extends SelectableSlot {
+  expiresAt: string;
 }

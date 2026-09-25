@@ -1,3 +1,4 @@
+import { MAX_VIRTUAL_LINK_LENGTH } from "@/modules/class-history/constants/classHistory.constants";
 import type { BookingHistoryItem } from "@/modules/class-history/interfaces/responses/booking-history-item.interface";
 
 const DAY_NAMES = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -79,12 +80,21 @@ export function buildModalityMessage(item: {
   return `Modalidad presencial. Dirección: ${item.address ?? "no especificada"}`;
 }
 
-export function isValidUrl(value: string): boolean {
+/** Returns the normalized virtual session link, or null if it is not a safe, valid URL. */
+export function normalizeVirtualLink(raw: string): string | null {
+  const value = raw.trim();
+  if (!value || value.length > MAX_VIRTUAL_LINK_LENGTH) return null;
+
+  const withProtocol = /^[a-z][a-z0-9+.-]*:\/\//i.test(value) ? value : `https://${value}`;
+
   try {
-    const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
+    const url = new URL(withProtocol);
+    if (url.protocol !== "https:") return null;
+    if (url.username || url.password) return null;
+    if (!url.hostname.includes(".")) return null;
+    return url.href;
   } catch {
-    return false;
+    return null;
   }
 }
 
