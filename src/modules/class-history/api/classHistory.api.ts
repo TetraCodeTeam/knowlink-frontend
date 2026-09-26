@@ -5,6 +5,8 @@ import type { BookingHistoryCategory } from "@/modules/class-history/types/booki
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/responses/booking-history-detail.interface";
 import type { VirtualSessionLinkRequest } from "@/modules/class-history/interfaces/requests/virtual-session-link.interface";
+import type { CancellationPreview } from "@/modules/class-history/interfaces/responses/cancellation-preview.interface";
+import type { BookingCancellationResponse } from "@/modules/class-history/interfaces/responses/booking-cancellation-response.interface";
 
 export async function getBookingHistory(params: {
   role: BookingRole;
@@ -30,6 +32,20 @@ export async function updateVirtualLink(
   const response = await httpClient.patch<BookingHistoryDetail>(
     `/api/v1/bookings/${bookingId}/virtual-link`,
     data
+  );
+  return response.data;
+}
+
+export async function getCancellationPreview(bookingId: string): Promise<CancellationPreview> {
+  const response = await httpClient.get<CancellationPreview>(
+    `/api/v1/bookings/${bookingId}/cancellations/preview`
+  );
+  return response.data;
+}
+
+export async function cancelBooking(bookingId: string): Promise<BookingCancellationResponse> {
+  const response = await httpClient.post<BookingCancellationResponse>(
+    `/api/v1/bookings/${bookingId}/cancellations`
   );
   return response.data;
 }
