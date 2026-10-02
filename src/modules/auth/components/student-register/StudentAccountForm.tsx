@@ -51,7 +51,6 @@ export default function StudentAccountForm({
     register,
     handleSubmit,
     control,
-    setValue,
     setError,
     formState: { errors },
   } = useForm<StudentAccountData>({
@@ -70,7 +69,6 @@ export default function StudentAccountForm({
 
     const url = URL.createObjectURL(file);
     setAvatarPreview(url);
-    setValue("profilePictureUrl", url);
   };
 
   const handleAccountSubmit = async (data: StudentAccountData) => {

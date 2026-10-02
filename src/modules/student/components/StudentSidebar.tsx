@@ -7,6 +7,7 @@ import { SIDEBAR_WIDTH } from "@/modules/student/components/StudentTopbar";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
+import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
 
 interface NavItem {
   icon: React.ElementType;
@@ -38,6 +39,7 @@ export default function StudentSidebar() {
   const { notificationsCount, complaintsCount } = useStudentBadgesStore();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const { data: profile } = useMyStudentProfile();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -166,7 +168,7 @@ export default function StudentSidebar() {
           }}
         >
           <Avatar
-            src={undefined}
+            src={profile?.profilePictureUrl ?? undefined}
             sx={{
               width: 42,
               height: 42,

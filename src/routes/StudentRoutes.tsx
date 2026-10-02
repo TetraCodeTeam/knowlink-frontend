@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import StudentLayout from "@/modules/student/layouts/StudentLayout";
 import StudentHomePage from "@/modules/student/pages/StudentHomePage";
+import SubjectTutorsPage from "@/modules/student/pages/SubjectTutorsPage";
 import { OwnProfilePage } from "@/modules/student/profile/pages/OwnProfilePage";
-import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
 import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import { TutorProfilePage } from "@/modules/student/tutorProfile/pages/ViewTutorProfile";
@@ -21,8 +21,8 @@ export default function StudentRoutes() {
         <Route path="profile" element={<OwnProfilePage />} />
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
         <Route path="tutor/:tutorId/disponibilidad" element={<UnderConstructionPage />} />
+        <Route path="tutores" element={<SubjectTutorsPage />} />
         <Route path="tutor/:tutorId/booking" element={<BookingPreviewPage />} />
-        <Route path="tutores" element={<TutoresPorMateriaPage />} />
         <Route path="buscar" element={<SearchResultsPage />} />
       </Route>
     </Routes>

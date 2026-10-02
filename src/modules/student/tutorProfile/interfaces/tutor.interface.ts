@@ -1,15 +1,15 @@
-export type Modalidad = "Presencial" | "Virtual";
+export type Modality = "Presencial" | "Virtual";
 export type RawModality = "VIRTUAL" | "IN_PERSON" | "BOTH";
 
 export interface TutorSubjectRate {
-  id: string; // ya es el tutorSubjectId real (ver mapTutorProfile)
+  id: string;
   name: string;
   rating: number;
   reviewsCount: number;
   price: number;
   isFree: boolean;
-  modalities: Modalidad[]; // para mostrar chips — no tocar, ya se usa en otro lado
-  rawModality: RawModality; // para lógica de negocio (booking)
+  modalities: Modality[];
+  rawModality: RawModality;
   isVerified: boolean;
 }
 
@@ -41,7 +41,7 @@ export interface TutorProfile {
   reviewsCount: number;
   subjects: string[];
   about: string;
-  address: string | null; // 👈 nuevo
+  address: string | null;
   subjectRates: TutorSubjectRate[];
   reviews: TutorReview[];
   material: TutorMaterialItem[];

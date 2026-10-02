@@ -10,22 +10,10 @@ import {
 } from "@mui/material";
 import { OctagonAlert } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
-
-type ConfirmDialogSeverity = "warning" | "danger";
-
-interface AppConfirmDialogProps {
-  open: boolean;
-  title: string;
-  message: string;
-  severity?: ConfirmDialogSeverity;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  requireCheckbox?: boolean;
-  checkboxLabel?: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-  isPending: boolean;
-}
+import type {
+  AppConfirmDialogProps,
+  ConfirmDialogSeverity,
+} from "./interfaces/shared-components.interface";
 
 const SEVERITY_STYLES: Record<
   ConfirmDialogSeverity,

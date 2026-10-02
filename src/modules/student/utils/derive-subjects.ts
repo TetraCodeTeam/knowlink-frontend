@@ -8,7 +8,7 @@ import type {
  * con sus subjects. Esta función deriva la lista de materias únicas a partir
  * de los tutores que trajo la búsqueda, dedupeando por nombre (case-insensitive).
  */
-export function deriveMateriasFromTutors(tutors: TutorSearchResult[]): SubjectSummary[] {
+export function deriveSubjectsFromTutors(tutors: TutorSearchResult[]): SubjectSummary[] {
   const seen = new Map<string, SubjectSummary>();
   for (const tutor of tutors) {
     for (const subject of tutor.subjects) {

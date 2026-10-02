@@ -1,13 +1,9 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import type { SearchModeToggleProps } from "./interfaces/student-components.interface";
 
-export type SearchMode = "materias" | "tutores";
-
-interface SearchModeToggleProps {
-  value: SearchMode;
-  onChange: (mode: SearchMode) => void;
-}
+export type SearchMode = "subjects" | "tutors";
 
 export default function SearchModeToggle({ value, onChange }: SearchModeToggleProps) {
   return (
@@ -35,10 +31,10 @@ export default function SearchModeToggle({ value, onChange }: SearchModeTogglePr
         },
       }}
     >
-      <ToggleButton value="materias" aria-label="Ver materias">
+      <ToggleButton value="subjects" aria-label="Ver materias">
         <MenuBookOutlinedIcon fontSize="small" /> Materias
       </ToggleButton>
-      <ToggleButton value="tutores" aria-label="Ver tutores">
+      <ToggleButton value="tutors" aria-label="Ver tutores">
         <PersonOutlineIcon fontSize="small" /> Tutores
       </ToggleButton>
     </ToggleButtonGroup>

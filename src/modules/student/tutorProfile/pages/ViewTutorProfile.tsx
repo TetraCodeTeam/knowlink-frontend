@@ -32,13 +32,13 @@ export const TutorProfilePage = () => {
     );
   }
 
-  const handleReservar = () => {
+  const handleBook = () => {
     navigate(`/student/tutor/${tutorId}/booking`);
   };
 
   return (
-    <Stack spacing={3} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
-      <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
+    <Stack spacing={4} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
+      <TutorProfileHeader tutor={tutor} onBook={handleBook} />
 
       <Grid container columnSpacing={4} rowSpacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>

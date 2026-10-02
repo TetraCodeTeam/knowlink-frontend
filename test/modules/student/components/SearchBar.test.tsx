@@ -5,15 +5,15 @@ import { MemoryRouter } from "react-router-dom";
 import SearchBar from "@/modules/student/components/SearchBar";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
-import { tutorAna } from "../../../fixtures/busqueda/tutoresDePrueba";
+import { tutorAna } from "../../../fixtures/search/testTutors";
 
-vi.mock("@/modules/student/hooks/useSearchTutorsAndMaterias", () => ({
-  useSearchTutorsAndMaterias: vi.fn(),
+vi.mock("@/modules/student/hooks/useSearchTutorsAndSubjects", () => ({
+  useSearchTutorsAndSubjects: vi.fn(),
 }));
 
-import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
+import { useSearchTutorsAndSubjects } from "@/modules/student/hooks/useSearchTutorsAndSubjects";
 
-const mockedHook = vi.mocked(useSearchTutorsAndMaterias);
+const mockedHook = vi.mocked(useSearchTutorsAndSubjects);
 
 function getTextContent(text: string) {
   return (_content: string, element: Element | null) =>
@@ -22,7 +22,7 @@ function getTextContent(text: string) {
 
 const SEARCH_PLACEHOLDER = "Busca tutores, materias";
 
-type HookResult = ReturnType<typeof useSearchTutorsAndMaterias>;
+type HookResult = ReturnType<typeof useSearchTutorsAndSubjects>;
 
 function hookResult(data: TutorSearchResult[], isFetching = false): HookResult {
   return { data, isFetching } as unknown as HookResult;

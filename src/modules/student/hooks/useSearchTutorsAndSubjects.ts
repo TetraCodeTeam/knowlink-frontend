@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { searchTutors } from "../api/search.api";
 import { STUDENTS_SEARCH_KEY } from "../constants";
 
-export function useSearchTutorsAndMaterias(query: string) {
+export function useSearchTutorsAndSubjects(query: string) {
   const trimmedQuery = query.trim();
 
   return useQuery({

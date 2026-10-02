@@ -1,10 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SearchResultsPanel, {
-  SearchResultsPanelProps,
-} from "@/modules/student/components/SearchResultsPanel";
-import { materiasIngenieria, tutoresDePrueba } from "../../../fixtures/busqueda/tutoresDePrueba";
+import SearchResultsPanel from "@/modules/student/components/SearchResultsPanel";
+import type { SearchResultsPanelProps } from "@/modules/student/components/interfaces/student-components.interface";
+import { engineeringSubjects, testTutors } from "../../../fixtures/search/testTutors";
 
 function getTextContent(text: string) {
   return (_content: string, element: Element | null) =>
@@ -12,20 +11,20 @@ function getTextContent(text: string) {
 }
 
 function renderPanel(props: Partial<SearchResultsPanelProps> = {}) {
-  const onSelectMateria = vi.fn();
+  const onSelectSubject = vi.fn();
   const onSelectTutor = vi.fn();
   render(
     <SearchResultsPanel
       query="a"
-      materias={materiasIngenieria}
-      tutors={tutoresDePrueba}
+      subjects={engineeringSubjects}
+      tutors={testTutors}
       loading={false}
-      onSelectMateria={onSelectMateria}
+      onSelectSubject={onSelectSubject}
       onSelectTutor={onSelectTutor}
       {...props}
     />
   );
-  return { onSelectMateria, onSelectTutor };
+  return { onSelectSubject, onSelectTutor };
 }
 
 describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
@@ -35,7 +34,7 @@ describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
   });
 
   it("CP-003.06 — Muestra estado vacío cuando no hay resultados", () => {
-    renderPanel({ materias: [], tutors: [] });
+    renderPanel({ subjects: [], tutors: [] });
     expect(screen.getByText("No se encontraron resultados para tu búsqueda")).toBeInTheDocument();
   });
 
@@ -55,11 +54,11 @@ describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
     expect(screen.getByText("Sin reseñas aún")).toBeInTheDocument();
   });
 
-  it("CP-003.09 — Llama a onSelectMateria al hacer click en una materia", async () => {
+  it("CP-003.09 — Llama a onSelectSubject al hacer click en una materia", async () => {
     const user = userEvent.setup();
-    const { onSelectMateria } = renderPanel();
+    const { onSelectSubject } = renderPanel();
     await user.click(screen.getByText(getTextContent("Álgebra")));
-    expect(onSelectMateria).toHaveBeenCalledWith("Álgebra");
+    expect(onSelectSubject).toHaveBeenCalledWith("Álgebra");
   });
 
   it("CP-003.10 — Llama a onSelectTutor al hacer click en un tutor", async () => {
@@ -70,13 +69,13 @@ describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
   });
 
   it("CP-003.11 — No renderiza sección Materias cuando no hay materias", () => {
-    renderPanel({ materias: [], tutors: tutoresDePrueba });
+    renderPanel({ subjects: [], tutors: testTutors });
     expect(screen.queryByText("Materias")).toBeNull();
     expect(screen.getByText("Tutores")).toBeInTheDocument();
   });
 
   it("CP-003.12 — No renderiza sección Tutores cuando no hay tutores", () => {
-    renderPanel({ materias: materiasIngenieria, tutors: [] });
+    renderPanel({ subjects: engineeringSubjects, tutors: [] });
     expect(screen.getByText("Materias")).toBeInTheDocument();
     expect(screen.queryByText("Tutores")).toBeNull();
   });

@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
-import { deriveMateriasFromTutors } from "../utils/derive-materias";
-import { buildMateriaTutorsRoute, buildTutorProfileRoute } from "../constants";
+import { useSearchTutorsAndSubjects } from "../hooks/useSearchTutorsAndSubjects";
+import { deriveSubjectsFromTutors } from "../utils/derive-subjects";
+import { buildSubjectTutorsRoute, buildTutorProfileRoute } from "../constants";
 import SearchModeToggle, { type SearchMode } from "../components/SearchModeToggle";
-import MateriaResultCard from "../components/MateriaResultCard";
+import SubjectResultCard from "../components/SubjectResultCard";
 import TutorResultCard from "../components/TutorResultCard";
 import EmptyState from "@/shared/components/EmptyState";
 import emptySearchResultsImage from "@/shared/assets/illustrations/empty-search-results.png";
@@ -18,13 +18,13 @@ export default function SearchResultsPage() {
   const navigate = useNavigate();
   const query = searchParams.get("q") ?? "";
 
-  const [mode, setMode] = useState<SearchMode>("materias");
+  const [mode, setMode] = useState<SearchMode>("subjects");
 
-  const { data, isFetching } = useSearchTutorsAndMaterias(query);
-  const tutores = useMemo(() => (Array.isArray(data) ? data : []), [data]);
-  const materias = useMemo(() => deriveMateriasFromTutors(tutores), [tutores]);
+  const { data, isFetching } = useSearchTutorsAndSubjects(query);
+  const tutors = useMemo(() => (Array.isArray(data) ? data : []), [data]);
+  const subjects = useMemo(() => deriveSubjectsFromTutors(tutors), [tutors]);
 
-  const title = mode === "materias" ? "Materias Relacionadas" : "Tutores Relacionados";
+  const title = mode === "subjects" ? "Materias Relacionadas" : "Tutores Relacionados";
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
@@ -46,8 +46,8 @@ export default function SearchResultsPage() {
 
       {isFetching ? (
         <Typography color="text.secondary">Buscando…</Typography>
-      ) : mode === "materias" ? (
-        materias.length === 0 ? (
+      ) : mode === "subjects" ? (
+        subjects.length === 0 ? (
           <EmptyState
             image={emptySearchResultsImage}
             imageAlt="No se encontraron resultados"
@@ -55,18 +55,18 @@ export default function SearchResultsPage() {
           />
         ) : (
           <Grid container spacing={3}>
-            {materias.map((materia, index) => (
-              <Grid key={materia.name} size={{ xs: 12, sm: 6, md: 4 }}>
-                <MateriaResultCard
-                  materia={materia}
-                  highlighted={index === 0 && materias.length > 1}
-                  onClick={() => navigate(buildMateriaTutorsRoute(materia.name))}
+            {subjects.map((subject, index) => (
+              <Grid key={subject.name} size={{ xs: 12, sm: 6, md: 4 }}>
+                <SubjectResultCard
+                  subject={subject}
+                  highlighted={index === 0 && subjects.length > 1}
+                  onClick={() => navigate(buildSubjectTutorsRoute(subject.name))}
                 />
               </Grid>
             ))}
           </Grid>
         )
-      ) : tutores.length === 0 ? (
+      ) : tutors.length === 0 ? (
         <EmptyState
           image={emptySearchResultsImage}
           imageAlt="No se encontraron resultados"
@@ -74,7 +74,7 @@ export default function SearchResultsPage() {
         />
       ) : (
         <Grid container spacing={3}>
-          {tutores.map((tutor) => (
+          {tutors.map((tutor) => (
             <Grid key={tutor.tutorId} size={{ xs: 12, sm: 6, md: 4 }}>
               <TutorResultCard
                 tutor={tutor}
