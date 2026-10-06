@@ -18,11 +18,14 @@ export default function StarRatingInput({ value, onChange, disabled }: StarRatin
 
   return (
     <Box
+      role="radiogroup"
+      aria-label="Calificación en estrellas"
       sx={{ display: "flex", gap: "6px", justifyContent: "center" }}
       onMouseLeave={() => setHovered(null)}
     >
       {Array.from({ length: STAR_COUNT }, (_, i) => i + 1).map((star) => {
         const active = star <= displayValue;
+        const selected = star === value;
         return (
           <IconButton
             key={star}
@@ -30,6 +33,9 @@ export default function StarRatingInput({ value, onChange, disabled }: StarRatin
             disabled={disabled}
             onMouseEnter={() => setHovered(star)}
             onClick={() => onChange(star)}
+            role="radio"
+            aria-checked={selected}
+            aria-pressed={selected}
             aria-label={`${star} ${star === 1 ? "estrella" : "estrellas"}`}
             sx={{ p: "4px" }}
           >
