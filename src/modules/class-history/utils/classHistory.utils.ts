@@ -109,6 +109,16 @@ export function isWithinVirtualLinkEditWindow(
   return minutesUntilStart > editWindowMinutes;
 }
 
+export function isWithinRatingWindow(
+  sessionDate: string,
+  endTime: string,
+  windowHours: number
+): boolean {
+  const classEnd = new Date(`${sessionDate}T${endTime}`);
+  const deadline = classEnd.getTime() + windowHours * 60 * 60 * 1000;
+  return Date.now() <= deadline;
+}
+
 export function formatSessionDateLabel(sessionDate: string): string {
   const date = new Date(`${sessionDate}T00:00:00`);
   return `${DAY_NAMES[date.getDay()]} ${date.getDate()}/${date.getMonth() + 1}`;
