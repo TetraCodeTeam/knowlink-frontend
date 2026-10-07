@@ -7,6 +7,8 @@ import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/re
 import type { VirtualSessionLinkRequest } from "@/modules/class-history/interfaces/requests/virtual-session-link.interface";
 import type { CancellationPreview } from "@/modules/class-history/interfaces/responses/cancellation-preview.interface";
 import type { BookingCancellationResponse } from "@/modules/class-history/interfaces/responses/booking-cancellation-response.interface";
+import type { RateBookingRequest } from "@/modules/class-history/interfaces/requests/rate-booking.interface";
+import type { BookingRatingResponse } from "@/modules/class-history/interfaces/responses/booking-rating-response.interface";
 
 export async function getBookingHistory(params: {
   role: BookingRole;
@@ -46,6 +48,17 @@ export async function getCancellationPreview(bookingId: string): Promise<Cancell
 export async function cancelBooking(bookingId: string): Promise<BookingCancellationResponse> {
   const response = await httpClient.post<BookingCancellationResponse>(
     `/api/v1/bookings/${bookingId}/cancellations`
+  );
+  return response.data;
+}
+
+export async function rateBooking(
+  bookingId: string,
+  data: RateBookingRequest
+): Promise<BookingRatingResponse> {
+  const response = await httpClient.post<BookingRatingResponse>(
+    `/api/v1/bookings/${bookingId}/ratings`,
+    data
   );
   return response.data;
 }

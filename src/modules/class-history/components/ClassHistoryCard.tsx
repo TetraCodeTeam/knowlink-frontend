@@ -10,6 +10,7 @@ import type { BookingRole } from "@/modules/class-history/types/booking-role.typ
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
 import VirtualLinkBox from "./VirtualLinkBox";
 import CancelBookingFlow from "./CancelBookingFlow";
+import RateBookingFlow from "./RateBookingFlow";
 
 interface ClassHistoryCardProps {
   item: BookingHistoryItem;
@@ -113,6 +114,9 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                 {category === "RESERVED" && !showVirtualLinkBox && (
                   <CancelBookingFlow detail={detail} role={role} />
                 )}
+                {category === "COMPLETED" && !showVirtualLinkBox && (
+                  <RateBookingFlow detail={detail} role={role} />
+                )}
               </Box>
 
               {showVirtualLinkBox && (
@@ -128,6 +132,11 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
               {category === "RESERVED" && showVirtualLinkBox && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>
                   <CancelBookingFlow detail={detail} role={role} />
+                </Box>
+              )}
+              {category === "COMPLETED" && showVirtualLinkBox && (
+                <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>
+                  <RateBookingFlow detail={detail} role={role} />
                 </Box>
               )}
             </Box>
