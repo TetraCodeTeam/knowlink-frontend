@@ -15,6 +15,7 @@ import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interface
 import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
 import { formatMaterialMetadata } from "@/modules/student/tutorProfile/utils/materialFormatting";
 import { groupBySubject } from "@/modules/student/tutorProfile/utils/materialTruncation";
+import ReportMaterialFlow from "@/modules/student/tutorProfile/components/ReportMaterialFlow";
 
 interface TutorMaterialModalProps {
   open: boolean;
@@ -147,17 +148,20 @@ export const TutorMaterialModal = ({
                           </Typography>
                         </Box>
                       </Stack>
-                      <Button
-                        onClick={() => void onDownload(item.id)}
-                        variant="contained"
-                        size="small"
-                        disableElevation
-                        endIcon={<Download size={16} />}
-                        sx={{ textTransform: "none", borderRadius: 3, flexShrink: 0 }}
-                        aria-label={`Descargar ${item.title}`}
-                      >
-                        Descargar
-                      </Button>
+                      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexShrink: 0 }}>
+                        <ReportMaterialFlow materialId={item.id} materialTitle={item.title} />
+                        <Button
+                          onClick={() => void onDownload(item.id)}
+                          variant="contained"
+                          size="small"
+                          disableElevation
+                          endIcon={<Download size={16} />}
+                          sx={{ textTransform: "none", borderRadius: 3 }}
+                          aria-label={`Descargar ${item.title}`}
+                        >
+                          Descargar
+                        </Button>
+                      </Stack>
                     </Box>
                   );
                 })}

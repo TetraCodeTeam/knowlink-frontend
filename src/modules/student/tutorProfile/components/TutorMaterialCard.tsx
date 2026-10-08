@@ -10,6 +10,7 @@ import {
   groupBySubject,
 } from "@/modules/student/tutorProfile/utils/materialTruncation";
 import { TutorMaterialModal } from "@/modules/student/tutorProfile/components/TutorMaterialModal";
+import ReportMaterialFlow from "@/modules/student/tutorProfile/components/ReportMaterialFlow";
 
 interface TutorMaterialCardProps {
   material: TutorMaterialItem[];
@@ -118,13 +119,16 @@ export const TutorMaterialCard = ({
                               </Typography>
                             </Box>
                           </Stack>
-                          <IconButton
-                            onClick={() => void onDownload(item.id)}
-                            size="small"
-                            aria-label={`Descargar ${item.title}`}
-                          >
-                            <Download size={18} color="#5865C8" />
-                          </IconButton>
+                          <Stack direction="row" spacing={0.5} alignItems="center">
+                            <ReportMaterialFlow materialId={item.id} materialTitle={item.title} />
+                            <IconButton
+                              onClick={() => void onDownload(item.id)}
+                              size="small"
+                              aria-label={`Descargar ${item.title}`}
+                            >
+                              <Download size={18} color="#5865C8" />
+                            </IconButton>
+                          </Stack>
                         </Box>
                       );
                     })}
