@@ -120,7 +120,11 @@ export const TutorMaterialCard = ({
                             </Box>
                           </Stack>
                           <Stack direction="row" spacing={0.5} alignItems="center">
-                            <ReportMaterialFlow materialId={item.id} materialTitle={item.title} />
+                            <ReportMaterialFlow
+                              materialId={item.id}
+                              materialTitle={item.title}
+                              alreadyReported={item.alreadyReported}
+                            />
                             <IconButton
                               onClick={() => void onDownload(item.id)}
                               size="small"

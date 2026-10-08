@@ -53,7 +53,11 @@ export const reportedLabelSx: SxProps<Theme> = {
   display: "inline-flex",
   alignItems: "center",
   gap: "4px",
+  background: "none",
+  border: "none",
+  cursor: "pointer",
   color: "#9E9E9E",
   fontWeight: 600,
   fontSize: "0.85rem",
+  p: 0,
 };

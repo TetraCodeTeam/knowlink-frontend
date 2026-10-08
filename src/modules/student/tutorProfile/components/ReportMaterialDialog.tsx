@@ -79,9 +79,11 @@ export default function ReportMaterialDialog({
           </Typography>
 
           <Box sx={reportInfoBoxSx}>
-            <Info size={24} color="#FF7700" style={{ flexShrink: 0 }} />
+            <Box sx={{ display: "flex", flexShrink: 0 }}>
+              <Info size={24} color="#FF7700" />
+            </Box>
             <Typography sx={{ fontSize: "0.8rem", color: "#7A3E00", fontWeight: 500 }}>
-              Podrás hacer el seguimiento en la sección &quot;Rec. y Solicitudes&quot;.
+              Un administrador va a revisar tu denuncia.
             </Typography>
           </Box>
 

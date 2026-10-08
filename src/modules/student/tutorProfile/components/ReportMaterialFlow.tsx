@@ -5,16 +5,13 @@ import ReportMaterialDialog from "@/modules/student/tutorProfile/components/Repo
 import ReportMaterialSuccessDialog from "@/modules/student/tutorProfile/components/ReportMaterialSuccessDialog";
 import ReportMaterialAlreadyReportedDialog from "@/modules/student/tutorProfile/components/ReportMaterialAlreadyReportedDialog";
 import { useReportMaterial } from "@/modules/student/tutorProfile/hooks/useReportMaterial";
-import {
-  hasReportedMaterial,
-  markMaterialAsReported,
-} from "@/modules/student/tutorProfile/utils/reportedMaterials.storage";
 import type { ReportMaterialFormValues } from "@/modules/student/tutorProfile/schemas/reportMaterial.schema";
-import type { ReportReason } from "@/modules/student/tutorProfile/interfaces/requests/report-material-request.interface";
+import type { ReportReason } from "@/modules/student/tutorProfile/types/report-reason.type";
 
 interface ReportMaterialFlowProps {
   materialId: string;
   materialTitle: string;
+  alreadyReported: boolean;
 }
 
 type ReportMaterialStep = "closed" | "reporting" | "success" | "already-reported";
@@ -30,16 +27,16 @@ function buildDescription(values: ReportMaterialFormValues): string | undefined 
   return parts.length > 0 ? parts.join(" — ") : undefined;
 }
 
-export default function ReportMaterialFlow({ materialId, materialTitle }: ReportMaterialFlowProps) {
+export default function ReportMaterialFlow({
+  materialId,
+  materialTitle,
+  alreadyReported,
+}: ReportMaterialFlowProps) {
   const [step, setStep] = useState<ReportMaterialStep>("closed");
   const { submitReport, isPending } = useReportMaterial(materialId);
 
   const handleOpen = () => {
-    if (hasReportedMaterial(materialId)) {
-      setStep("already-reported");
-      return;
-    }
-    setStep("reporting");
+    setStep(alreadyReported ? "already-reported" : "reporting");
   };
 
   const handleConfirm = async (values: ReportMaterialFormValues) => {
@@ -48,13 +45,13 @@ export default function ReportMaterialFlow({ materialId, materialTitle }: Report
         reason: values.reason as ReportReason,
         description: buildDescription(values),
       });
-      markMaterialAsReported(materialId);
       setStep("success");
     } catch (err: unknown) {
       const status = axios.isAxiosError(err) ? err.response?.status : undefined;
       if (status === 409) {
-        // 409 is the documented "already reported" conflict for this material.
-        markMaterialAsReported(materialId);
+        // 409 is the documented "already reported" conflict for this material;
+        // the tutor profile query was invalidated by useReportMaterial, so the
+        // button will show "Reportado" once it refetches.
         setStep("already-reported");
         return;
       }
@@ -67,7 +64,7 @@ export default function ReportMaterialFlow({ materialId, materialTitle }: Report
     <>
       <ReportMaterialButton
         materialTitle={materialTitle}
-        alreadyReported={hasReportedMaterial(materialId)}
+        alreadyReported={alreadyReported}
         onClick={handleOpen}
       />
 

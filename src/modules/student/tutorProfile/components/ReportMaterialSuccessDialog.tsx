@@ -40,8 +40,7 @@ export default function ReportMaterialSuccessDialog({
         </Typography>
 
         <Typography variant="body2" color="text.secondary">
-          Recibimos tu denuncia y un administrador la va a revisar. Podés hacer el seguimiento desde
-          &quot;Rec. y Solicitudes&quot;.
+          Recibimos tu denuncia y un administrador la va a revisar.
         </Typography>
       </DialogContent>
     </Dialog>

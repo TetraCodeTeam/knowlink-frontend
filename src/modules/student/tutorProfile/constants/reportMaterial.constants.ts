@@ -1,13 +1,10 @@
-import type { ReportReason } from "@/modules/student/tutorProfile/interfaces/requests/report-material-request.interface";
+import type { ReportReason } from "@/modules/student/tutorProfile/types/report-reason.type";
 
 interface ReportReasonOption {
   value: ReportReason;
   label: string;
 }
 
-// NOTE: only "PLAGIARISM" is confirmed by the backend contract. The other
-// three values are inferred from the acceptance criteria's wording and must
-// be confirmed with the backend team before this ships.
 export const REPORT_REASON_OPTIONS: ReportReasonOption[] = [
   { value: "INAPPROPRIATE_CONTENT", label: "Contenido inapropiado" },
   { value: "FALSE_INFORMATION", label: "Información falsa" },

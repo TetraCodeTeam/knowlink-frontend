@@ -1,4 +1,4 @@
-export type ReportReason = "INAPPROPRIATE_CONTENT" | "FALSE_INFORMATION" | "PLAGIARISM" | "OTHER";
+import type { ReportReason } from "@/modules/student/tutorProfile/types/report-reason.type";
 
 export interface ReportMaterialRequest {
   reason: ReportReason;

@@ -31,6 +31,7 @@ export interface TutorMaterialItem {
   fileUrl: string;
   fileType: FileType;
   fileSizeMB: number;
+  alreadyReported: boolean;
 }
 
 export interface TutorProfile {

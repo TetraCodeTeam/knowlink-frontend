@@ -37,6 +37,7 @@ export interface TutorMaterialApiResponse {
   downloadUrl: string | null;
   uploadedAt: string;
   sizeInBytes: number | null;
+  alreadyReported: boolean;
 }
 
 export interface TutorMaterialAccessApiResponse {

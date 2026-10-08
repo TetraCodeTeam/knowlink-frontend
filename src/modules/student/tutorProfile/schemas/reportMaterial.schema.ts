@@ -3,12 +3,11 @@ import {
   MAX_OTHER_REASON_LENGTH,
   MAX_REPORT_COMMENT_LENGTH,
 } from "@/modules/student/tutorProfile/constants/reportMaterial.constants";
-
-const REASON_VALUES = ["INAPPROPRIATE_CONTENT", "FALSE_INFORMATION", "PLAGIARISM", "OTHER"] as const;
+import { REPORT_REASON_VALUES } from "@/modules/student/tutorProfile/types/report-reason.type";
 
 export const reportMaterialSchema = z
   .object({
-    reason: z.enum(REASON_VALUES).or(z.literal("")),
+    reason: z.enum(REPORT_REASON_VALUES).or(z.literal("")),
     otherReasonText: z
       .string()
       .trim()

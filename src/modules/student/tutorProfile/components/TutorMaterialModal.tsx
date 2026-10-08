@@ -149,7 +149,11 @@ export const TutorMaterialModal = ({
                         </Box>
                       </Stack>
                       <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexShrink: 0 }}>
-                        <ReportMaterialFlow materialId={item.id} materialTitle={item.title} />
+                        <ReportMaterialFlow
+                          materialId={item.id}
+                          materialTitle={item.title}
+                          alreadyReported={item.alreadyReported}
+                        />
                         <Button
                           onClick={() => void onDownload(item.id)}
                           variant="contained"

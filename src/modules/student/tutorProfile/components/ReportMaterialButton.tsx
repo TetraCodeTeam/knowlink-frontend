@@ -16,25 +16,16 @@ export default function ReportMaterialButton({
   alreadyReported,
   onClick,
 }: ReportMaterialButtonProps) {
-  if (alreadyReported) {
-    return (
-      <Typography component="span" sx={reportedLabelSx}>
-        <Flag size={14} />
-        Reportado
-      </Typography>
-    );
-  }
-
   return (
     <Typography
       component="button"
       type="button"
       onClick={onClick}
-      aria-label={`Denunciar ${materialTitle}`}
-      sx={reportLinkButtonSx}
+      aria-label={alreadyReported ? `${materialTitle}: ya denunciado` : `Denunciar ${materialTitle}`}
+      sx={alreadyReported ? reportedLabelSx : reportLinkButtonSx}
     >
       <Flag size={14} />
-      Denunciar
+      {alreadyReported ? "Reportado" : "Denunciar"}
     </Typography>
   );
 }

@@ -30,8 +30,7 @@ export default function ReportMaterialAlreadyReportedDialog({
         </Typography>
 
         <Typography variant="body2" color="text.secondary">
-          Tu denuncia ya está siendo revisada por un administrador. Podés hacer el seguimiento desde
-          &quot;Mis Reclamos&quot;.
+          Tu denuncia ya está siendo revisada por un administrador.
         </Typography>
       </DialogContent>
 
