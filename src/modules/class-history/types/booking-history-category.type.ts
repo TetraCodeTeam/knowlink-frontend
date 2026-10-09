@@ -1,0 +1,1 @@
+export type BookingHistoryCategory = "RESERVED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
