@@ -3,6 +3,7 @@ export type RawModality = "VIRTUAL" | "IN_PERSON" | "BOTH";
 
 export interface TutorSubjectRate {
   id: string; // ya es el tutorSubjectId real (ver mapTutorProfile)
+  subjectId?: string; // id de la materia en /ratings, usado para filtrar reseñas por materia
   name: string;
   rating: number;
   reviewsCount: number;
@@ -18,6 +19,7 @@ export interface TutorReview {
   studentName: string;
   studentAvatarUrl: string | null;
   subject: string;
+  subjectId?: string;
   rating: number;
   comment: string;
 }
@@ -45,6 +47,8 @@ export interface TutorProfile {
   address: string | null; // 👈 nuevo
   subjectRates: TutorSubjectRate[];
   reviews: TutorReview[];
+  reviewsTotalElements: number;
+  hasRatings: boolean;
   material: TutorMaterialItem[];
   hasConfirmedBooking: boolean;
 }

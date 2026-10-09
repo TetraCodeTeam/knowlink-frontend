@@ -1,11 +1,15 @@
 import { create } from "zustand";
 
+export interface ReviewSubjectFilter {
+  subjectId: string | null;
+  subjectName: string;
+}
+
 interface ReviewsDialogState {
   isOpen: boolean;
-  subjectFilter: string | null;
-  openDialog: (subject?: string) => void;
+  subjectFilter: ReviewSubjectFilter | null;
+  openDialog: (subject?: ReviewSubjectFilter) => void;
   closeDialog: () => void;
-  setSubjectFilter: (subject: string | null) => void;
 }
 
 export const useReviewDialogStore = create<ReviewsDialogState>((set) => ({
@@ -13,5 +17,4 @@ export const useReviewDialogStore = create<ReviewsDialogState>((set) => ({
   subjectFilter: null,
   openDialog: (subject) => set({ isOpen: true, subjectFilter: subject ?? null }),
   closeDialog: () => set({ isOpen: false, subjectFilter: null }),
-  setSubjectFilter: (subject) => set({ subjectFilter: subject }),
 }));

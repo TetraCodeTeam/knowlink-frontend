@@ -45,7 +45,12 @@ export const TutorProfilePage = () => {
           <Stack spacing={3}>
             <TutorAboutCard about={tutor.about} />
             <TutorSubjectsCard subjectRates={tutor.subjectRates} />
-            <TutorReviewsCard reviews={tutor.reviews} />
+            <TutorReviewsCard
+              reviews={tutor.reviews}
+              reviewsTotalElements={tutor.reviewsTotalElements}
+              hasRatings={tutor.hasRatings}
+              tutorName={tutor.name}
+            />
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
@@ -58,7 +63,7 @@ export const TutorProfilePage = () => {
           </Stack>
         </Grid>
       </Grid>
-      <ReviewsDialog reviews={tutor.reviews} />
+      <ReviewsDialog tutorId={tutorId ?? ""} tutorName={tutor.name} />
     </Stack>
   );
 };
