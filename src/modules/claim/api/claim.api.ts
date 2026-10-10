@@ -1,0 +1,29 @@
+﻿import { httpClient } from "@/shared/lib/httpClient";
+import type {
+  ClaimEligibility,
+  ClaimResponse,
+  CreateClaimRequest,
+} from "@/modules/claim/interfaces/claimInterfaces";
+
+export async function getClaimEligibility(bookingId: string): Promise<ClaimEligibility> {
+  const response = await httpClient.get<ClaimEligibility>(
+    `/api/v1/bookings/${bookingId}/claims/eligibility`
+  );
+  return response.data;
+}
+
+export async function createClaim(
+  bookingId: string,
+  request: CreateClaimRequest,
+  file?: File
+): Promise<ClaimResponse> {
+  const formData = new FormData();
+  formData.append("request", new Blob([JSON.stringify(request)], { type: "application/json" }));
+  if (file) formData.append("files", file);
+
+  const response = await httpClient.post<ClaimResponse>(
+    `/api/v1/bookings/${bookingId}/claims`,
+    formData
+  );
+  return response.data;
+}
