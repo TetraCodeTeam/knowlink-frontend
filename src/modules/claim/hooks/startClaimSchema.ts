@@ -1,11 +1,12 @@
 import { z } from "zod";
 
-import { CLAIM_REASONS } from "@/modules/claim/constants/claimReasonsConstants";
-
 export const CLAIM_COMMENT_MAX_LENGTH = 400;
 
 export const startClaimSchema = z.object({
-  reason: z.enum(CLAIM_REASONS, { error: "Seleccioná qué sucedió en la clase" }),
+  reason: z.enum(
+    ["STUDENT_COULD_NOT_ATTEND", "TUTOR_COULD_NOT_ATTEND", "I_COULD_NOT_ATTEND"],
+    { error: "Seleccioná qué sucedió en la clase" }
+  ),
   comment: z
     .string()
     .max(CLAIM_COMMENT_MAX_LENGTH, `Máximo ${CLAIM_COMMENT_MAX_LENGTH} caracteres`)

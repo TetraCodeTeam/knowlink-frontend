@@ -18,7 +18,6 @@ import {
 
 import AppButton from "@/shared/components/AppButton";
 import {
-  CLAIM_REASONS_BY_ROLE,
   CLAIM_REASON_LABEL,
 } from "@/modules/claim/constants/claimReasonsConstants";
 import {
@@ -27,11 +26,13 @@ import {
   type StartClaimFormData,
 } from "@/modules/claim/hooks/startClaimSchema";
 import type { Role } from "@/shared/types/role.type";
+import type { ClaimReason } from "@/modules/claim/interfaces/claimReasonType";
 
 interface StartClaimDialogProps {
   open: boolean;
   /** Quién inicia el reclamo: define cómo se leen las opciones de motivo. */
   claimantRole: Role;
+  allowedReasons: ClaimReason[];
   /** Ya formateado por el caller, ej. "Física 1 con María Luz Juárez · Lunes 15/6". */
   sessionSummary: string;
   isPending: boolean;
@@ -65,6 +66,7 @@ const visuallyHiddenInputSx = {
 export default function StartClaimDialog({
   open,
   claimantRole,
+  allowedReasons,
   sessionSummary,
   isPending,
   onSubmit,
@@ -167,7 +169,7 @@ export default function StartClaimDialog({
           control={control}
           render={({ field }) => (
             <Stack role="radiogroup" aria-labelledby={reasonLabelId} aria-required spacing={1.25}>
-              {CLAIM_REASONS_BY_ROLE[claimantRole].map((reason) => {
+              {allowedReasons.map((reason) => {
                 const selected = field.value === reason;
                 return (
                   <FormControlLabel

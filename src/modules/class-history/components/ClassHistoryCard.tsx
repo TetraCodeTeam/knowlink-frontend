@@ -126,13 +126,11 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                 />
               )}
 
-              {category === "COMPLETED" && (
-                <StartClaimFlow
-                  bookingId={detail.bookingId}
-                  claimantRole={role}
-                  sessionSummary={` con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
-                />
-              )}
+              <StartClaimFlow
+                bookingId={detail.bookingId}
+                claimantRole={role}
+                sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
+              />
 
               {category === "RESERVED" && showVirtualLinkBox && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>
