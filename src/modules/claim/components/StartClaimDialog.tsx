@@ -17,10 +17,10 @@ import {
 } from "@mui/material";
 
 import AppButton from "@/shared/components/AppButton";
+import { CLAIM_REASON_LABEL } from "@/modules/claim/constants/claimReasonsConstants";
 import {
-  CLAIM_REASON_LABEL,
-} from "@/modules/claim/constants/claimReasonsConstants";
-import {
+  CLAIM_ALLOWED_ATTACHMENT_TYPES,
+  CLAIM_MAX_ATTACHMENTS,
   CLAIM_COMMENT_MAX_LENGTH,
   startClaimSchema,
   type StartClaimFormData,
@@ -49,7 +49,7 @@ const COLORS = {
   borderSelected: "#8F94E6",
 } as const;
 
-const ATTACHMENT_ACCEPT = "image/*,application/pdf";
+const ATTACHMENT_ACCEPT = CLAIM_ALLOWED_ATTACHMENT_TYPES.join(",");
 
 /** Oculta el input visualmente pero lo deja enfocable con teclado. */
 const visuallyHiddenInputSx = {
@@ -82,11 +82,11 @@ export default function StartClaimDialog({
     reset,
     setValue,
     watch,
-    formState: { isValid },
+    formState: { errors, isValid },
   } = useForm<StartClaimFormData>({
     resolver: zodResolver(startClaimSchema),
     mode: "onChange",
-    defaultValues: { reason: undefined, comment: "", attachment: undefined },
+    defaultValues: { reason: undefined, comment: "", attachments: [] },
   });
 
   // Cada apertura arranca con el formulario limpio.
@@ -95,11 +95,13 @@ export default function StartClaimDialog({
   }, [open, reset]);
 
   const comment = watch("comment") ?? "";
-  const attachment = watch("attachment");
+  const attachments = watch("attachments");
 
   const handleAttachmentChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) setValue("attachment", file, { shouldValidate: true });
+    const selectedFiles = Array.from(event.target.files ?? []);
+    if (selectedFiles.length > 0) {
+      setValue("attachments", [...attachments, ...selectedFiles], { shouldValidate: true });
+    }
     // Permite volver a elegir el mismo archivo después de quitarlo.
     event.target.value = "";
   };
@@ -218,7 +220,12 @@ export default function StartClaimDialog({
           justifyContent="space-between"
           sx={{ mt: 3, mb: 1 }}
         >
-          <Typography variant="subtitle2" fontWeight={600} component="label" htmlFor="claim-comment">
+          <Typography
+            variant="subtitle2"
+            fontWeight={600}
+            component="label"
+            htmlFor="claim-comment"
+          >
             Comentario adicional{" "}
             <Typography component="span" variant="caption" color="text.secondary">
               (opcional)
@@ -270,21 +277,37 @@ export default function StartClaimDialog({
               component="input"
               type="file"
               accept={ATTACHMENT_ACCEPT}
+              multiple
               onChange={handleAttachmentChange}
               sx={visuallyHiddenInputSx}
             />
           </Button>
 
-          {attachment && (
+          {attachments.map((attachment, index) => (
             <Chip
+              key={`${attachment.name}-${index}`}
               size="small"
               label={attachment.name}
-              onDelete={() => setValue("attachment", undefined, { shouldValidate: true })}
+              onDelete={() =>
+                setValue(
+                  "attachments",
+                  attachments.filter((_, attachmentIndex) => attachmentIndex !== index),
+                  { shouldValidate: true }
+                )
+              }
               disabled={isPending}
               sx={{ maxWidth: 220 }}
             />
-          )}
+          ))}
         </Stack>
+        <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
+          Hasta {CLAIM_MAX_ATTACHMENTS} archivos PDF, JPG o PNG.
+        </Typography>
+        {errors.attachments?.message && (
+          <Typography variant="caption" color="error" role="alert" display="block" sx={{ mt: 0.5 }}>
+            {errors.attachments.message}
+          </Typography>
+        )}
       </DialogContent>
 
       <DialogActions sx={{ justifyContent: "center", gap: 1.5, px: 4, pt: 2, pb: 3 }}>

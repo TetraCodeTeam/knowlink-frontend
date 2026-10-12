@@ -21,11 +21,11 @@ export async function getClaimEligibility(bookingId: string): Promise<ClaimEligi
 export async function createClaim(
   bookingId: string,
   request: CreateClaimRequest,
-  file?: File
+  files: File[] = []
 ): Promise<ClaimResponse> {
   const formData = new FormData();
   formData.append("request", new Blob([JSON.stringify(request)], { type: "application/json" }));
-  if (file) formData.append("files", file);
+  files.forEach((file) => formData.append("files", file));
 
   const response = await httpClient.post<ClaimResponse>(
     `/api/v1/bookings/${bookingId}/claims`,

@@ -12,7 +12,7 @@ export function useCreateClaim(bookingId: string) {
       createClaim(
         bookingId,
         { reason: data.reason, comment: data.comment?.trim() || undefined },
-        data.attachment
+        data.attachments
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["claimEligibility", bookingId] });
