@@ -64,6 +64,7 @@ export const mapTutorMaterials = (materials: TutorMaterialApiResponse[]): TutorM
     fileUrl: material.downloadUrl ?? "",
     fileType: inferFileType(material.format, material.originalFileName),
     fileSizeMB: bytesToMegabytes(material.sizeInBytes),
+    alreadyReported: material.alreadyReported,
   }));
 
 function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
