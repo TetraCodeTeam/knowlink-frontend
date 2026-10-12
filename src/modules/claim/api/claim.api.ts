@@ -6,10 +6,16 @@ import type {
 } from "@/modules/claim/interfaces/claimInterfaces";
 
 export async function getClaimEligibility(bookingId: string): Promise<ClaimEligibility> {
-  const response = await httpClient.get<ClaimEligibility>(
+  const response = await httpClient.get<Partial<ClaimEligibility>>(
     `/api/v1/bookings/${bookingId}/claims/eligibility`
   );
-  return response.data;
+  const data = response.data;
+  return {
+    canClaim: data.canClaim ?? false,
+    claimableUntil: data.claimableUntil ?? null,
+    blockReason: data.blockReason ?? null,
+    allowedReasons: data.allowedReasons,
+  };
 }
 
 export async function createClaim(
