@@ -49,7 +49,9 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
               type="button"
               variant="subtitle1"
               color="primary"
-              onClick={() => openDialog(subject.name)}
+              onClick={() =>
+                openDialog({ subjectId: subject.subjectId ?? null, subjectName: subject.name })
+              }
               sx={{
                 cursor: "pointer",
                 textDecoration: "underline",

@@ -37,6 +37,7 @@ export function mapAvailabilityBlocksToEvents(
 export function mapBookedSessionsToEvents(sessions: BookedSessionResponse[]): EventInput[] {
   return sessions.map((session) => {
     const sessionDate = new Date(`${session.date}T00:00:00`);
+    const isPast = isBeforeNowAtTime(sessionDate, session.endTime);
 
     return {
       id: `booked-${session.id}`,
