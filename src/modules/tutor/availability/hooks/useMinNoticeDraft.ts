@@ -1,8 +1,15 @@
 import { useMemo, useState } from "react";
 import { useMinNoticeMinutes } from "@/modules/tutor/availability/hooks/useMinNoticeMinutes";
 import { useUpdateMinNoticeMinutes } from "@/modules/tutor/availability/hooks/useUpdateMinNoticeMinutes";
-import { MIN_NOTICE_PRESETS, type MinNoticeUnit } from "@/modules/tutor/availability/constants/minNotice.constants";
-import { minutesToBestUnit, customValueToMinutes, findMatchingPreset } from "@/modules/tutor/availability/utils/minNotice.utils";
+import {
+  MIN_NOTICE_PRESETS,
+  type MinNoticeUnit,
+} from "@/modules/tutor/availability/constants/minNotice.constants";
+import {
+  minutesToBestUnit,
+  customValueToMinutes,
+  findMatchingPreset,
+} from "@/modules/tutor/availability/utils/minNotice.utils";
 
 export type MinNoticeSelection = number | "OTHER" | null;
 
@@ -18,10 +25,13 @@ export function useMinNoticeDraft() {
       ? "OTHER"
       : null;
 
-  const initialCustom =
-    !matchingPreset && initialMinutes != null
-      ? minutesToBestUnit(initialMinutes)
-      : { unit: "HOURS" as MinNoticeUnit, value: "" };
+  const initialCustom = useMemo(
+    () =>
+      !matchingPreset && initialMinutes != null
+        ? minutesToBestUnit(initialMinutes)
+        : { unit: "HOURS" as MinNoticeUnit, value: "" },
+    [initialMinutes, matchingPreset]
+  );
 
   const [selection, setSelection] = useState<MinNoticeSelection | undefined>(undefined);
   const [customValue, setCustomValue] = useState<string | undefined>(undefined);
@@ -34,14 +44,23 @@ export function useMinNoticeDraft() {
   const hasChanges = useMemo(() => {
     if (effectiveSelection !== initialSelection) return true;
     if (effectiveSelection === "OTHER") {
-      return effectiveCustomValue !== initialCustom.value || effectiveCustomUnit !== initialCustom.unit;
+      return (
+        effectiveCustomValue !== initialCustom.value || effectiveCustomUnit !== initialCustom.unit
+      );
     }
     return false;
-  }, [effectiveSelection, effectiveCustomValue, effectiveCustomUnit, initialSelection, initialCustom]);
+  }, [
+    effectiveSelection,
+    effectiveCustomValue,
+    effectiveCustomUnit,
+    initialSelection,
+    initialCustom,
+  ]);
 
   const isSaveDisabled =
     !hasChanges ||
-    (effectiveSelection === "OTHER" && customValueToMinutes(effectiveCustomValue, effectiveCustomUnit) === null);
+    (effectiveSelection === "OTHER" &&
+      customValueToMinutes(effectiveCustomValue, effectiveCustomUnit) === null);
 
   function selectPreset(minutes: number) {
     setSelection(effectiveSelection === minutes ? null : minutes);

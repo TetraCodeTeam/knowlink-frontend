@@ -18,12 +18,15 @@ import {
 } from "@mui/material";
 
 import { useEffect, useRef, useState } from "react";
-import { CompensationTypeRequest, ModalityRequest } from "@/modules/tutor/interfaces/TutorSubjectRequest";
+import {
+  CompensationTypeRequest,
+  ModalityRequest,
+} from "@/modules/tutor/interfaces/TutorSubjectRequest";
 import { useCreateTutorSubject } from "@/modules/tutor/hooks/Usecreatetutorsubject";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
-import { prefetchSuccessAnimation } from "@/shared/components/SuccessAnimation";
+import { prefetchSuccessAnimation } from "@/shared/components/success-animation.utils";
 import AppButton from "@/shared/components/AppButton";
 
 interface Props {
