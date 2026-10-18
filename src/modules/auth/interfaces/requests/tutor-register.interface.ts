@@ -3,7 +3,7 @@ export type TeachingModality = "VIRTUAL" | "IN_PERSON" | "BOTH";
 export type CompensationType = "FREE" | "PAID";
 
 export interface TutorSubjectRequest {
-  subjectName: string;
+  subjectId: string;
   modality: TeachingModality;
   compensationType: CompensationType;
   pricePerHour?: number | null;
@@ -17,7 +17,8 @@ export interface TutorRegisterRequest {
   lastName: string;
   dni: string;
   phoneNumber: string;
-  career: string;
+  institutionId: string;
+  careerId: string;
   institutionalId?: string;
   profilePictureUrl?: string;
   biography?: string;

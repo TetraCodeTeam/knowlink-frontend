@@ -12,10 +12,15 @@ import RoleRedirectDialog from "@/modules/student/dual-role/components/RoleRedir
 
 interface TutorRoleCardProps {
   hasTutorProfile: boolean;
-  career?: string;
+  institutionId: string;
+  careerId: string;
 }
 
-export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCardProps) {
+export default function TutorRoleCard({
+  hasTutorProfile,
+  institutionId,
+  careerId,
+}: TutorRoleCardProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { authResponse, login } = useAuthStore();
@@ -28,7 +33,13 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
 
   const handleActivateConfirm = () => {
     setShowConfirmDialog(false);
-    navigate("/auth/register/tutor", { state: { startAtStep: 2, career: career ?? "" } });
+    if (!institutionId || !careerId) {
+      toast.error("No pudimos identificar tu institución y carrera. Intentá nuevamente más tarde.");
+      return;
+    }
+    navigate("/auth/register/tutor", {
+      state: { startAtStep: 2, institutionId, careerId },
+    });
   };
 
   const handleSwitchToggle = async () => {

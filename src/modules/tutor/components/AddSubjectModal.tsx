@@ -23,7 +23,7 @@ import { useCreateTutorSubject } from "../hooks/useCreateTutorSubject";
 import { useAvailableSubjects } from "../availability/hooks/useAvailableSubjects";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
-import { prefetchSuccessAnimation } from "@/shared/components/SuccessAnimation";
+import { prefetchSuccessAnimation } from "@/shared/components/success-animation.utils";
 import AppButton from "@/shared/components/AppButton";
 
 interface Props {

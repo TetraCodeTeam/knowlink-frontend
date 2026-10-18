@@ -3,7 +3,8 @@ import { z } from "zod";
 export const step1Schema = z.object({
   firstName: z.string().min(1, "El nombre es obligatorio"),
   lastName: z.string().min(1, "El apellido es obligatorio"),
-  career: z.string().min(1, "La carrera es obligatoria"),
+  institutionId: z.string().min(1, "La institución es obligatoria"),
+  careerId: z.string().min(1, "La carrera es obligatoria"),
   phoneNumber: z.string().min(1, "El teléfono es obligatorio"),
   dni: z
     .string()
@@ -17,7 +18,7 @@ export type Step1Data = z.infer<typeof step1Schema>;
 
 export const subjectSchema = z
   .object({
-    subjectName: z.string().min(1, "La materia es obligatoria"),
+    subjectId: z.string().min(1, "La materia es obligatoria"),
     modality: z.enum(["VIRTUAL", "IN_PERSON", "BOTH"]),
     compensationType: z.enum(["FREE", "PAID"]),
     pricePerHour: z.number().positive("El precio debe ser mayor a cero").nullish(),

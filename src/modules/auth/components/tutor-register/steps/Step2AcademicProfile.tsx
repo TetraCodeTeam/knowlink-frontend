@@ -14,22 +14,22 @@ import {
 } from "@mui/material";
 import { Plus, Trash2, Laptop, LibraryBig } from "lucide-react";
 import { step2Schema, type Step2Data } from "@/modules/auth/schemas/tutor-register.schema";
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
-import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
-import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
+import { useMateriasByCarrera } from "@/modules/catalog/hooks/useMateriasByCarrera";
 import AppButton from "@/shared/components/AppButton";
 
 const inputSx = { "& .MuiOutlinedInput-root": { borderRadius: 2 } };
 
 interface Step2Props {
-  career: string;
+  institutionId: string;
+  careerId: string;
   defaultValues: Partial<Step2Data>;
   onNext: (data: Step2Data) => void;
   onBack: () => void;
 }
 
 export default function Step2AcademicProfile({
-  career,
+  institutionId,
+  careerId,
   defaultValues,
   onNext,
   onBack,
@@ -50,7 +50,7 @@ export default function Step2AcademicProfile({
           ? defaultValues.subjects
           : [
               {
-                subjectName: "",
+                subjectId: "",
                 modality: "VIRTUAL",
                 compensationType: "FREE",
                 pricePerHour: null,
@@ -64,13 +64,12 @@ export default function Step2AcademicProfile({
   const { fields, append, remove } = useFieldArray({ control, name: "subjects" });
   const watchedSubjects = watch("subjects");
 
-  const { data: careers } = useCareers();
-  const selectedCareer = careers?.find((c) => c.name === career);
-
-  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
-  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(
-    selectedCareer?.careerId
+  const { data: catalogSubjects, isLoading: subjectsLoading } = useMateriasByCarrera(
+    institutionId,
+    careerId
   );
+  const basicSubjects = catalogSubjects?.filter((subject) => subject.isBasic);
+  const careerSubjects = catalogSubjects?.filter((subject) => !subject.isBasic);
 
   const hasPresencial = watchedSubjects?.some(
     (s) => s.modality === "IN_PERSON" || s.modality === "BOTH"
@@ -124,14 +123,10 @@ export default function Step2AcademicProfile({
           const isBasicWatched = watchedSubjects?.[index]?.isBasic;
 
           const subjectOptions = isBasicWatched ? basicSubjects : careerSubjects;
-          const subjectsLoading = isBasicWatched ? basicLoading : careerLoading;
 
           const selectedSubjectIds = watchedSubjects
             ?.filter((_, i) => i !== index)
-            .map((s) => {
-              const options = s.isBasic ? basicSubjects : careerSubjects;
-              return options?.find((opt) => opt.name === s.subjectName)?.subjectId;
-            })
+            .map((s) => s.subjectId)
             .filter((id): id is string => Boolean(id));
 
           const availableSubjectOptions = subjectOptions?.filter(
@@ -164,22 +159,22 @@ export default function Step2AcademicProfile({
 
               {/* Básica + Nombre de la materia */}
               <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5 }}>
-                <FormControl fullWidth error={!!subjectErrors?.subjectName}>
+                <FormControl fullWidth error={!!subjectErrors?.subjectId}>
                   <Controller
-                    name={`subjects.${index}.subjectName`}
+                    name={`subjects.${index}.subjectId`}
                     control={control}
                     render={({ field: f }) => (
                       <Select {...f} disabled={subjectsLoading} sx={{ borderRadius: 2 }}>
                         {availableSubjectOptions?.map((s) => (
-                          <MenuItem key={s.subjectId} value={s.name}>
+                          <MenuItem key={s.subjectId} value={s.subjectId}>
                             {s.name}
                           </MenuItem>
                         ))}
                       </Select>
                     )}
                   />
-                  {subjectErrors?.subjectName && (
-                    <FormHelperText>{subjectErrors.subjectName.message}</FormHelperText>
+                  {subjectErrors?.subjectId && (
+                    <FormHelperText>{subjectErrors.subjectId.message}</FormHelperText>
                   )}
                 </FormControl>
 
@@ -196,7 +191,7 @@ export default function Step2AcademicProfile({
                         onChange={(_, val) => {
                           f.onChange(val);
 
-                          setValue(`subjects.${index}.subjectName`, "");
+                          setValue(`subjects.${index}.subjectId`, "");
                         }}
                         size="small"
                         sx={{ "& .MuiSwitch-thumb": { bgcolor: "#4361ee" } }}
@@ -326,7 +321,7 @@ export default function Step2AcademicProfile({
           type="button"
           onClick={() =>
             append({
-              subjectName: "",
+              subjectId: "",
               modality: "VIRTUAL",
               compensationType: "FREE",
               pricePerHour: null,

@@ -24,7 +24,3 @@ export function SuccessAnimation() {
     </Suspense>
   );
 }
-
-export function prefetchSuccessAnimation() {
-  void import("./SuccessLottie");
-}

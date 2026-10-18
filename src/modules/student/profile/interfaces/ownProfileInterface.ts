@@ -8,6 +8,8 @@ export interface StudentSelfProfileResponse {
   email: string;
   phoneNumber: string;
   career: string;
+  institutionId: string;
+  careerId: string;
   profilePictureUrl: string | null;
   role: StudentRole;
   hasTutorProfile: boolean;

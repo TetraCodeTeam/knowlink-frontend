@@ -4,6 +4,9 @@ import { Laptop, LibraryBig } from "lucide-react";
 import type { Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import type { Step2Data } from "@/modules/auth/schemas/tutor-register.schema";
 import AppButton from "@/shared/components/AppButton";
+import { useInstituciones } from "@/modules/catalog/hooks/useInstituciones";
+import { useCarrerasByInstitucion } from "@/modules/catalog/hooks/useCarrerasByInstitucion";
+import { useMateriasByCarrera } from "@/modules/catalog/hooks/useMateriasByCarrera";
 
 interface Step4Props {
   step1: Step1Data;
@@ -31,6 +34,15 @@ export default function Step4Confirmation({
   onConfirm,
   onBack,
 }: Step4Props) {
+  const { data: institutions } = useInstituciones();
+  const { data: careers } = useCarrerasByInstitucion(step1.institutionId);
+  const { data: subjects } = useMateriasByCarrera(step1.institutionId, step1.careerId);
+
+  const institutionName =
+    institutions?.find((i) => i.institutionId === step1.institutionId)?.name ?? "";
+  const careerName = careers?.find((c) => c.careerId === step1.careerId)?.name ?? "";
+  const subjectNameById = (subjectId: string) =>
+    subjects?.find((s) => s.subjectId === subjectId)?.name ?? subjectId;
   return (
     <Box
       sx={{
@@ -62,7 +74,10 @@ export default function Step4Confirmation({
               Nombre completo: {step1.firstName} {step1.lastName}
             </Typography>
             <Typography component="li" variant="body2" mb={0.5}>
-              Carrera: {step1.career}
+              Institución: {institutionName}
+            </Typography>
+            <Typography component="li" variant="body2" mb={0.5}>
+              Carrera: {careerName}
             </Typography>
             <Typography component="li" variant="body2">
               Teléfono: {step1.phoneNumber}
@@ -89,7 +104,7 @@ export default function Step4Confirmation({
                 Biografía
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                "{step2.biography}"
+                &ldquo;{step2.biography}&rdquo;
               </Typography>
             </Box>
           )}
@@ -120,7 +135,7 @@ export default function Step4Confirmation({
                   }}
                 >
                   <Typography variant="body2" noWrap sx={{ flex: 1 }}>
-                    {subject.subjectName}
+                    {subjectNameById(subject.subjectId)}
                   </Typography>
                   {modalitiesToShow.map((mod) => {
                     const ModalityIcon = MODALITY_ICON[mod];

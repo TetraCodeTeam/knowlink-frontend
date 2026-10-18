@@ -1,3 +1,4 @@
+import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +18,8 @@ import {
   studentAccountSchema,
   type StudentAccountData,
 } from "@/modules/auth/schemas/user-register.schema";
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { useInstituciones } from "@/modules/catalog/hooks/useInstituciones";
+import { useCarrerasByInstitucion } from "@/modules/catalog/hooks/useCarrerasByInstitucion";
 import AppButton from "@/shared/components/AppButton";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
@@ -52,12 +54,22 @@ export default function StudentAccountForm({
     handleSubmit,
     control,
     setError,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<StudentAccountData>({
     resolver: zodResolver(studentAccountSchema),
+    defaultValues: {
+      institutionId: "",
+      careerId: "",
+    },
   });
 
-  const { data: careers, isLoading: careersLoading } = useCareers();
+  const { data: institutions, isLoading: institutionsLoading } = useInstituciones();
+  const selectedInstitutionId = watch("institutionId");
+  const { data: careers, isLoading: careersLoading } =
+    useCarrerasByInstitucion(selectedInstitutionId);
+  const careerOptions = careers?.filter((c) => c.type !== "COMPARTIDA");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -69,6 +81,11 @@ export default function StudentAccountForm({
 
     const url = URL.createObjectURL(file);
     setAvatarPreview(url);
+  };
+
+  const handleInstitutionChange = (onChange: (value: string) => void) => (value: string) => {
+    onChange(value);
+    setValue("careerId", "", { shouldValidate: false });
   };
 
   const handleAccountSubmit = async (data: StudentAccountData) => {
@@ -159,23 +176,70 @@ export default function StudentAccountForm({
 
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
-          Carrera*
+          Institución*
         </Typography>
-        <FormControl fullWidth error={!!errors.career}>
+        <FormControl fullWidth error={!!errors.institutionId}>
           <Controller
-            name="career"
+            name="institutionId"
             control={control}
             render={({ field }) => (
-              <Select {...field} disabled={careersLoading} sx={{ borderRadius: 2 }}>
-                {careers?.map((c) => (
-                  <MenuItem key={c.careerId} value={c.name}>
-                    {c.name}
+              <Select
+                {...field}
+                disabled={institutionsLoading}
+                displayEmpty
+                sx={{ borderRadius: 2 }}
+                onChange={(event) =>
+                  handleInstitutionChange(field.onChange)(event.target.value as string)
+                }
+              >
+                <MenuItem value="" disabled>
+                  Seleccioná una institución
+                </MenuItem>
+                {institutions?.map((institution) => (
+                  <MenuItem key={institution.institutionId} value={institution.institutionId}>
+                    {institution.name}
                   </MenuItem>
                 ))}
               </Select>
             )}
           />
-          {errors.career && <FormHelperText>{errors.career.message}</FormHelperText>}
+          {errors.institutionId && (
+            <FormHelperText>{errors.institutionId.message}</FormHelperText>
+          )}
+        </FormControl>
+      </Box>
+
+      <Box>
+        <Typography variant="body2" fontWeight={500} mb={0.5}>
+          Carrera*
+        </Typography>
+        <FormControl fullWidth error={!!errors.careerId}>
+          <Controller
+            name="careerId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                disabled={!selectedInstitutionId || careersLoading}
+                displayEmpty
+                sx={{ borderRadius: 2 }}
+              >
+                <MenuItem value="" disabled>
+                  {selectedInstitutionId ? "Seleccioná una carrera" : "Elegí tu institución primero"}
+                </MenuItem>
+                {careerOptions?.map((career) => (
+                  <MenuItem key={career.careerId} value={career.careerId}>
+                    {career.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {errors.careerId ? (
+            <FormHelperText>{errors.careerId.message}</FormHelperText>
+          ) : !selectedInstitutionId ? (
+            <FormHelperText>Elegí tu institución primero</FormHelperText>
+          ) : null}
         </FormControl>
       </Box>
 

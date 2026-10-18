@@ -1,0 +1,1 @@
+export type AssociationMode = "REPLACE" | "ADD";

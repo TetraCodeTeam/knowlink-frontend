@@ -1,5 +1,5 @@
 export interface TutorSubjectForActivation {
-  subjectName: string;
+  subjectId: string;
   modality: "VIRTUAL" | "IN_PERSON" | "BOTH";
   compensationType: "FREE" | "PAID";
   pricePerHour?: number;

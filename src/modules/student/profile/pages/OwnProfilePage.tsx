@@ -44,7 +44,8 @@ export const OwnProfilePage = () => {
                 />
                 <TutorRoleCard
                     hasTutorProfile={profile.hasTutorProfile}
-                    career={profile.career}
+                    institutionId={profile.institutionId}
+                    careerId={profile.careerId}
                 />
             </Stack>
     </Stack>

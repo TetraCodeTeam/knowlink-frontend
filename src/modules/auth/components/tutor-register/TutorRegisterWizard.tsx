@@ -22,7 +22,8 @@ interface TutorRegisterWizardProps {
   onStepChange: (step: number) => void;
   initialStep?: number;
   isDualRole?: boolean;
-  dualRoleCareer?: string;
+  dualRoleInstitutionId?: string;
+  dualRoleCareerId?: string;
 }
 
 export default function TutorRegisterWizard({
@@ -30,7 +31,8 @@ export default function TutorRegisterWizard({
   onStepChange,
   initialStep = 1,
   isDualRole = false,
-  dualRoleCareer = "",
+  dualRoleInstitutionId = "",
+  dualRoleCareerId = "",
 }: TutorRegisterWizardProps) {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
@@ -60,7 +62,7 @@ export default function TutorRegisterWizard({
           biography: data.biography ?? "",
           address: data.address ?? "",
           subjects: data.subjects.map((s) => ({
-            subjectName: s.subjectName,
+            subjectId: s.subjectId,
             modality: s.modality,
             compensationType: s.compensationType,
             pricePerHour: s.compensationType === "FREE" ? undefined : (s.pricePerHour ?? undefined),
@@ -84,13 +86,14 @@ export default function TutorRegisterWizard({
       lastName: s1.lastName,
       dni: s1.dni,
       phoneNumber: s1.phoneNumber,
-      career: s1.career,
+      institutionId: s1.institutionId,
+      careerId: s1.careerId,
       institutionalId: s1.institutionalId || undefined,
       profilePictureUrl: s1.profilePictureUrl || undefined,
       biography: s2.biography || undefined,
       address: s2.address || undefined,
       subjects: s2.subjects.map((s) => ({
-        subjectName: s.subjectName,
+        subjectId: s.subjectId,
         modality: s.modality,
         compensationType: s.compensationType,
         pricePerHour: s.compensationType === "FREE" ? undefined : (s.pricePerHour ?? undefined),
@@ -112,7 +115,8 @@ export default function TutorRegisterWizard({
     return (
       <>
         <Step2AcademicProfile
-          career={isDualRole ? dualRoleCareer : (step1Data.career || "")}
+          institutionId={isDualRole ? dualRoleInstitutionId : (step1Data.institutionId || "")}
+          careerId={isDualRole ? dualRoleCareerId : (step1Data.careerId || "")}
           defaultValues={step2Data}
           onNext={(data) => void handleStep2Next(data)}
           onBack={() => (isDualRole ? navigate(-1) : goTo(1))}
@@ -139,4 +143,3 @@ export default function TutorRegisterWizard({
     />
   );
 }
-

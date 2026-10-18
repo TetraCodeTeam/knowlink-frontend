@@ -1,3 +1,4 @@
+import type React from "react";
 import { useRef } from "react";
 import { Avatar, Badge, Box, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { Camera } from "lucide-react";

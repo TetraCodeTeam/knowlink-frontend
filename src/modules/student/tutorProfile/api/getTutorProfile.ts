@@ -6,7 +6,6 @@ import type {
   RawModality,
 } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import type {
-  TutorMaterialAccessApiResponse,
   TutorMaterialApiResponse,
   TutorProfileApiResponse,
 } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";

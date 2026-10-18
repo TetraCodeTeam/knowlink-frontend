@@ -18,10 +18,13 @@ export function useMinNoticeDraft() {
       ? "OTHER"
       : null;
 
-  const initialCustom =
-    !matchingPreset && initialMinutes != null
-      ? minutesToBestUnit(initialMinutes)
-      : { unit: "HOURS" as MinNoticeUnit, value: "" };
+  const initialCustom = useMemo(
+    () =>
+      !matchingPreset && initialMinutes != null
+        ? minutesToBestUnit(initialMinutes)
+        : { unit: "HOURS" as MinNoticeUnit, value: "" },
+    [matchingPreset, initialMinutes]
+  );
 
   const [selection, setSelection] = useState<MinNoticeSelection | undefined>(undefined);
   const [customValue, setCustomValue] = useState<string | undefined>(undefined);

@@ -9,8 +9,14 @@ import { Box } from "@mui/material";
 export default function TutorRegisterPage() {
   const [credentials] = useState(() => useRegistrationStore.getState().credentials);
   const location = useLocation();
-  const isDualRole = (location.state as { startAtStep?: number } | null)?.startAtStep === 2;
-  const dualRoleCareer = (location.state as { career?: string } | null)?.career ?? "";
+  const dualRoleState = location.state as {
+    startAtStep?: number;
+    institutionId?: string;
+    careerId?: string;
+  } | null;
+  const isDualRole = dualRoleState?.startAtStep === 2;
+  const dualRoleInstitutionId = dualRoleState?.institutionId ?? "";
+  const dualRoleCareerId = dualRoleState?.careerId ?? "";
   const [currentStep, setCurrentStep] = useState(1);
 
   if (!isDualRole && !credentials) {
@@ -36,7 +42,8 @@ export default function TutorRegisterPage() {
         onStepChange={isDualRole ? () => {} : setCurrentStep}
         initialStep={isDualRole ? 2 : 1}
         isDualRole={isDualRole}
-        dualRoleCareer={dualRoleCareer}
+        dualRoleInstitutionId={dualRoleInstitutionId}
+        dualRoleCareerId={dualRoleCareerId}
       />
     </AuthLayout>
   );

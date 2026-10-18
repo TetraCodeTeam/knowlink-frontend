@@ -24,7 +24,8 @@ export type RegisterFormData = z.infer<typeof registerSchema>;
 export const studentAccountSchema = z.object({
   firstName: z.string().min(1, "El nombre es obligatorio"),
   lastName: z.string().min(1, "El apellido es obligatorio"),
-  career: z.string().min(1, "La carrera es obligatoria"),
+  institutionId: z.string().min(1, "La institución es obligatoria"),
+  careerId: z.string().min(1, "La carrera es obligatoria"),
   phoneNumber: z.string().min(1, "El teléfono es obligatorio"),
   dni: z
     .string()

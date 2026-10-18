@@ -16,7 +16,8 @@ import {
 import { Camera } from "lucide-react";
 import { step1Schema, type Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import AppButton from "@/shared/components/AppButton";
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { useInstituciones } from "@/modules/catalog/hooks/useInstituciones";
+import { useCarrerasByInstitucion } from "@/modules/catalog/hooks/useCarrerasByInstitucion";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
 const inputSx = {
@@ -34,7 +35,7 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     defaultValues.profilePictureUrl
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data: careers, isLoading: careersLoading } = useCareers();
+  const { data: institutions, isLoading: institutionsLoading } = useInstituciones();
 
   const {
     register,
@@ -42,10 +43,21 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     control,
     formState: { errors },
     setError,
+    setValue,
+    watch,
   } = useForm<Step1Data>({
     resolver: zodResolver(step1Schema),
-    defaultValues,
+    defaultValues: {
+      institutionId: "",
+      careerId: "",
+      ...defaultValues,
+    },
   });
+
+  const selectedInstitutionId = watch("institutionId");
+  const { data: careers, isLoading: careersLoading } =
+    useCarrerasByInstitucion(selectedInstitutionId);
+  const careerOptions = careers?.filter((career) => career.type !== "COMPARTIDA");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,6 +69,11 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
 
     const url = URL.createObjectURL(file);
     setAvatarPreview(url);
+  };
+
+  const handleInstitutionChange = (onChange: (value: string) => void) => (value: string) => {
+    onChange(value);
+    setValue("careerId", "", { shouldValidate: false });
   };
 
   const handleAccountSubmit = async (data: Step1Data) => {
@@ -150,26 +167,72 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         />
       </Box>
 
-      {/* Carrera */}
+      {/* Institución */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
-          Carrera*
+          Institución*
         </Typography>
-        <FormControl fullWidth error={!!errors.career}>
+        <FormControl fullWidth error={!!errors.institutionId}>
           <Controller
-            name="career"
+            name="institutionId"
             control={control}
-            render={({ field: f }) => (
-              <Select {...f} sx={{ borderRadius: 2 }} disabled={careersLoading}>
-                {careers?.map((c) => (
-                  <MenuItem key={c.careerId} value={c.name}>
-                    {c.name}
+            render={({ field }) => (
+              <Select
+                {...field}
+                disabled={institutionsLoading}
+                displayEmpty
+                sx={{ borderRadius: 2 }}
+                onChange={(event) =>
+                  handleInstitutionChange(field.onChange)(event.target.value as string)
+                }
+              >
+                <MenuItem value="" disabled>
+                  Seleccioná una institución
+                </MenuItem>
+                {institutions?.map((institution) => (
+                  <MenuItem key={institution.institutionId} value={institution.institutionId}>
+                    {institution.name}
                   </MenuItem>
                 ))}
               </Select>
             )}
           />
-          {errors.career && <FormHelperText>{errors.career.message}</FormHelperText>}
+          {errors.institutionId && <FormHelperText>{errors.institutionId.message}</FormHelperText>}
+        </FormControl>
+      </Box>
+
+      {/* Carrera */}
+      <Box>
+        <Typography variant="body2" fontWeight={500} mb={0.5}>
+          Carrera*
+        </Typography>
+        <FormControl fullWidth error={!!errors.careerId}>
+          <Controller
+            name="careerId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                sx={{ borderRadius: 2 }}
+                disabled={!selectedInstitutionId || careersLoading}
+                displayEmpty
+              >
+                <MenuItem value="" disabled>
+                  {selectedInstitutionId ? "Seleccioná una carrera" : "Elegí tu institución primero"}
+                </MenuItem>
+                {careerOptions?.map((career) => (
+                  <MenuItem key={career.careerId} value={career.careerId}>
+                    {career.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {errors.careerId ? (
+            <FormHelperText>{errors.careerId.message}</FormHelperText>
+          ) : !selectedInstitutionId ? (
+            <FormHelperText>Elegí tu institución primero</FormHelperText>
+          ) : null}
         </FormControl>
       </Box>
 
