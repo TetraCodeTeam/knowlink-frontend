@@ -16,7 +16,7 @@ export default function StudentRoutes() {
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
         <Route path="classes" element={<StudentClassHistoryPage />} />
-        <Route path="notifications" element={<UnderConstructionPage />} />
+
         <Route path="complaints" element={<UnderConstructionPage />} />
         <Route path="profile" element={<OwnProfilePage />} />
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />

@@ -8,6 +8,8 @@ import { SIDEBAR_WIDTH } from "@/modules/student/components/StudentTopbar";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
+import NotificationsPopover from "@/modules/notifications/components/NotificationsPopover";
+import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 
 interface NavItem {
   icon: React.ElementType;
@@ -36,18 +38,44 @@ export default function StudentSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authResponse } = useAuthStore();
-  const { notificationsCount, complaintsCount } = useStudentBadgesStore();
+  const { complaintsCount } = useStudentBadgesStore();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [notificationsAnchorEl, setNotificationsAnchorEl] = useState<HTMLElement | null>(null);
+  const { data: unreadCount = 0 } = useUnreadNotificationsCount();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isNotificationsOpen = Boolean(notificationsAnchorEl);
+  const isActive = (path: string, badge?: NavItem["badge"]) => {
+    if (badge === "notifications") return isNotificationsOpen;
+    return location.pathname === path;
+  };
 
   const handleLogout = () => setIsLogoutOpen(true);
 
+  const handleNotificationsClick = (event: React.MouseEvent<HTMLElement>) => {
+    setNotificationsAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationsKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setNotificationsAnchorEl(event.currentTarget);
+    }
+  };
+
+  const handleCloseNotifications = () => setNotificationsAnchorEl(null);
+
   const getBadgeCount = (badge?: NavItem["badge"]) => {
-    if (badge === "notifications") return notificationsCount;
+    if (badge === "notifications") return unreadCount;
     if (badge === "complaints") return complaintsCount;
     return 0;
+  };
+
+  const getAriaLabel = (label: string, badge?: NavItem["badge"]) => {
+    if (badge === "notifications" && unreadCount > 0) {
+      return `${label}, ${unreadCount} sin leer`;
+    }
+    return label;
   };
 
   const displayName = authResponse?.email.split("@")[0] ?? "Estudiante";
@@ -85,20 +113,28 @@ export default function StudentSidebar() {
         }}
       >
         {navItems.map(({ icon: Icon, label, path, badge }) => {
-          const active = isActive(path);
+          const active = isActive(path, badge);
           const count = getBadgeCount(badge);
+          const isNotifications = badge === "notifications";
           return (
             <Box
               key={path}
               role="button"
               tabIndex={0}
-              onClick={() => navigate(path)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  navigate(path);
-                }
-              }}
+              aria-label={getAriaLabel(label, badge)}
+              aria-haspopup={isNotifications ? "dialog" : undefined}
+              aria-expanded={isNotifications ? isNotificationsOpen : undefined}
+              onClick={isNotifications ? handleNotificationsClick : () => navigate(path)}
+              onKeyDown={
+                isNotifications
+                  ? handleNotificationsKeyDown
+                  : (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        navigate(path);
+                      }
+                    }
+              }
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -114,7 +150,13 @@ export default function StudentSidebar() {
                 transition: "background-color 0.15s ease",
               }}
             >
-              <Badge badgeContent={count} color="error" invisible={count === 0} max={99} sx={badgeSx}>
+              <Badge
+                badgeContent={count}
+                color="error"
+                invisible={count === 0}
+                max={99}
+                sx={badgeSx}
+              >
                 <Icon
                   size={26}
                   color={active ? "#FFFFFF" : "#3F4CAE"}
@@ -241,6 +283,12 @@ export default function StudentSidebar() {
         onClose={() => setIsLogoutOpen(false)}
         onConfirm={() => triggerLogout()}
         isPending={isLoggingOut}
+      />
+
+      <NotificationsPopover
+        anchorEl={notificationsAnchorEl}
+        open={isNotificationsOpen}
+        onClose={handleCloseNotifications}
       />
     </Box>
   );
