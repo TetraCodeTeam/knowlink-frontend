@@ -13,7 +13,9 @@ export async function getNotifications(params: {
 }
 
 export async function getUnreadCount(): Promise<UnreadCountResponse> {
-  const response = await rawHttpClient.get<UnreadCountResponse>("/api/v1/notifications/unread-count");
+  const response = await rawHttpClient.get<UnreadCountResponse>(
+    "/api/v1/notifications/unread-count"
+  );
   return response.data;
 }
 

@@ -2,7 +2,10 @@ import type React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import { getNotificationConfig, getNotificationRoute } from "@/modules/notifications/constants/notification-type-config";
+import {
+  getNotificationConfig,
+  getNotificationRoute,
+} from "@/modules/notifications/constants/notification-type-config";
 import { formatNotificationDate } from "@/modules/notifications/utils/format-notification-date";
 import type { NotificationItemProps } from "@/modules/notifications/components/NotificationItem.types";
 

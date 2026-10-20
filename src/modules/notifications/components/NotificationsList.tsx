@@ -7,15 +7,8 @@ import { useMarkNotificationAsRead } from "@/modules/notifications/hooks/useMark
 import type { NotificationsListProps } from "@/modules/notifications/components/NotificationsList.types";
 
 export default function NotificationsList({ onClose }: NotificationsListProps) {
-  const {
-    data,
-    isLoading,
-    isError,
-    refetch,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useNotifications(true);
+  const { data, isLoading, isError, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useNotifications(true);
   const markAsRead = useMarkNotificationAsRead();
 
   if (isLoading) {
@@ -51,7 +44,9 @@ export default function NotificationsList({ onClose }: NotificationsListProps) {
   const notifications = data?.pages.flatMap((page) => page.content) ?? [];
 
   if (notifications.length === 0) {
-    return <EmptyState icon={<Bell size={48} color="#5865C8" />} message="No tenés notificaciones" />;
+    return (
+      <EmptyState icon={<Bell size={48} color="#5865C8" />} message="No tenés notificaciones" />
+    );
   }
 
   return (

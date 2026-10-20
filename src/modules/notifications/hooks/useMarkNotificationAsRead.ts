@@ -14,11 +14,11 @@ export function useMarkNotificationAsRead() {
       await queryClient.cancelQueries({ queryKey: NOTIFICATION_QUERY_KEYS.list });
       await queryClient.cancelQueries({ queryKey: NOTIFICATION_QUERY_KEYS.unreadCount });
 
-      const previousList = queryClient.getQueryData<
-        InfiniteData<PagedNotificationsResponse>
-      >(NOTIFICATION_QUERY_KEYS.list);
+      const previousList = queryClient.getQueryData<InfiniteData<PagedNotificationsResponse>>(
+        NOTIFICATION_QUERY_KEYS.list
+      );
       const previousUnreadCount = queryClient.getQueryData<UnreadCountResponse>(
-        NOTIFICATION_QUERY_KEYS.unreadCount,
+        NOTIFICATION_QUERY_KEYS.unreadCount
       );
 
       queryClient.setQueryData<InfiniteData<PagedNotificationsResponse>>(
@@ -30,20 +30,17 @@ export function useMarkNotificationAsRead() {
             pages: old.pages.map((page) => ({
               ...page,
               content: page.content.map((item) =>
-                item.notificationId === notificationId ? { ...item, read: true } : item,
+                item.notificationId === notificationId ? { ...item, read: true } : item
               ),
             })),
           };
-        },
+        }
       );
 
-      queryClient.setQueryData<UnreadCountResponse>(
-        NOTIFICATION_QUERY_KEYS.unreadCount,
-        (old) => {
-          if (!old) return old;
-          return { count: Math.max(0, old.count - 1) };
-        },
-      );
+      queryClient.setQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount, (old) => {
+        if (!old) return old;
+        return { count: Math.max(0, old.count - 1) };
+      });
 
       return { previousList, previousUnreadCount };
     },
@@ -52,10 +49,7 @@ export function useMarkNotificationAsRead() {
         queryClient.setQueryData(NOTIFICATION_QUERY_KEYS.list, context.previousList);
       }
       if (context?.previousUnreadCount) {
-        queryClient.setQueryData(
-          NOTIFICATION_QUERY_KEYS.unreadCount,
-          context.previousUnreadCount,
-        );
+        queryClient.setQueryData(NOTIFICATION_QUERY_KEYS.unreadCount, context.previousUnreadCount);
       }
     },
     onSettled: () => {
