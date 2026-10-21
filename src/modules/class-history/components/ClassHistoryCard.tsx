@@ -75,7 +75,7 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
             <Typography sx={{ fontSize: "0.95rem", color: "#888" }}>Cargando detalle...</Typography>
           ) : isError || !detail ? (
             <Typography sx={{ fontSize: "0.95rem", color: "#c0392b" }}>
-              No se pudo cargar el detalle. IntentÃ¡ de nuevo.
+              No se pudo cargar el detalle. Intentá de nuevo.
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -130,11 +130,13 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                 />
               )}
 
-              <StartClaimFlow
-                bookingId={detail.bookingId}
-                claimantRole={role}
-                sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
-              />
+              {detail.status !== "CANCELLED" && (
+                <StartClaimFlow
+                  bookingId={detail.bookingId}
+                  claimantRole={role}
+                  sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
+                />
+              )}
 
               {category === "RESERVED" && showVirtualLinkBox && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>
