@@ -4,7 +4,6 @@ import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeade
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
 
-
 export const OwnProfilePage = () => {
   const { data: profile, isLoading, isError } = useMyStudentProfile();
 
@@ -25,7 +24,7 @@ export const OwnProfilePage = () => {
   }
 
   return (
-    <Stack spacing={3} sx={{ mx: "auto", pr:5, pl:5, pt:3, pb:3 }}>
+    <Stack spacing={3} sx={{ mx: "auto", pr: 5, pl: 5, pt: 3, pb: 3 }}>
       <ProfileHeader
         fullName={profile.fullName}
         profilePictureUrl={profile.profilePictureUrl}
@@ -36,7 +35,6 @@ export const OwnProfilePage = () => {
                     email={profile.email}
                     phoneNumber={profile.phoneNumber}
                     major={profile.career}
-                    onEditProfile={() => {}}
                 />
                 <TutorRoleCard
                     hasTutorProfile={profile.hasTutorProfile}
@@ -51,7 +49,6 @@ export const OwnProfilePage = () => {
           />
         </Grid> */}
       {/* </Grid> */}
-
       
     </Stack>
   );

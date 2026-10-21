@@ -1,3 +1,4 @@
+import type React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, CalendarClock, Bell, LogOut, GraduationCap, BookOpenCheck, MessageCircleQuestion } from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";

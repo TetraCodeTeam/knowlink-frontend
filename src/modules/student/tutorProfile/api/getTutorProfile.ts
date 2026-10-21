@@ -6,9 +6,10 @@ import type {
   RawModality,
 } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import type {
-  TutorMaterialAccessApiResponse,
+  RatingCommentApiResponse,
   TutorMaterialApiResponse,
   TutorProfileApiResponse,
+  TutorRatingHistoryApiResponse,
 } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 import { httpClient } from "@/shared/lib/httpClient";
 
@@ -112,6 +113,8 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     about: api.biography ?? "",
     subjectRates,
     reviews,
+    reviewsTotalElements: reviewsApi.length,
+    hasRatings: reviewsApi.length > 0,
     material: [],
     hasConfirmedBooking: false,
   };
@@ -142,5 +145,27 @@ export const getAccessibleTutorMaterials = async (
 
 export const getMaterialDownloadUrl = async (materialId: string): Promise<string> => {
   const { data } = await httpClient.get<string>(`/api/v1/materials/${materialId}/download`);
+  return data;
+};
+
+export const mapRatingComments = (comments: RatingCommentApiResponse[]): TutorReview[] =>
+  comments.map((comment) => ({
+    id: comment.id,
+    studentName: "Alumno",
+    studentAvatarUrl: null,
+    subject: comment.subjectName,
+    subjectId: comment.subjectId,
+    rating: comment.score,
+    comment: comment.comment ?? "",
+  }));
+
+export const getTutorRatingHistory = async (
+  tutorId: string,
+  params?: { subjectId?: string; page?: number; size?: number }
+): Promise<TutorRatingHistoryApiResponse> => {
+  const { data } = await httpClient.get<TutorRatingHistoryApiResponse>(
+    `/api/v1/tutors/${tutorId}/ratings`,
+    { params }
+  );
   return data;
 };

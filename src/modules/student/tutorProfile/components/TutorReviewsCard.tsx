@@ -1,21 +1,28 @@
-import { Box, Button, Card, CardContent, Stack, Typography } from "@mui/material";
-import { MessagesSquare, MessageSquareOff } from "lucide-react";
+import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
+import { MessagesSquare } from "lucide-react";
 import type { TutorReview } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { ReviewItem } from "@/modules/student/tutorProfile/components/ReviewItem";
+import { ReviewsEmptyState } from "@/modules/student/tutorProfile/components/ReviewsEmptyState";
 import { useReviewDialogStore } from "@/modules/student/tutorProfile/hooks/useReviewDialogStore";
 
 interface TutorReviewsCardProps {
   reviews: TutorReview[];
+  reviewsTotalElements: number;
+  hasRatings: boolean;
+  tutorName: string;
 }
 
 const PREVIEW_LIMIT = 3;
-const VER_TODAS_THRESHOLD = 4;
 
-export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
+export const TutorReviewsCard = ({
+  reviews,
+  reviewsTotalElements,
+  hasRatings,
+  tutorName,
+}: TutorReviewsCardProps) => {
   const openDialog = useReviewDialogStore((state) => state.openDialog);
   const previewReviews = reviews.slice(0, PREVIEW_LIMIT);
-  const showVerTodas = reviews.length >= VER_TODAS_THRESHOLD;
-  const hasReviews = reviews.length > 0;
+  const showVerTodas = reviewsTotalElements > PREVIEW_LIMIT;
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
@@ -34,27 +41,16 @@ export const TutorReviewsCard = ({ reviews }: TutorReviewsCardProps) => {
           )}
         </Stack>
 
-        {hasReviews ? (
+        {hasRatings && previewReviews.length > 0 ? (
           <Stack spacing={2}>
             {previewReviews.map((review) => (
               <ReviewItem key={review.id} review={review} />
             ))}
           </Stack>
         ) : (
-          <Box sx={{ textAlign: "center", py: 3 }}>
-            <Box sx={{ opacity: 0.5, display: "inline-flex" }}>
-              <MessageSquareOff size={35} color="#5865C8" />
-            </Box>
-            <Typography variant="subtitle1" fontWeight={600} mt={1}>
-              Sin reseñas todavía
-            </Typography>
-            <Typography variant="subtitle2" color="text.secondary">
-              Este tutor todavía no recibió reseñas de otros estudiantes.
-            </Typography>
-          </Box>
+          <ReviewsEmptyState tutorName={tutorName} />
         )}
       </CardContent>
     </Card>
   );
 };
-
