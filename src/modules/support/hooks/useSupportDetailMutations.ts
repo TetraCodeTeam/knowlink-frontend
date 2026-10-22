@@ -1,37 +1,35 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { addTutorClaimComment } from "@/modules/support/api/supportClaims.api";
 import { submitMaterialDefense } from "@/modules/support/api/supportMaterials.api";
 import { getSupportErrorMessage } from "@/modules/support/utils/supportErrors.utils";
-import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
 
 export function useAddTutorClaimComment(claimId: string) {
   const queryClient = useQueryClient();
-  const showMessage = useSnackbarStore((store) => store.showMessage);
 
   return useMutation({
     mutationFn: (comment: string) => addTutorClaimComment(claimId, comment),
     onSuccess: async () => {
-      showMessage("Comentario agregado al reclamo.", "success");
+      toast.success("Comentario agregado al reclamo.");
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["tutorSupport"] }),
         queryClient.invalidateQueries({ queryKey: ["tutorSupport", "claimDetail", claimId] }),
       ]);
     },
     onError: (error: unknown) => {
-      showMessage(getSupportErrorMessage(error, "No se pudo agregar el comentario."), "error");
+      toast.error(getSupportErrorMessage(error, "No se pudo agregar el comentario."));
     },
   });
 }
 
 export function useSubmitMaterialDefense(materialId: string) {
   const queryClient = useQueryClient();
-  const showMessage = useSnackbarStore((store) => store.showMessage);
 
   return useMutation({
     mutationFn: ({ description, files }: { description: string; files: File[] }) =>
       submitMaterialDefense(materialId, description, files),
     onSuccess: async () => {
-      showMessage("Descargo presentado correctamente.", "success");
+      toast.success("Descargo presentado correctamente.");
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["tutorSupport"] }),
         queryClient.invalidateQueries({
@@ -40,7 +38,7 @@ export function useSubmitMaterialDefense(materialId: string) {
       ]);
     },
     onError: (error: unknown) => {
-      showMessage(getSupportErrorMessage(error, "No se pudo presentar el descargo."), "error");
+      toast.error(getSupportErrorMessage(error, "No se pudo presentar el descargo."));
     },
   });
 }

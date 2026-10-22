@@ -46,7 +46,7 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
           </Typography>
         </SupportDetailTile>
         <SupportDetailTile title="Causal del reclamo">
-          <Typography sx={{ fontSize: 14 , fontWeight: 600, color: "#A94442" }}>
+          <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#A94442" }}>
             {formatSupportReason(claim.reason)}
           </Typography>
         </SupportDetailTile>
@@ -54,16 +54,6 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
 
       <SupportDetailSection title="Fondos y garantía">
         <Box sx={{ ...detailCardSx, p: 1.25 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 1,
-            }}
-          >
-        
-          </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
             <Box>
               <Typography sx={{ fontSize: 14, color: "#73778A" }}>Honorarios retenidos</Typography>
