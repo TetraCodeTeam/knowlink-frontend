@@ -18,10 +18,10 @@ export const sideCardHeaderSx = {
   mb: 1.5,
 } satisfies SxProps<Theme>;
 
-export const sideCardTitleSx = { fontSize: 13, fontWeight: 600 } satisfies SxProps<Theme>;
+export const sideCardTitleSx = { fontSize: 16, fontWeight: 600 } satisfies SxProps<Theme>;
 
 export const sideCardBodySx = {
-  fontSize: 12.5,
+  fontSize: 14,
   lineHeight: 1.5,
   color: "text.secondary",
 } satisfies SxProps<Theme>;
@@ -47,13 +47,13 @@ export const summaryValueSx = (tone: SummaryTone): SxProps<Theme> => ({
 });
 
 export const summaryLabelSx = {
-  fontSize: 11.5,
+  fontSize: 15,
   color: "text.secondary",
   mt: 0.5,
 } satisfies SxProps<Theme>;
 
 export const summaryCaptionSx = {
-  fontSize: 10.5,
+  fontSize: 12,
   color: "warning.dark",
   mt: 0.25,
 } satisfies SxProps<Theme>;
