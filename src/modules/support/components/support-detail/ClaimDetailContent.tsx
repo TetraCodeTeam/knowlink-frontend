@@ -88,7 +88,7 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
               borderRadius: 1,
             }}
           >
-            <Banknote size={11} color="#5866B1" />
+            <Banknote size={20} color="#5866B1" />
             <Typography sx={{ fontSize: 14, color: "#686C7B" }}>
               Los fondos se liberarán automáticamente al finalizar la revisión.
             </Typography>
