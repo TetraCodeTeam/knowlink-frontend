@@ -4,9 +4,9 @@ import type { MaterialReportingPolicy } from "@/modules/support/interfaces/respo
 import type { ReportedMaterialDetail } from "@/modules/support/interfaces/responses/reported-material-detail.response";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import { formatSupportReason } from "@/modules/support/utils/supportDetail.utils";
-import { SupportDetailSection } from "./SupportDetailSection";
-import { attachmentLinkSx, detailCardSx } from "../../styles/supportDetail.styles";
-import { MaterialDefenseForm } from "./MaterialDefenseForm";
+import { SupportDetailSection } from "@/modules/support/components/support-detail/SupportDetailSection";
+import { attachmentLinkSx, detailCardSx } from "@/modules/support/styles/supportDetail.styles";
+import { MaterialDefenseForm } from "@/modules/support/components/support-detail/MaterialDefenseForm";
 
 interface MaterialDetailContentProps {
   material: ReportedMaterialDetail;

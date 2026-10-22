@@ -1,6 +1,10 @@
 import type { ReactNode } from "react";
 import { Box, Typography } from "@mui/material";
-import { detailTileSx, detailTileTitleSx, sectionLabelSx } from "../../styles/supportDetail.styles";
+import {
+  detailTileSx,
+  detailTileTitleSx,
+  sectionLabelSx,
+} from "@/modules/support/styles/supportDetail.styles";
 
 interface SupportDetailBlockProps {
   title: string;

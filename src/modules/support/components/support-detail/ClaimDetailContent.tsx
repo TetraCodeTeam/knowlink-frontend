@@ -7,8 +7,11 @@ import {
   formatSupportAmount,
   formatSupportReason,
 } from "@/modules/support/utils/supportDetail.utils";
-import { SupportDetailSection, SupportDetailTile } from "./SupportDetailSection";
-import { attachmentLinkSx, detailCardSx } from "../../styles/supportDetail.styles";
+import {
+  SupportDetailSection,
+  SupportDetailTile,
+} from "@/modules/support/components/support-detail/SupportDetailSection";
+import { attachmentLinkSx, detailCardSx } from "@/modules/support/styles/supportDetail.styles";
 
 interface ClaimDetailContentProps {
   claim: TutorClaimDetail;
