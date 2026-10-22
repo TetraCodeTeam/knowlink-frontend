@@ -3,6 +3,12 @@ import { addTutorClaimComment } from "@/modules/support/api/supportClaims.api";
 import { submitMaterialDefense } from "@/modules/support/api/supportMaterials.api";
 import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
 
+function getErrorMessage(error: unknown, fallback: string): string {
+  return (
+    (error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? fallback
+  );
+}
+
 export function useAddTutorClaimComment(claimId: string) {
   const queryClient = useQueryClient();
   const showMessage = useSnackbarStore((store) => store.showMessage);
@@ -15,6 +21,9 @@ export function useAddTutorClaimComment(claimId: string) {
         queryClient.invalidateQueries({ queryKey: ["tutorSupport"] }),
         queryClient.invalidateQueries({ queryKey: ["tutorSupport", "claimDetail", claimId] }),
       ]);
+    },
+    onError: (error: unknown) => {
+      showMessage(getErrorMessage(error, "No se pudo agregar el comentario."), "error");
     },
   });
 }
@@ -34,6 +43,9 @@ export function useSubmitMaterialDefense(materialId: string) {
           queryKey: ["tutorSupport", "materialDetail", materialId],
         }),
       ]);
+    },
+    onError: (error: unknown) => {
+      showMessage(getErrorMessage(error, "No se pudo presentar el descargo."), "error");
     },
   });
 }
