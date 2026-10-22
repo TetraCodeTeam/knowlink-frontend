@@ -25,8 +25,8 @@ interface SessionConfirmationState {
    */
   resolvedBookingIds: Map<string, number>;
   openConfirmation: (data: PendingSessionConfirmation) => void;
-  /** Se llama tanto al confirmar con éxito como al vencer el plazo:
-   * en ambos casos el widget deja de tener sentido en pantalla. */
+  /** Se llama al confirmar, vencer el plazo o bloquearse por un reclamo:
+   * en todos los casos el widget deja de tener sentido en pantalla. */
   clearConfirmation: () => void;
   isResolved: (bookingId: string) => boolean;
 }

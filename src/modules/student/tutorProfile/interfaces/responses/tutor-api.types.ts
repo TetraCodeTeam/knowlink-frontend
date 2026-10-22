@@ -37,10 +37,43 @@ export interface TutorMaterialApiResponse {
   downloadUrl: string | null;
   uploadedAt: string;
   sizeInBytes: number | null;
+  alreadyReported: boolean;
 }
 
 export interface TutorMaterialAccessApiResponse {
   accesoHabilitado: boolean;
+}
+
+export interface SubjectAverageApiResponse {
+  subjectId: string;
+  name: string;
+  average: number | null;
+  count: number;
+}
+
+export interface RatingCommentApiResponse {
+  id: string;
+  subjectId: string;
+  subjectName: string;
+  score: number;
+  comment: string | null;
+  ratingDate: string;
+}
+
+export interface PagedCommentsApiResponse {
+  content: RatingCommentApiResponse[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface TutorRatingHistoryApiResponse {
+  tutorId: string;
+  averageRating: number | null;
+  totalRatings: number;
+  subjects: SubjectAverageApiResponse[];
+  comments: PagedCommentsApiResponse;
 }
 
 export interface TutorProfileApiResponse {

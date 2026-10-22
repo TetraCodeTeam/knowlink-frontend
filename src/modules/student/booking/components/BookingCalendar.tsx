@@ -155,7 +155,7 @@ export default function BookingCalendar({
         </Box>
       );
     },
-    [bookingSlots, handleSelectWindow, minimumNoticeMinutes, onDeselectSlot, selectedSlot]
+    [bookingSlots, disabled, handleSelectWindow, minimumNoticeMinutes, onDeselectSlot, selectedSlot]
   );
 
   const dayHeaderContent = useCallback(
