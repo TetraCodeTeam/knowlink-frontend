@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
 import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin } from "lucide-react";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
@@ -10,6 +10,7 @@ import type { BookingRole } from "@/modules/class-history/types/booking-role.typ
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
 import VirtualLinkBox from "./VirtualLinkBox";
 import CancelBookingFlow from "./CancelBookingFlow";
+import StartClaimFlow from "@/modules/claim/components/StartClaimFlow";
 import RateBookingFlow from "./RateBookingFlow";
 
 interface ClassHistoryCardProps {
@@ -126,6 +127,14 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                   sessionDate={detail.sessionDate}
                   startTime={detail.startTime}
                   editable={category === "RESERVED"}
+                />
+              )}
+
+              {detail.status !== "CANCELLED" && (
+                <StartClaimFlow
+                  bookingId={detail.bookingId}
+                  claimantRole={role}
+                  sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
                 />
               )}
 

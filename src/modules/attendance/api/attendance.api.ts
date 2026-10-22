@@ -8,6 +8,13 @@ interface ApiErrorPayload {
   detail?: string;
 }
 
+export class AttendanceApiError extends Error {
+  constructor(message: string, readonly code?: string) {
+    super(message);
+    this.name = "AttendanceApiError";
+  }
+}
+
 export interface UpcomingConfirmableBooking {
   bookingId: string;
   sessionDate: string; // "yyyy-MM-dd"
@@ -26,11 +33,18 @@ export async function confirmSessionAttendance(bookingId: string, code: string):
   try {
     await rawHttpClient.patch(`/api/v1/bookings/${bookingId}/confirmation`, { token: code });
   } catch (error) {
-    throw new Error(
-      extractErrorMessage(
-        error,
-        "El código ingresado no es válido. Verificalo con tu alumno e intentá de nuevo."
-      )
+    const payload = (error as { response?: { data?: ApiErrorPayload } })?.response?.data;
+    const errorCode = payload?.detail;
+    const message =
+      errorCode === "CONFIRMATION_BLOCKED_BY_ACTIVE_CLAIM"
+        ? "Hay un reclamo abierto para esta sesión. No se puede confirmar."
+        : extractErrorMessage(
+            error,
+            "El código ingresado no es válido. Verificalo con tu alumno e intentá de nuevo."
+          );
+    throw new AttendanceApiError(
+      message,
+      errorCode
     );
   }
 }
