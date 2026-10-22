@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 
 export const dialogPaperSx = {
   borderRadius: 3,
@@ -24,7 +25,7 @@ export const ruleSectionSx = { mb: 2.5 } satisfies SxProps<Theme>;
 export const ruleHighlightSx = {
   p: 1.75,
   borderRadius: 2,
-  bgcolor: "#F3F4F8",
+  bgcolor: SUPPORT_COLORS.surface,
 } satisfies SxProps<Theme>;
 
 export const ruleTitleSx = {

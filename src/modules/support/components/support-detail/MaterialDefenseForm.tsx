@@ -1,7 +1,10 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { FileText, Paperclip } from "lucide-react";
+import AppButton from "@/shared/components/AppButton";
 import { useMaterialDefenseForm } from "@/modules/support/hooks/useMaterialDefenseForm";
 import type { MaterialReportingPolicy } from "@/modules/support/interfaces/responses/material-reporting-policy.response";
+import { detailSmallButtonSx } from "@/modules/support/styles/supportDetail.styles";
+import { supportBodyTextSx } from "@/modules/support/styles/supportText.styles";
 
 interface MaterialDefenseFormProps {
   materialId: string;
@@ -32,15 +35,15 @@ export function MaterialDefenseForm({
 
   if (!isEditing) {
     return (
-      <Button
+      <AppButton
         fullWidth
-        variant="outlined"
+        appVariant="soft"
         startIcon={<FileText size={14} />}
         onClick={openEditor}
-        sx={{ textTransform: "none", fontSize: 14 }}
+        sx={detailSmallButtonSx}
       >
         Presentar descargo
-      </Button>
+      </AppButton>
     );
   }
 
@@ -79,9 +82,7 @@ export function MaterialDefenseForm({
         </Typography>
       )}
       {files.length > 0 && (
-        <Typography sx={{ fontSize: 14, color: "#686C7B" }}>
-          {files.map((file) => file.name).join(", ")}
-        </Typography>
+        <Typography sx={supportBodyTextSx}>{files.map((file) => file.name).join(", ")}</Typography>
       )}
       {policyIsError && (
         <Typography color="error" sx={{ fontSize: 14 }}>
@@ -89,23 +90,23 @@ export function MaterialDefenseForm({
         </Typography>
       )}
       <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-        <Button
+        <AppButton
+          appVariant="outline"
           size="small"
           onClick={closeEditor}
           disabled={isPending}
-          sx={{ textTransform: "none", fontSize: 14 }}
+          sx={detailSmallButtonSx}
         >
           Cancelar
-        </Button>
-        <Button
+        </AppButton>
+        <AppButton
           type="submit"
-          variant="contained"
           size="small"
           disabled={isPending || policyIsLoading || policyIsError}
-          sx={{ bgcolor: "#293E9D", textTransform: "none", fontSize: 14 }}
+          sx={detailSmallButtonSx}
         >
           {isPending ? "Enviando..." : "Presentar descargo"}
-        </Button>
+        </AppButton>
       </Box>
     </Box>
   );

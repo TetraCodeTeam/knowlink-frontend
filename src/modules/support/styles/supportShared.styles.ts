@@ -1,11 +1,12 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 
 export type StatusTone = "warning" | "info" | "neutral";
 
 export const TONE_COLORS: Record<StatusTone, { bg: string; fg: string }> = {
-  warning: { bg: "#FDE7D6", fg: "#B4531A" },
-  info: { bg: "#E6E8FB", fg: "#3F4BC4" },
-  neutral: { bg: "#E9EAEF", fg: "#4B4F5C" },
+  warning: { bg: SUPPORT_COLORS.orangeSoft, fg: SUPPORT_COLORS.orange },
+  info: { bg: SUPPORT_COLORS.indigoSoft, fg: SUPPORT_COLORS.indigo },
+  neutral: { bg: SUPPORT_COLORS.slateTone, fg: SUPPORT_COLORS.slate },
 };
 
 export const cardBase = {

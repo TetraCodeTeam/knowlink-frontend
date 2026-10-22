@@ -1,13 +1,13 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { MessageSquarePlus } from "lucide-react";
+import AppButton from "@/shared/components/AppButton";
 import { MAX_CLAIM_COMMENT_LENGTH } from "@/modules/support/constants/support.constants";
 import { useClaimCommentForm } from "@/modules/support/hooks/useClaimCommentForm";
 import {
   composerActionsSx,
-  composerCancelButtonSx,
+  composerButtonSx,
   composerContainerSx,
   composerOpenButtonSx,
-  composerSubmitButtonSx,
 } from "@/modules/support/styles/claimCommentComposer.styles";
 
 interface ClaimCommentComposerProps {
@@ -42,35 +42,34 @@ export function ClaimCommentComposer({ claimId }: ClaimCommentComposerProps) {
             disabled={isPending}
           />
           <Box sx={composerActionsSx}>
-            <Button
+            <AppButton
+              appVariant="outline"
               size="small"
               onClick={closeEditor}
               disabled={isPending}
-              sx={composerCancelButtonSx}
+              sx={composerButtonSx}
             >
               Cancelar
-            </Button>
-            <Button
+            </AppButton>
+            <AppButton
               type="submit"
               size="small"
-              variant="contained"
               disabled={!commentLength || isPending}
-              sx={composerSubmitButtonSx}
+              sx={composerButtonSx}
             >
               {isPending ? "Enviando..." : "Enviar comentario"}
-            </Button>
+            </AppButton>
           </Box>
         </Box>
       ) : (
-        <Button
+        <AppButton
           fullWidth
-          variant="contained"
           startIcon={<MessageSquarePlus size={16} />}
           onClick={openEditor}
           sx={composerOpenButtonSx}
         >
           Aportar comentario
-        </Button>
+        </AppButton>
       )}
     </Box>
   );

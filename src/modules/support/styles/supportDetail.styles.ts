@@ -1,7 +1,9 @@
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
+
 export const detailCardSx = {
   p: 1.25,
   borderRadius: 2,
-  bgcolor: "#F3F4F8",
+  bgcolor: SUPPORT_COLORS.surface,
 };
 
 export const detailTileSx = {
@@ -12,7 +14,7 @@ export const detailTileSx = {
 
 export const detailTileTitleSx = {
   fontSize: 12,
-  color: "#73778A",
+  color: SUPPORT_COLORS.textMuted,
   mb: 0.4,
 };
 
@@ -20,7 +22,7 @@ export const sectionLabelSx = {
   fontSize: 16,
   fontWeight: 700,
   letterSpacing: 0.55,
-  color: "#626577",
+  color: SUPPORT_COLORS.textLabel,
   mb: 0.75,
   mt: 1.5,
 };
@@ -39,8 +41,8 @@ export const supportDetailPanelSx = {
 
 export const supportDetailHeaderSx = {
   p: 2,
-  bgcolor: "#F3F4F8",
-  borderBottom: "1px solid #E5E7EF",
+  bgcolor: SUPPORT_COLORS.surface,
+  borderBottom: `1px solid ${SUPPORT_COLORS.border}`,
 };
 
 export const supportDetailBodySx = {
@@ -52,12 +54,68 @@ export const supportDetailBodySx = {
   overflowY: "auto",
 };
 
+export const supportDetailTitleSx = {
+  fontSize: 20,
+  fontWeight: 700,
+  color: SUPPORT_COLORS.primary,
+  letterSpacing: 0.55,
+};
+
+export const supportDetailSubtitleSx = {
+  mt: 0.25,
+  fontSize: 14,
+  fontWeight: 700,
+  color: SUPPORT_COLORS.textHeading,
+};
+
+export const supportDetailCloseButtonSx = {
+  bgcolor: "background.paper",
+  color: SUPPORT_COLORS.primary,
+  flexShrink: 0,
+};
+
 export const attachmentLinkSx = {
   display: "flex",
   alignItems: "center",
   gap: 0.6,
   fontSize: 14,
-  color: "#3549A5",
+  color: SUPPORT_COLORS.primary,
   textDecoration: "none",
   "&:hover": { textDecoration: "underline" },
+};
+
+export const detailAvatarSx = {
+  width: 34,
+  height: 34,
+  bgcolor: SUPPORT_COLORS.avatarBg,
+  color: SUPPORT_COLORS.avatarFg,
+};
+
+export const detailFundsNoteSx = {
+  display: "flex",
+  gap: 0.6,
+  mt: 1,
+  p: 0.75,
+  bgcolor: "background.paper",
+  borderRadius: 1,
+};
+
+export const detailPhaseCardSx = {
+  ...detailCardSx,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  gap: 0.8,
+};
+
+export const detailSmallButtonSx = {
+  py: 0.5,
+  px: 1.5,
+  borderRadius: 2,
+  fontSize: 14,
+};
+
+export const supportLinkButtonSx = {
+  fontSize: 14,
+  textTransform: "none",
 };

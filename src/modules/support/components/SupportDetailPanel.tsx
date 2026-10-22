@@ -1,5 +1,6 @@
-import { Box, Button, CircularProgress, IconButton, Paper, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Paper, Typography } from "@mui/material";
 import { X } from "lucide-react";
+import AppButton from "@/shared/components/AppButton";
 import {
   useMaterialReportingPolicy,
   useReportedMaterialDetail,
@@ -18,9 +19,13 @@ import { MaterialDetailContent } from "@/modules/support/components/support-deta
 import { getSupportErrorMessage } from "@/modules/support/utils/supportErrors.utils";
 import type { SupportDetailSelection } from "@/modules/support/interfaces/support-detail-selection.type";
 import {
+  detailSmallButtonSx,
   supportDetailBodySx,
+  supportDetailCloseButtonSx,
   supportDetailHeaderSx,
   supportDetailPanelSx,
+  supportDetailSubtitleSx,
+  supportDetailTitleSx,
 } from "@/modules/support/styles/supportDetail.styles";
 
 interface SupportDetailPanelProps {
@@ -53,15 +58,13 @@ function SupportDetailHeader({
       >
         <Box sx={{ minWidth: 0 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-            <Typography
-              sx={{ fontSize: 20, fontWeight: 700, color: "#3549A5", letterSpacing: 0.55 }}
-            >
+            <Typography sx={supportDetailTitleSx}>
               {isClaim ? "Detalle del reclamo" : "Detalle del material"}
             </Typography>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-            <Typography sx={{ mt: 0.25, fontSize: 14, fontWeight: 700, color: "#24263A" }}>
+            <Typography sx={supportDetailSubtitleSx}>
               {isClaim
                 ? `#REC-${selection.id.slice(0, 8).toUpperCase()}`
                 : (material?.originalFileName ?? material?.name ?? "Denuncia de material")}
@@ -77,7 +80,7 @@ function SupportDetailHeader({
           aria-label="Cerrar detalle"
           onClick={onClose}
           size="small"
-          sx={{ bgcolor: "background.paper", color: "#3549A5", flexShrink: 0 }}
+          sx={supportDetailCloseButtonSx}
         >
           <X size={15} />
         </IconButton>
@@ -111,9 +114,9 @@ function DetailLoadState({
         <Typography color="error" sx={{ fontSize: 14, mb: 1 }}>
           {getSupportErrorMessage(error, "No se pudo cargar el detalle.")}
         </Typography>
-        <Button size="small" onClick={onRetry} sx={{ textTransform: "none", fontSize: 14 }}>
+        <AppButton appVariant="outline" size="small" onClick={onRetry} sx={detailSmallButtonSx}>
           Reintentar
-        </Button>
+        </AppButton>
       </Box>
     );
   }

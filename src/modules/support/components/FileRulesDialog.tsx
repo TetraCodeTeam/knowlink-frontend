@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -9,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ShieldCheck, X } from "lucide-react";
+import AppButton from "@/shared/components/AppButton";
 import { useMaterialReportingPolicy } from "@/modules/support/hooks/useSupportDetailQueries";
 import {
   ACCEPTED_FILE_FORMATS,
@@ -144,9 +144,7 @@ export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
       </DialogContent>
 
       <DialogActions sx={{ justifyContent: "center", py: 2 }}>
-        <Button variant="contained" onClick={onClose}>
-          Entendido, cerrar
-        </Button>
+        <AppButton onClick={onClose}>Entendido, cerrar</AppButton>
       </DialogActions>
     </Dialog>
   );

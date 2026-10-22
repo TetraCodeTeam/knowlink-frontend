@@ -1,5 +1,6 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 import { cardBase } from "@/modules/support/styles/supportShared.styles";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 
 export type SummaryTone = "neutral" | "info";
 
@@ -36,7 +37,7 @@ export const getSummaryTileSx = (tone: SummaryTone): SxProps<Theme> => ({
   position: "relative",
   p: 1.5,
   borderRadius: 2,
-  bgcolor: tone === "info" ? "#F1F2FD" : "#F3F4F8",
+  bgcolor: tone === "info" ? SUPPORT_COLORS.surfaceInfo : SUPPORT_COLORS.surface,
 });
 
 export const summaryValueSx = (tone: SummaryTone): SxProps<Theme> => ({

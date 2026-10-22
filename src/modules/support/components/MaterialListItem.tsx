@@ -2,6 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { ChevronRight, Flag } from "lucide-react";
 import { SupportStatusChip } from "@/modules/support/components/SupportStatusChip";
 import { FILE_FORMAT_META } from "@/modules/support/constants/file-format.constants";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { MATERIAL_STATUS_META } from "@/modules/support/constants/status.constants";
 import type { ReportedMaterialResponse } from "@/modules/support/interfaces/responses/reported-material.response";
 import {
@@ -35,9 +36,9 @@ export function MaterialListItem({
       component="li"
       sx={{
         ...listItemSx,
-        border: selected ? "1px solid #4C5CB5" : "1px solid transparent",
+        border: selected ? `1px solid ${SUPPORT_COLORS.borderSelected}` : "1px solid transparent",
         boxShadow: selected ? "0 2px 5px rgba(41, 62, 157, 0.2)" : "none",
-        bgcolor: selected ? "#F4F5FF" : listItemSx.bgcolor,
+        bgcolor: selected ? SUPPORT_COLORS.surfaceSelected : listItemSx.bgcolor,
       }}
     >
       <Box sx={getIconBoxSx(bg, fg)}>

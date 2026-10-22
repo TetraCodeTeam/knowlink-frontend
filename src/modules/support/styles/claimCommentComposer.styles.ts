@@ -1,9 +1,10 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 
 export const composerContainerSx = {
   p: 1.5,
   pt: 1,
-  borderTop: "1px solid #E9EAF0",
+  borderTop: `1px solid ${SUPPORT_COLORS.borderSoft}`,
   bgcolor: "background.paper",
 } satisfies SxProps<Theme>;
 
@@ -14,20 +15,15 @@ export const composerActionsSx = {
   mt: 1,
 } satisfies SxProps<Theme>;
 
-export const composerCancelButtonSx = {
-  textTransform: "none",
-  fontSize: 14,
-} satisfies SxProps<Theme>;
-
-export const composerSubmitButtonSx = {
-  bgcolor: "#293E9D",
-  textTransform: "none",
+export const composerButtonSx = {
+  py: 0.5,
+  px: 1.5,
+  borderRadius: 2,
   fontSize: 14,
 } satisfies SxProps<Theme>;
 
 export const composerOpenButtonSx = {
-  bgcolor: "#293E9D",
+  py: 1,
   borderRadius: 1.5,
-  textTransform: "none",
   fontSize: 14,
 } satisfies SxProps<Theme>;

@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
+import { Box, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
+import AppButton from "@/shared/components/AppButton";
 import { ClaimsSidebar } from "@/modules/support/components/ClaimsSidebar";
 import { ClaimsTab } from "@/modules/support/components/ClaimsTab";
 import { FileRulesDialog } from "@/modules/support/components/FileRulesDialog";
@@ -72,9 +73,9 @@ export function SupportPage() {
               sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, py: 8 }}
             >
               <Typography color="error">No se pudo cargar la información de soporte.</Typography>
-              <Button variant="outlined" onClick={() => void refetch()}>
+              <AppButton appVariant="outline" onClick={() => void refetch()}>
                 Reintentar
-              </Button>
+              </AppButton>
             </Box>
           ) : activeTab === "claims" ? (
             <ClaimsTab

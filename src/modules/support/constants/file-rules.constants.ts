@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import {
   BadgeX,
   CircleCheck,
@@ -72,7 +73,7 @@ export const FILE_RULES_SECTIONS: FileRuleSection[] = [
       {
         id: "infraction-confirmed",
         icon: BadgeX,
-        iconColor: "#C62828",
+        iconColor: SUPPORT_COLORS.red,
         title: "Confirmación de infracción",
         text:
           "Si se confirma el incumplimiento, el material se da de baja de forma inmediata y " +
@@ -82,7 +83,7 @@ export const FILE_RULES_SECTIONS: FileRuleSection[] = [
       {
         id: "dismissed",
         icon: CircleCheck,
-        iconColor: "#3F4BC4",
+        iconColor: SUPPORT_COLORS.indigo,
         title: "Desestimación",
         text:
           "Si la denuncia no es procedente, el material permanece disponible y la denuncia " +
@@ -91,7 +92,7 @@ export const FILE_RULES_SECTIONS: FileRuleSection[] = [
       {
         id: "reporter-notification",
         icon: Info,
-        iconColor: "#4B4F5C",
+        iconColor: SUPPORT_COLORS.slate,
         title: "Notificación a denunciantes",
         text:
           "En ambos casos, el usuario que realizó la denuncia recibe una notificación con el " +

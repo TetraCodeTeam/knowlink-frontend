@@ -1,6 +1,7 @@
 import { Avatar, Box, Link, Typography } from "@mui/material";
 import { Banknote, Clock3, Paperclip, UserRound, ArrowUpRight } from "lucide-react";
 import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tutor-claim-detail.response";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import {
   formatReviewPhase,
@@ -11,7 +12,23 @@ import {
   SupportDetailSection,
   SupportDetailTile,
 } from "@/modules/support/components/support-detail/SupportDetailSection";
-import { attachmentLinkSx, detailCardSx } from "@/modules/support/styles/supportDetail.styles";
+import {
+  attachmentLinkSx,
+  detailAvatarSx,
+  detailCardSx,
+  detailFundsNoteSx,
+  detailPhaseCardSx,
+} from "@/modules/support/styles/supportDetail.styles";
+import {
+  supportAccentTextSx,
+  supportBodyTextSx,
+  supportDangerTextSx,
+  supportMutedLabelSx,
+  supportMutedTextSx,
+  supportQuoteTextSx,
+  supportStrongLabelSx,
+  supportTitleTextSx,
+} from "@/modules/support/styles/supportText.styles";
 
 interface ClaimDetailContentProps {
   claim: TutorClaimDetail;
@@ -22,17 +39,12 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
     <>
       <SupportDetailSection title="Estudiante involucrado">
         <Box sx={{ ...detailCardSx, display: "flex", alignItems: "center", gap: 1 }}>
-          <Avatar
-            src={claim.student.profilePictureUrl ?? undefined}
-            sx={{ width: 34, height: 34, bgcolor: "#E1E5FF", color: "#3347A3" }}
-          >
+          <Avatar src={claim.student.profilePictureUrl ?? undefined} sx={detailAvatarSx}>
             <UserRound size={17} />
           </Avatar>
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
-              {claim.student.fullName}
-            </Typography>
-            <Typography sx={{ fontSize: 14, color: "#686C7B", lineHeight: 1.35 }}>
+            <Typography sx={supportTitleTextSx}>{claim.student.fullName}</Typography>
+            <Typography sx={{ ...supportBodyTextSx, lineHeight: 1.35 }}>
               {claim.student.careerName ?? "Estudiante"}
             </Typography>
           </Box>
@@ -41,48 +53,35 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
 
       <Box sx={{ display: "flex", gap: 1 }}>
         <SupportDetailTile title="Materia">
-          <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
-            {claim.subjectName}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: "#73778A" }}>
+          <Typography sx={supportTitleTextSx}>{claim.subjectName}</Typography>
+          <Typography sx={supportMutedTextSx}>
             Sesión del {formatLongDate(claim.sessionDate)}
           </Typography>
         </SupportDetailTile>
         <SupportDetailTile title="Causal del reclamo">
-          <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#A94442" }}>
-            {formatSupportReason(claim.reason)}
-          </Typography>
+          <Typography sx={supportDangerTextSx}>{formatSupportReason(claim.reason)}</Typography>
         </SupportDetailTile>
       </Box>
 
       <SupportDetailSection title="Fondos y garantía">
-        <Box sx={{ ...detailCardSx, p: 1.25 }}>
+        <Box sx={detailCardSx}>
           <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
             <Box>
-              <Typography sx={{ fontSize: 14, color: "#73778A" }}>Honorarios retenidos</Typography>
-              <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
+              <Typography sx={supportMutedTextSx}>Honorarios retenidos</Typography>
+              <Typography sx={supportTitleTextSx}>
                 {formatSupportAmount(claim.funds.protectedAmount, claim.funds.currency)}
               </Typography>
             </Box>
             <Box sx={{ textAlign: "right" }}>
-              <Typography sx={{ fontSize: 14, color: "#73778A" }}>Garantía académica</Typography>
-              <Typography sx={{ fontSize: 14, fontWeight: 700, color: "#3549A5" }}>
+              <Typography sx={supportMutedTextSx}>Garantía académica</Typography>
+              <Typography sx={supportAccentTextSx}>
                 {claim.funds.protectedAmount > 0 ? "100% protegido" : "Sin fondos retenidos"}
               </Typography>
             </Box>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 0.6,
-              mt: 1,
-              p: 0.75,
-              bgcolor: "background.paper",
-              borderRadius: 1,
-            }}
-          >
-            <Banknote size={20} color="#5866B1" />
-            <Typography sx={{ fontSize: 14, color: "#686C7B" }}>
+          <Box sx={detailFundsNoteSx}>
+            <Banknote size={20} color={SUPPORT_COLORS.primaryIcon} />
+            <Typography sx={supportBodyTextSx}>
               Los fondos se liberarán automáticamente al finalizar la revisión.
             </Typography>
           </Box>
@@ -91,10 +90,10 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
 
       <SupportDetailSection title="Descargo y evidencias">
         <Box sx={detailCardSx}>
-          <Typography sx={{ fontSize: 14, fontWeight: 700, color: "#73778A", mb: 0.5 }}>
+          <Typography sx={{ ...supportStrongLabelSx, mb: 0.5 }}>
             Declaración del {claim.claimantRole === "TUTOR" ? "tutor" : "estudiante"}:
           </Typography>
-          <Typography sx={{ fontSize: 14, color: "#55596B", fontStyle: "italic", lineHeight: 1.5 }}>
+          <Typography sx={supportQuoteTextSx}>
             {claim.declaration || "No se agregó una declaración."}
           </Typography>
           {claim.attachments.length > 0 && (
@@ -117,30 +116,20 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
         </Box>
       </SupportDetailSection>
 
-      <Box
-        sx={{
-          ...detailCardSx,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: 0.8,
-        }}
-      >
+      <Box sx={detailPhaseCardSx}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-          <Clock3 size={14} color="#3549A5" />
-          <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#73778A" }}>
-            Fase actual del reclamo
-          </Typography>
+          <Clock3 size={14} color={SUPPORT_COLORS.primary} />
+          <Typography sx={supportMutedLabelSx}>Fase actual del reclamo</Typography>
         </Box>
-        <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#282A3B" }}>
+        <Typography sx={{ ...supportTitleTextSx, fontSize: 14 }}>
           {formatReviewPhase(claim.reviewProgress.currentPhase)}
         </Typography>
         {claim.reviewProgress.queuePosition != null && (
-          <Typography sx={{ fontSize: 12, color: "#73778A" }}>
+          <Typography sx={supportMutedTextSx}>
             Turno #{claim.reviewProgress.queuePosition}
           </Typography>
         )}
-        <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#3549A5" }}>
+        <Typography sx={{ ...supportAccentTextSx, fontWeight: 600 }}>
           {claim.reviewProgress.remainingMinutes > 0
             ? `< ${Math.ceil(claim.reviewProgress.remainingMinutes / 60)} hs resp.`
             : "Actualizado"}
@@ -152,10 +141,10 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
           <Box sx={{ ...detailCardSx, display: "flex", flexDirection: "column", gap: 1 }}>
             {claim.comments.map((entry) => (
               <Box key={entry.id}>
-                <Typography sx={{ fontSize: 14, fontWeight: 700, color: "#73778A" }}>
+                <Typography sx={supportStrongLabelSx}>
                   {entry.authorName} · {new Date(entry.createdAt).toLocaleString("es-AR")}
                 </Typography>
-                <Typography sx={{ fontSize: 14, color: "#45495A", mt: 0.25 }}>
+                <Typography sx={{ ...supportBodyTextSx, color: SUPPORT_COLORS.textBody, mt: 0.25 }}>
                   {entry.comment}
                 </Typography>
               </Box>

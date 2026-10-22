@@ -2,10 +2,22 @@ import { Box, Button, Link, Typography } from "@mui/material";
 import { AlertCircle, ArrowUpRight, FileText } from "lucide-react";
 import type { MaterialReportingPolicy } from "@/modules/support/interfaces/responses/material-reporting-policy.response";
 import type { ReportedMaterialDetail } from "@/modules/support/interfaces/responses/reported-material-detail.response";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import { formatSupportReason } from "@/modules/support/utils/supportDetail.utils";
 import { SupportDetailSection } from "@/modules/support/components/support-detail/SupportDetailSection";
-import { attachmentLinkSx, detailCardSx } from "@/modules/support/styles/supportDetail.styles";
+import {
+  attachmentLinkSx,
+  detailCardSx,
+  supportLinkButtonSx,
+} from "@/modules/support/styles/supportDetail.styles";
+import {
+  supportBodyTextSx,
+  supportDangerTextSx,
+  supportMutedTextSx,
+  supportQuoteTextSx,
+  supportTitleTextSx,
+} from "@/modules/support/styles/supportText.styles";
 import { MaterialDefenseForm } from "@/modules/support/components/support-detail/MaterialDefenseForm";
 
 interface MaterialDetailContentProps {
@@ -25,14 +37,18 @@ export function MaterialDetailContent({
     <>
       <SupportDetailSection title="Material denunciado">
         <Box sx={detailCardSx}>
-          <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
+          <Typography sx={supportTitleTextSx}>
             {material.originalFileName || material.name}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: "#686C7B", mt: 0.25 }}>
+          <Typography sx={{ ...supportBodyTextSx, mt: 0.25 }}>
             {material.subjectName} · {material.format.toUpperCase()}
           </Typography>
           <Typography
-            sx={{ fontSize: 14, color: material.available ? "#357A51" : "#A94442", mt: 0.5 }}
+            sx={{
+              fontSize: 14,
+              color: material.available ? SUPPORT_COLORS.success : SUPPORT_COLORS.danger,
+              mt: 0.5,
+            }}
           >
             {material.available ? "Disponible para estudiantes" : "No disponible"}
           </Typography>
@@ -44,7 +60,7 @@ export function MaterialDetailContent({
               rel="noreferrer"
               size="small"
               endIcon={<ArrowUpRight size={14} />}
-              sx={{ mt: 0.75, fontSize: 14, textTransform: "none" }}
+              sx={{ ...supportLinkButtonSx, mt: 0.75 }}
             >
               Abrir material
             </Button>
@@ -56,14 +72,12 @@ export function MaterialDetailContent({
         {material.reports.map((report) => (
           <Box key={report.reportId} sx={{ ...detailCardSx, mb: 0.75 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
-              <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#A94442" }}>
-                {formatSupportReason(report.reason)}
-              </Typography>
-              <Typography sx={{ fontSize: 14, color: "#73778A", flexShrink: 0 }}>
+              <Typography sx={supportDangerTextSx}>{formatSupportReason(report.reason)}</Typography>
+              <Typography sx={{ ...supportMutedTextSx, flexShrink: 0 }}>
                 {formatLongDate(report.reportedAt.slice(0, 10))}
               </Typography>
             </Box>
-            <Typography sx={{ fontSize: 14, color: "#55596B", mt: 0.5 }}>
+            <Typography sx={{ ...supportBodyTextSx, color: SUPPORT_COLORS.textQuote, mt: 0.5 }}>
               {report.description || "Sin descripción adicional."}
             </Typography>
           </Box>
@@ -72,12 +86,10 @@ export function MaterialDetailContent({
 
       <SupportDetailSection title="Revisión">
         <Box sx={{ ...detailCardSx, display: "flex", alignItems: "center", gap: 0.75 }}>
-          <AlertCircle size={14} color="#5866B1" />
+          <AlertCircle size={14} color={SUPPORT_COLORS.primaryIcon} />
           <Box>
-            <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
-              {material.reviewTeamName}
-            </Typography>
-            <Typography sx={{ fontSize: 14, color: "#73778A" }}>
+            <Typography sx={supportTitleTextSx}>{material.reviewTeamName}</Typography>
+            <Typography sx={supportMutedTextSx}>
               {material.reviewerName
                 ? `A cargo de ${material.reviewerName}`
                 : "Equipo de revisión asignado"}
@@ -89,9 +101,7 @@ export function MaterialDetailContent({
       <SupportDetailSection title="Descargo y evidencias">
         {material.defense?.submitted ? (
           <Box sx={detailCardSx}>
-            <Typography
-              sx={{ fontSize: 14, color: "#55596B", fontStyle: "italic", lineHeight: 1.5 }}
-            >
+            <Typography sx={supportQuoteTextSx}>
               {material.defense.description || "Se presentó un descargo sin descripción."}
             </Typography>
             {material.defense.attachments.map((attachment) => (
@@ -108,7 +118,7 @@ export function MaterialDetailContent({
             ))}
           </Box>
         ) : (
-          <Typography sx={{ ...detailCardSx, fontSize: 14, color: "#73778A" }}>
+          <Typography sx={{ ...detailCardSx, ...supportMutedTextSx }}>
             Todavía no presentaste un descargo.
           </Typography>
         )}

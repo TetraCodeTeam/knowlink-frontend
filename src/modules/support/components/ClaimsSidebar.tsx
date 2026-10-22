@@ -2,6 +2,7 @@ import { Box, Button } from "@mui/material";
 import { ArrowRight, Info, Lock, ShieldCheck } from "lucide-react";
 import { SideInfoCard } from "@/modules/support/components/SideInfoCard";
 import { SummaryCard, type SummaryTile } from "@/modules/support/components/SummaryCard";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { TONE_COLORS } from "@/modules/support/styles/supportShared.styles";
 import {
   sideBadgeSx,
@@ -55,8 +56,8 @@ export function ClaimsSidebar({
 
       <SideInfoCard
         icon={<Lock size={16} aria-hidden="true" />}
-        iconBg="#FCE4E4"
-        iconColor="#C62828"
+        iconBg={SUPPORT_COLORS.redSoft}
+        iconColor={SUPPORT_COLORS.red}
         title="Fondos retenidos"
       >
         Mientras un reclamo esté abierto o en revisión, el dinero de esa sesión no se transfiere. Se

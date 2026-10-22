@@ -2,6 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { BookOpen, CalendarDays, ChevronRight, CircleCheck } from "lucide-react";
 import { SupportStatusChip } from "@/modules/support/components/SupportStatusChip";
 import { CLAIM_STATUS_META } from "@/modules/support/constants/status.constants";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import type { ClaimResponse } from "@/modules/support/interfaces/responses/claim.response";
 import {
   detailButtonSx,
@@ -32,9 +33,9 @@ export function ClaimListItem({ claim, onViewDetail, selected = false }: ClaimLi
       component="li"
       sx={{
         ...listItemSx,
-        border: selected ? "1px solid #4C5CB5" : "1px solid transparent",
+        border: selected ? `1px solid ${SUPPORT_COLORS.borderSelected}` : "1px solid transparent",
         boxShadow: selected ? "0 2px 5px rgba(41, 62, 157, 0.2)" : "none",
-        bgcolor: selected ? "#F4F5FF" : listItemSx.bgcolor,
+        bgcolor: selected ? SUPPORT_COLORS.surfaceSelected : listItemSx.bgcolor,
       }}
     >
       <Box sx={getIconBoxSx(bg, fg)}>

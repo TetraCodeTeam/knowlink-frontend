@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 
 export const listHeaderSx = {
   display: "flex",
@@ -38,7 +39,7 @@ export const listItemSx = {
   gap: 1.5,
   px: 2,
   py: 1.5,
-  bgcolor: "#F3F4F8",
+  bgcolor: SUPPORT_COLORS.surface,
   borderRadius: 2,
 } satisfies SxProps<Theme>;
 
