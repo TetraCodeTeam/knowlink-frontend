@@ -1,9 +1,8 @@
-import type { FileFormat } from "@/modules/support/types/file-format.type";
-import type { MaterialReportStatus } from "@/modules/support/types/material-report-status.type";
+import type { FileFormat } from "@/modules/support/interfaces/file-format.type";
+import type { MaterialReportStatus } from "@/modules/support/interfaces/material-report-status.type";
 
-// Forma provisoria: confirmar contra el DTO real del backend antes de conectar.
 export interface ReportedMaterialResponse {
-  id: number;
+  id: string;
   fileName: string;
   fileFormat: FileFormat;
   subjectName: string;

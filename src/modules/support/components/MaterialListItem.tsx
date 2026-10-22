@@ -18,7 +18,7 @@ import { pluralizeReports } from "@/modules/support/utils/format.utils";
 
 interface MaterialListItemProps {
   material: ReportedMaterialResponse;
-  onViewDetail: (materialId: number) => void;
+  onViewDetail: (materialId: string) => void;
 }
 
 export function MaterialListItem({ material, onViewDetail }: MaterialListItemProps) {

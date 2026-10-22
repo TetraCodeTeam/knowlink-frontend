@@ -8,7 +8,9 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import { ShieldCheck, X } from "lucide-react";
+import { getMaterialReportingPolicy } from "@/modules/support/api/support.api";
 import {
   ACCEPTED_FILE_FORMATS,
   FILE_FORMAT_META,
@@ -35,6 +37,12 @@ interface FileRulesDialogProps {
 }
 
 export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
+  const { data: policy, isError } = useQuery({
+    queryKey: ["tutorSupport", "materialPolicy"],
+    queryFn: getMaterialReportingPolicy,
+    enabled: open,
+  });
+
   return (
     <Dialog
       open={open}
@@ -61,8 +69,20 @@ export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
       </DialogTitle>
 
       <DialogContent dividers>
+        {isError && (
+          <Typography color="error" sx={{ mb: 2 }}>
+            No se pudo actualizar la normativa desde el servidor. Se muestra la información
+            disponible.
+          </Typography>
+        )}
         {FILE_RULES_SECTIONS.map((section) => {
           const SectionIcon = section.icon;
+          const body =
+            section.id === "allowed-content"
+              ? (policy?.permittedContentPolicy ?? section.body)
+              : section.id === "review-process"
+                ? (policy?.reviewProcess ?? section.body)
+                : section.body;
 
           return (
             <Box
@@ -75,11 +95,11 @@ export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
                 {section.title}
               </Typography>
 
-              {section.body ? <Typography sx={ruleBodySx}>{section.body}</Typography> : null}
+              {body ? <Typography sx={ruleBodySx}>{body}</Typography> : null}
 
               {section.showFormats ? (
                 <Box sx={ruleFormatsSx}>
-                  {ACCEPTED_FILE_FORMATS.map((format) => {
+                  {(policy?.acceptedFormats ?? ACCEPTED_FILE_FORMATS).map((format) => {
                     const { icon: FormatIcon, label, bg, fg } = FILE_FORMAT_META[format];
 
                     return (
@@ -92,8 +112,25 @@ export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
                 </Box>
               ) : null}
 
+              {section.id === "report-reasons" &&
+                policy?.reportReasons.map((reason) => (
+                  <Typography key={reason.code} sx={ruleBodySx}>
+                    <Box component="strong" sx={{ color: "text.primary" }}>
+                      {reason.label}:
+                    </Box>{" "}
+                    {reason.description}
+                  </Typography>
+                ))}
+
               {section.items?.map((item) => {
                 const ItemIcon = item.icon;
+                const itemText = policy
+                  ? item.id === "infraction-confirmed"
+                    ? policy.upheldOutcome
+                    : item.id === "dismissed"
+                      ? policy.dismissedOutcome
+                      : policy.reporterNotification
+                  : item.text;
 
                 return (
                   <Box key={item.id} sx={ruleItemSx}>
@@ -102,7 +139,7 @@ export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
                       <Box component="strong" sx={{ color: "text.primary" }}>
                         {item.title}:
                       </Box>{" "}
-                      {item.text}
+                      {itemText}
                     </Typography>
                   </Box>
                 );

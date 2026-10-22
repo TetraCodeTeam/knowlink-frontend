@@ -19,7 +19,7 @@ import { formatLongDate, formatShortDate } from "@/modules/support/utils/format.
 
 interface ClaimListItemProps {
   claim: ClaimResponse;
-  onViewDetail: (claimId: number) => void;
+  onViewDetail: (claimId: string) => void;
 }
 
 export function ClaimListItem({ claim, onViewDetail }: ClaimListItemProps) {

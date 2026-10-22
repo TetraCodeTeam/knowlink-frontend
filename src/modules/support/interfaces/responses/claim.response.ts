@@ -1,8 +1,7 @@
-import type { ClaimStatus } from "@/modules/support/types/claim-status.type";
+import type { ClaimStatus } from "@/modules/support/interfaces/claim-status.type";
 
-// Forma provisoria: confirmar contra el DTO real del backend antes de conectar.
 export interface ClaimResponse {
-  id: number;
+  id: string;
   subjectName: string;
   studentName: string;
   sessionDate: string; // ISO yyyy-MM-dd

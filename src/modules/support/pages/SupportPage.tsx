@@ -1,12 +1,14 @@
 import { useCallback, useState, type SyntheticEvent } from "react";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Box, Button, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
 import { ClaimsSidebar } from "@/modules/support/components/ClaimsSidebar";
 import { ClaimsTab } from "@/modules/support/components/ClaimsTab";
 import { FileRulesDialog } from "@/modules/support/components/FileRulesDialog";
 import { MaterialsSidebar } from "@/modules/support/components/MaterialsSidebar";
 import { MaterialsTab } from "@/modules/support/components/MaterialsTab";
+import { SupportDetailDialog } from "@/modules/support/components/SupportDetailDialog";
 import { SUPPORT_TABS, type SupportTab } from "@/modules/support/constants/support.constants";
-import { MOCK_CLAIMS, MOCK_MATERIALS } from "@/modules/support/mocks/support.mocks";
+import { useTutorSupport } from "@/modules/support/hooks/useTutorSupport";
 import {
   mainCardSx,
   pageLayoutSx,
@@ -15,12 +17,14 @@ import {
 } from "@/modules/support/styles/support.styles";
 
 export function SupportPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<SupportTab>("claims");
   const [isRulesOpen, setIsRulesOpen] = useState(false);
-
-  // TODO: reemplazar por los hooks de TanStack Query (useClaims, useReportedMaterials).
-  const claims = MOCK_CLAIMS;
-  const materials = MOCK_MATERIALS;
+  const [selectedDetail, setSelectedDetail] = useState<{
+    type: "claim" | "material";
+    id: string;
+  } | null>(null);
+  const { claims, materials, isLoading, isError, refetch } = useTutorSupport();
 
   const openClaimsCount = claims.filter((claim) => claim.status === "OPEN").length;
   const inReviewClaimsCount = claims.filter((claim) => claim.status === "IN_REVIEW").length;
@@ -35,11 +39,15 @@ export function SupportPage() {
   const handleOpenRules = useCallback(() => setIsRulesOpen(true), []);
   const handleCloseRules = useCallback(() => setIsRulesOpen(false), []);
 
-  // TODO: navegar al detalle del reclamo / material cuando exista la ruta.
-  const handleViewClaimDetail = useCallback((_claimId: number) => undefined, []);
-  const handleViewMaterialDetail = useCallback((_materialId: number) => undefined, []);
-  // TODO: navegar al historial de clases (inicio del flujo "nuevo reclamo").
-  const handleGoToClassHistory = useCallback(() => undefined, []);
+  const handleViewClaimDetail = useCallback(
+    (claimId: string) => setSelectedDetail({ type: "claim", id: claimId }),
+    []
+  );
+  const handleViewMaterialDetail = useCallback(
+    (materialId: string) => setSelectedDetail({ type: "material", id: materialId }),
+    []
+  );
+  const handleGoToClassHistory = useCallback(() => navigate("/tutor/classes"), [navigate]);
 
   return (
     <Box sx={pageLayoutSx}>
@@ -70,7 +78,20 @@ export function SupportPage() {
           id={`support-panel-${activeTab}`}
           aria-labelledby={`support-tab-${activeTab}`}
         >
-          {activeTab === "claims" ? (
+          {isLoading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+              <CircularProgress />
+            </Box>
+          ) : isError ? (
+            <Box
+              sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, py: 8 }}
+            >
+              <Typography color="error">No se pudo cargar la información de soporte.</Typography>
+              <Button variant="outlined" onClick={() => void refetch()}>
+                Reintentar
+              </Button>
+            </Box>
+          ) : activeTab === "claims" ? (
             <ClaimsTab claims={claims} onViewDetail={handleViewClaimDetail} />
           ) : (
             <MaterialsTab materials={materials} onViewDetail={handleViewMaterialDetail} />
@@ -93,6 +114,7 @@ export function SupportPage() {
       )}
 
       <FileRulesDialog open={isRulesOpen} onClose={handleCloseRules} />
+      <SupportDetailDialog selection={selectedDetail} onClose={() => setSelectedDetail(null)} />
     </Box>
   );
 }

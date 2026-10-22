@@ -1,15 +1,26 @@
 import { useState } from "react";
-import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Button, Divider, IconButton, Typography } from "@mui/material";
 import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin } from "lucide-react";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import { useBookingDetail } from "@/modules/class-history/hooks/useBookingDetail";
-import { buildModalityMessage, formatDurationLabel, formatPriceLabel, formatTime, } from "@/modules/class-history/utils/classHistory.utils";
-import { cardContainerSx, timeColumnSx, timeTickSx } from "@/modules/class-history/styles/classHistoryStyles";
+import {
+  buildModalityMessage,
+  formatDurationLabel,
+  formatPriceLabel,
+  formatTime,
+} from "@/modules/class-history/utils/classHistory.utils";
+import {
+  cardContainerSx,
+  timeColumnSx,
+  timeTickSx,
+} from "@/modules/class-history/styles/classHistoryStyles";
 import type { BookingHistoryItem } from "@/modules/class-history/interfaces/responses/booking-history-item.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
 import VirtualLinkBox from "./VirtualLinkBox";
 import CancelBookingFlow from "./CancelBookingFlow";
+import CreateClaimDialog from "./CreateClaimDialog";
+import { useClaimEligibility } from "@/modules/class-history/hooks/useClaimEligibility";
 
 interface ClassHistoryCardProps {
   item: BookingHistoryItem;
@@ -19,7 +30,14 @@ interface ClassHistoryCardProps {
 
 export default function ClassHistoryCard({ item, role, category }: ClassHistoryCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [isClaimDialogOpen, setIsClaimDialogOpen] = useState(false);
   const { detail, isLoading, isError } = useBookingDetail(item.bookingId, expanded);
+  const {
+    eligibility,
+    isLoading: isEligibilityLoading,
+    isError: isEligibilityError,
+    refetch: refetchEligibility,
+  } = useClaimEligibility(item.bookingId, expanded && category === "COMPLETED");
   const showVirtualLinkBox = role === "TUTOR" && detail?.modality === "VIRTUAL";
 
   return (
@@ -77,8 +95,23 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <Box sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "16px" }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, minWidth: 0 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                  gap: "16px",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    flex: 1,
+                    minWidth: 0,
+                  }}
+                >
                   <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <Clock size={18} color="#666" />
                     <Typography sx={{ fontSize: "0.95rem", color: "#333" }}>
@@ -103,7 +136,13 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                       )}
                     </Box>
                     <Typography
-                      sx={{ fontSize: "0.95rem", color: "#333", flex: 1, minWidth: 0, wordBreak: "break-all" }}
+                      sx={{
+                        fontSize: "0.95rem",
+                        color: "#333",
+                        flex: 1,
+                        minWidth: 0,
+                        wordBreak: "break-all",
+                      }}
                     >
                       {buildModalityMessage(detail)}
                     </Typography>
@@ -128,6 +167,43 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
               {category === "RESERVED" && showVirtualLinkBox && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>
                   <CancelBookingFlow detail={detail} role={role} />
+                </Box>
+              )}
+
+              {category === "COMPLETED" && (
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 1 }}
+                >
+                  {isEligibilityLoading ? (
+                    <Typography sx={{ fontSize: "0.9rem", color: "#888" }}>
+                      Verificando disponibilidad de reclamo...
+                    </Typography>
+                  ) : isEligibilityError ? (
+                    <>
+                      <Typography sx={{ fontSize: "0.9rem", color: "#c0392b" }}>
+                        No se pudo verificar si podés reclamar.
+                      </Typography>
+                      <Button size="small" onClick={() => void refetchEligibility()}>
+                        Reintentar
+                      </Button>
+                    </>
+                  ) : eligibility?.canClaim ? (
+                    <Button variant="outlined" onClick={() => setIsClaimDialogOpen(true)}>
+                      Iniciar reclamo
+                    </Button>
+                  ) : (
+                    <Typography sx={{ fontSize: "0.9rem", color: "#888" }}>
+                      Esta sesión no admite un nuevo reclamo.
+                    </Typography>
+                  )}
+                  {eligibility && (
+                    <CreateClaimDialog
+                      open={isClaimDialogOpen}
+                      bookingId={item.bookingId}
+                      eligibility={eligibility}
+                      onClose={() => setIsClaimDialogOpen(false)}
+                    />
+                  )}
                 </Box>
               )}
             </Box>

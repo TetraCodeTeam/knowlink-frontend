@@ -7,7 +7,7 @@ import { listSx } from "@/modules/support/styles/support.styles";
 
 interface MaterialsTabProps {
   materials: ReportedMaterialResponse[];
-  onViewDetail: (materialId: number) => void;
+  onViewDetail: (materialId: string) => void;
 }
 
 export function MaterialsTab({ materials, onViewDetail }: MaterialsTabProps) {

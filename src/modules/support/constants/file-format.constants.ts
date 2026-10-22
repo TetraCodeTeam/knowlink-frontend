@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import { FileSpreadsheet, FileText, ImageIcon } from "lucide-react";
-import type { FileFormat } from "@/modules/support/types/file-format.type";
+import type { FileFormat } from "@/modules/support/interfaces/file-format.type";
 
 interface FileFormatMeta {
   label: string;

@@ -7,7 +7,7 @@ import { listSx } from "@/modules/support/styles/support.styles";
 
 interface ClaimsTabProps {
   claims: ClaimResponse[];
-  onViewDetail: (claimId: number) => void;
+  onViewDetail: (claimId: string) => void;
 }
 
 export function ClaimsTab({ claims, onViewDetail }: ClaimsTabProps) {
