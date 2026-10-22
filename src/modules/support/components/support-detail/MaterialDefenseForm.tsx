@@ -35,9 +35,9 @@ export function MaterialDefenseForm({
       <Button
         fullWidth
         variant="outlined"
-        startIcon={<FileText size={13} />}
+        startIcon={<FileText size={14} />}
         onClick={openEditor}
-        sx={{ textTransform: "none", fontSize: 9 }}
+        sx={{ textTransform: "none", fontSize: 14 }}
       >
         Presentar descargo
       </Button>
@@ -67,24 +67,24 @@ export function MaterialDefenseForm({
         variant="outlined"
         size="small"
         disabled={policyIsLoading || policyIsError || isPending}
-        startIcon={<Paperclip size={13} />}
-        sx={{ textTransform: "none", fontSize: 12 }}
+        startIcon={<Paperclip size={14} />}
+        sx={{ textTransform: "none", fontSize: 14 }}
       >
         Adjuntar evidencias
         <input hidden type="file" multiple accept=".pdf,.png,.xlsx" onChange={handleFileChange} />
       </Button>
       {filesError && (
-        <Typography color="error" sx={{ fontSize: 12 }}>
+        <Typography color="error" sx={{ fontSize: 14 }}>
           {filesError}
         </Typography>
       )}
       {files.length > 0 && (
-        <Typography sx={{ fontSize: 12, color: "#686C7B" }}>
+        <Typography sx={{ fontSize: 14, color: "#686C7B" }}>
           {files.map((file) => file.name).join(", ")}
         </Typography>
       )}
       {policyIsError && (
-        <Typography color="error" sx={{ fontSize: 12 }}>
+        <Typography color="error" sx={{ fontSize: 14 }}>
           No se pudo cargar el límite de archivos.
         </Typography>
       )}
@@ -93,7 +93,7 @@ export function MaterialDefenseForm({
           size="small"
           onClick={closeEditor}
           disabled={isPending}
-          sx={{ textTransform: "none", fontSize: 12 }}
+          sx={{ textTransform: "none", fontSize: 14 }}
         >
           Cancelar
         </Button>
@@ -102,7 +102,7 @@ export function MaterialDefenseForm({
           variant="contained"
           size="small"
           disabled={isPending || policyIsLoading || policyIsError}
-          sx={{ bgcolor: "#293E9D", textTransform: "none", fontSize: 12 }}
+          sx={{ bgcolor: "#293E9D", textTransform: "none", fontSize: 14 }}
         >
           {isPending ? "Enviando..." : "Presentar descargo"}
         </Button>

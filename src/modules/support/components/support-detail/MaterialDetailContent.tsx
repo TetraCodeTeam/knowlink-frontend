@@ -25,14 +25,14 @@ export function MaterialDetailContent({
     <>
       <SupportDetailSection title="Material denunciado">
         <Box sx={detailCardSx}>
-          <Typography sx={{ fontSize: 14, fontWeight: 700, color: "#282A3B" }}>
+          <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
             {material.originalFileName || material.name}
           </Typography>
-          <Typography sx={{ fontSize: 12, color: "#686C7B", mt: 0.25 }}>
+          <Typography sx={{ fontSize: 14, color: "#686C7B", mt: 0.25 }}>
             {material.subjectName} · {material.format.toUpperCase()}
           </Typography>
           <Typography
-            sx={{ fontSize: 12, color: material.available ? "#357A51" : "#A94442", mt: 0.5 }}
+            sx={{ fontSize: 14, color: material.available ? "#357A51" : "#A94442", mt: 0.5 }}
           >
             {material.available ? "Disponible para estudiantes" : "No disponible"}
           </Typography>
@@ -43,8 +43,8 @@ export function MaterialDetailContent({
               target="_blank"
               rel="noreferrer"
               size="small"
-              endIcon={<ArrowUpRight size={12} />}
-              sx={{ mt: 0.75, fontSize: 12, textTransform: "none" }}
+              endIcon={<ArrowUpRight size={14} />}
+              sx={{ mt: 0.75, fontSize: 14, textTransform: "none" }}
             >
               Abrir material
             </Button>
@@ -56,14 +56,14 @@ export function MaterialDetailContent({
         {material.reports.map((report) => (
           <Box key={report.reportId} sx={{ ...detailCardSx, mb: 0.75 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1 }}>
-              <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#A94442" }}>
+              <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#A94442" }}>
                 {formatSupportReason(report.reason)}
               </Typography>
-              <Typography sx={{ fontSize: 12, color: "#73778A", flexShrink: 0 }}>
+              <Typography sx={{ fontSize: 14, color: "#73778A", flexShrink: 0 }}>
                 {formatLongDate(report.reportedAt.slice(0, 10))}
               </Typography>
             </Box>
-            <Typography sx={{ fontSize: 12, color: "#55596B", mt: 0.5 }}>
+            <Typography sx={{ fontSize: 14, color: "#55596B", mt: 0.5 }}>
               {report.description || "Sin descripción adicional."}
             </Typography>
           </Box>
@@ -72,12 +72,12 @@ export function MaterialDetailContent({
 
       <SupportDetailSection title="Revisión">
         <Box sx={{ ...detailCardSx, display: "flex", alignItems: "center", gap: 0.75 }}>
-          <AlertCircle size={13} color="#5866B1" />
+          <AlertCircle size={14} color="#5866B1" />
           <Box>
-            <Typography sx={{ fontSize: 12, fontWeight: 700, color: "#282A3B" }}>
+            <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#282A3B" }}>
               {material.reviewTeamName}
             </Typography>
-            <Typography sx={{ fontSize: 12, color: "#73778A" }}>
+            <Typography sx={{ fontSize: 14, color: "#73778A" }}>
               {material.reviewerName
                 ? `A cargo de ${material.reviewerName}`
                 : "Equipo de revisión asignado"}
@@ -90,7 +90,7 @@ export function MaterialDetailContent({
         {material.defense?.submitted ? (
           <Box sx={detailCardSx}>
             <Typography
-              sx={{ fontSize: 12, color: "#55596B", fontStyle: "italic", lineHeight: 1.5 }}
+              sx={{ fontSize: 14, color: "#55596B", fontStyle: "italic", lineHeight: 1.5 }}
             >
               {material.defense.description || "Se presentó un descargo sin descripción."}
             </Typography>
@@ -105,17 +105,17 @@ export function MaterialDetailContent({
                   alignItems: "center",
                   gap: 5,
                   marginTop: 6,
-                  fontSize: 12,
+                  fontSize: 14,
                   color: "#3549A5",
                 }}
               >
-                <FileText size={11} />
+                <FileText size={14} />
                 {attachment.fileName}
               </a>
             ))}
           </Box>
         ) : (
-          <Typography sx={{ ...detailCardSx, fontSize: 12, color: "#73778A" }}>
+          <Typography sx={{ ...detailCardSx, fontSize: 14, color: "#73778A" }}>
             Todavía no presentaste un descargo.
           </Typography>
         )}
