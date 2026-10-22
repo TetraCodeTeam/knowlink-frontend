@@ -22,6 +22,7 @@ export const sectionLabelSx = {
   letterSpacing: 0.55,
   color: "#626577",
   mb: 0.75,
+  mt:1.5
 };
 
 export const supportDetailPanelSx = {
@@ -46,7 +47,7 @@ export const supportDetailBodySx = {
   p: 1.5,
   display: "flex",
   flexDirection: "column",
-  gap: 1.25,
+  gap: 1.5,
   flex: 1,
   overflowY: "auto",
 };
