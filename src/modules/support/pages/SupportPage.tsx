@@ -22,7 +22,7 @@ export function SupportPage() {
   const [isRulesOpen, setIsRulesOpen] = useState(false);
   const { claims, materials, isLoading, isError, refetch } = useTutorSupport();
   const { activeTab, selectedDetail, changeTab, selectClaim, selectMaterial, clearSelection } =
-    useSupportSelection({ claims, materials, isLoading, isError });
+    useSupportSelection();
 
   const openClaimsCount = claims.filter((claim) => claim.status === "OPEN").length;
   const inReviewClaimsCount = claims.filter((claim) => claim.status === "IN_REVIEW").length;
