@@ -22,6 +22,7 @@ function makePage(): PagedNotificationsResponse {
       {
         notificationId: "n-1",
         type: "BOOKING_CONFIRMED",
+        title: "Reserva confirmada",
         message: "Clase confirmada",
         referenceId: null,
         read: false,
@@ -30,6 +31,7 @@ function makePage(): PagedNotificationsResponse {
       {
         notificationId: "n-2",
         type: "FUNDS_TRANSFERRED",
+        title: "Pago acreditado. Sesión completada",
         message: "Fondos transferidos",
         referenceId: null,
         read: false,
@@ -45,10 +47,13 @@ function makePage(): PagedNotificationsResponse {
 }
 
 function seedCache(client: QueryClient) {
-  client.setQueryData<InfiniteData<PagedNotificationsResponse>>(NOTIFICATION_QUERY_KEYS.list, {
-    pages: [makePage()],
-    pageParams: [0],
-  });
+  client.setQueryData<InfiniteData<PagedNotificationsResponse>>(
+    [...NOTIFICATION_QUERY_KEYS.list, "UNREAD"],
+    {
+      pages: [makePage()],
+      pageParams: [0],
+    }
+  );
   client.setQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount, { count: 2 });
 }
 
@@ -79,9 +84,10 @@ describe("useMarkNotificationAsRead — actualizacion optimista", () => {
       expect(unread?.count).toBe(1);
     });
 
-    const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>(
-      NOTIFICATION_QUERY_KEYS.list
-    );
+    const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>([
+      ...NOTIFICATION_QUERY_KEYS.list,
+      "UNREAD",
+    ]);
     expect(list?.pages[0].content[0].read).toBe(true);
     expect(list?.pages[0].content[1].read).toBe(false);
 
@@ -107,9 +113,10 @@ describe("useMarkNotificationAsRead — actualizacion optimista", () => {
     const unread = client.getQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount);
     expect(unread?.count).toBe(2);
 
-    const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>(
-      NOTIFICATION_QUERY_KEYS.list
-    );
+    const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>([
+      ...NOTIFICATION_QUERY_KEYS.list,
+      "UNREAD",
+    ]);
     expect(list?.pages[0].content[0].read).toBe(false);
   });
 });

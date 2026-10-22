@@ -4,6 +4,8 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import NotificationItem from "@/modules/notifications/components/NotificationItem";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useRatingPopupStore } from "@/modules/class-history/hooks/useRatingPopupStore";
+import { useClaimPopupStore } from "@/modules/claim/hooks/useClaimPopupStore";
 import type { NotificationResponse } from "@/modules/notifications/interfaces/responses/notification.interface";
 
 const navigateMock = vi.fn();
@@ -16,6 +18,7 @@ function makeNotification(overrides: Partial<NotificationResponse> = {}): Notifi
   return {
     notificationId: "n-1",
     type: "BOOKING_CONFIRMED",
+    title: "Reserva confirmada",
     message: "Tu clase fue confirmada",
     referenceId: "b-1",
     read: false,
@@ -49,6 +52,8 @@ describe("NotificationItem", () => {
         role: "STUDENT",
       } as never,
     });
+    useRatingPopupStore.setState({ bookingId: null });
+    useClaimPopupStore.setState({ bookingId: null });
   });
 
   it("marca como leida al hacer click en una no leida y navega", async () => {
@@ -83,6 +88,58 @@ describe("NotificationItem", () => {
     expect(onMarkAsRead).toHaveBeenCalledWith("n-1");
     expect(navigateMock).not.toHaveBeenCalled();
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it("muestra el titulo en negrita y el mensaje debajo", () => {
+    render_item(makeNotification());
+
+    expect(screen.getByText("Reserva confirmada")).toBeInTheDocument();
+    expect(screen.getByText("Tu clase fue confirmada")).toBeInTheDocument();
+    expect(screen.getByText("Ver →")).toBeInTheDocument();
+  });
+
+  it("usa el mensaje como titulo cuando title es null", () => {
+    render_item(makeNotification({ title: null }));
+
+    expect(screen.getByText("Tu clase fue confirmada")).toBeInTheDocument();
+    expect(screen.queryByText("Reserva confirmada")).not.toBeInTheDocument();
+  });
+
+  it("abre el popup de calificacion para RATING_ENABLED sin navegar", async () => {
+    const user = userEvent.setup();
+    const { onClose } = render_item(
+      makeNotification({
+        type: "RATING_ENABLED",
+        title: "Calificá tu sesión de Física 1",
+        message: "Contanos cómo fue tu experiencia",
+        referenceId: "b-9",
+      })
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    expect(useRatingPopupStore.getState().bookingId).toBe("b-9");
+    expect(navigateMock).not.toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+    expect(screen.getByText("Calificar →")).toBeInTheDocument();
+  });
+
+  it("abre el popup de reclamo para SESSION_COMPLETED sin navegar", async () => {
+    const user = userEvent.setup();
+    render_item(
+      makeNotification({
+        type: "SESSION_COMPLETED",
+        title: "Tu sesión de Física 1 finalizó",
+        message: "Si hubo algún inconveniente con la asistencia, tenés 24 horas para reclamarlo.",
+        referenceId: "b-7",
+      })
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    expect(useClaimPopupStore.getState().bookingId).toBe("b-7");
+    expect(navigateMock).not.toHaveBeenCalled();
+    expect(screen.getByText("Reclamar →")).toBeInTheDocument();
   });
 
   it("anuncia No leida en el aria-label cuando no esta leida", () => {

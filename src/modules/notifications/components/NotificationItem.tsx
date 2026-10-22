@@ -2,11 +2,12 @@ import type React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useRatingPopupStore } from "@/modules/class-history/hooks/useRatingPopupStore";
+import { useClaimPopupStore } from "@/modules/claim/hooks/useClaimPopupStore";
 import {
+  getNotificationAction,
   getNotificationConfig,
-  getNotificationRoute,
 } from "@/modules/notifications/constants/notification-type-config";
-import { formatNotificationDate } from "@/modules/notifications/utils/format-notification-date";
 import type { NotificationItemProps } from "@/modules/notifications/components/NotificationItem.types";
 
 export default function NotificationItem({
@@ -16,15 +17,22 @@ export default function NotificationItem({
 }: NotificationItemProps) {
   const navigate = useNavigate();
   const authResponse = useAuthStore((s) => s.authResponse);
-  const { icon: Icon } = getNotificationConfig(notification.type);
+  const openRatingPopup = useRatingPopupStore((s) => s.open);
+  const openClaimPopup = useClaimPopupStore((s) => s.open);
+  const { icon: Icon, tileColor, iconColor } = getNotificationConfig(notification.type);
+  const action = getNotificationAction(notification.type, authResponse?.role ?? "");
+  const title = notification.title ?? notification.message;
 
   const handleClick = () => {
     if (!notification.read) {
       onMarkAsRead(notification.notificationId);
     }
-    const route = getNotificationRoute(notification.type, authResponse?.role ?? "");
-    if (route) {
-      navigate(route);
+    if (action.kind === "rating" && notification.referenceId) {
+      openRatingPopup(notification.referenceId);
+    } else if (action.kind === "claim" && notification.referenceId) {
+      openClaimPopup(notification.referenceId);
+    } else if (action.kind === "navigate") {
+      navigate(action.route);
     }
     onClose();
   };
@@ -47,54 +55,70 @@ export default function NotificationItem({
         display: "flex",
         alignItems: "flex-start",
         gap: 1.5,
-        padding: "12px 16px",
+        padding: "14px 16px",
         cursor: "pointer",
-        backgroundColor: notification.read ? "#FFFFFF" : "#F4F3FB",
-        "&:hover": { backgroundColor: "#EDEBFA" },
+        borderBottom: "1px solid #EEEEF5",
+        backgroundColor: "#FFFFFF",
+        "&:hover": { backgroundColor: "#F8F7FE" },
         transition: "background-color 0.15s ease",
       }}
     >
       <Box
         sx={{
-          width: 36,
-          height: 36,
-          borderRadius: "50%",
-          backgroundColor: "#EDEBFA",
+          width: 40,
+          height: 40,
+          borderRadius: "10px",
+          backgroundColor: tileColor,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
         }}
       >
-        <Icon size={18} color="#5865C8" />
+        <Icon size={20} color={iconColor} />
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography
           sx={{
-            fontSize: "13px",
-            fontWeight: notification.read ? 400 : 600,
+            fontSize: "14px",
+            fontWeight: 700,
             color: "#1A1A2E",
+            lineHeight: 1.3,
             wordBreak: "break-word",
           }}
         >
-          {notification.message}
+          {title}
         </Typography>
-        <Typography sx={{ fontSize: "11px", color: "#8A8AA3", marginTop: "4px" }}>
-          {formatNotificationDate(notification.createdAt)}
-        </Typography>
+        {notification.title != null && (
+          <Typography
+            sx={{
+              fontSize: "12px",
+              color: "#6B6B80",
+              marginTop: "2px",
+              lineHeight: 1.4,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {notification.message}
+          </Typography>
+        )}
+        {action.kind !== "none" && (
+          <Typography
+            sx={{
+              marginTop: "4px",
+              textAlign: "right",
+              fontSize: "12px",
+              fontWeight: 600,
+              color: "#3F4CAE",
+            }}
+          >
+            {action.label} →
+          </Typography>
+        )}
       </Box>
-      {!notification.read && (
-        <Box
-          sx={{
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            backgroundColor: "#5865C8",
-            flexShrink: 0,
-            marginTop: "4px",
-          }}
-        />
-      )}
     </Box>
   );
 }

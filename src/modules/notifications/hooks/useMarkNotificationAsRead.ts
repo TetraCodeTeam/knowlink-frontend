@@ -14,15 +14,15 @@ export function useMarkNotificationAsRead() {
       await queryClient.cancelQueries({ queryKey: NOTIFICATION_QUERY_KEYS.list });
       await queryClient.cancelQueries({ queryKey: NOTIFICATION_QUERY_KEYS.unreadCount });
 
-      const previousList = queryClient.getQueryData<InfiniteData<PagedNotificationsResponse>>(
-        NOTIFICATION_QUERY_KEYS.list
-      );
+      const previousLists = queryClient.getQueriesData<InfiniteData<PagedNotificationsResponse>>({
+        queryKey: NOTIFICATION_QUERY_KEYS.list,
+      });
       const previousUnreadCount = queryClient.getQueryData<UnreadCountResponse>(
         NOTIFICATION_QUERY_KEYS.unreadCount
       );
 
-      queryClient.setQueryData<InfiniteData<PagedNotificationsResponse>>(
-        NOTIFICATION_QUERY_KEYS.list,
+      queryClient.setQueriesData<InfiniteData<PagedNotificationsResponse>>(
+        { queryKey: NOTIFICATION_QUERY_KEYS.list },
         (old) => {
           if (!old) return old;
           return {
@@ -42,11 +42,11 @@ export function useMarkNotificationAsRead() {
         return { count: Math.max(0, old.count - 1) };
       });
 
-      return { previousList, previousUnreadCount };
+      return { previousLists, previousUnreadCount };
     },
     onError: (_error, _notificationId, context) => {
-      if (context?.previousList) {
-        queryClient.setQueryData(NOTIFICATION_QUERY_KEYS.list, context.previousList);
+      for (const [key, data] of context?.previousLists ?? []) {
+        if (data) queryClient.setQueryData(key, data);
       }
       if (context?.previousUnreadCount) {
         queryClient.setQueryData(NOTIFICATION_QUERY_KEYS.unreadCount, context.previousUnreadCount);

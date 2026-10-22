@@ -15,7 +15,7 @@ import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
-import NotificationsPopover from "@/modules/notifications/components/NotificationsPopover";
+import NotificationsPanel from "@/modules/notifications/components/NotificationsPanel";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
@@ -61,10 +61,8 @@ export default function TutorSidebar() {
   const { requestsCount } = useTutorBadgesStore();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-  const [notificationsAnchorEl, setNotificationsAnchorEl] = useState<HTMLElement | null>(null);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
-
-  const isNotificationsOpen = Boolean(notificationsAnchorEl);
   const isActive = (path: string, badge?: NavItem["badge"]) => {
     if (badge === "notifications") return isNotificationsOpen;
     return location.pathname === path;
@@ -72,18 +70,16 @@ export default function TutorSidebar() {
 
   const handleLogout = () => setIsLogoutOpen(true);
 
-  const handleNotificationsClick = (event: React.MouseEvent<HTMLElement>) => {
-    setNotificationsAnchorEl(event.currentTarget);
-  };
+  const handleNotificationsClick = () => setIsNotificationsOpen((open) => !open);
 
   const handleNotificationsKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      setNotificationsAnchorEl(event.currentTarget);
+      setIsNotificationsOpen((open) => !open);
     }
   };
 
-  const handleCloseNotifications = () => setNotificationsAnchorEl(null);
+  const handleCloseNotifications = () => setIsNotificationsOpen(false);
 
   const getBadgeCount = (badge?: NavItem["badge"]) => {
     if (badge === "notifications") return unreadCount;
@@ -333,10 +329,11 @@ export default function TutorSidebar() {
         isPending={isLoggingOut}
       />
 
-      <NotificationsPopover
-        anchorEl={notificationsAnchorEl}
+      <NotificationsPanel
         open={isNotificationsOpen}
         onClose={handleCloseNotifications}
+        sidebarWidth={TUTOR_SIDEBAR_WIDTH}
+        showDualRoleHint
       />
     </Box>
   );

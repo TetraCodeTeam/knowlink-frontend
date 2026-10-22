@@ -6,12 +6,13 @@ import {
   NOTIFICATIONS_PAGE_SIZE,
 } from "@/modules/notifications/constants/notification-polling";
 import type { PagedNotificationsResponse } from "@/modules/notifications/interfaces/responses/paged-notifications.interface";
+import type { NotificationReadFilter } from "@/modules/notifications/types/notification-read-filter.type";
 
-export function useNotifications(enabled: boolean) {
+export function useNotifications(status: NotificationReadFilter, enabled: boolean) {
   return useInfiniteQuery({
-    queryKey: NOTIFICATION_QUERY_KEYS.list,
+    queryKey: [...NOTIFICATION_QUERY_KEYS.list, status],
     queryFn: ({ pageParam }) =>
-      getNotifications({ page: pageParam, size: NOTIFICATIONS_PAGE_SIZE }),
+      getNotifications({ page: pageParam, size: NOTIFICATIONS_PAGE_SIZE, status }),
     initialPageParam: 0,
     getNextPageParam: (lastPage: PagedNotificationsResponse) =>
       lastPage.hasNext ? lastPage.page + 1 : undefined,

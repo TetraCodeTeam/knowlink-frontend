@@ -8,7 +8,7 @@ import { SIDEBAR_WIDTH } from "@/modules/student/components/StudentTopbar";
 import { useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
-import NotificationsPopover from "@/modules/notifications/components/NotificationsPopover";
+import NotificationsPanel from "@/modules/notifications/components/NotificationsPanel";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 
 interface NavItem {
@@ -41,10 +41,8 @@ export default function StudentSidebar() {
   const { complaintsCount } = useStudentBadgesStore();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
-  const [notificationsAnchorEl, setNotificationsAnchorEl] = useState<HTMLElement | null>(null);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
-
-  const isNotificationsOpen = Boolean(notificationsAnchorEl);
   const isActive = (path: string, badge?: NavItem["badge"]) => {
     if (badge === "notifications") return isNotificationsOpen;
     return location.pathname === path;
@@ -52,18 +50,16 @@ export default function StudentSidebar() {
 
   const handleLogout = () => setIsLogoutOpen(true);
 
-  const handleNotificationsClick = (event: React.MouseEvent<HTMLElement>) => {
-    setNotificationsAnchorEl(event.currentTarget);
-  };
+  const handleNotificationsClick = () => setIsNotificationsOpen((open) => !open);
 
   const handleNotificationsKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      setNotificationsAnchorEl(event.currentTarget);
+      setIsNotificationsOpen((open) => !open);
     }
   };
 
-  const handleCloseNotifications = () => setNotificationsAnchorEl(null);
+  const handleCloseNotifications = () => setIsNotificationsOpen(false);
 
   const getBadgeCount = (badge?: NavItem["badge"]) => {
     if (badge === "notifications") return unreadCount;
@@ -285,10 +281,10 @@ export default function StudentSidebar() {
         isPending={isLoggingOut}
       />
 
-      <NotificationsPopover
-        anchorEl={notificationsAnchorEl}
+      <NotificationsPanel
         open={isNotificationsOpen}
         onClose={handleCloseNotifications}
+        sidebarWidth={SIDEBAR_WIDTH}
       />
     </Box>
   );
