@@ -22,7 +22,7 @@ export const sectionLabelSx = {
   letterSpacing: 0.55,
   color: "#626577",
   mb: 0.75,
-  mt:1.5
+  mt: 1.5,
 };
 
 export const supportDetailPanelSx = {
@@ -50,4 +50,14 @@ export const supportDetailBodySx = {
   gap: 1.5,
   flex: 1,
   overflowY: "auto",
+};
+
+export const attachmentLinkSx = {
+  display: "flex",
+  alignItems: "center",
+  gap: 0.6,
+  fontSize: 14,
+  color: "#3549A5",
+  textDecoration: "none",
+  "&:hover": { textDecoration: "underline" },
 };

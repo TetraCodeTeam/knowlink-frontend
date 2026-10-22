@@ -1,11 +1,11 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Link, Typography } from "@mui/material";
 import { AlertCircle, ArrowUpRight, FileText } from "lucide-react";
 import type { MaterialReportingPolicy } from "@/modules/support/interfaces/responses/material-reporting-policy.response";
 import type { ReportedMaterialDetail } from "@/modules/support/interfaces/responses/reported-material-detail.response";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import { formatSupportReason } from "@/modules/support/utils/supportDetail.utils";
 import { SupportDetailSection } from "./SupportDetailSection";
-import { detailCardSx } from "../../styles/supportDetail.styles";
+import { attachmentLinkSx, detailCardSx } from "../../styles/supportDetail.styles";
 import { MaterialDefenseForm } from "./MaterialDefenseForm";
 
 interface MaterialDetailContentProps {
@@ -95,23 +95,16 @@ export function MaterialDetailContent({
               {material.defense.description || "Se presentó un descargo sin descripción."}
             </Typography>
             {material.defense.attachments.map((attachment) => (
-              <a
+              <Link
                 key={attachment.attachmentId}
                 href={attachment.signedUrl}
                 target="_blank"
                 rel="noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 5,
-                  marginTop: 6,
-                  fontSize: 14,
-                  color: "#3549A5",
-                }}
+                sx={{ ...attachmentLinkSx, mt: 0.75 }}
               >
                 <FileText size={14} />
                 {attachment.fileName}
-              </a>
+              </Link>
             ))}
           </Box>
         ) : (

@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Link, Typography } from "@mui/material";
 import { Banknote, Clock3, Paperclip, UserRound, ArrowUpRight } from "lucide-react";
 import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tutor-claim-detail.response";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
@@ -8,7 +8,7 @@ import {
   formatSupportReason,
 } from "@/modules/support/utils/supportDetail.utils";
 import { SupportDetailSection, SupportDetailTile } from "./SupportDetailSection";
-import { detailCardSx } from "../../styles/supportDetail.styles";
+import { attachmentLinkSx, detailCardSx } from "../../styles/supportDetail.styles";
 
 interface ClaimDetailContentProps {
   claim: TutorClaimDetail;
@@ -97,23 +97,17 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
           {claim.attachments.length > 0 && (
             <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
               {claim.attachments.map((attachment) => (
-                <a
+                <Link
                   key={attachment.id}
                   href={attachment.signedUrl}
                   target="_blank"
                   rel="noreferrer"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 5,
-                    fontSize: 14,
-                    color: "#3549A5",
-                  }}
+                  sx={attachmentLinkSx}
                 >
                   <Paperclip size={14} />
                   {attachment.fileName}
                   <ArrowUpRight size={14} />
-                </a>
+                </Link>
               ))}
             </Box>
           )}
