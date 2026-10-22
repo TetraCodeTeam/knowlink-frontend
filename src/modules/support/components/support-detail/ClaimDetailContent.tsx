@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import { Banknote, Clock3, Paperclip, UserRound, ArrowUpRight } from "lucide-react";
-import type { TutorClaimDetail } from "@/modules/support/api/support.api";
+import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tutor-claim-detail.response";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import {
   formatReviewPhase,
@@ -8,7 +8,7 @@ import {
   formatSupportReason,
 } from "@/modules/support/utils/supportDetail.utils";
 import { SupportDetailSection, SupportDetailTile } from "./SupportDetailSection";
-import { detailCardSx } from "./supportDetail.styles";
+import { detailCardSx } from "../../styles/supportDetail.styles";
 
 interface ClaimDetailContentProps {
   claim: TutorClaimDetail;

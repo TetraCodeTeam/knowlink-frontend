@@ -10,7 +10,7 @@ import {
   summaryTileIconSx,
   summaryValueSx,
   type SummaryTone,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportSidebar.styles";
 
 export interface SummaryTile {
   id: string;

@@ -3,7 +3,7 @@ import { ClaimListItem } from "@/modules/support/components/ClaimListItem";
 import { SupportEmptyState } from "@/modules/support/components/SupportEmptyState";
 import { SupportListSection } from "@/modules/support/components/SupportListSection";
 import type { ClaimResponse } from "@/modules/support/interfaces/responses/claim.response";
-import { listSx } from "@/modules/support/styles/support.styles";
+import { listSx } from "@/modules/support/styles/supportList.styles";
 
 interface ClaimsTabProps {
   claims: ClaimResponse[];

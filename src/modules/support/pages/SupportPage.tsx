@@ -14,7 +14,7 @@ import {
   pageLayoutSx,
   pageTitleSx,
   tabsSx,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportPage.styles";
 
 export function SupportPage() {
   const navigate = useNavigate();

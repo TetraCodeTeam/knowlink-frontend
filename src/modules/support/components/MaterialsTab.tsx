@@ -3,7 +3,7 @@ import { MaterialListItem } from "@/modules/support/components/MaterialListItem"
 import { SupportEmptyState } from "@/modules/support/components/SupportEmptyState";
 import { SupportListSection } from "@/modules/support/components/SupportListSection";
 import type { ReportedMaterialResponse } from "@/modules/support/interfaces/responses/reported-material.response";
-import { listSx } from "@/modules/support/styles/support.styles";
+import { listSx } from "@/modules/support/styles/supportList.styles";
 
 interface MaterialsTabProps {
   materials: ReportedMaterialResponse[];

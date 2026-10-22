@@ -5,7 +5,7 @@ import {
   listHeaderSx,
   listSubtitleSx,
   listTitleSx,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportList.styles";
 
 interface SupportListSectionProps {
   title: string;

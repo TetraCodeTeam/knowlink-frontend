@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { ShieldCheck, X } from "lucide-react";
-import { getMaterialReportingPolicy } from "@/modules/support/api/support.api";
+import { getMaterialReportingPolicy } from "@/modules/support/api/supportMaterials.api";
 import {
   ACCEPTED_FILE_FORMATS,
   FILE_FORMAT_META,
@@ -21,15 +21,14 @@ import {
   dialogHeaderSx,
   dialogPaperSx,
   getFormatChipSx,
-  getIconBoxSx,
   ruleBodySx,
   ruleFormatsSx,
   ruleHighlightSx,
   ruleItemSx,
   ruleSectionSx,
   ruleTitleSx,
-  TONE_COLORS,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportFileRulesDialog.styles";
+import { getIconBoxSx, TONE_COLORS } from "@/modules/support/styles/supportShared.styles";
 
 interface FileRulesDialogProps {
   open: boolean;

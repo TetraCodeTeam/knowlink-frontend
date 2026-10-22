@@ -4,6 +4,18 @@ export const detailCardSx = {
   bgcolor: "#F3F4F8",
 };
 
+export const detailTileSx = {
+  ...detailCardSx,
+  minWidth: 0,
+  flex: 1,
+};
+
+export const detailTileTitleSx = {
+  fontSize: 12,
+  color: "#73778A",
+  mb: 0.4,
+};
+
 export const sectionLabelSx = {
   fontSize: 16,
   fontWeight: 700,

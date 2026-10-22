@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Box, Button, CircularProgress, IconButton, Paper, Typography } from "@mui/material";
 import { X } from "lucide-react";
+import { getTutorClaimDetail } from "@/modules/support/api/supportClaims.api";
 import {
   getMaterialReportingPolicy,
   getReportedMaterialDetail,
-  getTutorClaimDetail,
-  type ReportedMaterialDetail,
-  type TutorClaimDetail,
-} from "@/modules/support/api/support.api";
+} from "@/modules/support/api/supportMaterials.api";
+import type { ReportedMaterialDetail } from "@/modules/support/interfaces/responses/reported-material-detail.response";
+import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tutor-claim-detail.response";
 import {
   CLAIM_STATUS_META,
   MATERIAL_STATUS_META,
@@ -20,7 +20,7 @@ import {
   supportDetailBodySx,
   supportDetailHeaderSx,
   supportDetailPanelSx,
-} from "@/modules/support/components/support-detail/supportDetail.styles";
+} from "@/modules/support/styles/supportDetail.styles";
 
 export type SupportDetailSelection =
   { type: "claim"; id: string } | { type: "material"; id: string } | null;
@@ -60,20 +60,19 @@ function SupportDetailHeader({
             >
               {isClaim ? "Detalle del reclamo" : "Detalle del material"}
             </Typography>
-            </Box>
-            
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
             <Typography sx={{ mt: 0.25, fontSize: 14, fontWeight: 700, color: "#24263A" }}>
-            {isClaim
-              ? `#REC-${selection.id.slice(0, 8).toUpperCase()}`
-              : (material?.originalFileName ?? material?.name ?? "Denuncia de material")}
-          </Typography>
-            
+              {isClaim
+                ? `#REC-${selection.id.slice(0, 8).toUpperCase()}`
+                : (material?.originalFileName ?? material?.name ?? "Denuncia de material")}
+            </Typography>
+
             {isClaim && claim && <SupportStatusChip {...CLAIM_STATUS_META[claim.status]} />}
             {!isClaim && material && (
               <SupportStatusChip {...MATERIAL_STATUS_META[material.status]} />
             )}
-          
           </Box>
         </Box>
         <IconButton

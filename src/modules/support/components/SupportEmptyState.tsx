@@ -9,7 +9,7 @@ import {
   emptyIllustrationSx,
   emptyStateSx,
   emptyTitleSx,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportEmptyState.styles";
 
 export function SupportEmptyState() {
   return (

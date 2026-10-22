@@ -2,13 +2,13 @@ import { Box, Button } from "@mui/material";
 import { Bell, ExternalLink, Hourglass, Scale, ShieldAlert, TriangleAlert } from "lucide-react";
 import { SideInfoCard } from "@/modules/support/components/SideInfoCard";
 import { SummaryCard, type SummaryTile } from "@/modules/support/components/SummaryCard";
+import { TONE_COLORS } from "@/modules/support/styles/supportShared.styles";
 import {
   sideBulletListSx,
   sideBulletSx,
   sideColumnSx,
   sideLinkSx,
-  TONE_COLORS,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportSidebar.styles";
 
 interface MaterialsSidebarProps {
   reportedCount: number;

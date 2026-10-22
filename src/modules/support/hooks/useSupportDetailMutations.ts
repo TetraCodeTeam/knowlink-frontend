@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addTutorClaimComment, submitMaterialDefense } from "@/modules/support/api/support.api";
+import { addTutorClaimComment } from "@/modules/support/api/supportClaims.api";
+import { submitMaterialDefense } from "@/modules/support/api/supportMaterials.api";
 import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
 
 export function useAddTutorClaimComment(claimId: string) {

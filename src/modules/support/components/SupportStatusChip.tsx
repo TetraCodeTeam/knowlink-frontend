@@ -1,9 +1,6 @@
 import { Box } from "@mui/material";
-import {
-  getStatusChipSx,
-  statusDotSx,
-  type StatusTone,
-} from "@/modules/support/styles/support.styles";
+import type { StatusTone } from "@/modules/support/styles/supportShared.styles";
+import { getStatusChipSx, statusDotSx } from "@/modules/support/styles/supportStatusChip.styles";
 
 interface SupportStatusChipProps {
   label: string;

@@ -1,6 +1,6 @@
 import type { ClaimStatus } from "@/modules/support/interfaces/claim-status.type";
 import type { MaterialReportStatus } from "@/modules/support/interfaces/material-report-status.type";
-import type { StatusTone } from "@/modules/support/styles/support.styles";
+import type { StatusTone } from "@/modules/support/styles/supportShared.styles";
 
 interface StatusMeta {
   label: string;

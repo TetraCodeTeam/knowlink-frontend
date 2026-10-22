@@ -5,7 +5,6 @@ import { CLAIM_STATUS_META } from "@/modules/support/constants/status.constants"
 import type { ClaimResponse } from "@/modules/support/interfaces/responses/claim.response";
 import {
   detailButtonSx,
-  getIconBoxSx,
   itemBodySx,
   itemMetaSx,
   itemReasonSx,
@@ -13,8 +12,8 @@ import {
   itemTitleSx,
   listItemSx,
   metaSeparatorSx,
-  TONE_COLORS,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportList.styles";
+import { getIconBoxSx, TONE_COLORS } from "@/modules/support/styles/supportShared.styles";
 import { formatLongDate, formatShortDate } from "@/modules/support/utils/format.utils";
 
 interface ClaimListItemProps {

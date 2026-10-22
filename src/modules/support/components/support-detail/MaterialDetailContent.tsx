@@ -1,13 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
 import { AlertCircle, ArrowUpRight, FileText } from "lucide-react";
-import type {
-  MaterialReportingPolicy,
-  ReportedMaterialDetail,
-} from "@/modules/support/api/support.api";
+import type { MaterialReportingPolicy } from "@/modules/support/interfaces/responses/material-reporting-policy.response";
+import type { ReportedMaterialDetail } from "@/modules/support/interfaces/responses/reported-material-detail.response";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import { formatSupportReason } from "@/modules/support/utils/supportDetail.utils";
 import { SupportDetailSection } from "./SupportDetailSection";
-import { detailCardSx } from "./supportDetail.styles";
+import { detailCardSx } from "../../styles/supportDetail.styles";
 import { MaterialDefenseForm } from "./MaterialDefenseForm";
 
 interface MaterialDetailContentProps {

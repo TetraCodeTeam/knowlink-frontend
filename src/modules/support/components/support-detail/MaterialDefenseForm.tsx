@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { FileText, Paperclip } from "lucide-react";
-import type { MaterialReportingPolicy } from "@/modules/support/api/support.api";
+import type { MaterialReportingPolicy } from "@/modules/support/interfaces/responses/material-reporting-policy.response";
 import { useSubmitMaterialDefense } from "@/modules/support/hooks/useSupportDetailMutations";
 
 interface MaterialDefenseFormProps {

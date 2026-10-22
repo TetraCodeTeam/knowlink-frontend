@@ -2,12 +2,12 @@ import { Box, Button } from "@mui/material";
 import { ArrowRight, Info, Lock, ShieldCheck } from "lucide-react";
 import { SideInfoCard } from "@/modules/support/components/SideInfoCard";
 import { SummaryCard, type SummaryTile } from "@/modules/support/components/SummaryCard";
+import { TONE_COLORS } from "@/modules/support/styles/supportShared.styles";
 import {
   sideBadgeSx,
   sideColumnSx,
   sideLinkSx,
-  TONE_COLORS,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportSidebar.styles";
 
 interface ClaimsSidebarProps {
   openCount: number;

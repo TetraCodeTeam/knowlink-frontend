@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTutorSupport } from "@/modules/support/api/support.api";
+import { getTutorSupport } from "@/modules/support/api/tutorSupport.api";
 
 export function useTutorSupport() {
   const { data, isLoading, isError, refetch } = useQuery({

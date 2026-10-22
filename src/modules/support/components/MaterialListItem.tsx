@@ -6,14 +6,14 @@ import { MATERIAL_STATUS_META } from "@/modules/support/constants/status.constan
 import type { ReportedMaterialResponse } from "@/modules/support/interfaces/responses/reported-material.response";
 import {
   detailButtonSx,
-  getIconBoxSx,
   itemBodySx,
   itemMetaSx,
   itemTitleRowSx,
   itemTitleSx,
   listItemSx,
   metaSeparatorSx,
-} from "@/modules/support/styles/support.styles";
+} from "@/modules/support/styles/supportList.styles";
+import { getIconBoxSx } from "@/modules/support/styles/supportShared.styles";
 import { pluralizeReports } from "@/modules/support/utils/format.utils";
 
 interface MaterialListItemProps {
