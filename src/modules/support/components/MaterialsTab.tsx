@@ -8,9 +8,10 @@ import { listSx } from "@/modules/support/styles/support.styles";
 interface MaterialsTabProps {
   materials: ReportedMaterialResponse[];
   onViewDetail: (materialId: string) => void;
+  selectedMaterialId?: string;
 }
 
-export function MaterialsTab({ materials, onViewDetail }: MaterialsTabProps) {
+export function MaterialsTab({ materials, onViewDetail, selectedMaterialId }: MaterialsTabProps) {
   if (materials.length === 0) {
     return <SupportEmptyState />;
   }
@@ -23,7 +24,12 @@ export function MaterialsTab({ materials, onViewDetail }: MaterialsTabProps) {
     >
       <Box component="ul" sx={listSx}>
         {materials.map((material) => (
-          <MaterialListItem key={material.id} material={material} onViewDetail={onViewDetail} />
+          <MaterialListItem
+            key={material.id}
+            material={material}
+            onViewDetail={onViewDetail}
+            selected={material.id === selectedMaterialId}
+          />
         ))}
       </Box>
     </SupportListSection>

@@ -19,14 +19,27 @@ import { pluralizeReports } from "@/modules/support/utils/format.utils";
 interface MaterialListItemProps {
   material: ReportedMaterialResponse;
   onViewDetail: (materialId: string) => void;
+  selected?: boolean;
 }
 
-export function MaterialListItem({ material, onViewDetail }: MaterialListItemProps) {
+export function MaterialListItem({
+  material,
+  onViewDetail,
+  selected = false,
+}: MaterialListItemProps) {
   const { label, tone } = MATERIAL_STATUS_META[material.status];
   const { icon: FormatIcon, bg, fg } = FILE_FORMAT_META[material.fileFormat];
 
   return (
-    <Box component="li" sx={listItemSx}>
+    <Box
+      component="li"
+      sx={{
+        ...listItemSx,
+        border: selected ? "1px solid #4C5CB5" : "1px solid transparent",
+        boxShadow: selected ? "0 2px 5px rgba(41, 62, 157, 0.2)" : "none",
+        bgcolor: selected ? "#F4F5FF" : listItemSx.bgcolor,
+      }}
+    >
       <Box sx={getIconBoxSx(bg, fg)}>
         <FormatIcon size={18} aria-hidden="true" />
       </Box>

@@ -1,4 +1,4 @@
-import { useCallback, useState, type SyntheticEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
 import { ClaimsSidebar } from "@/modules/support/components/ClaimsSidebar";
@@ -6,7 +6,7 @@ import { ClaimsTab } from "@/modules/support/components/ClaimsTab";
 import { FileRulesDialog } from "@/modules/support/components/FileRulesDialog";
 import { MaterialsSidebar } from "@/modules/support/components/MaterialsSidebar";
 import { MaterialsTab } from "@/modules/support/components/MaterialsTab";
-import { SupportDetailDialog } from "@/modules/support/components/SupportDetailDialog";
+import { SupportDetailPanel } from "@/modules/support/components/SupportDetailPanel";
 import { SUPPORT_TABS, type SupportTab } from "@/modules/support/constants/support.constants";
 import { useTutorSupport } from "@/modules/support/hooks/useTutorSupport";
 import {
@@ -25,6 +25,17 @@ export function SupportPage() {
     id: string;
   } | null>(null);
   const { claims, materials, isLoading, isError, refetch } = useTutorSupport();
+  const initializedSelection = useRef(false);
+
+  useEffect(() => {
+    if (isLoading || isError || initializedSelection.current) return;
+    initializedSelection.current = true;
+    if (activeTab === "claims" && claims.length > 0) {
+      setSelectedDetail({ type: "claim", id: claims[0].id });
+    } else if (activeTab === "materials" && materials.length > 0) {
+      setSelectedDetail({ type: "material", id: materials[0].id });
+    }
+  }, [activeTab, claims, isError, isLoading, materials]);
 
   const openClaimsCount = claims.filter((claim) => claim.status === "OPEN").length;
   const inReviewClaimsCount = claims.filter((claim) => claim.status === "IN_REVIEW").length;
@@ -32,9 +43,17 @@ export function SupportPage() {
     (material) => material.status === "IN_REVIEW"
   ).length;
 
-  const handleTabChange = useCallback((_event: SyntheticEvent, value: SupportTab) => {
-    setActiveTab(value);
-  }, []);
+  const handleTabChange = useCallback(
+    (_event: SyntheticEvent, value: SupportTab) => {
+      setActiveTab(value);
+      if (value === "claims") {
+        setSelectedDetail(claims[0] ? { type: "claim", id: claims[0].id } : null);
+      } else {
+        setSelectedDetail(materials[0] ? { type: "material", id: materials[0].id } : null);
+      }
+    },
+    [claims, materials]
+  );
 
   const handleOpenRules = useCallback(() => setIsRulesOpen(true), []);
   const handleCloseRules = useCallback(() => setIsRulesOpen(false), []);
@@ -92,14 +111,26 @@ export function SupportPage() {
               </Button>
             </Box>
           ) : activeTab === "claims" ? (
-            <ClaimsTab claims={claims} onViewDetail={handleViewClaimDetail} />
+            <ClaimsTab
+              claims={claims}
+              onViewDetail={handleViewClaimDetail}
+              selectedClaimId={selectedDetail?.type === "claim" ? selectedDetail.id : undefined}
+            />
           ) : (
-            <MaterialsTab materials={materials} onViewDetail={handleViewMaterialDetail} />
+            <MaterialsTab
+              materials={materials}
+              onViewDetail={handleViewMaterialDetail}
+              selectedMaterialId={
+                selectedDetail?.type === "material" ? selectedDetail.id : undefined
+              }
+            />
           )}
         </Box>
       </Box>
 
-      {activeTab === "claims" ? (
+      {selectedDetail ? (
+        <SupportDetailPanel selection={selectedDetail} onClose={() => setSelectedDetail(null)} />
+      ) : activeTab === "claims" ? (
         <ClaimsSidebar
           openCount={openClaimsCount}
           inReviewCount={inReviewClaimsCount}
@@ -114,7 +145,6 @@ export function SupportPage() {
       )}
 
       <FileRulesDialog open={isRulesOpen} onClose={handleCloseRules} />
-      <SupportDetailDialog selection={selectedDetail} onClose={() => setSelectedDetail(null)} />
     </Box>
   );
 }

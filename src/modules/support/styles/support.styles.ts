@@ -19,16 +19,20 @@ const cardBase = {
 
 export const pageLayoutSx = {
   display: "grid",
-  gridTemplateColumns: { xs: "minmax(0, 1fr)", lg: "minmax(0, 1fr) 340px" },
+  gridTemplateColumns: {
+    xs: "minmax(0, 1fr)",
+    sm: "minmax(0, 1fr) minmax(250px, 0.85fr)",
+    lg: "minmax(0, 1fr) 340px",
+  },
   gap: 3,
-  alignItems: "start",
-  p:4
+  alignItems: "stretch",
+  p: 4,
 } satisfies SxProps<Theme>;
 
 export const mainCardSx = {
   ...cardBase,
   p: { xs: 2.5, md: 4 },
-  minHeight: 480,
+  minHeight: { xs: 480, lg: 580 },
 } satisfies SxProps<Theme>;
 
 export const sideColumnSx = {

@@ -8,9 +8,10 @@ import { listSx } from "@/modules/support/styles/support.styles";
 interface ClaimsTabProps {
   claims: ClaimResponse[];
   onViewDetail: (claimId: string) => void;
+  selectedClaimId?: string;
 }
 
-export function ClaimsTab({ claims, onViewDetail }: ClaimsTabProps) {
+export function ClaimsTab({ claims, onViewDetail, selectedClaimId }: ClaimsTabProps) {
   if (claims.length === 0) {
     return <SupportEmptyState />;
   }
@@ -23,7 +24,12 @@ export function ClaimsTab({ claims, onViewDetail }: ClaimsTabProps) {
     >
       <Box component="ul" sx={listSx}>
         {claims.map((claim) => (
-          <ClaimListItem key={claim.id} claim={claim} onViewDetail={onViewDetail} />
+          <ClaimListItem
+            key={claim.id}
+            claim={claim}
+            onViewDetail={onViewDetail}
+            selected={claim.id === selectedClaimId}
+          />
         ))}
       </Box>
     </SupportListSection>

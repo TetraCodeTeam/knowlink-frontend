@@ -20,15 +20,24 @@ import { formatLongDate, formatShortDate } from "@/modules/support/utils/format.
 interface ClaimListItemProps {
   claim: ClaimResponse;
   onViewDetail: (claimId: string) => void;
+  selected?: boolean;
 }
 
-export function ClaimListItem({ claim, onViewDetail }: ClaimListItemProps) {
+export function ClaimListItem({ claim, onViewDetail, selected = false }: ClaimListItemProps) {
   const { label, tone } = CLAIM_STATUS_META[claim.status];
   const isResolved = claim.status === "RESOLVED" && claim.resolvedAt !== null;
   const { bg, fg } = TONE_COLORS[tone];
 
   return (
-    <Box component="li" sx={listItemSx}>
+    <Box
+      component="li"
+      sx={{
+        ...listItemSx,
+        border: selected ? "1px solid #4C5CB5" : "1px solid transparent",
+        boxShadow: selected ? "0 2px 5px rgba(41, 62, 157, 0.2)" : "none",
+        bgcolor: selected ? "#F4F5FF" : listItemSx.bgcolor,
+      }}
+    >
       <Box sx={getIconBoxSx(bg, fg)}>
         <BookOpen size={18} aria-hidden="true" />
       </Box>
