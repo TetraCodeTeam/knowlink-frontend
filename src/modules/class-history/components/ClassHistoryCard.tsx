@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
 import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin } from "lucide-react";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
@@ -10,6 +10,7 @@ import type { BookingRole } from "@/modules/class-history/types/booking-role.typ
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
 import VirtualLinkBox from "./VirtualLinkBox";
 import CancelBookingFlow from "./CancelBookingFlow";
+import StartClaimFlow from "@/modules/claim/components/StartClaimFlow";
 import RateBookingFlow from "./RateBookingFlow";
 
 interface ClassHistoryCardProps {
@@ -74,7 +75,7 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
             <Typography sx={{ fontSize: "0.95rem", color: "#888" }}>Cargando detalle...</Typography>
           ) : isError || !detail ? (
             <Typography sx={{ fontSize: "0.95rem", color: "#c0392b" }}>
-              No se pudo cargar el detalle. Intentá de nuevo.
+              No se pudo cargar el detalle. IntentÃ¡ de nuevo.
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -128,6 +129,12 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                   editable={category === "RESERVED"}
                 />
               )}
+
+              <StartClaimFlow
+                bookingId={detail.bookingId}
+                claimantRole={role}
+                sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
+              />
 
               {category === "RESERVED" && showVirtualLinkBox && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>

@@ -4,7 +4,9 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 
 import { useDraggablePosition } from "@/modules/attendance/hooks/useDraggablePosition";
 import { useSessionConfirmationStore } from "@/modules/attendance/hooks/useSessionConfirmationStore";
+import { AttendanceApiError } from "@/modules/attendance/api/attendance.api";
 import CountdownTimer from "@/shared/components/CountdownTimer";
+import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
 import {
   SessionCodeInput,
   type SessionCodeInputHandle,
@@ -31,6 +33,7 @@ export const TutorSessionConfirmationWidget = ({ onConfirm }: SessionConfirmatio
   const codeInputRef = useRef<SessionCodeInputHandle>(null);
   const pending = useSessionConfirmationStore((state) => state.pending);
   const clearConfirmation = useSessionConfirmationStore((state) => state.clearConfirmation);
+  const showMessage = useSnackbarStore((state) => state.showMessage);
 
   const { position, isDragging, handleMouseDragStart, handleTouchDragStart } =
     useDraggablePosition(paperRef);
@@ -50,6 +53,14 @@ export const TutorSessionConfirmationWidget = ({ onConfirm }: SessionConfirmatio
       await onConfirm({ sessionId: pending.sessionId, code: enteredCode });
       clearConfirmation();
     } catch (error) {
+      if (
+        error instanceof AttendanceApiError &&
+        error.code === "CONFIRMATION_BLOCKED_BY_ACTIVE_CLAIM"
+      ) {
+        clearConfirmation();
+        showMessage(error.message, "info");
+        return;
+      }
       const message = error instanceof Error ? error.message : DEFAULT_ERROR_MESSAGE;
       setErrorMessage(message || DEFAULT_ERROR_MESSAGE);
       setEnteredCode("");
