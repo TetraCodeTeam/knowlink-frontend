@@ -15,6 +15,7 @@ import { SupportStatusChip } from "@/modules/support/components/SupportStatusChi
 import { ClaimCommentComposer } from "@/modules/support/components/support-detail/ClaimCommentComposer";
 import { ClaimDetailContent } from "@/modules/support/components/support-detail/ClaimDetailContent";
 import { MaterialDetailContent } from "@/modules/support/components/support-detail/MaterialDetailContent";
+import { getSupportErrorMessage } from "@/modules/support/utils/supportErrors.utils";
 import type { SupportDetailSelection } from "@/modules/support/interfaces/support-detail-selection.type";
 import {
   supportDetailBodySx,
@@ -88,10 +89,12 @@ function SupportDetailHeader({
 function DetailLoadState({
   isLoading,
   isError,
+  error,
   onRetry,
 }: {
   isLoading: boolean;
   isError: boolean;
+  error: unknown;
   onRetry: () => void;
 }) {
   if (isLoading) {
@@ -105,10 +108,10 @@ function DetailLoadState({
   if (isError) {
     return (
       <Box>
-        <Typography color="error" sx={{ fontSize: 12, mb: 1 }}>
-          No se pudo cargar el detalle.
+        <Typography color="error" sx={{ fontSize: 14, mb: 1 }}>
+          {getSupportErrorMessage(error, "No se pudo cargar el detalle.")}
         </Typography>
-        <Button size="small" onClick={onRetry} sx={{ textTransform: "none", fontSize: 10 }}>
+        <Button size="small" onClick={onRetry} sx={{ textTransform: "none", fontSize: 14 }}>
           Reintentar
         </Button>
       </Box>
@@ -131,6 +134,7 @@ export function SupportDetailPanel({ selection, onClose }: SupportDetailPanelPro
   const isClaim = selection.type === "claim";
   const isLoading = isClaim ? claimQuery.isLoading : materialQuery.isLoading;
   const isError = isClaim ? claimQuery.isError : materialQuery.isError;
+  const error = isClaim ? claimQuery.error : materialQuery.error;
   const claim = claimQuery.data;
   const material = materialQuery.data;
 
@@ -146,6 +150,7 @@ export function SupportDetailPanel({ selection, onClose }: SupportDetailPanelPro
         <DetailLoadState
           isLoading={isLoading}
           isError={isError}
+          error={error}
           onRetry={() => void (isClaim ? claimQuery.refetch() : materialQuery.refetch())}
         />
         {!isLoading && !isError && claim && <ClaimDetailContent claim={claim} />}
