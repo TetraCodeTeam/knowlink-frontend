@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type SyntheticEvent } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, CircularProgress, Tab, Tabs, Typography } from "@mui/material";
 import { ClaimsSidebar } from "@/modules/support/components/ClaimsSidebar";
@@ -7,7 +7,8 @@ import { FileRulesDialog } from "@/modules/support/components/FileRulesDialog";
 import { MaterialsSidebar } from "@/modules/support/components/MaterialsSidebar";
 import { MaterialsTab } from "@/modules/support/components/MaterialsTab";
 import { SupportDetailPanel } from "@/modules/support/components/SupportDetailPanel";
-import { SUPPORT_TABS, type SupportTab } from "@/modules/support/constants/support.constants";
+import { SUPPORT_TABS } from "@/modules/support/constants/support.constants";
+import { useSupportSelection } from "@/modules/support/hooks/useSupportSelection";
 import { useTutorSupport } from "@/modules/support/hooks/useTutorSupport";
 import {
   mainCardSx,
@@ -18,24 +19,10 @@ import {
 
 export function SupportPage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<SupportTab>("claims");
   const [isRulesOpen, setIsRulesOpen] = useState(false);
-  const [selectedDetail, setSelectedDetail] = useState<{
-    type: "claim" | "material";
-    id: string;
-  } | null>(null);
   const { claims, materials, isLoading, isError, refetch } = useTutorSupport();
-  const initializedSelection = useRef(false);
-
-  useEffect(() => {
-    if (isLoading || isError || initializedSelection.current) return;
-    initializedSelection.current = true;
-    if (activeTab === "claims" && claims.length > 0) {
-      setSelectedDetail({ type: "claim", id: claims[0].id });
-    } else if (activeTab === "materials" && materials.length > 0) {
-      setSelectedDetail({ type: "material", id: materials[0].id });
-    }
-  }, [activeTab, claims, isError, isLoading, materials]);
+  const { activeTab, selectedDetail, changeTab, selectClaim, selectMaterial, clearSelection } =
+    useSupportSelection({ claims, materials, isLoading, isError });
 
   const openClaimsCount = claims.filter((claim) => claim.status === "OPEN").length;
   const inReviewClaimsCount = claims.filter((claim) => claim.status === "IN_REVIEW").length;
@@ -43,29 +30,8 @@ export function SupportPage() {
     (material) => material.status === "IN_REVIEW"
   ).length;
 
-  const handleTabChange = useCallback(
-    (_event: SyntheticEvent, value: SupportTab) => {
-      setActiveTab(value);
-      if (value === "claims") {
-        setSelectedDetail(claims[0] ? { type: "claim", id: claims[0].id } : null);
-      } else {
-        setSelectedDetail(materials[0] ? { type: "material", id: materials[0].id } : null);
-      }
-    },
-    [claims, materials]
-  );
-
   const handleOpenRules = useCallback(() => setIsRulesOpen(true), []);
   const handleCloseRules = useCallback(() => setIsRulesOpen(false), []);
-
-  const handleViewClaimDetail = useCallback(
-    (claimId: string) => setSelectedDetail({ type: "claim", id: claimId }),
-    []
-  );
-  const handleViewMaterialDetail = useCallback(
-    (materialId: string) => setSelectedDetail({ type: "material", id: materialId }),
-    []
-  );
   const handleGoToClassHistory = useCallback(() => navigate("/tutor/classes"), [navigate]);
 
   return (
@@ -77,7 +43,7 @@ export function SupportPage() {
 
         <Tabs
           value={activeTab}
-          onChange={handleTabChange}
+          onChange={changeTab}
           aria-label="Secciones de soporte y solicitudes"
           sx={tabsSx}
         >
@@ -113,13 +79,13 @@ export function SupportPage() {
           ) : activeTab === "claims" ? (
             <ClaimsTab
               claims={claims}
-              onViewDetail={handleViewClaimDetail}
+              onViewDetail={selectClaim}
               selectedClaimId={selectedDetail?.type === "claim" ? selectedDetail.id : undefined}
             />
           ) : (
             <MaterialsTab
               materials={materials}
-              onViewDetail={handleViewMaterialDetail}
+              onViewDetail={selectMaterial}
               selectedMaterialId={
                 selectedDetail?.type === "material" ? selectedDetail.id : undefined
               }
@@ -129,7 +95,7 @@ export function SupportPage() {
       </Box>
 
       {selectedDetail ? (
-        <SupportDetailPanel selection={selectedDetail} onClose={() => setSelectedDetail(null)} />
+        <SupportDetailPanel selection={selectedDetail} onClose={clearSelection} />
       ) : activeTab === "claims" ? (
         <ClaimsSidebar
           openCount={openClaimsCount}

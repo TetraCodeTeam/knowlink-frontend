@@ -1,52 +1,52 @@
-import { useState, type FormEvent } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { MessageSquarePlus } from "lucide-react";
-import { useAddTutorClaimComment } from "@/modules/support/hooks/useSupportDetailMutations";
+import { MAX_CLAIM_COMMENT_LENGTH } from "@/modules/support/constants/support.constants";
+import { useClaimCommentForm } from "@/modules/support/hooks/useClaimCommentForm";
+import {
+  composerActionsSx,
+  composerCancelButtonSx,
+  composerContainerSx,
+  composerOpenButtonSx,
+  composerSubmitButtonSx,
+} from "@/modules/support/styles/claimCommentComposer.styles";
 
-export function ClaimCommentComposer({ claimId }: { claimId: string }) {
-  const [comment, setComment] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const mutation = useAddTutorClaimComment(claimId);
+interface ClaimCommentComposerProps {
+  claimId: string;
+}
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const message = comment.trim();
-    if (!message) return;
-
-    mutation.mutate(message, {
-      onSuccess: () => {
-        setComment("");
-        setIsEditing(false);
-      },
-    });
-  };
+export function ClaimCommentComposer({ claimId }: ClaimCommentComposerProps) {
+  const { form, isEditing, isPending, openEditor, closeEditor, submit } =
+    useClaimCommentForm(claimId);
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = form;
+  const commentLength = watch("comment").length;
 
   return (
-    <Box sx={{ p: 1.5, pt: 1, borderTop: "1px solid #E9EAF0", bgcolor: "background.paper" }}>
+    <Box sx={composerContainerSx}>
       {isEditing ? (
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={submit}>
           <TextField
+            {...register("comment")}
             fullWidth
             size="small"
             autoFocus
             placeholder="Escribí tu comentario..."
-            value={comment}
-            onChange={(event) => setComment(event.target.value)}
             multiline
             minRows={2}
-            inputProps={{ maxLength: 2000 }}
-            helperText={`${comment.length}/2000`}
-            disabled={mutation.isPending}
+            inputProps={{ maxLength: MAX_CLAIM_COMMENT_LENGTH }}
+            error={!!errors.comment}
+            helperText={errors.comment?.message ?? `${commentLength}/${MAX_CLAIM_COMMENT_LENGTH}`}
+            disabled={isPending}
           />
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, mt: 1 }}>
+          <Box sx={composerActionsSx}>
             <Button
               size="small"
-              onClick={() => {
-                setIsEditing(false);
-                setComment("");
-              }}
-              disabled={mutation.isPending}
-              sx={{ textTransform: "none", fontSize: 14 }}
+              onClick={closeEditor}
+              disabled={isPending}
+              sx={composerCancelButtonSx}
             >
               Cancelar
             </Button>
@@ -54,10 +54,10 @@ export function ClaimCommentComposer({ claimId }: { claimId: string }) {
               type="submit"
               size="small"
               variant="contained"
-              disabled={!comment.trim() || mutation.isPending}
-              sx={{ bgcolor: "#293E9D", textTransform: "none", fontSize: 14 }}
+              disabled={!commentLength || isPending}
+              sx={composerSubmitButtonSx}
             >
-              {mutation.isPending ? "Enviando..." : "Enviar comentario"}
+              {isPending ? "Enviando..." : "Enviar comentario"}
             </Button>
           </Box>
         </Box>
@@ -66,8 +66,8 @@ export function ClaimCommentComposer({ claimId }: { claimId: string }) {
           fullWidth
           variant="contained"
           startIcon={<MessageSquarePlus size={16} />}
-          onClick={() => setIsEditing(true)}
-          sx={{ bgcolor: "#293E9D", borderRadius: 1.5, textTransform: "none", fontSize: 14 }}
+          onClick={openEditor}
+          sx={composerOpenButtonSx}
         >
           Aportar comentario
         </Button>

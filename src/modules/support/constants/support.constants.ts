@@ -5,7 +5,8 @@ export const SUPPORT_TABS = [
 
 export type SupportTab = (typeof SUPPORT_TABS)[number]["value"];
 
-// La ilustración (Storyset "Documents - Bro", color #407BFF) va en public/illustrations/.
 export const EMPTY_STATE_ILLUSTRATION_SRC = "/illustrations/documents-bro.svg";
 export const EMPTY_STATE_TITLE = "Sin registros por ahora";
 export const EMPTY_STATE_DESCRIPTION = "Por el momento no tenés nada pendiente en esta sección.";
+
+export const MAX_CLAIM_COMMENT_LENGTH = 2000;

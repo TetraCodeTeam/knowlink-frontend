@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { Box, Button, CircularProgress, IconButton, Paper, Typography } from "@mui/material";
 import { X } from "lucide-react";
-import { getTutorClaimDetail } from "@/modules/support/api/supportClaims.api";
 import {
-  getMaterialReportingPolicy,
-  getReportedMaterialDetail,
-} from "@/modules/support/api/supportMaterials.api";
+  useMaterialReportingPolicy,
+  useReportedMaterialDetail,
+  useTutorClaimDetail,
+} from "@/modules/support/hooks/useSupportDetailQueries";
 import type { ReportedMaterialDetail } from "@/modules/support/interfaces/responses/reported-material-detail.response";
 import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tutor-claim-detail.response";
 import {
@@ -16,14 +15,12 @@ import { SupportStatusChip } from "@/modules/support/components/SupportStatusChi
 import { ClaimCommentComposer } from "@/modules/support/components/support-detail/ClaimCommentComposer";
 import { ClaimDetailContent } from "@/modules/support/components/support-detail/ClaimDetailContent";
 import { MaterialDetailContent } from "@/modules/support/components/support-detail/MaterialDetailContent";
+import type { SupportDetailSelection } from "@/modules/support/interfaces/support-detail-selection.type";
 import {
   supportDetailBodySx,
   supportDetailHeaderSx,
   supportDetailPanelSx,
 } from "@/modules/support/styles/supportDetail.styles";
-
-export type SupportDetailSelection =
-  { type: "claim"; id: string } | { type: "material"; id: string } | null;
 
 interface SupportDetailPanelProps {
   selection: SupportDetailSelection;
@@ -125,21 +122,9 @@ export function SupportDetailPanel({ selection, onClose }: SupportDetailPanelPro
   const claimId = selection?.type === "claim" ? selection.id : null;
   const materialId = selection?.type === "material" ? selection.id : null;
 
-  const claimQuery = useQuery({
-    queryKey: ["tutorSupport", "claimDetail", claimId],
-    queryFn: () => getTutorClaimDetail(claimId!),
-    enabled: claimId !== null,
-  });
-  const materialQuery = useQuery({
-    queryKey: ["tutorSupport", "materialDetail", materialId],
-    queryFn: () => getReportedMaterialDetail(materialId!),
-    enabled: materialId !== null,
-  });
-  const policyQuery = useQuery({
-    queryKey: ["tutorSupport", "materialPolicy"],
-    queryFn: getMaterialReportingPolicy,
-    enabled: materialId !== null,
-  });
+  const claimQuery = useTutorClaimDetail(claimId);
+  const materialQuery = useReportedMaterialDetail(materialId);
+  const policyQuery = useMaterialReportingPolicy(materialId !== null);
 
   if (!selection) return null;
 

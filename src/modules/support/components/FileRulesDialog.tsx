@@ -8,9 +8,8 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { ShieldCheck, X } from "lucide-react";
-import { getMaterialReportingPolicy } from "@/modules/support/api/supportMaterials.api";
+import { useMaterialReportingPolicy } from "@/modules/support/hooks/useSupportDetailQueries";
 import {
   ACCEPTED_FILE_FORMATS,
   FILE_FORMAT_META,
@@ -36,11 +35,7 @@ interface FileRulesDialogProps {
 }
 
 export function FileRulesDialog({ open, onClose }: FileRulesDialogProps) {
-  const { data: policy, isError } = useQuery({
-    queryKey: ["tutorSupport", "materialPolicy"],
-    queryFn: getMaterialReportingPolicy,
-    enabled: open,
-  });
+  const { data: policy, isError } = useMaterialReportingPolicy(open);
 
   return (
     <Dialog
