@@ -5,6 +5,7 @@ import TutorProfilePage from "@/modules/tutor/profile/components/TutorProfilePag
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import TutorClassHistoryPage from "@/modules/tutor/pages/TutorClassHistoryPage";
 import { WeeklyAgendaPage } from "@/modules/tutor/weekly-schedule/pages/WeeklyAgendaPage";
+import { SupportPage } from "@/modules/support/pages/SupportPage";
 
 export default function TutorRoutes() {
   return (
@@ -16,7 +17,7 @@ export default function TutorRoutes() {
         <Route path="content" element={<UnderConstructionPage />} />
         <Route path="stats" element={<UnderConstructionPage />} />
         <Route path="notifications" element={<UnderConstructionPage />} />
-        <Route path="requests" element={<UnderConstructionPage />} />
+        <Route path="requests" element={<SupportPage />} />
         <Route path="profile" element={<TutorProfilePage />} />
         <Route path="availability" element={<WeeklyAgendaPage />} />
       </Route>
