@@ -25,6 +25,7 @@ export function MaterialDefenseForm({
     files,
     filesError,
     maxDescriptionLength,
+    canSubmit,
     isPending,
     openEditor,
     closeEditor,
@@ -102,7 +103,7 @@ export function MaterialDefenseForm({
         <AppButton
           type="submit"
           size="small"
-          disabled={isPending || policyIsLoading || policyIsError}
+          disabled={!canSubmit || isPending || policyIsLoading || policyIsError}
           sx={detailSmallButtonSx}
         >
           {isPending ? "Enviando..." : "Presentar descargo"}

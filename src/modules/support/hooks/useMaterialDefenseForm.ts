@@ -5,7 +5,16 @@ import type { MaterialReportingPolicy } from "@/modules/support/interfaces/respo
 const DEFAULT_MAX_ATTACHMENTS = 5;
 const DEFAULT_MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
 export const DEFAULT_MAX_DESCRIPTION_LENGTH = 2000;
-const ALLOWED_EXTENSIONS = ["pdf", "png", "xlsx"];
+const ALLOWED_CONTENT_TYPES: Record<string, string> = {
+  pdf: "application/pdf",
+  png: "image/png",
+  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+};
+
+function isValidDefenseFile(file: File, maxSize: number): boolean {
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return file.size > 0 && file.size <= maxSize && ALLOWED_CONTENT_TYPES[extension] === file.type;
+}
 
 export function useMaterialDefenseForm(
   materialId: string,
@@ -31,16 +40,13 @@ export function useMaterialDefenseForm(
     const selectedFiles = Array.from(event.target.files ?? []);
     const maxAttachments = policy?.maxDefenseAttachments ?? DEFAULT_MAX_ATTACHMENTS;
     const maxSize = policy?.maxDefenseAttachmentSizeBytes ?? DEFAULT_MAX_ATTACHMENT_BYTES;
-    const hasInvalidFile = selectedFiles.some((file) => {
-      const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
-      return !ALLOWED_EXTENSIONS.includes(extension) || file.size > maxSize;
-    });
+    const hasInvalidFile = selectedFiles.some((file) => !isValidDefenseFile(file, maxSize));
 
     const error =
       selectedFiles.length > maxAttachments
         ? `Podés adjuntar hasta ${maxAttachments} archivos.`
         : hasInvalidFile
-          ? "Los archivos deben ser PDF, PNG o XLSX y respetar el tamaño máximo permitido."
+          ? "Los archivos deben ser PDF, PNG o XLSX válidos, no estar vacíos y respetar el tamaño máximo permitido."
           : "";
 
     setFilesError(error);
@@ -48,8 +54,11 @@ export function useMaterialDefenseForm(
     if (error) event.target.value = "";
   };
 
+  const canSubmit = description.trim().length > 0 || files.length > 0;
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!canSubmit) return;
     mutation.mutate(
       { description: description.trim(), files },
       {
@@ -67,6 +76,7 @@ export function useMaterialDefenseForm(
     files,
     filesError,
     maxDescriptionLength,
+    canSubmit,
     isPending: mutation.isPending,
     openEditor: () => setIsEditing(true),
     closeEditor,
