@@ -333,7 +333,6 @@ export default function TutorSidebar() {
         open={isNotificationsOpen}
         onClose={handleCloseNotifications}
         sidebarWidth={TUTOR_SIDEBAR_WIDTH}
-        showDualRoleHint
       />
     </Box>
   );
