@@ -96,7 +96,11 @@ export function SupportPage() {
       </Box>
 
       {selectedDetail ? (
-        <SupportDetailPanel selection={selectedDetail} onClose={clearSelection} />
+        <SupportDetailPanel
+          key={`${selectedDetail.type}-${selectedDetail.id}`}
+          selection={selectedDetail}
+          onClose={clearSelection}
+        />
       ) : activeTab === "claims" ? (
         <ClaimsSidebar
           openCount={openClaimsCount}
