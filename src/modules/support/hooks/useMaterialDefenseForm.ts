@@ -45,7 +45,10 @@ export function useMaterialDefenseForm(
     setFilesError("");
   };
 
-  const closeEditor = () => setIsEditing(false);
+  const closeEditor = () => {
+    setIsEditing(false);
+    reset();
+  };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(event.target.files ?? []);
