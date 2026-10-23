@@ -18,7 +18,7 @@ export function MaterialsTab({ materials, onViewDetail, selectedMaterialId }: Ma
 
   return (
     <SupportListSection
-      title="Historial de reclamos"
+      title="Historial de materiales denunciados"
       subtitle="Visualizá el avance e intervenciones del equipo académico"
       count={materials.length}
     >
