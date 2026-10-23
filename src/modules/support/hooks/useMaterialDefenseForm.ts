@@ -1,19 +1,25 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useSubmitMaterialDefense } from "@/modules/support/hooks/useSupportDetailMutations";
+import {
+  ACCEPTED_FILE_FORMATS,
+  FILE_FORMAT_MIME_TYPES,
+} from "@/modules/support/constants/file-format.constants";
+import type { FileFormat } from "@/modules/support/interfaces/file-format.type";
 import type { MaterialReportingPolicy } from "@/modules/support/interfaces/responses/material-reporting-policy.response";
 
 const DEFAULT_MAX_ATTACHMENTS = 5;
 const DEFAULT_MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
 export const DEFAULT_MAX_DESCRIPTION_LENGTH = 2000;
-const ALLOWED_CONTENT_TYPES: Record<string, string> = {
-  pdf: "application/pdf",
-  png: "image/png",
-  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-};
 
-function isValidDefenseFile(file: File, maxSize: number): boolean {
-  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
-  return file.size > 0 && file.size <= maxSize && ALLOWED_CONTENT_TYPES[extension] === file.type;
+function isValidDefenseFile(file: File, maxSize: number, allowedFormats: FileFormat[]): boolean {
+  const extension = file.name.split(".").pop()?.toUpperCase() ?? "";
+  const format = allowedFormats.find((allowed) => allowed === extension);
+  return (
+    format !== undefined &&
+    file.size > 0 &&
+    file.size <= maxSize &&
+    FILE_FORMAT_MIME_TYPES[format] === file.type
+  );
 }
 
 export function useMaterialDefenseForm(
@@ -27,6 +33,11 @@ export function useMaterialDefenseForm(
   const mutation = useSubmitMaterialDefense(materialId);
 
   const maxDescriptionLength = policy?.maxDescriptionLength ?? DEFAULT_MAX_DESCRIPTION_LENGTH;
+  const acceptedFormats = (policy?.acceptedFormats ?? ACCEPTED_FILE_FORMATS).filter(
+    (format) => format in FILE_FORMAT_MIME_TYPES
+  );
+  const acceptAttribute = acceptedFormats.map((format) => `.${format.toLowerCase()}`).join(",");
+  const acceptedFormatsLabel = acceptedFormats.join(", ");
 
   const reset = () => {
     setDescription("");
@@ -40,13 +51,15 @@ export function useMaterialDefenseForm(
     const selectedFiles = Array.from(event.target.files ?? []);
     const maxAttachments = policy?.maxDefenseAttachments ?? DEFAULT_MAX_ATTACHMENTS;
     const maxSize = policy?.maxDefenseAttachmentSizeBytes ?? DEFAULT_MAX_ATTACHMENT_BYTES;
-    const hasInvalidFile = selectedFiles.some((file) => !isValidDefenseFile(file, maxSize));
+    const hasInvalidFile = selectedFiles.some(
+      (file) => !isValidDefenseFile(file, maxSize, acceptedFormats)
+    );
 
     const error =
       selectedFiles.length > maxAttachments
         ? `Podés adjuntar hasta ${maxAttachments} archivos.`
         : hasInvalidFile
-          ? "Los archivos deben ser PDF, PNG o XLSX válidos, no estar vacíos y respetar el tamaño máximo permitido."
+          ? `Los archivos deben ser ${acceptedFormatsLabel} válidos, no estar vacíos y respetar el tamaño máximo permitido.`
           : "";
 
     setFilesError(error);
@@ -77,6 +90,7 @@ export function useMaterialDefenseForm(
     filesError,
     maxDescriptionLength,
     canSubmit,
+    acceptAttribute,
     isPending: mutation.isPending,
     openEditor: () => setIsEditing(true),
     closeEditor,

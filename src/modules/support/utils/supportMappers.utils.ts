@@ -1,3 +1,4 @@
+import { ACCEPTED_FILE_FORMATS } from "@/modules/support/constants/file-format.constants";
 import type { FileFormat } from "@/modules/support/interfaces/file-format.type";
 import type {
   TutorSupportData,
@@ -19,9 +20,8 @@ function describeClaimReason(reason: string): string {
 
 function normalizeFileFormat(format: string): FileFormat {
   const normalized = format.toUpperCase();
-  if (normalized === "PDF" || normalized === "PNG" || normalized === "XLSX") {
-    return normalized;
-  }
+  const match = ACCEPTED_FILE_FORMATS.find((accepted) => accepted === normalized);
+  if (match) return match;
   throw new Error(`Formato de material no reconocido: ${format}`);
 }
 

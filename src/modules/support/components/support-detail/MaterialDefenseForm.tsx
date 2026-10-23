@@ -26,6 +26,7 @@ export function MaterialDefenseForm({
     filesError,
     maxDescriptionLength,
     canSubmit,
+    acceptAttribute,
     isPending,
     openEditor,
     closeEditor,
@@ -75,7 +76,7 @@ export function MaterialDefenseForm({
         sx={{ textTransform: "none", fontSize: 14 }}
       >
         Adjuntar evidencias
-        <input hidden type="file" multiple accept=".pdf,.png,.xlsx" onChange={handleFileChange} />
+        <input hidden type="file" multiple accept={acceptAttribute} onChange={handleFileChange} />
       </Button>
       {filesError && (
         <Typography color="error" sx={{ fontSize: 14 }}>

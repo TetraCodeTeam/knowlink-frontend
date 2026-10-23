@@ -22,3 +22,9 @@ export const FILE_FORMAT_META: Record<FileFormat, FileFormatMeta> = {
 };
 
 export const ACCEPTED_FILE_FORMATS: FileFormat[] = ["PDF", "PNG", "XLSX"];
+
+export const FILE_FORMAT_MIME_TYPES: Record<FileFormat, string> = {
+  PDF: "application/pdf",
+  PNG: "image/png",
+  XLSX: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+};
