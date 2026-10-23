@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { addTutorClaimComment } from "@/modules/support/api/supportClaims.api";
 import { submitMaterialDefense } from "@/modules/support/api/supportMaterials.api";
-import { getSupportErrorMessage } from "@/modules/support/utils/supportErrors.utils";
 
 export function useAddTutorClaimComment(claimId: string) {
   const queryClient = useQueryClient();
@@ -15,9 +14,6 @@ export function useAddTutorClaimComment(claimId: string) {
         queryClient.invalidateQueries({ queryKey: ["tutorSupport"] }),
         queryClient.invalidateQueries({ queryKey: ["tutorSupport", "claimDetail", claimId] }),
       ]);
-    },
-    onError: (error: unknown) => {
-      toast.error(getSupportErrorMessage(error, "No se pudo agregar el comentario."));
     },
   });
 }
@@ -36,9 +32,6 @@ export function useSubmitMaterialDefense(materialId: string) {
           queryKey: ["tutorSupport", "materialDetail", materialId],
         }),
       ]);
-    },
-    onError: (error: unknown) => {
-      toast.error(getSupportErrorMessage(error, "No se pudo presentar el descargo."));
     },
   });
 }
