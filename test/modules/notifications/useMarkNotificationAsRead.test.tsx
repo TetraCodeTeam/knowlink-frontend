@@ -4,6 +4,7 @@ import { renderHook, waitFor, act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useMarkNotificationAsRead } from "@/modules/notifications/hooks/useMarkNotificationAsRead";
 import { NOTIFICATION_QUERY_KEYS } from "@/modules/notifications/constants/notification-query-keys";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import type { InfiniteData } from "@tanstack/react-query";
 import type { PagedNotificationsResponse } from "@/modules/notifications/interfaces/responses/paged-notifications.interface";
 import type { UnreadCountResponse } from "@/modules/notifications/interfaces/responses/unread-count.interface";
@@ -48,13 +49,15 @@ function makePage(): PagedNotificationsResponse {
 
 function seedCache(client: QueryClient) {
   client.setQueryData<InfiniteData<PagedNotificationsResponse>>(
-    [...NOTIFICATION_QUERY_KEYS.list, "UNREAD"],
+    [...NOTIFICATION_QUERY_KEYS.list("STUDENT"), "UNREAD"],
     {
       pages: [makePage()],
       pageParams: [0],
     }
   );
-  client.setQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount, { count: 2 });
+  client.setQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount("STUDENT"), {
+    count: 2,
+  });
 }
 
 function renderWithClient(client: QueryClient) {
@@ -67,6 +70,15 @@ function renderWithClient(client: QueryClient) {
 describe("useMarkNotificationAsRead — actualizacion optimista", () => {
   beforeEach(() => {
     mockedMarkRead.mockReset();
+    useAuthStore.setState({
+      isAuthenticated: true,
+      authResponse: {
+        userId: "u-1",
+        email: "alumno@test.com",
+        token: "token",
+        role: "STUDENT",
+      } as never,
+    });
   });
 
   it("baja el badge al instante y reconcilia con el servidor en exito", async () => {
@@ -80,12 +92,14 @@ describe("useMarkNotificationAsRead — actualizacion optimista", () => {
     });
 
     await waitFor(() => {
-      const unread = client.getQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount);
+      const unread = client.getQueryData<UnreadCountResponse>(
+        NOTIFICATION_QUERY_KEYS.unreadCount("STUDENT")
+      );
       expect(unread?.count).toBe(1);
     });
 
     const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>([
-      ...NOTIFICATION_QUERY_KEYS.list,
+      ...NOTIFICATION_QUERY_KEYS.list("STUDENT"),
       "UNREAD",
     ]);
     expect(list?.pages[0].content[0].read).toBe(true);
@@ -110,11 +124,13 @@ describe("useMarkNotificationAsRead — actualizacion optimista", () => {
       expect(result.current.isError).toBe(true);
     });
 
-    const unread = client.getQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount);
+    const unread = client.getQueryData<UnreadCountResponse>(
+      NOTIFICATION_QUERY_KEYS.unreadCount("STUDENT")
+    );
     expect(unread?.count).toBe(2);
 
     const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>([
-      ...NOTIFICATION_QUERY_KEYS.list,
+      ...NOTIFICATION_QUERY_KEYS.list("STUDENT"),
       "UNREAD",
     ]);
     expect(list?.pages[0].content[0].read).toBe(false);

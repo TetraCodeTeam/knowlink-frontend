@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -122,6 +122,26 @@ describe("NotificationsPanel", () => {
     await user.click(screen.getByRole("button", { name: "Colapsar panel" }));
 
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it("cierra el panel al hacer click fuera (backdrop)", () => {
+    mockedGetNotifications.mockResolvedValue(makePage([]));
+    const { onClose } = renderPanel();
+
+    fireEvent.click(screen.getByTestId("notifications-backdrop"));
+
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("limita el chip de sin leer a 99+ y conserva el total real en el aria-label", async () => {
+    mockedGetUnreadCount.mockResolvedValue({ count: 150 });
+    mockedGetNotifications.mockResolvedValue(makePage([]));
+    renderPanel();
+
+    await waitFor(() => {
+      expect(screen.getByText("99+")).toBeInTheDocument();
+    });
+    expect(screen.getByLabelText("150 notificaciones sin leer")).toBeInTheDocument();
   });
 
   it("no muestra el banner de modo Alumno (pendiente de otherRoleCount)", async () => {

@@ -6,9 +6,10 @@ import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
 export function useUnreadNotificationsCount() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const role = useAuthStore((s) => s.authResponse?.role) ?? "ANONYMOUS";
 
   return useQuery({
-    queryKey: NOTIFICATION_QUERY_KEYS.unreadCount,
+    queryKey: NOTIFICATION_QUERY_KEYS.unreadCount(role),
     queryFn: getUnreadCount,
     select: (data) => data.count,
     enabled: isAuthenticated,

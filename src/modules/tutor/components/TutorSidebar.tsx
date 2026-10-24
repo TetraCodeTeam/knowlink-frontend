@@ -13,7 +13,7 @@ import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 import NotificationsPanel from "@/modules/notifications/components/NotificationsPanel";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
@@ -62,6 +62,17 @@ export default function TutorSidebar() {
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const notificationsRef = useRef<HTMLDivElement>(null);
+  const wasNotificationsOpenRef = useRef(false);
+
+  useEffect(() => {
+    if (isNotificationsOpen) {
+      wasNotificationsOpenRef.current = true;
+    } else if (wasNotificationsOpenRef.current) {
+      wasNotificationsOpenRef.current = false;
+      notificationsRef.current?.focus();
+    }
+  }, [isNotificationsOpen]);
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
   const isActive = (path: string, badge?: NavItem["badge"]) => {
     if (badge === "notifications") return isNotificationsOpen;
@@ -163,6 +174,7 @@ export default function TutorSidebar() {
           return (
             <Box
               key={path}
+              ref={isNotifications ? notificationsRef : undefined}
               role="button"
               tabIndex={0}
               aria-label={getAriaLabel(label, badge)}
