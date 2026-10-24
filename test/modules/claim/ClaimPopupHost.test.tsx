@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useClaimPopupStore } from "@/modules/claim/hooks/useClaimPopupStore";
-import type { ClaimEligibility } from "@/modules/claim/interfaces/claimInterfaces";
+import type { ClaimEligibility } from "@/modules/claim/interfaces/responses/claim-eligibility.interface";
 import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/responses/booking-history-detail.interface";
 
 vi.mock("@/modules/claim/api/claim.api", () => ({
