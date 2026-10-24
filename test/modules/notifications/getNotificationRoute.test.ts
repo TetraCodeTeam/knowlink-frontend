@@ -41,6 +41,17 @@ describe("getNotificationRoute", () => {
     expect(getNotificationRoute("ADMIN_MATERIAL_REPORT_RECEIVED", "TUTOR")).toBeNull();
   });
 
+  it("resuelve las rutas de los tipos de soporte", () => {
+    for (const type of [
+      "SESSION_CLAIM_UPDATE",
+      "SESSION_CLAIM_COMMENT",
+      "MATERIAL_REPORT_UPDATE",
+    ] as const) {
+      expect(getNotificationRoute(type, "STUDENT")).toBe("/student/complaints");
+      expect(getNotificationRoute(type, "TUTOR")).toBe("/tutor/requests");
+    }
+  });
+
   it("devuelve null para ADMIN en todos los tipos", () => {
     for (const type of NOTIFICATION_TYPE_VALUES) {
       expect(getNotificationRoute(type, "ADMIN")).toBeNull();
@@ -73,6 +84,14 @@ describe("getNotificationAction", () => {
     expect(getNotificationAction("SESSION_COMPLETED", "TUTOR")).toEqual({
       kind: "claim",
       label: "Reclamar",
+    });
+  });
+
+  it("resuelve navigate con Ver para los tipos de soporte", () => {
+    expect(getNotificationAction("SESSION_CLAIM_COMMENT", "TUTOR")).toEqual({
+      kind: "navigate",
+      label: "Ver",
+      route: "/tutor/requests",
     });
   });
 

@@ -8,6 +8,7 @@ import {
   CircleCheck,
   ClipboardList,
   FileExclamationPoint,
+  MessageSquare,
   Star,
   Timer,
   TimerOff,
@@ -133,6 +134,27 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, NotificationType
     iconColor: LAVENDER_ICON,
     action: { kind: "navigate", label: "Ver" },
     routes: { STUDENT: null, TUTOR: null },
+  },
+  SESSION_CLAIM_UPDATE: {
+    icon: ClipboardList,
+    tileColor: LAVENDER_TILE,
+    iconColor: LAVENDER_ICON,
+    action: { kind: "navigate", label: "Ver" },
+    routes: { STUDENT: "/student/complaints", TUTOR: "/tutor/requests" },
+  },
+  SESSION_CLAIM_COMMENT: {
+    icon: MessageSquare,
+    tileColor: LAVENDER_TILE,
+    iconColor: LAVENDER_ICON,
+    action: { kind: "navigate", label: "Ver" },
+    routes: { STUDENT: "/student/complaints", TUTOR: "/tutor/requests" },
+  },
+  MATERIAL_REPORT_UPDATE: {
+    icon: FileExclamationPoint,
+    tileColor: LAVENDER_TILE,
+    iconColor: LAVENDER_ICON,
+    action: { kind: "navigate", label: "Ver" },
+    routes: { STUDENT: "/student/complaints", TUTOR: "/tutor/requests" },
   },
 };
 
