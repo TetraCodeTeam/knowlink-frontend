@@ -8,6 +8,7 @@ import {
   getNotificationAction,
   getNotificationConfig,
 } from "@/modules/notifications/constants/notification-type-config";
+import { formatNotificationDate } from "@/modules/notifications/utils/format-notification-date";
 import type { NotificationItemProps } from "@/modules/notifications/components/NotificationItem.types";
 
 export default function NotificationItem({
@@ -22,6 +23,7 @@ export default function NotificationItem({
   const { icon: Icon, tileColor, iconColor } = getNotificationConfig(notification.type);
   const action = getNotificationAction(notification.type, authResponse?.role ?? "");
   const title = notification.title ?? notification.message;
+  const isUnread = !notification.read;
 
   const handleClick = () => {
     if (!notification.read) {
@@ -58,8 +60,8 @@ export default function NotificationItem({
         padding: "14px 16px",
         cursor: "pointer",
         borderBottom: "1px solid #EEEEF5",
-        backgroundColor: "#FFFFFF",
-        "&:hover": { backgroundColor: "#F8F7FE" },
+        backgroundColor: isUnread ? "#F4F3FB" : "#FFFFFF",
+        "&:hover": { backgroundColor: isUnread ? "#EDECF9" : "#F8F7FE" },
         transition: "background-color 0.15s ease",
       }}
     >
@@ -78,17 +80,32 @@ export default function NotificationItem({
         <Icon size={20} color={iconColor} />
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography
-          sx={{
-            fontSize: "14px",
-            fontWeight: 700,
-            color: "#1A1A2E",
-            lineHeight: 1.3,
-            wordBreak: "break-word",
-          }}
-        >
-          {title}
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography
+            sx={{
+              flex: 1,
+              fontSize: "14px",
+              fontWeight: isUnread ? 600 : 400,
+              color: "#1A1A2E",
+              lineHeight: 1.3,
+              wordBreak: "break-word",
+            }}
+          >
+            {title}
+          </Typography>
+          {isUnread && (
+            <Box
+              aria-hidden
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                backgroundColor: "#3F4CAE",
+                flexShrink: 0,
+              }}
+            />
+          )}
+        </Box>
         {notification.title != null && (
           <Typography
             sx={{
@@ -105,6 +122,9 @@ export default function NotificationItem({
             {notification.message}
           </Typography>
         )}
+        <Typography sx={{ fontSize: "11px", color: "#8A8AA3", marginTop: "4px" }}>
+          {formatNotificationDate(notification.createdAt)}
+        </Typography>
         {action.kind !== "none" && (
           <Typography
             sx={{

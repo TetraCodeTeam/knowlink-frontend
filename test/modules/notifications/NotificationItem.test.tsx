@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import NotificationItem from "@/modules/notifications/components/NotificationItem";
+import { formatNotificationDate } from "@/modules/notifications/utils/format-notification-date";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useRatingPopupStore } from "@/modules/class-history/hooks/useRatingPopupStore";
 import { useClaimPopupStore } from "@/modules/claim/hooks/useClaimPopupStore";
@@ -103,6 +104,27 @@ describe("NotificationItem", () => {
 
     expect(screen.getByText("Tu clase fue confirmada")).toBeInTheDocument();
     expect(screen.queryByText("Reserva confirmada")).not.toBeInTheDocument();
+  });
+
+  it("muestra la fecha y hora formateadas en es-AR", () => {
+    render_item(makeNotification());
+
+    const expectedDate = formatNotificationDate("2026-10-20T15:14:00").replace(/\s+/g, " ");
+    expect(screen.getByText(expectedDate)).toBeInTheDocument();
+  });
+
+  it("destaca visualmente la notificacion no leida", () => {
+    render_item(makeNotification());
+
+    expect(screen.getByRole("button")).toHaveStyle({ backgroundColor: "#F4F3FB" });
+    expect(screen.getByText("Reserva confirmada")).toHaveStyle({ fontWeight: "600" });
+  });
+
+  it("renderiza la notificacion leida sin destacar", () => {
+    render_item(makeNotification({ read: true }));
+
+    expect(screen.getByRole("button")).toHaveStyle({ backgroundColor: "#FFFFFF" });
+    expect(screen.getByText("Reserva confirmada")).toHaveStyle({ fontWeight: "400" });
   });
 
   it("abre el popup de calificacion para RATING_ENABLED sin navegar", async () => {
