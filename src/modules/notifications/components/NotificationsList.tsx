@@ -6,8 +6,8 @@ import { useMarkNotificationAsRead } from "@/modules/notifications/hooks/useMark
 import type { NotificationsListProps } from "@/modules/notifications/components/NotificationsList.types";
 
 const EMPTY_STATE: Record<NotificationsListProps["status"], { title: string; subtitle: string }> = {
-  ALL: { title: "Estas al día", subtitle: "No tienes notificaciones pendientes por ahora" },
-  UNREAD: { title: "Estas al día", subtitle: "No tienes notificaciones pendientes por ahora" },
+  ALL: { title: "Estás al día", subtitle: "No tienes notificaciones pendientes por ahora" },
+  UNREAD: { title: "Estás al día", subtitle: "No tienes notificaciones pendientes por ahora" },
   READ: {
     title: "Sin notificaciones leídas",
     subtitle: "Las notificaciones que marques como leídas aparecerán acá",

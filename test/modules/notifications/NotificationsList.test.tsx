@@ -97,7 +97,7 @@ describe("NotificationsList", () => {
     renderList("UNREAD");
 
     await waitFor(() => {
-      expect(screen.getByText("Estas al día")).toBeInTheDocument();
+      expect(screen.getByText("Estás al día")).toBeInTheDocument();
     });
     expect(screen.getByText("No tienes notificaciones pendientes por ahora")).toBeInTheDocument();
   });
