@@ -3,8 +3,17 @@ import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
 import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin } from "lucide-react";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import { useBookingDetail } from "@/modules/class-history/hooks/useBookingDetail";
-import { buildModalityMessage, formatDurationLabel, formatPriceLabel, formatTime, } from "@/modules/class-history/utils/classHistory.utils";
-import { cardContainerSx, timeColumnSx, timeTickSx } from "@/modules/class-history/styles/classHistoryStyles";
+import {
+  buildModalityMessage,
+  formatDurationLabel,
+  formatPriceLabel,
+  formatTime,
+} from "@/modules/class-history/utils/classHistory.utils";
+import {
+  cardContainerSx,
+  timeColumnSx,
+  timeTickSx,
+} from "@/modules/class-history/styles/classHistoryStyles";
 import type { BookingHistoryItem } from "@/modules/class-history/interfaces/responses/booking-history-item.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
@@ -75,12 +84,27 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
             <Typography sx={{ fontSize: "0.95rem", color: "#888" }}>Cargando detalle...</Typography>
           ) : isError || !detail ? (
             <Typography sx={{ fontSize: "0.95rem", color: "#c0392b" }}>
-              No se pudo cargar el detalle. IntentÃ¡ de nuevo.
+              No se pudo cargar el detalle. Intentá de nuevo.
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <Box sx={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "16px" }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, minWidth: 0 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                  gap: "16px",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    flex: 1,
+                    minWidth: 0,
+                  }}
+                >
                   <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <Clock size={18} color="#666" />
                     <Typography sx={{ fontSize: "0.95rem", color: "#333" }}>
@@ -105,7 +129,13 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                       )}
                     </Box>
                     <Typography
-                      sx={{ fontSize: "0.95rem", color: "#333", flex: 1, minWidth: 0, wordBreak: "break-all" }}
+                      sx={{
+                        fontSize: "0.95rem",
+                        color: "#333",
+                        flex: 1,
+                        minWidth: 0,
+                        wordBreak: "break-all",
+                      }}
                     >
                       {buildModalityMessage(detail)}
                     </Typography>
@@ -130,11 +160,13 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                 />
               )}
 
-              <StartClaimFlow
-                bookingId={detail.bookingId}
-                claimantRole={role}
-                sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
-              />
+              {detail.status !== "CANCELLED" && (
+                <StartClaimFlow
+                  bookingId={detail.bookingId}
+                  claimantRole={role}
+                  sessionSummary={`${detail.subjectName} con ${detail.otherPartyFullName} · ${detail.sessionDate}`}
+                />
+              )}
 
               {category === "RESERVED" && showVirtualLinkBox && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "6px" }}>

@@ -1,9 +1,7 @@
-﻿import { httpClient } from "@/shared/lib/httpClient";
-import type {
-  ClaimEligibility,
-  ClaimResponse,
-  CreateClaimRequest,
-} from "@/modules/claim/interfaces/claimInterfaces";
+import { httpClient } from "@/shared/lib/httpClient";
+import type { ClaimEligibility } from "@/modules/claim/interfaces/responses/claim-eligibility.interface";
+import type { ClaimResponse } from "@/modules/claim/interfaces/responses/claim-response.interface";
+import type { CreateClaimRequest } from "@/modules/claim/interfaces/requests/create-claim.interface";
 
 export async function getClaimEligibility(bookingId: string): Promise<ClaimEligibility> {
   const response = await httpClient.get<Partial<ClaimEligibility>>(

@@ -24,11 +24,11 @@ export default function StartClaimFlow({ bookingId, claimantRole, sessionSummary
   if (!eligibility) return null;
 
   // Backends sin `allowedReasons` solo aceptan estos motivos.
-  const allowedReasons: ClaimReason[] = eligibility.allowedReasons?.length
-    ? eligibility.allowedReasons
-    : claimantRole === "TUTOR"
+  const allowedReasons: ClaimReason[] =
+    eligibility.allowedReasons ??
+    (claimantRole === "TUTOR"
       ? ["STUDENT_COULD_NOT_ATTEND", "I_COULD_NOT_ATTEND"]
-      : ["I_COULD_NOT_ATTEND"];
+      : ["I_COULD_NOT_ATTEND"]);
 
   const canStartClaim = eligibility.canClaim && allowedReasons.length > 0;
 
