@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeftToLine, Bell, ChevronRight } from "lucide-react";
+import { ArrowLeftToLine } from "lucide-react";
 import { Box, IconButton, Typography } from "@mui/material";
 import NotificationsList from "@/modules/notifications/components/NotificationsList";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
-import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 import type { NotificationsPanelProps } from "@/modules/notifications/components/NotificationsPanel.types";
 import type { NotificationReadFilter } from "@/modules/notifications/types/notification-read-filter.type";
 
@@ -19,13 +16,8 @@ export default function NotificationsPanel({
   onClose,
   sidebarWidth,
 }: NotificationsPanelProps) {
-  const navigate = useNavigate();
   const [status, setStatus] = useState<NotificationReadFilter>("UNREAD");
   const { data: unreadCount = 0 } = useUnreadNotificationsCount();
-  const role = useAuthStore((state) => state.authResponse?.role);
-  const isTutor = role === "TUTOR";
-  const { data: tutorProfile } = useMyTutorProfile(isTutor && open);
-  const showDualRoleHint = Boolean(isTutor && tutorProfile?.hasStudentProfile);
 
   useEffect(() => {
     if (!open) return;
@@ -123,42 +115,6 @@ export default function NotificationsPanel({
       <Box sx={{ flex: 1, overflowY: "auto" }}>
         <NotificationsList status={status} onClose={onClose} />
       </Box>
-
-      {showDualRoleHint && (
-        <Box
-          role="button"
-          tabIndex={0}
-          onClick={() => navigate("/tutor/profile")}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              event.preventDefault();
-              navigate("/tutor/profile");
-            }
-          }}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            margin: "12px 16px 16px",
-            padding: "12px 14px",
-            borderRadius: "12px",
-            border: "1px solid #E8E8F0",
-            backgroundColor: "#FFFFFF",
-            cursor: "pointer",
-          }}
-        >
-          <Bell size={22} color="#5865C8" />
-          <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: "13px", fontWeight: 600, color: "#1A1A2E" }}>
-              Tenés novedades en modo Alumno
-            </Typography>
-            <Typography sx={{ fontSize: "12px", color: "#6B6B80" }}>
-              Cambiá de rol para verlas
-            </Typography>
-          </Box>
-          <ChevronRight size={18} color="#8A8AA3" />
-        </Box>
-      )}
     </Box>
   );
 }

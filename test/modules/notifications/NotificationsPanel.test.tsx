@@ -16,21 +16,8 @@ vi.mock("@/modules/notifications/api/notifications.api", () => ({
 
 import { getNotifications, getUnreadCount } from "@/modules/notifications/api/notifications.api";
 
-vi.mock("@/modules/tutor/profile/api/getMyTutorProfile", () => ({
-  getMyTutorProfile: vi.fn(),
-}));
-
-import { getMyTutorProfile } from "@/modules/tutor/profile/api/getMyTutorProfile";
-
-const navigateMock = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return { ...actual, useNavigate: () => navigateMock };
-});
-
 const mockedGetNotifications = vi.mocked(getNotifications);
 const mockedGetUnreadCount = vi.mocked(getUnreadCount);
-const mockedGetMyTutorProfile = vi.mocked(getMyTutorProfile);
 
 function makePage(content: PagedNotificationsResponse["content"]): PagedNotificationsResponse {
   return {
@@ -70,12 +57,9 @@ function renderPanel(props: Partial<Parameters<typeof NotificationsPanel>[0]> = 
 
 describe("NotificationsPanel", () => {
   beforeEach(() => {
-    navigateMock.mockReset();
     mockedGetNotifications.mockReset();
     mockedGetUnreadCount.mockReset();
     mockedGetUnreadCount.mockResolvedValue({ count: 4 });
-    mockedGetMyTutorProfile.mockReset();
-    mockedGetMyTutorProfile.mockResolvedValue({ hasStudentProfile: false } as never);
     useAuthStore.setState({
       isAuthenticated: true,
       authResponse: {
@@ -140,7 +124,7 @@ describe("NotificationsPanel", () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  it("muestra el banner de dual rol solo si el tutor tiene perfil de alumno", async () => {
+  it("no muestra el banner de modo Alumno (pendiente de otherRoleCount)", async () => {
     useAuthStore.setState({
       isAuthenticated: true,
       authResponse: {
@@ -151,57 +135,11 @@ describe("NotificationsPanel", () => {
       } as never,
     });
     mockedGetNotifications.mockResolvedValue(makePage([]));
-    mockedGetMyTutorProfile.mockResolvedValue({ hasStudentProfile: true } as never);
-    renderPanel();
-
-    expect(await screen.findByText("Tenés novedades en modo Alumno")).toBeInTheDocument();
-    expect(screen.getByText("Cambiá de rol para verlas")).toBeInTheDocument();
-  });
-
-  it("no muestra el banner si el tutor no tiene perfil de alumno", async () => {
-    useAuthStore.setState({
-      isAuthenticated: true,
-      authResponse: {
-        userId: "u-2",
-        email: "tutor@test.com",
-        token: "token",
-        role: "TUTOR",
-      } as never,
-    });
-    mockedGetNotifications.mockResolvedValue(makePage([]));
-    mockedGetMyTutorProfile.mockResolvedValue({ hasStudentProfile: false } as never);
     renderPanel();
 
     await waitFor(() => {
-      expect(mockedGetMyTutorProfile).toHaveBeenCalled();
+      expect(mockedGetNotifications).toHaveBeenCalled();
     });
-    expect(screen.queryByText("Tenés novedades en modo Alumno")).not.toBeInTheDocument();
-  });
-
-  it("navega al perfil al hacer click en el banner de dual rol", async () => {
-    const user = userEvent.setup();
-    useAuthStore.setState({
-      isAuthenticated: true,
-      authResponse: {
-        userId: "u-2",
-        email: "tutor@test.com",
-        token: "token",
-        role: "TUTOR",
-      } as never,
-    });
-    mockedGetNotifications.mockResolvedValue(makePage([]));
-    mockedGetMyTutorProfile.mockResolvedValue({ hasStudentProfile: true } as never);
-    renderPanel();
-
-    await user.click(await screen.findByText("Tenés novedades en modo Alumno"));
-
-    expect(navigateMock).toHaveBeenCalledWith("/tutor/profile");
-  });
-
-  it("no muestra el banner de dual rol para alumnos", () => {
-    mockedGetNotifications.mockResolvedValue(makePage([]));
-    renderPanel();
-
     expect(screen.queryByText("Tenés novedades en modo Alumno")).not.toBeInTheDocument();
   });
 });
