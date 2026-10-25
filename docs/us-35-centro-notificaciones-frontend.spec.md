@@ -12,7 +12,7 @@
 | Historias relacionadas | US-28 / US-29 / US-30 (navbar por rol), US-10, US-11, US-15, US-18, US-22, US-24 / US-27, US-41                                                                                                                                |
 | Repo / branch          | `TetraCodeTeam/knowlink-frontend` (`julian-salvucci`) — PR #47 en `feature/notifications-center`                                                                                                                               |
 | Depende de             | `us-35-centro-notificaciones-backend.spec.md` — `GET /api/v1/notifications?status=`, `GET /api/v1/notifications/unread-count`, `PATCH /api/v1/notifications/{id}/read`; tipos de claim/funds emitidos por el backend (PR #111) |
-| Verificado contra      | `knowlink-frontend@7f29caf` (main); resincronizado contra `feature/notifications-center` (PR #47)                                                                                                                              |
+| Verificado contra      | `knowlink-frontend@feature/notifications-center` (2026-10-24)                                                                                                                                                                  |
 
 **Convención de idioma:** identificadores (componentes, hooks, tipos, props, archivos) en **inglés**. Todo texto visible en la UI en **español**. Las interfaces/props van en archivos separados, nunca dentro del componente. Prettier: doble comilla, `;`, trailing comma ES5, 100 columnas, 2 espacios.
 
@@ -30,6 +30,16 @@ Estado implementado en el PR #47 (verificado en el código):
 - No existe layout, rutas ni login redirect para ADMIN (`RoleRoute` solo conoce STUDENT y TUTOR).
 
 **Decisión de diseño (CA 1 y 2):** el "ícono de notificaciones del navbar" es el **ítem "Notificaciones" que ya existe en cada sidebar**. En lugar de navegar a una página, **abre un panel lateral** (`NotificationsPanel`, un `Box` fijo de ancho `min(380px, 100vw - sidebarWidth)`) que entra por el borde izquierdo junto al sidebar. Se reemplaza la fuente del badge por el conteo real del backend.
+
+## Actualización 2026-10-24 — notificaciones separadas por rol
+
+El backend ahora persiste `recipient_role` y separa el feed por rol activo. El front acompaña el contrato:
+
+- `UnreadCountResponse` es `{ count, otherRoleCount }`: `count` alimenta el badge y el chip; `otherRoleCount` son las no leídas del otro rol STUDENT/TUTOR (0 para ADMIN).
+- `useUnreadNotificationsCount()` devuelve el objeto completo. Los sidebars y el panel usan `data?.count`; `useMarkNotificationAsRead` resta 1 a `count` y **preserva** `otherRoleCount`.
+- El panel renderiza `OtherRoleBanner` sobre las pestañas cuando `otherRoleCount > 0` y el rol activo es STUDENT o TUTOR. El banner muestra "Tenés novedades en modo {Alumno|Tutor}" y ofrece cambiar de rol reutilizando `RoleRedirectDialog` y los hooks `useSwitchTo{Student,Tutor}Role`.
+- Al cambiar de rol se invalida el perfil destino, se actualiza el token con `login` y se navega a `/student/home` o `/tutor/home`.
+- Las query keys siguen incluyendo el rol: al cambiar, cada rol tiene su propio `count` y `otherRoleCount`.
 
 ---
 
@@ -54,6 +64,18 @@ Feature: Centro de notificaciones (UI)
   Scenario: Badge acotado
     Given tengo más de 99 notificaciones sin leer
     Then el badge muestra "99+"
+
+  Scenario: Banner de novedades en el otro rol
+    Given tengo una cuenta dual STUDENT/TUTOR con el rol activo STUDENT
+    And el backend informa otherRoleCount > 0
+    When abro el panel de notificaciones
+    Then veo el banner "Tenés novedades en modo Tutor"
+    And puedo cambiar de rol y navegar a /tutor/home
+
+  Scenario: Sin novedades en el otro rol
+    Given el backend informa otherRoleCount = 0
+    When abro el panel de notificaciones
+    Then el banner del otro rol no se renderiza
 
   Scenario: Abrir el panel (CA 2)
     When hago click en el ítem "Notificaciones"
@@ -212,6 +234,7 @@ export interface NotificationResponse {
 // interfaces/responses/unread-count.interface.ts
 export interface UnreadCountResponse {
   count: number;
+  otherRoleCount: number;
 }
 
 // interfaces/responses/paged-notifications.interface.ts
@@ -356,7 +379,7 @@ Importar el cliente desde `@/shared/lib/httpClient`. Nunca `axios` directo.
 - `useQuery` con `NOTIFICATION_QUERY_KEYS.unreadCount(role)`.
 - `refetchInterval: 30_000`, `refetchIntervalInBackground: false`, `refetchOnWindowFocus: true`.
 - `enabled` solo si `useAuthStore((s) => s.isAuthenticated)`.
-- `select: (d) => d.count`; el consumidor usa `data ?? 0`.
+- Devuelve el objeto completo (`{ count, otherRoleCount }`); los consumidores usan `data?.count` o `data?.otherRoleCount`. Sin `select`, para no perder el otro rol en la caché.
 - `retry: 1`. Con error conserva el último valor (comportamiento por defecto de React Query).
 
 **`useNotifications(status: NotificationReadFilter, enabled: boolean)`**
@@ -367,7 +390,7 @@ Importar el cliente desde `@/shared/lib/httpClient`. Nunca `axios` directo.
 
 **`useMarkNotificationAsRead()`** — `useMutation` con actualización optimista:
 
-1. `onMutate`: `cancelQueries` de `listBase` y `unreadCountBase`; guardar snapshot de ambos (`previousLists` por prefijo y `previousUnreadCount` por key exacta con rol); en la lista marcar `read: true` el item; en el contador restar 1 (mínimo 0) con `unreadCount(role)`.
+1. `onMutate`: `cancelQueries` de `listBase` y `unreadCountBase`; guardar snapshot de ambos (`previousLists` por prefijo y `previousUnreadCount` por key exacta con rol); en la lista marcar `read: true` el item; en el contador restar 1 (mínimo 0) con `unreadCount(role)` **preservando `otherRoleCount`** (`{ ...old, count: Math.max(0, old.count - 1) }`).
 2. `onError`: restaurar ambos snapshots.
 3. `onSettled`: `invalidateQueries` de `unreadCountBase` y `listBase` (reconcilia con el servidor).
 
@@ -391,6 +414,7 @@ Importar el cliente desde `@/shared/lib/httpClient`. Nunca `axios` directo.
 - Backdrop `Box` (`aria-hidden`, `data-testid="notifications-backdrop"`, `zIndex: 99`, transparente, `inset: 0`): click fuera cierra el panel (el sidebar queda por encima con `zIndex: 100`, así que el ítem sigue clickeable para alternar).
 - Esc cierra (listener en `window` mientras `open`).
 - Encabezado: título "Notificaciones" · chip con el conteo de no leídas (aria-label `"{N} notificaciones sin leer"`, muestra `"99+"` con `minWidth: 26` y padding cuando supera 99) · `IconButton` "Colapsar panel" (`ArrowLeftToLine`) que llama `onClose`.
+- Sobre las pestañas, `<OtherRoleBanner otherRoleCount={data?.otherRoleCount ?? 0} />`; el banner se oculta solo si el contador es 0, no hay sesión o el rol activo no es STUDENT/TUTOR.
 - Pestañas (`role="tablist"`): "No Leído" (`UNREAD`, seleccionada por defecto) y "Leído" (`READ`), con `role="tab"`, `aria-selected` y Enter / Espacio.
 - Contenido: `<NotificationsList status={status} onClose={onClose} />`.
 - Sin `Popover` de MUI ni `anchorEl`: el estado vive en el sidebar. Estilos con `sx`; **sin `style={{}}`**.
@@ -445,7 +469,7 @@ Importar el cliente desde `@/shared/lib/httpClient`. Nunca `axios` directo.
 2. **Destinos de los enlaces.** Hoy son `UnderConstructionPage`. Al construir las pantallas de detalle (clases, material, etc.) hay que actualizar solo la config de rutas.
 3. **Ver todas / página completa:** no incluida; si el panel con "Cargar más" resulta corto, se evalúa una historia aparte.
 4. **Marcar todas como leídas:** no está en los criterios; sumarlo es un botón en el encabezado + endpoint `PATCH /read-all` en backend.
-5. **Banner "Tenés novedades en modo Alumno".** Diseñado para ofrecer al tutor con rol de alumno saltar al otro rol; **oculto** hasta que el backend exponga `otherRoleCount` (hoy la respuesta no lo trae). El PR #47 lo implementó y el review pidió ocultarlo: no debe renderizarse nada (queda solo el test que verifica su ausencia) hasta que exista el dato.
+5. **Banner "Tenés novedades en el otro rol": implementado.** Se muestra dentro del panel cuando `otherRoleCount > 0`; reutiliza el flujo de cambio de rol (`RoleRedirectDialog` + `useSwitchTo{Student,Tutor}Role`). No hay banner fuera del panel.
 6. **Acciones "Calificar" y "Reclamar" dependen del backend.** El front ya las tiene configuradas (`RATING_ENABLED` → popup de rating, `SESSION_COMPLETED` → popup de reclamo), pero solo son clickeables útiles cuando el backend emite esos tipos (emisión de `RATING_ENABLED` al confirmar y `SESSION_COMPLETED` al completar: PR #111, item 10).
 7. **`SESSION_CLAIM_UPDATE` / `SESSION_CLAIM_COMMENT` / `MATERIAL_REPORT_UPDATE`** llegan cuando el backend del PR #111 emita eventos de claim y de reporte de material; las rutas de soporte (`/student/complaints`, `/tutor/requests`) ya existen.
 
@@ -455,7 +479,7 @@ Importar el cliente desde `@/shared/lib/httpClient`. Nunca `axios` directo.
 
 Vitest + Testing Library (config en `vitest.config.ts`, setup en `test/setup.ts`), carpeta `test/modules/notifications/` más `test/modules/student/StudentSidebar.test.tsx` (foco de vuelta a la campana). Mockear `@/modules/notifications/api/notifications.api` en los tests de UI (o `@/shared/lib/httpClient`, los dos clientes) y envolver con `QueryClientProvider` y `MemoryRouter`. Si se agregan casos al directorio de QA (`docs/testing/cases`), seguir el modelo dual Markdown/YAML ya definido en `qa-spec-test-automation.md`.
 
-Cobertura actual (15 archivos / 85 tests en verde): `getNotificationRoute.test.ts` (rutas por tipo × STUDENT / TUTOR / ADMIN + desconocido, y `getNotificationAction`: navigate / rating / claim / none), `NotificationItem.test.tsx` (leída, no leída, fecha, visual), `NotificationsList.test.tsx` (loading, error, vacíos por pestaña, cargar más), `NotificationsPanel.test.tsx` (header, chip 99+, pestañas, backdrop, colapsar, ausencia del banner dual-role), `badge.test.tsx`, `useMarkNotificationAsRead.test.tsx` (optimismo y rollback con keys por rol) y `StudentSidebar.test.tsx`.
+Cobertura actual (suite de notificaciones en verde): `getNotificationRoute.test.ts` (rutas por tipo - STUDENT / TUTOR / ADMIN + desconocido, y `getNotificationAction`: navigate / rating / claim / none), `NotificationItem.test.tsx` (leída, no leída, fecha, visual), `NotificationsList.test.tsx` (loading, error, vacíos por pestaña, cargar más), `NotificationsPanel.test.tsx` (header, chip 99+, pestañas, backdrop, colapsar, banner del otro rol oculto/visible), `badge.test.tsx`, `useMarkNotificationAsRead.test.tsx` (optimismo, rollback y preservación de `otherRoleCount`) y `StudentSidebar.test.tsx`.
 
 > Ojo con Testing Library: `matches()` normaliza solo el lado DOM y compara el esperado **en crudo**; `formatNotificationDate` produce un NBSP (U+00A0) en "p. m." → en los tests de fecha usar `.replace(/\s+/g, " ")` sobre el esperado.
 
@@ -463,6 +487,10 @@ Cobertura actual (15 archivos / 85 tests en verde): `getNotificationRoute.test.t
 
 ## Definition of Done
 
+- [x] `UnreadCountResponse` incluye `otherRoleCount`; el badge/chip usa `count` y el banner usa `otherRoleCount`
+- [x] `useUnreadNotificationsCount` devuelve el objeto completo y el PATCH optimista preserva `otherRoleCount`
+- [x] `OtherRoleBanner` dentro del panel, visible con `otherRoleCount > 0`, con cambio de rol vía `RoleRedirectDialog`
+- [x] Tests del banner (oculto/visible) y de la preservación de `otherRoleCount` en el hook optimista
 - [x] Módulo `src/modules/notifications` con la estructura indicada; tipos/props en archivos separados
 - [x] Tipos de `interfaces/responses` alineados 1:1 con los DTO del backend (17 tipos de notificación)
 - [x] `NOTIFICATION_QUERY_KEYS` como única fuente de keys, con rol; ningún array de key suelto

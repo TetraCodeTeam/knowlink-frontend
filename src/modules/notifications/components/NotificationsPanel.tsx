@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeftToLine } from "lucide-react";
 import { Box, IconButton, Typography } from "@mui/material";
 import NotificationsList from "@/modules/notifications/components/NotificationsList";
+import OtherRoleBanner from "@/modules/notifications/components/OtherRoleBanner";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 import type { NotificationsPanelProps } from "@/modules/notifications/components/NotificationsPanel.types";
 import type { NotificationReadFilter } from "@/modules/notifications/types/notification-read-filter.type";
@@ -17,7 +18,9 @@ export default function NotificationsPanel({
   sidebarWidth,
 }: NotificationsPanelProps) {
   const [status, setStatus] = useState<NotificationReadFilter>("UNREAD");
-  const { data: unreadCount = 0 } = useUnreadNotificationsCount();
+  const { data } = useUnreadNotificationsCount();
+  const unreadCount = data?.count ?? 0;
+  const otherRoleCount = data?.otherRoleCount ?? 0;
 
   useEffect(() => {
     if (!open) return;
@@ -85,6 +88,8 @@ export default function NotificationsPanel({
             <ArrowLeftToLine size={20} />
           </IconButton>
         </Box>
+
+        {otherRoleCount > 0 && <OtherRoleBanner otherRoleCount={otherRoleCount} />}
 
         <Box sx={{ display: "flex", borderBottom: "1px solid #E8E8F0" }} role="tablist">
           {TABS.map((tab) => {

@@ -11,7 +11,6 @@ export function useUnreadNotificationsCount() {
   return useQuery({
     queryKey: NOTIFICATION_QUERY_KEYS.unreadCount(role),
     queryFn: getUnreadCount,
-    select: (data) => data.count,
     enabled: isAuthenticated,
     refetchInterval: NOTIFICATION_POLL_INTERVAL,
     refetchIntervalInBackground: false,

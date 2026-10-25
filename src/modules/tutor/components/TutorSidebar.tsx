@@ -73,7 +73,8 @@ export default function TutorSidebar() {
       notificationsRef.current?.focus();
     }
   }, [isNotificationsOpen]);
-  const { data: unreadCount = 0 } = useUnreadNotificationsCount();
+  const { data } = useUnreadNotificationsCount();
+  const unreadCount = data?.count ?? 0;
   const isActive = (path: string, badge?: NavItem["badge"]) => {
     if (badge === "notifications") return isNotificationsOpen;
     return location.pathname === path;

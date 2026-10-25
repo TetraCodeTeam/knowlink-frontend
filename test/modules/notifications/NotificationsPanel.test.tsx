@@ -59,7 +59,7 @@ describe("NotificationsPanel", () => {
   beforeEach(() => {
     mockedGetNotifications.mockReset();
     mockedGetUnreadCount.mockReset();
-    mockedGetUnreadCount.mockResolvedValue({ count: 4 });
+    mockedGetUnreadCount.mockResolvedValue({ count: 4, otherRoleCount: 0 });
     useAuthStore.setState({
       isAuthenticated: true,
       authResponse: {
@@ -134,7 +134,7 @@ describe("NotificationsPanel", () => {
   });
 
   it("limita el chip de sin leer a 99+ y conserva el total real en el aria-label", async () => {
-    mockedGetUnreadCount.mockResolvedValue({ count: 150 });
+    mockedGetUnreadCount.mockResolvedValue({ count: 150, otherRoleCount: 0 });
     mockedGetNotifications.mockResolvedValue(makePage([]));
     renderPanel();
 
@@ -144,7 +144,7 @@ describe("NotificationsPanel", () => {
     expect(screen.getByLabelText("150 notificaciones sin leer")).toBeInTheDocument();
   });
 
-  it("no muestra el banner de modo Alumno (pendiente de otherRoleCount)", async () => {
+  it("no muestra el banner si el otro rol no tiene notificaciones sin leer", async () => {
     useAuthStore.setState({
       isAuthenticated: true,
       authResponse: {
@@ -154,6 +154,7 @@ describe("NotificationsPanel", () => {
         role: "TUTOR",
       } as never,
     });
+    mockedGetUnreadCount.mockResolvedValue({ count: 1, otherRoleCount: 0 });
     mockedGetNotifications.mockResolvedValue(makePage([]));
     renderPanel();
 
@@ -161,5 +162,24 @@ describe("NotificationsPanel", () => {
       expect(mockedGetNotifications).toHaveBeenCalled();
     });
     expect(screen.queryByText("Tenés novedades en modo Alumno")).not.toBeInTheDocument();
+  });
+
+  it("muestra el banner para cambiar al otro rol con notificaciones sin leer", async () => {
+    useAuthStore.setState({
+      isAuthenticated: true,
+      authResponse: {
+        userId: "u-2",
+        email: "tutor@test.com",
+        token: "token",
+        role: "TUTOR",
+      } as never,
+    });
+    mockedGetUnreadCount.mockResolvedValue({ count: 1, otherRoleCount: 2 });
+    mockedGetNotifications.mockResolvedValue(makePage([]));
+    renderPanel();
+
+    expect(await screen.findByText("Tenés novedades en modo Alumno")).toBeInTheDocument();
+    expect(screen.getByText("2 sin leer en tu otro rol")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ir a modo Alumno" })).toBeInTheDocument();
   });
 });

@@ -43,7 +43,7 @@ export function useMarkNotificationAsRead() {
         NOTIFICATION_QUERY_KEYS.unreadCount(role),
         (old) => {
           if (!old) return old;
-          return { count: Math.max(0, old.count - 1) };
+          return { ...old, count: Math.max(0, old.count - 1) };
         }
       );
 

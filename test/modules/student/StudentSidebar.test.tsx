@@ -15,7 +15,7 @@ vi.mock("@/modules/notifications/api/notifications.api", () => ({
     totalPages: 1,
     hasNext: false,
   }),
-  getUnreadCount: vi.fn().mockResolvedValue({ count: 0 }),
+  getUnreadCount: vi.fn().mockResolvedValue({ count: 0, otherRoleCount: 0 }),
   markNotificationAsRead: vi.fn(),
 }));
 

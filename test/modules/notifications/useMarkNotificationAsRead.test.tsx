@@ -57,6 +57,7 @@ function seedCache(client: QueryClient) {
   );
   client.setQueryData<UnreadCountResponse>(NOTIFICATION_QUERY_KEYS.unreadCount("STUDENT"), {
     count: 2,
+    otherRoleCount: 3,
   });
 }
 
@@ -96,6 +97,7 @@ describe("useMarkNotificationAsRead — actualizacion optimista", () => {
         NOTIFICATION_QUERY_KEYS.unreadCount("STUDENT")
       );
       expect(unread?.count).toBe(1);
+      expect(unread?.otherRoleCount).toBe(3);
     });
 
     const list = client.getQueryData<InfiniteData<PagedNotificationsResponse>>([
