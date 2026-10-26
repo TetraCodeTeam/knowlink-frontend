@@ -1,11 +1,10 @@
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock } from "lucide-react";
 import { Box, Divider, InputAdornment, TextField } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
 import { useLogin } from "@/modules/auth/hooks/useLogin";
 import PasswordField from "@/modules/auth/components/PasswordField";
-import RoleToggleGroup from "@/shared/components/RoleToggleGroup";
 
 export default function LoginForm() {
   const { mutate, isPending } = useLogin();
@@ -13,14 +12,10 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    control,
-    watch,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
-
-  const selectedRole = watch("role");
 
   return (
     <>
@@ -84,33 +79,6 @@ export default function LoginForm() {
             />
           </Box>
 
-          {/* ─── Rol ─── */}
-          <Box>
-            <Box
-              component="label"
-              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
-            >
-              Quiero ingresar como
-            </Box>
-            <Controller
-              name="role"
-              control={control}
-              render={({ field }) => (
-                <RoleToggleGroup
-                  value={field.value}
-                  onChange={field.onChange}
-                  allowDeselect
-                  onClear={() => field.onChange(undefined)}
-                />
-              )}
-            />
-            {errors.role && (
-              <Box component="p" sx={{ color: "#d32f2f", fontSize: 13, mt: "4px", mb: 0 }}>
-                {errors.role.message}
-              </Box>
-            )}
-          </Box>
-
           {/* ─── Botón Iniciar Sesión ─── */}
           <Box
             component="button"
@@ -132,13 +100,7 @@ export default function LoginForm() {
               "&:hover:not(:disabled)": { backgroundColor: "#4a54b4" },
             }}
           >
-            {isPending
-              ? "Iniciando sesión..."
-              : selectedRole === "TUTOR"
-                ? "Ingresar como tutor"
-                : selectedRole === "STUDENT"
-                  ? "Ingresar como alumno"
-                  : "Iniciar Sesión"}
+            {isPending ? "Iniciando sesión..." : "Iniciar Sesión"}
           </Box>
         </Box>
       </Box>
