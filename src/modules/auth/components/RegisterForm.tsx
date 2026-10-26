@@ -15,7 +15,7 @@ import { registerSchema, type RegisterFormData } from "@/modules/auth/schemas/us
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import PasswordField from "@/modules/auth/components/PasswordField";
-import RoleToggleGroup from "@/shared/components/RoleToggleGroup";
+import RoleToggleGroup from "@/modules/auth/components/RoleToggleGroup";
 
 export default function RegisterForm() {
   const navigate = useNavigate();

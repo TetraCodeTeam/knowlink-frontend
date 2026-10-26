@@ -17,8 +17,7 @@ export function useLogin() {
 
   const { isPending, mutate } = useMutation({
     mutationKey: [AUTH_LOGIN_KEY],
-    mutationFn: ({ email, password, role }: LoginFormValues) =>
-      loginUser({ email, password, ...(role ? { targetRole: role } : {}) }),
+    mutationFn: ({ email, password }: LoginFormValues) => loginUser({ email, password }),
     onSuccess: (authResponse) => {
       login(authResponse);
       const destination = ROLE_REDIRECT[authResponse.role] ?? "/student/home";
