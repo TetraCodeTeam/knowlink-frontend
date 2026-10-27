@@ -1,12 +1,22 @@
 import type React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, CalendarClock, Bell, LogOut, GraduationCap, BookOpenCheck, MessageCircleQuestion } from "lucide-react";
+import {
+  Home,
+  CalendarClock,
+  Bell,
+  LogOut,
+  GraduationCap,
+  BookOpenCheck,
+  MessageCircleQuestion,
+} from "lucide-react";
 import { Box, Typography, Avatar, Divider, Badge } from "@mui/material";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useTutorBadgesStore } from "@/modules/tutor/hooks/useTutorBadgesStore";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
+import NotificationsPanel from "@/modules/notifications/components/NotificationsPanel";
+import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 
 export const TUTOR_SIDEBAR_WIDTH = 108;
 
@@ -27,7 +37,12 @@ const navItems: NavItem[] = [
   { icon: CalendarClock, label: "Mi agenda", path: "/tutor/availability" },
   { icon: BookOpenCheck, label: "Mis clases", path: "/tutor/classes" },
   { icon: Bell, label: "Notificaciones", path: "/tutor/notifications", badge: "notifications" },
-  { icon: MessageCircleQuestion, label: "Soporte y solicitudes", path: "/tutor/requests", badge: "requests" },
+  {
+    icon: MessageCircleQuestion,
+    label: "Soporte y solicitudes",
+    path: "/tutor/requests",
+    badge: "requests",
+  },
 ];
 
 const badgeSx = {
@@ -43,18 +58,52 @@ export default function TutorSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authResponse } = useAuthStore();
-  const { notificationsCount, requestsCount } = useTutorBadgesStore();
+  const { requestsCount } = useTutorBadgesStore();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const notificationsRef = useRef<HTMLDivElement>(null);
+  const wasNotificationsOpenRef = useRef(false);
 
-  const isActive = (path: string) => location.pathname === path;
+  useEffect(() => {
+    if (isNotificationsOpen) {
+      wasNotificationsOpenRef.current = true;
+    } else if (wasNotificationsOpenRef.current) {
+      wasNotificationsOpenRef.current = false;
+      notificationsRef.current?.focus();
+    }
+  }, [isNotificationsOpen]);
+  const { data } = useUnreadNotificationsCount();
+  const unreadCount = data?.count ?? 0;
+  const isActive = (path: string, badge?: NavItem["badge"]) => {
+    if (badge === "notifications") return isNotificationsOpen;
+    return location.pathname === path;
+  };
 
   const handleLogout = () => setIsLogoutOpen(true);
 
+  const handleNotificationsClick = () => setIsNotificationsOpen((open) => !open);
+
+  const handleNotificationsKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setIsNotificationsOpen((open) => !open);
+    }
+  };
+
+  const handleCloseNotifications = () => setIsNotificationsOpen(false);
+
   const getBadgeCount = (badge?: NavItem["badge"]) => {
-    if (badge === "notifications") return notificationsCount;
+    if (badge === "notifications") return unreadCount;
     if (badge === "requests") return requestsCount;
     return 0;
+  };
+
+  const getAriaLabel = (label: string, badge?: NavItem["badge"]) => {
+    if (badge === "notifications" && unreadCount > 0) {
+      return `${label}, ${unreadCount} sin leer`;
+    }
+    return label;
   };
 
   const displayName = authResponse?.email.split("@")[0] ?? "Tutor";
@@ -120,20 +169,29 @@ export default function TutorSidebar() {
         }}
       >
         {navItems.map(({ icon: Icon, label, path, badge }) => {
-          const active = isActive(path);
+          const active = isActive(path, badge);
           const count = getBadgeCount(badge);
+          const isNotifications = badge === "notifications";
           return (
             <Box
               key={path}
+              ref={isNotifications ? notificationsRef : undefined}
               role="button"
               tabIndex={0}
-              onClick={() => navigate(path)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  navigate(path);
-                }
-              }}
+              aria-label={getAriaLabel(label, badge)}
+              aria-haspopup={isNotifications ? "dialog" : undefined}
+              aria-expanded={isNotifications ? isNotificationsOpen : undefined}
+              onClick={isNotifications ? handleNotificationsClick : () => navigate(path)}
+              onKeyDown={
+                isNotifications
+                  ? handleNotificationsKeyDown
+                  : (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        navigate(path);
+                      }
+                    }
+              }
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -149,7 +207,13 @@ export default function TutorSidebar() {
                 transition: "background-color 0.15s ease",
               }}
             >
-              <Badge badgeContent={count} color="error" invisible={count === 0} max={99} sx={badgeSx}>
+              <Badge
+                badgeContent={count}
+                color="error"
+                invisible={count === 0}
+                max={99}
+                sx={badgeSx}
+              >
                 <Icon size={24} color={TEXT_COLOR} strokeWidth={active ? 2.5 : 2} />
               </Badge>
               <Typography
@@ -276,6 +340,12 @@ export default function TutorSidebar() {
         onClose={() => setIsLogoutOpen(false)}
         onConfirm={() => triggerLogout()}
         isPending={isLoggingOut}
+      />
+
+      <NotificationsPanel
+        open={isNotificationsOpen}
+        onClose={handleCloseNotifications}
+        sidebarWidth={TUTOR_SIDEBAR_WIDTH}
       />
     </Box>
   );

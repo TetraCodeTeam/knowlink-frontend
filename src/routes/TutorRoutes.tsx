@@ -16,7 +16,6 @@ export default function TutorRoutes() {
         <Route path="classes" element={<TutorClassHistoryPage />} />
         <Route path="content" element={<UnderConstructionPage />} />
         <Route path="stats" element={<UnderConstructionPage />} />
-        <Route path="notifications" element={<UnderConstructionPage />} />
         <Route path="requests" element={<SupportPage />} />
         <Route path="profile" element={<TutorProfilePage />} />
         <Route path="availability" element={<WeeklyAgendaPage />} />

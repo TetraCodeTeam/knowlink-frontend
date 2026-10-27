@@ -7,6 +7,8 @@ import StudentTopbar, {
 } from "@/modules/student/components/StudentTopbar";
 import { StudentTokenWidget } from "@/modules/attendance/components/StudentTokenWidget";
 import { useAutoShowStudentToken } from "@/modules/attendance/hooks/useAutoShowStudentToken";
+import RatingPopupHost from "@/modules/class-history/components/RatingPopupHost";
+import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
 
 export default function StudentLayout() {
   useAutoShowStudentToken();
@@ -35,6 +37,8 @@ export default function StudentLayout() {
         </Box>
       </Box>
       <StudentTokenWidget />
+      <RatingPopupHost />
+      <ClaimPopupHost />
     </Box>
   );
 }

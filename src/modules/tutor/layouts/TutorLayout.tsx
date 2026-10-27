@@ -4,6 +4,8 @@ import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/Tu
 import { TutorSessionConfirmationWidget } from "@/modules/attendance/components/TutorSessionconfirmationwidget";
 import { useAutoOpenSessionConfirmation } from "@/modules/attendance/hooks/useAutoOpenSessionConfirmation";
 import { useConfirmSessionAttendance } from "@/modules/attendance/hooks/useConfirmSessionAttendance";
+import RatingPopupHost from "@/modules/class-history/components/RatingPopupHost";
+import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
 
 export default function TutorLayout() {
   useAutoOpenSessionConfirmation();
@@ -26,6 +28,8 @@ export default function TutorLayout() {
       <TutorSessionConfirmationWidget
         onConfirm={({ sessionId, code }) => confirmSessionAttendance({ sessionId, code })}
       />
+      <RatingPopupHost />
+      <ClaimPopupHost />
     </Box>
   );
 }
