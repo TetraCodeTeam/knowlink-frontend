@@ -14,6 +14,7 @@ import {
   TimerOff,
   Wallet,
 } from "lucide-react";
+import type { NotificationActionStatus } from "@/modules/notifications/types/notification-action-status.type";
 import type { NotificationType } from "@/modules/notifications/types/notification-type.type";
 import type { Role } from "@/shared/types/role.type";
 
@@ -173,15 +174,27 @@ export function getNotificationConfig(type: string): NotificationTypeConfig {
 export type NotificationAction =
   | { kind: "none" }
   | { kind: "rating"; label: string }
+  | { kind: "rating-done"; label: string }
+  | { kind: "rating-expired"; label: string }
   | { kind: "claim"; label: string }
   | { kind: "navigate"; label: string; route: string };
 
-export function getNotificationAction(type: string, role: string): NotificationAction {
+export function getNotificationAction(
+  type: string,
+  role: string,
+  actionStatus: NotificationActionStatus = "NONE"
+): NotificationAction {
   if (role !== "STUDENT" && role !== "TUTOR") {
     return { kind: "none" };
   }
   const config = getNotificationConfig(type);
   if (config.action.kind === "rating") {
+    if (actionStatus === "COMPLETED") {
+      return { kind: "rating-done", label: "Ya calificaste" };
+    }
+    if (actionStatus === "EXPIRED") {
+      return { kind: "rating-expired", label: "Venció el plazo" };
+    }
     return { kind: "rating", label: config.action.label };
   }
   if (config.action.kind === "claim") {
