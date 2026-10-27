@@ -37,19 +37,35 @@ export default function RateBookingFlow({ detail, role }: RateBookingFlowProps) 
     const msUntilDeadline = deadline - Date.now();
     if (msUntilDeadline <= 0) {
       setDeadlinePassed(true);
+      setStep((current) => (current === "rating" ? "expired" : current));
       return;
     }
 
     const timer = setTimeout(() => {
       setDeadlinePassed(true);
+      setStep((current) => (current === "rating" ? "expired" : current));
       forceRerender();
       invalidate();
     }, msUntilDeadline);
     return () => clearTimeout(timer);
   }, [detail.ratingStatus, deadline, invalidate]);
 
+  useEffect(() => {
+    if (step !== "rating") return;
+    if (detail.ratingStatus === "SUBMITTED") {
+      setStep("already-rated");
+    } else if (detail.ratingStatus === "EXPIRED") {
+      setStep("expired");
+    }
+  }, [detail.ratingStatus, step]);
+
+  const canRate =
+    detail.ratingStatus === "PENDING" &&
+    !deadlinePassed &&
+    (deadline === null || Date.now() < deadline);
+
   const handleOpen = () => {
-    if (detail.ratingStatus !== "PENDING") return;
+    if (!canRate) return;
     setStep("rating");
   };
 
@@ -88,17 +104,9 @@ export default function RateBookingFlow({ detail, role }: RateBookingFlowProps) 
     resolve(detail.bookingId);
   };
 
-  if (
-    detail.ratingStatus !== "PENDING" ||
-    deadlinePassed ||
-    (deadline !== null && Date.now() >= deadline)
-  ) {
-    return null;
-  }
-
   return (
     <>
-      <RateBookingButton onClick={handleOpen} />
+      {canRate && <RateBookingButton onClick={handleOpen} />}
 
       <RateBookingDialog
         open={step === "rating"}
