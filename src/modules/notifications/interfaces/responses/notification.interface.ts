@@ -1,3 +1,4 @@
+import type { NotificationActionStatus } from "@/modules/notifications/types/notification-action-status.type";
 import type { NotificationType } from "@/modules/notifications/types/notification-type.type";
 
 export interface NotificationResponse {
@@ -8,4 +9,6 @@ export interface NotificationResponse {
   referenceId: string | null;
   read: boolean;
   createdAt: string;
+  expiresAt: string | null;
+  actionStatus: NotificationActionStatus;
 }

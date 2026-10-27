@@ -21,15 +21,27 @@ export default function NotificationItem({
   const openRatingPopup = useRatingPopupStore((s) => s.open);
   const openClaimPopup = useClaimPopupStore((s) => s.open);
   const { icon: Icon, tileColor, iconColor } = getNotificationConfig(notification.type);
-  const action = getNotificationAction(notification.type, authResponse?.role ?? "");
+  const action = getNotificationAction(
+    notification.type,
+    authResponse?.role ?? "",
+    notification.actionStatus
+  );
   const title = notification.title ?? notification.message;
   const isUnread = !notification.read;
+  const isSettledRating = action.kind === "rating-done" || action.kind === "rating-expired";
+  const isRatingAction = action.kind === "rating" || isSettledRating;
+  const ariaSuffix =
+    action.kind === "rating-done"
+      ? ". Ya calificaste."
+      : action.kind === "rating-expired"
+        ? ". Venció el plazo para calificar."
+        : "";
 
   const handleClick = () => {
     if (!notification.read) {
       onMarkAsRead(notification.notificationId);
     }
-    if (action.kind === "rating" && notification.referenceId) {
+    if (isRatingAction && notification.referenceId) {
       openRatingPopup(notification.referenceId);
     } else if (action.kind === "claim" && notification.referenceId) {
       openClaimPopup(notification.referenceId);
@@ -52,7 +64,7 @@ export default function NotificationItem({
       tabIndex={0}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      aria-label={`${notification.read ? "Leída" : "No leída"}: ${notification.message}`}
+      aria-label={`${notification.read ? "Leída" : "No leída"}: ${notification.message}${ariaSuffix}`}
       sx={{
         display: "flex",
         alignItems: "flex-start",
@@ -61,6 +73,7 @@ export default function NotificationItem({
         cursor: "pointer",
         borderBottom: "1px solid #EEEEF5",
         backgroundColor: isUnread ? "#F4F3FB" : "#FFFFFF",
+        opacity: isSettledRating ? 0.7 : 1,
         "&:hover": { backgroundColor: isUnread ? "#EDECF9" : "#F8F7FE" },
         transition: "background-color 0.15s ease",
       }}
@@ -132,10 +145,10 @@ export default function NotificationItem({
               textAlign: "right",
               fontSize: "12px",
               fontWeight: 600,
-              color: "#3F4CAE",
+              color: isSettledRating ? "#6B6B80" : "#3F4CAE",
             }}
           >
-            {action.label} →
+            {isSettledRating ? action.label : `${action.label} →`}
           </Typography>
         )}
       </Box>

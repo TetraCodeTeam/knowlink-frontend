@@ -50,6 +50,8 @@ function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHisto
     virtualSessionLink: "https://meet.example.com/abc",
     address: null,
     createdAt: "2026-10-15T10:00:00",
+    ratingStatus: "NOT_AVAILABLE",
+    ratingDeadline: null,
     ...overrides,
   };
 }

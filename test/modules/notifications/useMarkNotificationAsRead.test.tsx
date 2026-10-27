@@ -28,6 +28,8 @@ function makePage(): PagedNotificationsResponse {
         referenceId: null,
         read: false,
         createdAt: "2026-10-20T10:00:00",
+        expiresAt: null,
+        actionStatus: "NONE",
       },
       {
         notificationId: "n-2",
@@ -37,6 +39,8 @@ function makePage(): PagedNotificationsResponse {
         referenceId: null,
         read: false,
         createdAt: "2026-10-20T09:00:00",
+        expiresAt: null,
+        actionStatus: "NONE",
       },
     ],
     page: 0,

@@ -38,6 +38,8 @@ const sampleNotification: PagedNotificationsResponse["content"][number] = {
   referenceId: "b-1",
   read: false,
   createdAt: "2026-10-20T10:00:00",
+  expiresAt: null,
+  actionStatus: "NONE",
 };
 
 function renderPanel(props: Partial<Parameters<typeof NotificationsPanel>[0]> = {}) {

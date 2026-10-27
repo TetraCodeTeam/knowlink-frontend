@@ -3,10 +3,10 @@ import type { BookingHistoryCategory } from "@/modules/class-history/types/booki
 export const HISTORY_PAGE_SIZE = 10;
 
 export const CATEGORY_TABS: { category: BookingHistoryCategory; label: string }[] = [
-    { category: "RESERVED", label: "Reservadas" },
-    { category: "IN_PROGRESS", label: "En Curso" },
-    { category: "COMPLETED", label: "Realizadas" },
-    { category: "CANCELLED", label: "Canceladas" },
+  { category: "RESERVED", label: "Reservadas" },
+  { category: "IN_PROGRESS", label: "En Curso" },
+  { category: "COMPLETED", label: "Realizadas" },
+  { category: "CANCELLED", label: "Canceladas" },
 ];
 
 export const EMPTY_STATE_MESSAGE = "No hay registros de clases para mostrar en esta sección";
@@ -16,5 +16,3 @@ export const VIRTUAL_LINK_EDIT_WINDOW_MINUTES = 10;
 export const MAX_VIRTUAL_LINK_LENGTH = 2048;
 
 export const MAX_RATING_COMMENT_LENGTH = 2000;
-
-export const RATING_WINDOW_HOURS = 24;

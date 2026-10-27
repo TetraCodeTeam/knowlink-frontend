@@ -200,6 +200,7 @@ export const NOTIFICATION_TYPE_VALUES = [
   "BOOKING_CONFIRMED",
   "BOOKING_CANCELLED",
   "SESSION_CONFIRMATION_REMINDER",
+  "SESSION_CONFIRMATION_TOKEN_AVAILABLE",
   "SESSION_CONFIRMED",
   "SESSION_NOT_CONFIRMED",
   "SESSION_COMPLETED",
@@ -270,6 +271,7 @@ Paletas de tile: GREEN `#DDF5E6` / icono `#2F9E5F` · RED `#FBDEDE` / `#D64545` 
 | `BOOKING_CONFIRMED`                | `CalendarCheck`        | GREEN    | Ver           | `/student/classes`       | `/tutor/classes`    |
 | `BOOKING_CANCELLED`                | `CalendarX`            | RED      | Ver           | `/student/classes`       | `/tutor/classes`    |
 | `SESSION_CONFIRMATION_REMINDER`    | `Timer`                | YELLOW   | Ver           | `/student/classes`       | `/tutor/classes`    |
+| `SESSION_CONFIRMATION_TOKEN_AVAILABLE` | `KeyRound`         | YELLOW   | Ver código    | `/student/classes`       | `null`              |
 | `SESSION_CONFIRMED`                | `BellRing`             | GREEN    | Ver           | `/student/classes`       | `/tutor/classes`    |
 | `SESSION_NOT_CONFIRMED`            | `TimerOff`             | RED      | Ver           | `/student/classes`       | `/tutor/classes`    |
 | `SESSION_COMPLETED`                | `CircleCheck`          | YELLOW   | **Reclamar**  | `/student/classes`       | `/tutor/classes`    |
