@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { toBlockEndTime } from "@/shared/utils/dayTime.utils";
 import { useAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useAvailabilityBlocks";
 import { useSaveAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useSaveAvailabilityBlocks";
 import {
@@ -189,7 +190,7 @@ export function useAvailabilityDraft() {
       id: typeof crypto?.randomUUID === "function" ? crypto.randomUUID() : String(Date.now()),
       date: toDateStr(start),
       startTime: start.toTimeString().slice(0, 8),
-      endTime: end.toTimeString().slice(0, 8),
+      endTime: toBlockEndTime(start, end),
     };
 
     setDraftBlocks((prev) => [...(prev ?? blocks), newBlock]);

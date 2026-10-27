@@ -63,5 +63,5 @@ export const AGENDA_LEGEND_ITEMS = [
 
 /** Ventana horaria visible en la grilla semanal. */
 export const AGENDA_CALENDAR_SLOT_MIN_TIME = "08:00:00";
-export const AGENDA_CALENDAR_SLOT_MAX_TIME = "21:00:00";
+export const AGENDA_CALENDAR_SLOT_MAX_TIME = "24:00:00";
 export const AGENDA_CALENDAR_SLOT_DURATION = "00:30:00";

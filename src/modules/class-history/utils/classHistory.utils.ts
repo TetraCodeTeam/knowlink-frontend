@@ -1,3 +1,4 @@
+import { formatClockTime, toMinutesOfDay } from "@/shared/utils/dayTime.utils";
 import { MAX_VIRTUAL_LINK_LENGTH } from "@/modules/class-history/constants/classHistory.constants";
 import type { BookingHistoryItem } from "@/modules/class-history/interfaces/responses/booking-history-item.interface";
 
@@ -45,13 +46,11 @@ export function formatClassCountBadge(count: number): string {
 }
 
 export function formatTime(time: string): string {
-  return time.slice(0, 5);
+  return formatClockTime(time);
 }
 
 export function formatDurationLabel(startTime: string, endTime: string): string {
-  const [startH, startM] = startTime.split(":").map(Number);
-  const [endH, endM] = endTime.split(":").map(Number);
-  const minutes = endH * 60 + endM - (startH * 60 + startM);
+  const minutes = toMinutesOfDay(endTime) - toMinutesOfDay(startTime);
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
 

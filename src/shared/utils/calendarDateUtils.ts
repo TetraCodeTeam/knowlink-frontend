@@ -1,3 +1,5 @@
+import { toMinutesOfDay } from "@/shared/utils/dayTime.utils";
+
 const MONTHS_ES = [
   "enero",
   "febrero",
@@ -82,9 +84,10 @@ export function resolveDateForDayOfWeek(weekStart: Date, dayOfWeek: number): Dat
 }
 
 export function isBeforeNowAtTime(date: Date, time: string): boolean {
-  const [hours, minutes] = time.split(":").map(Number);
+  const minutesOfDay = toMinutesOfDay(time);
   const candidate = new Date(date);
-  candidate.setHours(hours, minutes, 0, 0);
+  // 1440 min (fin de día) desborda a las 00:00 del día siguiente, que es lo que corresponde.
+  candidate.setHours(0, minutesOfDay, 0, 0);
   return isBeforeNow(candidate);
 }
 
