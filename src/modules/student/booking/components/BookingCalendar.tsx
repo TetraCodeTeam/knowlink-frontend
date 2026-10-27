@@ -233,7 +233,7 @@ export default function BookingCalendar({
           dayCellClassNames={dayCellClassNames}
           allDaySlot={false}
           slotMinTime="08:00:00"
-          slotMaxTime="23:00:00"
+          slotMaxTime="24:00:00"
           slotDuration="00:30:00"
           slotLabelInterval="01:00:00"
           slotLabelFormat={SLOT_LABEL_FORMAT}

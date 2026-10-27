@@ -9,6 +9,7 @@ import {
   resolveDateForDayOfWeek,
   toDateStr,
 } from "@/shared/utils/calendarDateUtils";
+import { formatClockTime } from "@/shared/utils/dayTime.utils";
 
 export function mapAvailabilityBlocksToEvents(
   blocks: AvailabilityBlockResponse[],
@@ -28,7 +29,7 @@ export function mapAvailabilityBlocksToEvents(
       extendedProps: {
         kind: "available",
         isPast,
-        timeRangeLabel: `${block.startTime} - ${block.endTime}`,
+        timeRangeLabel: `${formatClockTime(block.startTime)} - ${formatClockTime(block.endTime)}`,
       },
     };
   });
@@ -49,7 +50,7 @@ export function mapBookedSessionsToEvents(sessions: BookedSessionResponse[]): Ev
         kind: "booked",
         isPast,
         studentName: session.studentName,
-        timeRangeLabel: `${session.startTime} - ${session.endTime}`,
+        timeRangeLabel: `${formatClockTime(session.startTime)} - ${formatClockTime(session.endTime)}`,
       },
     };
   });
