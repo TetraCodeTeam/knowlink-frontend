@@ -18,6 +18,17 @@ import { getBookingDetail, rateBooking } from "@/modules/class-history/api/class
 const mockedGetBookingDetail = vi.mocked(getBookingDetail);
 const mockedRateBooking = vi.mocked(rateBooking);
 
+function toLocalDateTime(date: Date): string {
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
+    date.getHours()
+  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
+function futureDeadline(offsetMs = 60 * 60 * 1000): string {
+  return toLocalDateTime(new Date(Date.now() + offsetMs));
+}
+
 function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHistoryDetail {
   return {
     bookingId: "b-1",
@@ -34,6 +45,8 @@ function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHisto
     virtualSessionLink: "https://meet.example.com/abc",
     address: null,
     createdAt: "2026-10-15T10:00:00",
+    ratingStatus: "PENDING",
+    ratingDeadline: futureDeadline(),
     ...overrides,
   };
 }
@@ -54,11 +67,17 @@ function openPopup(bookingId = "b-1") {
   });
 }
 
+function axiosError(status: number, detail?: string): Error {
+  return Object.assign(new Error("request failed"), {
+    isAxiosError: true,
+    response: { status, data: detail ? { detail } : undefined },
+  });
+}
+
 describe("RatingPopupHost", () => {
   beforeEach(() => {
     mockedGetBookingDetail.mockReset();
     mockedRateBooking.mockReset();
-    localStorage.clear();
     useAuthStore.setState({
       isAuthenticated: true,
       authResponse: {
@@ -78,7 +97,7 @@ describe("RatingPopupHost", () => {
     expect(screen.queryByText("Calificá tu sesión")).not.toBeInTheDocument();
   });
 
-  it("abre el dialogo de calificacion cuando el detalle carga", async () => {
+  it("abre el dialogo de calificacion cuando el detalle esta pendiente", async () => {
     mockedGetBookingDetail.mockResolvedValue(makeDetail());
     renderHost();
     openPopup();
@@ -88,13 +107,38 @@ describe("RatingPopupHost", () => {
     expect(mockedGetBookingDetail).toHaveBeenCalledWith("b-1");
   });
 
-  it("muestra el dialogo de ya calificaste si el storage local lo indica", async () => {
-    localStorage.setItem("knowlink:ratedBookingIds:u-1", JSON.stringify(["b-1"]));
-    mockedGetBookingDetail.mockResolvedValue(makeDetail());
+  it("muestra el dialogo de ya calificaste si el backend informa SUBMITTED", async () => {
+    mockedGetBookingDetail.mockResolvedValue(
+      makeDetail({ ratingStatus: "SUBMITTED", ratingDeadline: futureDeadline() })
+    );
     renderHost();
     openPopup();
 
     expect(await screen.findByText("Ya calificaste esta sesión")).toBeInTheDocument();
+    expect(screen.queryByText("Calificá tu sesión")).not.toBeInTheDocument();
+  });
+
+  it("muestra el aviso de plazo vencido si el backend informa EXPIRED", async () => {
+    mockedGetBookingDetail.mockResolvedValue(
+      makeDetail({ ratingStatus: "EXPIRED", ratingDeadline: futureDeadline() })
+    );
+    renderHost();
+    openPopup();
+
+    expect(await screen.findByText("El plazo para calificar venció")).toBeInTheDocument();
+    expect(screen.queryByText("Calificá tu sesión")).not.toBeInTheDocument();
+  });
+
+  it("cierra el store cuando la calificacion no esta disponible", async () => {
+    mockedGetBookingDetail.mockResolvedValue(
+      makeDetail({ ratingStatus: "NOT_AVAILABLE", ratingDeadline: null })
+    );
+    renderHost();
+    openPopup();
+
+    await waitFor(() => {
+      expect(useRatingPopupStore.getState().bookingId).toBeNull();
+    });
   });
 
   it("al cancelar cierra el store", async () => {
@@ -141,12 +185,7 @@ describe("RatingPopupHost", () => {
   it("un 409 muestra el dialogo de ya calificaste", async () => {
     const user = userEvent.setup();
     mockedGetBookingDetail.mockResolvedValue(makeDetail());
-    mockedRateBooking.mockRejectedValue(
-      Object.assign(new Error("conflict"), {
-        isAxiosError: true,
-        response: { status: 409 },
-      })
-    );
+    mockedRateBooking.mockRejectedValue(axiosError(409));
     renderHost();
     openPopup();
 
@@ -158,16 +197,40 @@ describe("RatingPopupHost", () => {
     });
   });
 
-  it("cierra el store si la ventana de calificacion ya vencio", async () => {
+  it("un 422 RATING_WINDOW_EXPIRED muestra el aviso de plazo vencido", async () => {
+    const user = userEvent.setup();
+    mockedGetBookingDetail.mockResolvedValue(makeDetail());
+    mockedRateBooking.mockRejectedValue(axiosError(422, "RATING_WINDOW_EXPIRED"));
+    renderHost();
+    openPopup();
+
+    await user.click(await screen.findByRole("radio", { name: "5 estrellas" }));
+    await user.click(screen.getByRole("button", { name: "Enviar" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("El plazo para calificar venció")).toBeInTheDocument();
+    });
+    expect(screen.queryByText("Ya calificaste esta sesión")).not.toBeInTheDocument();
+  });
+
+  it("si el plazo ya vencio al abrir el formulario muestra el aviso", async () => {
     mockedGetBookingDetail.mockResolvedValue(
-      makeDetail({ sessionDate: "2020-01-01", endTime: "10:00:00" })
+      makeDetail({ ratingDeadline: futureDeadline(-60_000) })
     );
     renderHost();
     openPopup();
 
-    await waitFor(() => {
-      expect(useRatingPopupStore.getState().bookingId).toBeNull();
-    });
-    expect(screen.queryByText("Calificá tu sesión")).not.toBeInTheDocument();
+    expect(await screen.findByText("El plazo para calificar venció")).toBeInTheDocument();
+  });
+
+  it("si el plazo vence con el formulario abierto muestra el aviso", async () => {
+    mockedGetBookingDetail.mockResolvedValue(makeDetail({ ratingDeadline: futureDeadline(1_200) }));
+    renderHost();
+    openPopup();
+
+    expect(await screen.findByText("Calificá tu sesión")).toBeInTheDocument();
+    expect(
+      await screen.findByText("El plazo para calificar venció", {}, { timeout: 3000 })
+    ).toBeInTheDocument();
   });
 });

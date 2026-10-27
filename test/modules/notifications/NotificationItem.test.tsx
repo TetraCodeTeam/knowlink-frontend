@@ -24,6 +24,8 @@ function makeNotification(overrides: Partial<NotificationResponse> = {}): Notifi
     referenceId: "b-1",
     read: false,
     createdAt: "2026-10-20T15:14:00",
+    expiresAt: null,
+    actionStatus: "NONE",
     ...overrides,
   };
 }
@@ -135,6 +137,7 @@ describe("NotificationItem", () => {
         title: "Calificá tu sesión de Física 1",
         message: "Contanos cómo fue tu experiencia",
         referenceId: "b-9",
+        actionStatus: "PENDING",
       })
     );
 
@@ -164,6 +167,82 @@ describe("NotificationItem", () => {
     expect(screen.getByText("Reclamar →")).toBeInTheDocument();
   });
 
+  it("muestra Ya calificaste y atenua la fila cuando la notificacion esta completada", () => {
+    const { onMarkAsRead } = render_item(
+      makeNotification({
+        type: "RATING_ENABLED",
+        title: "Calificá tu sesión de Física 1",
+        message: "Contanos cómo fue tu experiencia",
+        referenceId: "b-9",
+        actionStatus: "COMPLETED",
+      })
+    );
+
+    expect(screen.getByText("Ya calificaste")).toBeInTheDocument();
+    expect(screen.queryByText("Calificar →")).not.toBeInTheDocument();
+    expect(screen.getByRole("button")).toHaveStyle({ opacity: "0.7" });
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-label",
+      expect.stringContaining("Ya calificaste.")
+    );
+    expect(onMarkAsRead).not.toHaveBeenCalled();
+  });
+
+  it("muestra Venció el plazo cuando la notificacion expiro", () => {
+    render_item(
+      makeNotification({
+        type: "RATING_ENABLED",
+        title: "Calificá tu sesión de Física 1",
+        message: "Contanos cómo fue tu experiencia",
+        referenceId: "b-9",
+        actionStatus: "EXPIRED",
+      })
+    );
+
+    expect(screen.getByText("Venció el plazo")).toBeInTheDocument();
+    expect(screen.queryByText("Calificar →")).not.toBeInTheDocument();
+    expect(screen.getByRole("button")).toHaveStyle({ opacity: "0.7" });
+    expect(screen.getByRole("button")).toHaveAttribute(
+      "aria-label",
+      expect.stringContaining("Venció el plazo para calificar.")
+    );
+  });
+
+  it("abre el popup al tocar una notificacion completada", async () => {
+    const user = userEvent.setup();
+    render_item(
+      makeNotification({
+        type: "RATING_ENABLED",
+        title: "Calificá tu sesión de Física 1",
+        message: "Contanos cómo fue tu experiencia",
+        referenceId: "b-9",
+        actionStatus: "COMPLETED",
+      })
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    expect(useRatingPopupStore.getState().bookingId).toBe("b-9");
+    expect(navigateMock).not.toHaveBeenCalled();
+  });
+
+  it("abre el popup al tocar una notificacion vencida", async () => {
+    const user = userEvent.setup();
+    render_item(
+      makeNotification({
+        type: "RATING_ENABLED",
+        title: "Calificá tu sesión de Física 1",
+        message: "Contanos cómo fue tu experiencia",
+        referenceId: "b-9",
+        actionStatus: "EXPIRED",
+      })
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    expect(useRatingPopupStore.getState().bookingId).toBe("b-9");
+    expect(navigateMock).not.toHaveBeenCalled();
+  });
   it("anuncia No leida en el aria-label cuando no esta leida", () => {
     render_item(makeNotification());
     expect(screen.getByRole("button")).toHaveAttribute(

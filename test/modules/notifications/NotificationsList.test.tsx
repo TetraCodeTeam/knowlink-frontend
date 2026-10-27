@@ -29,6 +29,8 @@ function makePage(overrides: Partial<PagedNotificationsResponse> = {}): PagedNot
         referenceId: null,
         read: false,
         createdAt: "2026-10-20T10:00:00",
+        expiresAt: null,
+        actionStatus: "NONE",
       },
     ],
     page: 0,

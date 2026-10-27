@@ -74,7 +74,28 @@ describe("getNotificationAction", () => {
   });
 
   it("resuelve rating para RATING_ENABLED sin navegar", () => {
-    expect(getNotificationAction("RATING_ENABLED", "STUDENT")).toEqual({
+    expect(getNotificationAction("RATING_ENABLED", "STUDENT", "PENDING")).toEqual({
+      kind: "rating",
+      label: "Calificar",
+    });
+  });
+
+  it("resuelve rating-done cuando el usuario ya califico", () => {
+    expect(getNotificationAction("RATING_ENABLED", "TUTOR", "COMPLETED")).toEqual({
+      kind: "rating-done",
+      label: "Ya calificaste",
+    });
+  });
+
+  it("resuelve rating-expired cuando vencio el plazo", () => {
+    expect(getNotificationAction("RATING_ENABLED", "STUDENT", "EXPIRED")).toEqual({
+      kind: "rating-expired",
+      label: "Venció el plazo",
+    });
+  });
+
+  it("trata NONE como pendiente para notificaciones viejas", () => {
+    expect(getNotificationAction("RATING_ENABLED", "STUDENT", "NONE")).toEqual({
       kind: "rating",
       label: "Calificar",
     });
