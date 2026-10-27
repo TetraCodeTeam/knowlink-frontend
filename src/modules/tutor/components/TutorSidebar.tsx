@@ -1,6 +1,7 @@
 import type React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
+  BarChart3,
   Home,
   CalendarClock,
   Bell,
@@ -36,6 +37,7 @@ const navItems: NavItem[] = [
   { icon: Home, label: "Home", path: "/tutor/home" },
   { icon: CalendarClock, label: "Mi agenda", path: "/tutor/availability" },
   { icon: BookOpenCheck, label: "Mis clases", path: "/tutor/classes" },
+  { icon: BarChart3, label: "Panel de estadísticas", path: "/tutor/stats" },
   { icon: Bell, label: "Notificaciones", path: "/tutor/notifications", badge: "notifications" },
   {
     icon: MessageCircleQuestion,
