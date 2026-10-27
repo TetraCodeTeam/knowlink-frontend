@@ -8,6 +8,7 @@ import {
   CircleCheck,
   ClipboardList,
   FileExclamationPoint,
+  KeyRound,
   MessageSquare,
   Star,
   Timer,
@@ -58,6 +59,13 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, NotificationType
     iconColor: YELLOW_ICON,
     action: { kind: "navigate", label: "Ver" },
     routes: { STUDENT: "/student/classes", TUTOR: "/tutor/classes" },
+  },
+  SESSION_CONFIRMATION_TOKEN_AVAILABLE: {
+    icon: KeyRound,
+    tileColor: YELLOW_TILE,
+    iconColor: YELLOW_ICON,
+    action: { kind: "navigate", label: "Ver código" },
+    routes: { STUDENT: "/student/classes", TUTOR: null },
   },
   SESSION_CONFIRMED: {
     icon: BellRing,
