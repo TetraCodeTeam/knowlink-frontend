@@ -1,1 +1,6 @@
-export type BookingHistoryCategory = "RESERVED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+export type BookingHistoryCategory =
+  | "RESERVED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "NOT_CONFIRMED"
+  | "CANCELLED";
