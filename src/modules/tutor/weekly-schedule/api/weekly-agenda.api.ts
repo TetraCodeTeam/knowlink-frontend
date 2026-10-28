@@ -1,12 +1,33 @@
 import { httpClient } from "@/shared/lib/httpClient";
-import type { WeeklyAgendaResponse } from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda.interface";
-import type { BackendWeeklyScheduleResponse } from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda-backend.interface";
+import type {
+  WeeklyAgendaResponse,
+  WeeklyAgendaSummary,
+} from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda.interface";
+import type {
+  BackendWeeklyScheduleResponse,
+  BackendWeeklyScheduleSummary,
+} from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda-backend.interface";
 import { dayOfWeekFromDate } from "@/shared/utils/calendarDateUtils";
+
+function mapSummary(summary: BackendWeeklyScheduleSummary): WeeklyAgendaSummary {
+  return {
+    confirmedBookingsCount: summary.confirmedBookingsCount,
+    freeBlocksCount: summary.freeBlocksCount,
+    nextClass: summary.nextClass
+      ? {
+          bookingId: summary.nextClass.bookingId,
+          date: summary.nextClass.sessionDate,
+          startTime: summary.nextClass.startTime,
+          endTime: summary.nextClass.endTime,
+        }
+      : null,
+  };
+}
 
 export async function getWeeklyAgenda(from: string, to: string): Promise<WeeklyAgendaResponse> {
   const response = await httpClient.get<BackendWeeklyScheduleResponse>(
     "/api/v1/tutors/me/weekly-schedule",
-    { params: { from, to } },
+    { params: { from, to } }
   );
 
   return {
@@ -26,5 +47,6 @@ export async function getWeeklyAgenda(from: string, to: string): Promise<WeeklyA
       endTime: booking.endTime,
       modality: booking.modality,
     })),
+    summary: mapSummary(response.data.summary),
   };
 }

@@ -1,4 +1,8 @@
-import type { BookedSessionResponse } from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda.interface";
+import type {
+  BookedSessionResponse,
+  WeeklyAgendaNextClass,
+} from "@/modules/tutor/weekly-schedule/interfaces/responses/weekly-agenda.interface";
+import { formatClockTime } from "@/shared/utils/dayTime.utils";
 
 export interface NextSessionInfo {
   subjectName: string;
@@ -7,6 +11,7 @@ export interface NextSessionInfo {
 }
 
 const WEEKDAY_LABELS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+const FALLBACK_SUBJECT_NAME = "Clase reservada";
 
 function isSameCalendarDay(a: Date, b: Date): boolean {
   return (
@@ -27,24 +32,23 @@ function buildDateLabel(sessionDate: Date, now: Date): string {
   return `${weekday}, ${sessionDate.getDate()}/${sessionDate.getMonth() + 1}`;
 }
 
-export function findNextSession(
+/**
+ * La próxima clase la resuelve el backend (`summary.nextClass`); acá solo se
+ * enriquece con la materia que ya viene en las reservas de la semana.
+ */
+export function buildNextSessionInfo(
+  nextClass: WeeklyAgendaNextClass | null,
   sessions: BookedSessionResponse[],
   now: Date = new Date()
 ): NextSessionInfo | null {
-  const upcoming = sessions
-    .map((session) => ({
-      session,
-      datetime: new Date(`${session.date}T${session.startTime}`),
-    }))
-    .filter(({ datetime }) => datetime.getTime() >= now.getTime())
-    .sort((a, b) => a.datetime.getTime() - b.datetime.getTime());
+  if (!nextClass) return null;
 
-  if (upcoming.length === 0) return null;
+  const session = sessions.find((item) => item.id === nextClass.bookingId);
+  const nextDate = new Date(`${nextClass.date}T${nextClass.startTime}`);
 
-  const next = upcoming[0];
   return {
-    subjectName: next.session.subjectName,
-    dateLabel: buildDateLabel(next.datetime, now),
-    timeLabel: next.session.startTime,
+    subjectName: session?.subjectName ?? FALLBACK_SUBJECT_NAME,
+    dateLabel: buildDateLabel(nextDate, now),
+    timeLabel: formatClockTime(nextClass.startTime),
   };
 }
