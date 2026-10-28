@@ -1,0 +1,3 @@
+export const NOTIFICATION_POLL_INTERVAL = 30_000;
+
+export const NOTIFICATIONS_PAGE_SIZE = 20;
