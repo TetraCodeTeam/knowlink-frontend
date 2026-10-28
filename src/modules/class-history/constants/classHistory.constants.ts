@@ -6,6 +6,7 @@ export const CATEGORY_TABS: { category: BookingHistoryCategory; label: string }[
   { category: "RESERVED", label: "Reservadas" },
   { category: "IN_PROGRESS", label: "En Curso" },
   { category: "COMPLETED", label: "Realizadas" },
+  { category: "NOT_CONFIRMED", label: "No confirmadas" },
   { category: "CANCELLED", label: "Canceladas" },
 ];
 

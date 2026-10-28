@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Chip, Divider, IconButton, Typography } from "@mui/material";
 import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin } from "lucide-react";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import { useBookingDetail } from "@/modules/class-history/hooks/useBookingDetail";
@@ -73,6 +73,18 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
             <Box sx={{ ml: "10px" }}>
               <ModalityChip modality={item.modality} size="sm" />
             </Box>
+            {item.status === "NOT_CONFIRMED" && (
+              <Chip
+                size="small"
+                label="No confirmada"
+                sx={{
+                  ml: "4px",
+                  fontWeight: 600,
+                  color: "#8A5300",
+                  backgroundColor: "#FFF4E5",
+                }}
+              />
+            )}
           </Box>
         </Box>
       </Box>
