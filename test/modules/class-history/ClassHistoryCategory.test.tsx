@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import CategoryTabs from "@/modules/class-history/components/CategoryTabs";
 import ClassHistoryCard from "@/modules/class-history/components/ClassHistoryCard";
 import { CATEGORY_TABS } from "@/modules/class-history/constants/classHistory.constants";
 import type { BookingHistoryItem } from "@/modules/class-history/interfaces/responses/booking-history-item.interface";
@@ -34,5 +35,16 @@ describe("historial de clases - no confirmadas", () => {
     render(<ClassHistoryCard item={notConfirmedItem} role="STUDENT" category="NOT_CONFIRMED" />);
 
     expect(screen.getByText("No confirmada")).toBeInTheDocument();
+  });
+
+  it("renderiza las cinco pestanas y notifica el cambio de categoria", () => {
+    const onChange = vi.fn();
+    render(<CategoryTabs activeCategory="RESERVED" onChange={onChange} />);
+
+    expect(screen.getAllByRole("button")).toHaveLength(5);
+
+    fireEvent.click(screen.getByRole("button", { name: "No confirmadas" }));
+
+    expect(onChange).toHaveBeenCalledWith("NOT_CONFIRMED");
   });
 });

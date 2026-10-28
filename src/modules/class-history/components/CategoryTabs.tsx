@@ -15,7 +15,6 @@ export default function CategoryTabs({ activeCategory, onChange }: CategoryTabsP
             {CATEGORY_TABS.map(({ category, label }) => (
                 <Button
                     key={category}
-                    fullWidth
                     onClick={() => onChange(category)}
                     aria-pressed={activeCategory === category}
                     sx={categoryTabSx(activeCategory === category)}

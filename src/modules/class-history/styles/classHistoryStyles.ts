@@ -2,8 +2,9 @@ import type { SxProps, Theme } from "@mui/material";
 
 export const categoryTabsContainerSx: SxProps<Theme> = {
   display: "flex",
-  flexWrap: "wrap",
+  flexWrap: "nowrap",
   gap: "18px",
+  overflowX: "auto",
   bgcolor: "#ffffff4d",
   borderRadius: 3,
   px: 2,
@@ -12,6 +13,9 @@ export const categoryTabsContainerSx: SxProps<Theme> = {
 };
 
 export const categoryTabSx = (active: boolean): SxProps<Theme> => ({
+  flex: "1 1 0",
+  minWidth: "max-content",
+  whiteSpace: "nowrap",
   borderRadius: "10px",
   textTransform: "none",
   fontWeight: 600,
