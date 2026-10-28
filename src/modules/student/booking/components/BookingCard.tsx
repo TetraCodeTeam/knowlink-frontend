@@ -77,7 +77,7 @@ export default function BookingCard({
       {selectedSlot && (
         <BookingCountdownTimer
           key={selectedSlot.id}
-          expiresAt={selectedSlot.expiresAt} 
+          expiresAt={selectedSlot.expiresAt}
           onExpire={handleBookingExpired}
         />
       )}
@@ -213,6 +213,13 @@ export default function BookingCard({
           formatter={currencyFormatter}
           valueColor={pricing?.total === 0 ? "text.secondary" : undefined}
         />
+        {pricing && pricing.durationHours > 1 && (
+          <BookingPricingRow
+            label="Duración"
+            value={`${pricing.durationHours} horas`}
+            formatter={currencyFormatter}
+          />
+        )}
         {pricing && pricing.total !== 0 && (
           <BookingPricingRow
             label={`Tarifa de servicio (${Math.round(pricing.serviceFeeRate * 100)}%)`}

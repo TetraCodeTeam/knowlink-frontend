@@ -1,13 +1,22 @@
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 
-const RESERVATION_DURATION_MS = 60 * 60 * 1000; // 1 hora, fija para esta versión
-const STEP_MS = 30 * 60 * 1000; // paso de 30 minutos entre ventanas posibles
+const RESERVATION_WINDOW_MS = 60 * 60 * 1000; // franja base de 1 hora
+const STEP_MS = 30 * 60 * 1000; // paso de 30 minutos entre franjas posibles
+
+/** Duración mínima y máxima de una reserva, siempre en horas completas. */
+export const MIN_RESERVATION_HOURS = 1;
+export const MAX_RESERVATION_HOURS = 3;
 
 /**
- * Dado un bloque de disponibilidad (start-end), devuelve todas las ventanas
- * de 1 hora reservables dentro de ese rango, en pasos de 30 minutos.
+ * Dado un bloque de disponibilidad (start-end), devuelve todas las franjas
+ * de 1 hora que el alumno puede usar como punto de partida o de llegada al
+ * arrastrar, en pasos de 30 minutos.
  *
  * Ej: bloque de 15:00 a 17:00 (2h) → [15:00-16:00, 15:30-16:30, 16:00-17:00]
+ *
+ * El alumno puede combinar varias franjas contiguas para reservar 1, 2 o 3
+ * horas completas; esa regla de duración se valida al interpretar el arrastre
+ * (useAvailabilityBlockInteraction), no acá.
  *
  * Asume que la duración del bloque es múltiplo de 30 min y de al menos 60
  * min (garantizado por cómo el tutor configura su disponibilidad). No hace
@@ -18,15 +27,29 @@ export function getReservationWindows(blockStart: Date, blockEnd: Date): Reserva
   const windows: ReservationWindow[] = [];
   let windowStart = blockStart.getTime();
 
-  while (windowStart + RESERVATION_DURATION_MS <= blockEnd.getTime()) {
+  while (windowStart + RESERVATION_WINDOW_MS <= blockEnd.getTime()) {
     windows.push({
       start: new Date(windowStart),
-      end: new Date(windowStart + RESERVATION_DURATION_MS),
+      end: new Date(windowStart + RESERVATION_WINDOW_MS),
     });
     windowStart += STEP_MS;
   }
 
   return windows;
+}
+
+/**
+ * Una reserva válida dura 1, 2 o 3 horas completas. El backend aplica la
+ * misma regla al crear el hold, así que el frontend la valida antes de enviar.
+ */
+export function hasValidReservationDuration(selection: ReservationWindow): boolean {
+  const durationMinutes = (selection.end.getTime() - selection.start.getTime()) / (60 * 1000);
+
+  return (
+    durationMinutes >= MIN_RESERVATION_HOURS * 60 &&
+    durationMinutes <= MAX_RESERVATION_HOURS * 60 &&
+    durationMinutes % 60 === 0
+  );
 }
 
 /**
