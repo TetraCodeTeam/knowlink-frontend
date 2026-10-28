@@ -23,7 +23,21 @@ export interface BookedSessionResponse {
   date: string; // "YYYY-MM-DD"
   startTime: string; // "HH:mm"
   endTime: string; // "HH:mm"
-  modality: typeof MODALITY_OPTIONS[number];
+  modality: (typeof MODALITY_OPTIONS)[number];
+}
+
+/** Próxima clase confirmada que calcula el backend (BOOKED y futura). */
+export interface WeeklyAgendaNextClass {
+  bookingId: string;
+  date: string; // "YYYY-MM-DD"
+  startTime: string; // "HH:mm"
+  endTime: string; // "HH:mm"
+}
+
+export interface WeeklyAgendaSummary {
+  confirmedBookingsCount: number;
+  freeBlocksCount: number;
+  nextClass: WeeklyAgendaNextClass | null;
 }
 
 /**
@@ -34,4 +48,5 @@ export interface WeeklyAgendaResponse {
   weekStart: string; // "YYYY-MM-DD", lunes de la semana visible
   availabilityBlocks: AvailabilityBlockResponse[];
   bookedSessions: BookedSessionResponse[];
+  summary: WeeklyAgendaSummary;
 }

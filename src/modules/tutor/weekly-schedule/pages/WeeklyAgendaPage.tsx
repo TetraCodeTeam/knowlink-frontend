@@ -3,11 +3,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import { useWeeklyAgenda } from "@/modules/tutor/weekly-schedule/hooks/useWeeklyAgenda";
 import { AgendaSummaryCards } from "@/modules/tutor/weekly-schedule/components/AgendaSummaryCards";
 import { WeeklyAgendaCalendar } from "@/modules/tutor/weekly-schedule/components/WeeklyAgendaCalendar";
-import {
-  countConfirmedBookings,
-  countFreeBlocks,
-} from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaSummary.utils";
-import { findNextSession } from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaNextSession.utils";
+import { buildNextSessionInfo } from "@/modules/tutor/weekly-schedule/utils/weeklyAgendaNextSession.utils";
 
 export function WeeklyAgendaPage() {
   const { data, isLoading, isError, weekStart, goToPreviousWeek, goToNextWeek } = useWeeklyAgenda();
@@ -28,16 +24,15 @@ export function WeeklyAgendaPage() {
     );
   }
 
-  const confirmedBookings = countConfirmedBookings(data.bookedSessions);
-  const freeBlocks = countFreeBlocks(data.availabilityBlocks, weekStart);
-  const nextSession = findNextSession(data.bookedSessions);
+  const { confirmedBookingsCount, freeBlocksCount, nextClass } = data.summary;
+  const nextSession = buildNextSessionInfo(nextClass, data.bookedSessions);
 
   return (
     <Stack spacing={5} sx={{ p: { xs: 2, md: 3 }, pr: { xs: 2, md: 6 }, pl: { xs: 2, md: 6 } }}>
       <Box sx={{ mb: 5 }}>
         <AgendaSummaryCards
-          confirmedBookings={confirmedBookings}
-          freeBlocks={freeBlocks}
+          confirmedBookings={confirmedBookingsCount}
+          freeBlocks={freeBlocksCount}
           nextSession={nextSession}
         />
       </Box>

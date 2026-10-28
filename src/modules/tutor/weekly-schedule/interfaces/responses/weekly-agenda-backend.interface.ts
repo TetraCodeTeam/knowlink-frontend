@@ -14,9 +14,23 @@ export interface BackendBookingResponse {
   sessionDate: string;
   startTime: string;
   endTime: string;
-  modality: typeof MODALITY_OPTIONS[number];
+  modality: (typeof MODALITY_OPTIONS)[number];
   tutorSubjectName: string;
   studentFullName: string;
+}
+
+export interface BackendNextClassResponse {
+  bookingId: string;
+  sessionDate: string;
+  startTime: string;
+  endTime: string;
+}
+
+/** Resumen calculado por el backend; es la única fuente de verdad de las tarjetas. */
+export interface BackendWeeklyScheduleSummary {
+  confirmedBookingsCount: number;
+  freeBlocksCount: number;
+  nextClass: BackendNextClassResponse | null;
 }
 
 export interface BackendWeeklyScheduleResponse {
@@ -24,4 +38,5 @@ export interface BackendWeeklyScheduleResponse {
   to: string;
   availabilityBlocks: BackendAvailabilityBlockResponse[];
   bookings: BackendBookingResponse[];
+  summary: BackendWeeklyScheduleSummary;
 }
