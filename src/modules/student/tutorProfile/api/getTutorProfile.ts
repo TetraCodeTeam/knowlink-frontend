@@ -151,8 +151,8 @@ export const getMaterialDownloadUrl = async (materialId: string): Promise<string
 export const mapRatingComments = (comments: RatingCommentApiResponse[]): TutorReview[] =>
   comments.map((comment) => ({
     id: comment.id,
-    studentName: "Alumno",
-    studentAvatarUrl: null,
+    studentName: comment.author.fullName,
+    studentAvatarUrl: comment.author.profilePictureUrl ?? null,
     subject: comment.subjectName,
     subjectId: comment.subjectId,
     rating: comment.score,

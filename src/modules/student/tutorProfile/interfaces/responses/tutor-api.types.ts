@@ -49,12 +49,20 @@ export interface SubjectAverageApiResponse {
   name: string;
   average: number | null;
   count: number;
+  commentCount: number;
+}
+
+export interface RatingAuthorApiResponse {
+  userId: string;
+  fullName: string;
+  profilePictureUrl: string | null;
 }
 
 export interface RatingCommentApiResponse {
   id: string;
   subjectId: string;
   subjectName: string;
+  author: RatingAuthorApiResponse;
   score: number;
   comment: string | null;
   ratingDate: string;
@@ -72,6 +80,7 @@ export interface TutorRatingHistoryApiResponse {
   tutorId: string;
   averageRating: number | null;
   totalRatings: number;
+  totalComments: number;
   subjects: SubjectAverageApiResponse[];
   comments: PagedCommentsApiResponse;
 }

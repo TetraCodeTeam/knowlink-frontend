@@ -52,7 +52,7 @@ export const useTutorProfile = (tutorId: string) => {
           ...subject,
           subjectId: match.subjectId,
           rating: match.average ?? 0,
-          reviewsCount: match.count,
+          reviewsCount: match.commentCount,
         };
       });
 
@@ -60,7 +60,7 @@ export const useTutorProfile = (tutorId: string) => {
         ...profile,
         subjectRates,
         reviews: mapRatingComments(ratingHistory.comments.content),
-        reviewsCount: ratingHistory.totalRatings,
+        reviewsCount: ratingHistory.totalComments,
         reviewsTotalElements: ratingHistory.comments.totalElements,
         rating: ratingHistory.averageRating ?? 0,
         hasRatings: ratingHistory.averageRating !== null,
