@@ -4,6 +4,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import {
   getReservationWindows,
   getWindowAtRelativePosition,
+  hasValidReservationDuration,
 } from "@/modules/student/booking/utils/reservationWindowUtils";
 import type { AvailabilityBlockContentProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
@@ -73,17 +74,11 @@ export function useAvailabilityBlockInteraction({
     []
   );
 
-  const isWholeHourSelection = useCallback((selection: ReservationWindow) => {
-    const durationMinutes = (selection.end.getTime() - selection.start.getTime()) / (60 * 1000);
-
-    return durationMinutes % 60 === 0;
-  }, []);
-
   const isValidSelection = useCallback(
     (startWindow: ReservationWindow, endWindow: ReservationWindow) => {
       const preview = getSelectionPreview(startWindow, endWindow);
       return (
-        isWholeHourSelection(preview) &&
+        hasValidReservationDuration(preview) &&
         !violatesMinimumNotice(preview) &&
         !unavailableWindows.some((unavailable) => {
           const uStart = new Date(unavailable.start).getTime();
@@ -92,7 +87,7 @@ export function useAvailabilityBlockInteraction({
         })
       );
     },
-    [getSelectionPreview, isWholeHourSelection, unavailableWindows, violatesMinimumNotice]
+    [getSelectionPreview, unavailableWindows, violatesMinimumNotice]
   );
 
   const isSelectionDifferent = useCallback(
@@ -106,11 +101,11 @@ export function useAvailabilityBlockInteraction({
       const preview = getSelectionPreview(startWindow, endWindow);
       setPreviewWindow(preview);
       setIsInvalidDrag(
-        isSelectionDifferent(startWindow, endWindow) && !isWholeHourSelection(preview)
+        isSelectionDifferent(startWindow, endWindow) && !hasValidReservationDuration(preview)
       );
       return preview;
     },
-    [getSelectionPreview, isSelectionDifferent, isWholeHourSelection]
+    [getSelectionPreview, isSelectionDifferent]
   );
 
   const handleMouseMove = useCallback(

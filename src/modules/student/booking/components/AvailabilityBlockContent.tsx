@@ -80,7 +80,7 @@ export default function AvailabilityBlockContent({
       {isInvalidDrag && (
         <BookingValidationMessage
           anchorEl={containerRef.current}
-          message="Las reservas se realizan por hora completa, no se admite seleccionar medias horas"
+          message="Reservá horas completas, entre 1 y 3 horas por clase"
         />
       )}
       {isMinimumNoticeViolation && (
