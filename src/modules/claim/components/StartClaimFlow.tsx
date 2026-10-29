@@ -16,7 +16,11 @@ interface StartClaimFlowProps {
   sessionSummary: string;
 }
 
-export default function StartClaimFlow({ bookingId, claimantRole, sessionSummary }: StartClaimFlowProps) {
+export default function StartClaimFlow({
+  bookingId,
+  claimantRole,
+  sessionSummary,
+}: StartClaimFlowProps) {
   const [open, setOpen] = useState(false);
   const { eligibility } = useClaimEligibility(bookingId, true);
   const { submitClaim, isPending } = useCreateClaim(bookingId);

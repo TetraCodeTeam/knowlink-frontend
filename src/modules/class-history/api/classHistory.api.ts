@@ -16,9 +16,12 @@ export async function getBookingHistory(params: {
   page: number;
   size: number;
 }): Promise<PagedResponse<BookingHistoryItem>> {
-  const response = await httpClient.get<PagedResponse<BookingHistoryItem>>("/api/v1/bookings/mine", {
-    params,
-  });
+  const response = await httpClient.get<PagedResponse<BookingHistoryItem>>(
+    "/api/v1/bookings/mine",
+    {
+      params,
+    }
+  );
   return response.data;
 }
 

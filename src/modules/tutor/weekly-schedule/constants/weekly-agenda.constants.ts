@@ -23,7 +23,10 @@ interface AgendaBlockColorTokens {
   text: string;
 }
 
-export const AGENDA_BLOCK_COLOR: Record<AgendaBlockKind, { current: AgendaBlockColorTokens; past: AgendaBlockColorTokens }> = {
+export const AGENDA_BLOCK_COLOR: Record<
+  AgendaBlockKind,
+  { current: AgendaBlockColorTokens; past: AgendaBlockColorTokens }
+> = {
   available: {
     current: {
       bg: "#E0E0FA",

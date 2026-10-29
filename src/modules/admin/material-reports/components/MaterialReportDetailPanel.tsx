@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { Box, Skeleton, Typography } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
-import BeforeResolvingGuide from "@/modules/admin/material-reports/components/BeforeResolvingGuide";
+import BeforeResolvingGuide from "@/modules/admin/components/BeforeResolvingGuide";
 import DismissReportDialog from "@/modules/admin/material-reports/components/DismissReportDialog";
 import MaterialReportDetailHeader from "@/modules/admin/material-reports/components/MaterialReportDetailHeader";
 import RemoveMaterialDialog from "@/modules/admin/material-reports/components/RemoveMaterialDialog";
 import ReportedItemsList from "@/modules/admin/material-reports/components/ReportedItemsList";
 import ResolutionActions from "@/modules/admin/material-reports/components/ResolutionActions";
 import TutorOwnerCard from "@/modules/admin/material-reports/components/TutorOwnerCard";
-import type { AdminStatusTone } from "@/modules/admin/material-reports/constants/material-report-status-meta";
-import { MATERIAL_REPORT_MESSAGES } from "@/modules/admin/material-reports/constants/material-reports.constants";
+import type { AdminStatusTone } from "@/modules/admin/constants/admin-status-meta";
+import {
+  MATERIAL_REPORT_GUIDELINES,
+  MATERIAL_REPORT_MESSAGES,
+} from "@/modules/admin/material-reports/constants/material-reports.constants";
 import { useAdminMaterialReportDetail } from "@/modules/admin/material-reports/hooks/useAdminMaterialReportDetail";
 import { useAssignMaterialReport } from "@/modules/admin/material-reports/hooks/useAssignMaterialReport";
 import type { AdminMaterialReportDetailResponse } from "@/modules/admin/material-reports/interfaces/responses/admin-material-report-detail.response";
@@ -102,7 +105,7 @@ export default function MaterialReportDetailPanel({ materialId }: MaterialReport
         <Typography sx={detailSubtitleSx}>
           Elegí un archivo de la lista para ver las denuncias recibidas y resolverlo.
         </Typography>
-        <BeforeResolvingGuide />
+        <BeforeResolvingGuide guidelines={MATERIAL_REPORT_GUIDELINES} />
       </Box>
     );
   }

@@ -1,6 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { Monitor, Building2 } from "lucide-react";
-import { VIRTUAL_BG, PRESENTIAL_BG } from "@/modules/tutor/profile/constants/profileColors.constants";
+import {
+  VIRTUAL_BG,
+  PRESENTIAL_BG,
+} from "@/modules/tutor/profile/constants/profileColors.constants";
 import type { Modality } from "@/modules/tutor/types/modality.type";
 
 export type ModalityChipSize = "sm" | "md";
@@ -15,7 +18,10 @@ interface ModalityChipProps {
   size?: ModalityChipSize;
 }
 
-const SIZE_STYLES: Record<ModalityChipSize, { iconSize: number; px: string; py: string; fontSize: string }> = {
+const SIZE_STYLES: Record<
+  ModalityChipSize,
+  { iconSize: number; px: string; py: string; fontSize: string }
+> = {
   md: { iconSize: 22, px: "18px", py: "10px", fontSize: "17px" },
   sm: { iconSize: 16, px: "12px", py: "6px", fontSize: "0.85rem" },
 };

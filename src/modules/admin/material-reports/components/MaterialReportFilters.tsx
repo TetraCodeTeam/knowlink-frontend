@@ -1,15 +1,7 @@
-import { Box } from "@mui/material";
+import AdminListFilters, {
+  type AdminListFilterTab,
+} from "@/modules/admin/components/AdminListFilters";
 import type { AdminMaterialReportStatusCounts } from "@/modules/admin/material-reports/interfaces/responses/admin-material-report-status-counts.response";
-import {
-  filtersBarSx,
-  scopeButtonActiveSx,
-  scopeButtonSx,
-  scopeToggleSx,
-  statusTabActiveSx,
-  statusTabCountSx,
-  statusTabSx,
-  statusTabsSx,
-} from "@/modules/admin/material-reports/styles/material-reports.styles";
 import type {
   AdminMaterialReportScope,
   AdminMaterialReportStatusFilter,
@@ -23,12 +15,6 @@ interface MaterialReportFiltersProps {
   onScopeChange: (scope: AdminMaterialReportScope) => void;
 }
 
-interface StatusTab {
-  value: AdminMaterialReportStatusFilter;
-  label: string;
-  count?: number;
-}
-
 export default function MaterialReportFilters({
   status,
   scope,
@@ -36,7 +22,7 @@ export default function MaterialReportFilters({
   onStatusChange,
   onScopeChange,
 }: MaterialReportFiltersProps) {
-  const tabs: StatusTab[] = [
+  const tabs: AdminListFilterTab<AdminMaterialReportStatusFilter>[] = [
     { value: "ALL", label: "Todo" },
     { value: "PENDING", label: "Pendiente", count: statusCounts?.pending ?? 0 },
     { value: "IN_REVIEW", label: "En revisión" },
@@ -45,55 +31,13 @@ export default function MaterialReportFilters({
   ];
 
   return (
-    <Box component="section" aria-label="Filtros de denuncias" sx={filtersBarSx}>
-      <Box role="group" aria-label="Filtrar por estado" sx={statusTabsSx}>
-        {tabs.map((tab) => {
-          const active = status === tab.value;
-
-          return (
-            <Box
-              key={tab.value}
-              component="button"
-              type="button"
-              aria-pressed={active}
-              onClick={() => onStatusChange(tab.value)}
-              sx={{ ...statusTabSx, ...(active ? statusTabActiveSx : {}) }}
-            >
-              {tab.value === "PENDING" ? (
-                <>
-                  <span>Pendiente</span>
-                  <Box component="span" sx={statusTabCountSx}>
-                    {tab.count}
-                  </Box>
-                </>
-              ) : (
-                tab.label
-              )}
-            </Box>
-          );
-        })}
-      </Box>
-
-      <Box role="group" aria-label="Filtrar por asignación" sx={scopeToggleSx}>
-        <Box
-          component="button"
-          type="button"
-          aria-pressed={scope === "all"}
-          onClick={() => onScopeChange("all")}
-          sx={{ ...scopeButtonSx, ...(scope === "all" ? scopeButtonActiveSx : {}) }}
-        >
-          Todas
-        </Box>
-        <Box
-          component="button"
-          type="button"
-          aria-pressed={scope === "mine"}
-          onClick={() => onScopeChange("mine")}
-          sx={{ ...scopeButtonSx, ...(scope === "mine" ? scopeButtonActiveSx : {}) }}
-        >
-          Asignadas a mí
-        </Box>
-      </Box>
-    </Box>
+    <AdminListFilters
+      status={status}
+      tabs={tabs}
+      scope={scope}
+      onStatusChange={onStatusChange}
+      onScopeChange={onScopeChange}
+      ariaLabel="Filtros de denuncias"
+    />
   );
 }

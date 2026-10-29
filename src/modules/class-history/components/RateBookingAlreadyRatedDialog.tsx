@@ -20,7 +20,9 @@ export default function RateBookingAlreadyRatedDialog({
       fullWidth
       PaperProps={{ sx: { borderRadius: 4, textAlign: "center", pt: 1 } }}
     >
-      <DialogContent sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
+      >
         <Box sx={cancelDialogIconWrapperSx("#FBF3DE")}>
           <CircleAlert size={32} color="#B8860B" />
         </Box>

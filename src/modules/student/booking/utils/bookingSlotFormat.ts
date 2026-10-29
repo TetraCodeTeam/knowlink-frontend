@@ -12,7 +12,11 @@ export function buildSelectableSlot(blockId: string, window: SlotWindow): Select
     id: `${blockId}__${window.start.toISOString()}__${window.end.toISOString()}`,
     startIso: window.start.toISOString(),
     endIso: window.end.toISOString(),
-    date: window.start.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" }),
+    date: window.start.toLocaleDateString("es-AR", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }),
     startTime: window.start.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
     endTime: window.end.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
     durationHours,

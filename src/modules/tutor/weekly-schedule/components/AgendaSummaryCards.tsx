@@ -1,5 +1,5 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
-import { CircleCheckBig, Clock,CalendarClock } from "lucide-react";
+import { CircleCheckBig, Clock, CalendarClock } from "lucide-react";
 
 import {
   agendaSummaryCardSx,
@@ -15,7 +15,15 @@ interface AgendaSummaryCardsProps {
   nextSession: NextSessionInfo | null;
 }
 
-function StatChip({ label, dotColor, chipBg }: { label: string; dotColor: string; chipBg: string }) {
+function StatChip({
+  label,
+  dotColor,
+  chipBg,
+}: {
+  label: string;
+  dotColor: string;
+  chipBg: string;
+}) {
   return (
     <Chip
       size="small"
@@ -23,7 +31,13 @@ function StatChip({ label, dotColor, chipBg }: { label: string; dotColor: string
       icon={
         <Box
           component="span"
-          sx={{ width: 12, height: 12, borderRadius: "50%", bgcolor: dotColor, ml: "8px !important" }}
+          sx={{
+            width: 12,
+            height: 12,
+            borderRadius: "50%",
+            bgcolor: dotColor,
+            ml: "8px !important",
+          }}
         />
       }
       label={label}
@@ -41,10 +55,18 @@ export function AgendaSummaryCards({
   const nextSessionColor = AGENDA_STAT_COLOR.nextSession;
 
   return (
-    <Stack direction={{ xs: "column", sm: "row" }} spacing={4.5} sx={{bgcolor:"#ffffff4d", borderRadius: 3, px: 2, py: 2,}}>
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      spacing={4.5}
+      sx={{ bgcolor: "#ffffff4d", borderRadius: 3, px: 2, py: 2 }}
+    >
       <Box sx={agendaSummaryCardSx}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <StatChip label="Esta semana" dotColor={bookingsColor.dot} chipBg={bookingsColor.chipBg} />
+          <StatChip
+            label="Esta semana"
+            dotColor={bookingsColor.dot}
+            chipBg={bookingsColor.chipBg}
+          />
           <Box sx={agendaStatIconBoxSx(bookingsColor.iconBg)}>
             <CircleCheckBig size={23} color={bookingsColor.iconColor} />
           </Box>

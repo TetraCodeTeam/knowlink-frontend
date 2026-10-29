@@ -14,7 +14,11 @@ function getWaitingMessage(role: BookingRole): string {
   return `Podrás ver la calificación que recibiste una vez que ${otherPartyLabel} también envíe la suya. Si no lo hace dentro de las 24 horas correspondientes, no recibirás una calificación por esta sesión.`;
 }
 
-export default function RateBookingSuccessDialog({ open, role, onClose }: RateBookingSuccessDialogProps) {
+export default function RateBookingSuccessDialog({
+  open,
+  role,
+  onClose,
+}: RateBookingSuccessDialogProps) {
   return (
     <Dialog
       open={open}
@@ -32,7 +36,9 @@ export default function RateBookingSuccessDialog({ open, role, onClose }: RateBo
         <X size={20} />
       </IconButton>
 
-      <DialogContent sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 3, px: 4, pb: 4 }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 3, px: 4, pb: 4 }}
+      >
         <Box sx={cancelDialogIconWrapperSx("#EEEDFE")}>
           <BadgeCheck size={32} color="#2255C4" />
         </Box>

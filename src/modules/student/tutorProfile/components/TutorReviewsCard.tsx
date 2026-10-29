@@ -35,7 +35,11 @@ export const TutorReviewsCard = ({
             </Typography>
           </Stack>
           {showVerTodas && (
-            <Button size="small" onClick={() => openDialog()} sx={{ textTransform: "none", fontSize: 16 }}>
+            <Button
+              size="small"
+              onClick={() => openDialog()}
+              sx={{ textTransform: "none", fontSize: 16 }}
+            >
               Ver Todas
             </Button>
           )}

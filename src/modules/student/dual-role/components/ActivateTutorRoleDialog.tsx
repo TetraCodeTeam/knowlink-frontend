@@ -40,7 +40,7 @@ export default function ActivateTutorRoleDialog({
         <Typography variant="h6" fontWeight={600} mb={1}>
           ¿Activar tu perfil de tutor?
         </Typography>
-        <Typography sx={{ color: "#666", fontSize: "15px"}}>
+        <Typography sx={{ color: "#666", fontSize: "15px" }}>
           Completarás información adicional para activar tu rol de tutor en la plataforma.
         </Typography>
       </DialogContent>
@@ -53,5 +53,5 @@ export default function ActivateTutorRoleDialog({
         </AppButton>
       </DialogActions>
     </Dialog>
-  );  
+  );
 }

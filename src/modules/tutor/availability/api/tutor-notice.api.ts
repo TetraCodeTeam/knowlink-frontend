@@ -4,7 +4,7 @@ import type { UpdateMinNoticeRequest } from "@/modules/tutor/availability/interf
 
 export async function getMinNoticeMinutes(): Promise<MinNoticeMinutesResponse> {
   const response = await httpClient.get<MinNoticeMinutesResponse>(
-    "/api/v1/tutors/me/min-notice-minutes",
+    "/api/v1/tutors/me/min-notice-minutes"
   );
   return response.data;
 }
@@ -13,4 +13,3 @@ export async function updateMinNoticeMinutes(minutes: number | null): Promise<vo
   const body: UpdateMinNoticeRequest = { minNoticeMinutes: minutes };
   await httpClient.put("/api/v1/tutors/me/min-notice-minutes", body);
 }
-

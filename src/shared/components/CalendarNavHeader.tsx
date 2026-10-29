@@ -13,7 +13,10 @@ export default function CalendarNavHeader({ label, onPrev, onNext }: CalendarNav
       <IconButton size="small" onClick={onPrev} sx={{ color: "#5B6ED9" }}>
         <ChevronLeft size={20} />
       </IconButton>
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, color: "#1a1a2e", minWidth: 220, textAlign: "center" }}>
+      <Typography
+        variant="subtitle1"
+        sx={{ fontWeight: 700, color: "#1a1a2e", minWidth: 220, textAlign: "center" }}
+      >
         {label}
       </Typography>
       <IconButton size="small" onClick={onNext} sx={{ color: "#5B6ED9" }}>

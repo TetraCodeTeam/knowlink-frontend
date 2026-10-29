@@ -9,7 +9,6 @@ import { SnackbarProvider } from "@/providers/SnackbarProvider";
 import { queryClient } from "@/shared/lib/queryClient";
 import theme from "@/theme";
 
-
 export default function AppProvider() {
   return (
     <StrictMode>

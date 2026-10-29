@@ -19,7 +19,10 @@ export default function ClassHistoryEmptyState() {
         alt="Sin clases"
         sx={{ width: 420, maxWidth: "90%" }}
       />
-      <Typography variant="h5" sx={{ color: "#666", maxWidth: "560px", lineHeight: 1.6, textAlign: "center" }}>
+      <Typography
+        variant="h5"
+        sx={{ color: "#666", maxWidth: "560px", lineHeight: 1.6, textAlign: "center" }}
+      >
         {EMPTY_STATE_MESSAGE}
       </Typography>
     </Box>

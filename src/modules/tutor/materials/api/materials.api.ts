@@ -1,5 +1,8 @@
 import { httpClient } from "@/shared/lib/httpClient";
-import type { Material, CreateMaterialRequest } from "@/modules/tutor/materials/interfaces/material.interface";
+import type {
+  Material,
+  CreateMaterialRequest,
+} from "@/modules/tutor/materials/interfaces/material.interface";
 
 const MIME_TYPES: Record<string, string> = {
   PDF: "application/pdf",

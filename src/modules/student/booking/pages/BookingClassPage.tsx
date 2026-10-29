@@ -144,7 +144,9 @@ export default function BookingClassPage() {
           action={
             <AppButton
               appVariant="outline"
-              onClick={() => navigate(studentPaths.bookingWithTutor(activeHoldElsewhere.tutorUserId))}
+              onClick={() =>
+                navigate(studentPaths.bookingWithTutor(activeHoldElsewhere.tutorUserId))
+              }
             >
               Ir a esa reserva
             </AppButton>

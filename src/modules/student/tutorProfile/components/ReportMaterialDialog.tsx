@@ -96,7 +96,10 @@ export default function ReportMaterialDialog({
               name="reason"
               control={control}
               render={({ field }) => (
-                <Box role="radiogroup" sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <Box
+                  role="radiogroup"
+                  sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
+                >
                   {REPORT_REASON_OPTIONS.map((option) => (
                     <Box key={option.value}>
                       <ReportReasonCard

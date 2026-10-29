@@ -10,7 +10,11 @@ export interface SubjectWithCatalogId {
 }
 
 function normalizeName(name: string) {
-  return name.normalize("NFD").replace(/\p{Diacritic}/gu, "").trim().toLowerCase();
+  return name
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .trim()
+    .toLowerCase();
 }
 
 /**

@@ -42,7 +42,13 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
           {subject.name}
         </Typography>
         <Stack direction="row" spacing={3} alignItems="center" mt={1} flexWrap="wrap" useFlexGap>
-          <Stack direction="row" spacing={1} alignItems="center" flexWrap="nowrap" whiteSpace="nowrap">
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            flexWrap="nowrap"
+            whiteSpace="nowrap"
+          >
             <Rating value={subject.rating} precision={0.1} readOnly size="small" />
             <Typography
               component="button"
@@ -66,44 +72,44 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
             </Typography>
           </Stack>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-          {subject.isVerified && (
-            <Chip
-              icon={<ShieldCheck size={14} />}
-              label={verifiedLabel}
-              size="small"
-              variant="outlined"
-              sx={{
-                bgcolor: TUTOR_STATUS[verifiedLabel].bg,
-                color: TUTOR_STATUS[verifiedLabel].color,
-                borderColor: "transparent",
-                fontSize: TUTOR_STATUS[verifiedLabel].fontSize,
-                "& .MuiChip-icon": { color: TUTOR_STATUS[verifiedLabel].color },
-              }}
-            />
-          )}
-          {subject.modalities.map((modality) => {
-            const modalityLabel = MODALITY_DISPLAY_NAME[modality];
-            const tag = MODALITY[modalityLabel];
-            const ModalityIcon = tag.icon;
-            return (
+            {subject.isVerified && (
               <Chip
-                key={modality}
-                label={modalityLabel}
-                icon={ModalityIcon ? <ModalityIcon size={14} /> : undefined}
+                icon={<ShieldCheck size={14} />}
+                label={verifiedLabel}
                 size="small"
                 variant="outlined"
                 sx={{
-                  bgcolor: tag.bg,
-                  color: tag.color,
+                  bgcolor: TUTOR_STATUS[verifiedLabel].bg,
+                  color: TUTOR_STATUS[verifiedLabel].color,
                   borderColor: "transparent",
-                  fontSize: tag.fontSize,
-                  "& .MuiChip-icon": { color: tag.color },
-                  py: 0.5,
-                  px:0.5,
+                  fontSize: TUTOR_STATUS[verifiedLabel].fontSize,
+                  "& .MuiChip-icon": { color: TUTOR_STATUS[verifiedLabel].color },
                 }}
               />
-            );
-          })}
+            )}
+            {subject.modalities.map((modality) => {
+              const modalityLabel = MODALITY_DISPLAY_NAME[modality];
+              const tag = MODALITY[modalityLabel];
+              const ModalityIcon = tag.icon;
+              return (
+                <Chip
+                  key={modality}
+                  label={modalityLabel}
+                  icon={ModalityIcon ? <ModalityIcon size={14} /> : undefined}
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    bgcolor: tag.bg,
+                    color: tag.color,
+                    borderColor: "transparent",
+                    fontSize: tag.fontSize,
+                    "& .MuiChip-icon": { color: tag.color },
+                    py: 0.5,
+                    px: 0.5,
+                  }}
+                />
+              );
+            })}
           </Stack>
         </Stack>
       </Box>

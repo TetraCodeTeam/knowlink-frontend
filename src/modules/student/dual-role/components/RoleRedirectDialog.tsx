@@ -33,9 +33,9 @@ export default function RoleRedirectDialog({ open, variant, onRedirect }: RoleRe
     const timer = setTimeout(onRedirect, REDIRECT_DELAY_MS);
     return () => clearTimeout(timer);
   }, [open, onRedirect]);
-  
+
   const { bgColor, iconColor, Icon, title, subtitle } = VARIANT_CONFIG[variant];
-  
+
   return (
     <Dialog open={open} maxWidth="xs" fullWidth PaperProps={{ sx: { borderRadius: 4 } }}>
       <DialogContent sx={{ textAlign: "center", py: 5, px: 4 }}>

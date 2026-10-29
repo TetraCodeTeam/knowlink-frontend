@@ -57,7 +57,9 @@ export const ReviewsDialog = ({ tutorId, tutorName }: ReviewsDialogProps) => {
         },
       }}
     >
-      <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <DialogTitle
+        sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}
+      >
         <Stack direction="row" spacing={1} alignItems="center">
           <MessageSquare size={20} color="#5865C8" />
           <Box>

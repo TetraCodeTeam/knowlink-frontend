@@ -21,12 +21,18 @@ export default function LoginForm() {
     <>
       <Box component="form" onSubmit={handleSubmit((data) => mutate(data))} noValidate>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-
           {/* ─── Correo electrónico ─── */}
           <Box>
             <Box
               component="label"
-              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+              sx={{
+                display: "block",
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#333",
+                mb: "6px",
+                fontFamily: "Inter, sans-serif",
+              }}
             >
               Correo Electrónico*
             </Box>
@@ -55,7 +61,14 @@ export default function LoginForm() {
           <Box>
             <Box
               component="label"
-              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+              sx={{
+                display: "block",
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#333",
+                mb: "6px",
+                fontFamily: "Inter, sans-serif",
+              }}
             >
               Contraseña*
             </Box>
@@ -106,7 +119,9 @@ export default function LoginForm() {
       </Box>
 
       {/* ─── Línea divisora (corta y centrada) ─── */}
-      <Divider sx={{ my: 3, width: "50%", margin: "24px auto 24px auto", borderColor: "#D5D5D5" }} />
+      <Divider
+        sx={{ my: 3, width: "50%", margin: "24px auto 24px auto", borderColor: "#D5D5D5" }}
+      />
     </>
   );
 }

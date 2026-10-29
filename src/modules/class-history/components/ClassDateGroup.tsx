@@ -1,6 +1,9 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { dateHeaderSx, dateBadgeSx } from "@/modules/class-history/styles/classHistoryStyles";
-import { formatClassCountBadge, formatDateHeader } from "@/modules/class-history/utils/classHistory.utils";
+import {
+  formatClassCountBadge,
+  formatDateHeader,
+} from "@/modules/class-history/utils/classHistory.utils";
 import ClassHistoryCard from "@/modules/class-history/components/ClassHistoryCard";
 import type { DateGroup } from "@/modules/class-history/utils/classHistory.utils";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
@@ -16,7 +19,9 @@ export default function ClassDateGroup({ group, role, category }: ClassDateGroup
   return (
     <Box sx={{ mb: "28px" }}>
       <Box sx={dateHeaderSx}>
-        <Typography sx={{ fontSize: "1.1rem", fontWeight: 600, color: "#1a1a2e", whiteSpace: "nowrap" }}>
+        <Typography
+          sx={{ fontSize: "1.1rem", fontWeight: 600, color: "#1a1a2e", whiteSpace: "nowrap" }}
+        >
           {formatDateHeader(group.sessionDate)}
         </Typography>
         <Divider sx={{ flex: 1 }} />

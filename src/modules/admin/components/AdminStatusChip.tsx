@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import type { AdminStatusTone } from "@/modules/admin/material-reports/constants/material-report-status-meta";
+import type { AdminStatusTone } from "@/modules/admin/constants/admin-status-meta";
 import {
   STATUS_CHIP_COLORS,
   statusChipBaseSx,
   statusChipDotSx,
-} from "@/modules/admin/material-reports/styles/material-reports.styles";
+} from "@/modules/admin/styles/admin-list.styles";
 
 interface AdminStatusChipProps {
   label: string;

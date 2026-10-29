@@ -123,11 +123,7 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
         onConfirm={handleActivateConfirm}
       />
 
-      <RoleRedirectDialog
-        open={showRedirectDialog}
-        variant="switch"
-        onRedirect={handleRedirect}
-      />
+      <RoleRedirectDialog open={showRedirectDialog} variant="switch" onRedirect={handleRedirect} />
     </>
   );
 }

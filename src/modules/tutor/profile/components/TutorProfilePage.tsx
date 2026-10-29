@@ -13,7 +13,12 @@ import { Mail, Map, Phone } from "lucide-react";
 import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 import { getInitials, getUniqueModalities } from "@/modules/tutor/profile/utils/profile.utils";
 import { SECTION_LABEL_SX } from "@/modules/tutor/profile/styles/profileStyles";
-import { STAR_COLOR, BIO_BG, BIO_BORDER, BIO_TEXT } from "@/modules/tutor/profile/constants/profileColors.constants";
+import {
+  STAR_COLOR,
+  BIO_BG,
+  BIO_BORDER,
+  BIO_TEXT,
+} from "@/modules/tutor/profile/constants/profileColors.constants";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import DataItem from "@/modules/tutor/profile/components/DataItem";
 import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";
@@ -209,68 +214,68 @@ export default function TutorProfilePage() {
               boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
             }}
           >
-          <Box sx={{ display: "flex", alignItems: "stretch", p: "36px 40px" }}>
-            <Box sx={{ flex: "0 0 40%", pr: "16px" }}>
-              <Typography sx={{ ...SECTION_LABEL_SX, mb: "26px" }}>Datos personales</Typography>
-              <DataItem icon={<Mail size={30} />} label="Correo" value={profile.email} />
-              <DataItem icon={<Phone size={30} />} label="Celular" value={profile.phoneNumber} />
-              <DataItem
-                icon={<Map size={30} />}
-                label="Dirección clases presenciales"
-                value={profile.address}
-              />
-            </Box>
-
-            <Divider orientation="vertical" flexItem sx={{ my: "12px", mx: "24px" }} />
-
-            <Box sx={{ flex: 1, pl: "16px" }}>
-              <Typography sx={SECTION_LABEL_SX}>Modalidad</Typography>
-              <Box sx={{ display: "flex", gap: "12px", mb: "30px", flexWrap: "wrap" }}>
-                {allModalities.length > 0 ? (
-                  allModalities.map((mod) => <ModalityChip key={mod} modality={mod} />)
-                ) : (
-                  <Typography sx={{ fontSize: "17px", color: "#aaa" }}>
-                    No hay modalidades configuradas
-                  </Typography>
-                )}
+            <Box sx={{ display: "flex", alignItems: "stretch", p: "36px 40px" }}>
+              <Box sx={{ flex: "0 0 40%", pr: "16px" }}>
+                <Typography sx={{ ...SECTION_LABEL_SX, mb: "26px" }}>Datos personales</Typography>
+                <DataItem icon={<Mail size={30} />} label="Correo" value={profile.email} />
+                <DataItem icon={<Phone size={30} />} label="Celular" value={profile.phoneNumber} />
+                <DataItem
+                  icon={<Map size={30} />}
+                  label="Dirección clases presenciales"
+                  value={profile.address}
+                />
               </Box>
 
-              <Typography sx={SECTION_LABEL_SX}>Pagos</Typography>
-              <Box sx={{ mb: "30px" }}>
-                <PaymentSection linked={profile.mercadoPagoLinked} />
-              </Box>
+              <Divider orientation="vertical" flexItem sx={{ my: "12px", mx: "24px" }} />
 
-              <Typography sx={SECTION_LABEL_SX}>Biografía</Typography>
-              <Box
-                sx={{
-                  border: `1.5px dashed ${BIO_BORDER}`,
-                  borderRadius: "10px",
-                  backgroundColor: BIO_BG,
-                  p: "20px 24px",
-                  minHeight: "100px",
-                  display: "flex",
-                  alignItems: profile.biography ? "flex-start" : "center",
-                  justifyContent: profile.biography ? "flex-start" : "center",
-                }}
-              >
-                <Typography
+              <Box sx={{ flex: 1, pl: "16px" }}>
+                <Typography sx={SECTION_LABEL_SX}>Modalidad</Typography>
+                <Box sx={{ display: "flex", gap: "12px", mb: "30px", flexWrap: "wrap" }}>
+                  {allModalities.length > 0 ? (
+                    allModalities.map((mod) => <ModalityChip key={mod} modality={mod} />)
+                  ) : (
+                    <Typography sx={{ fontSize: "17px", color: "#aaa" }}>
+                      No hay modalidades configuradas
+                    </Typography>
+                  )}
+                </Box>
+
+                <Typography sx={SECTION_LABEL_SX}>Pagos</Typography>
+                <Box sx={{ mb: "30px" }}>
+                  <PaymentSection linked={profile.mercadoPagoLinked} />
+                </Box>
+
+                <Typography sx={SECTION_LABEL_SX}>Biografía</Typography>
+                <Box
                   sx={{
-                    fontSize: "17px",
-                    color: BIO_TEXT,
-                    textAlign: profile.biography ? "left" : "center",
-                    lineHeight: 1.7,
+                    border: `1.5px dashed ${BIO_BORDER}`,
+                    borderRadius: "10px",
+                    backgroundColor: BIO_BG,
+                    p: "20px 24px",
+                    minHeight: "100px",
+                    display: "flex",
+                    alignItems: profile.biography ? "flex-start" : "center",
+                    justifyContent: profile.biography ? "flex-start" : "center",
                   }}
                 >
-                  {profile.biography ??
-                    "Completa tu biografía para aumentar tus chances de recibir reservas"}
-                </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "17px",
+                      color: BIO_TEXT,
+                      textAlign: profile.biography ? "left" : "center",
+                      lineHeight: 1.7,
+                    }}
+                  >
+                    {profile.biography ??
+                      "Completa tu biografía para aumentar tus chances de recibir reservas"}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <StudentRoleCard hasStudentProfile={profile.hasStudentProfile} />
-        </Box>
+          <Box sx={{ mt: 2 }}>
+            <StudentRoleCard hasStudentProfile={profile.hasStudentProfile} />
+          </Box>
         </>
       )}
 

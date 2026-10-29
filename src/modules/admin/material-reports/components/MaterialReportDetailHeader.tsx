@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import AdminStatusChip from "@/modules/admin/material-reports/components/AdminStatusChip";
-import type { AdminStatusTone } from "@/modules/admin/material-reports/constants/material-report-status-meta";
+import AdminStatusChip from "@/modules/admin/components/AdminStatusChip";
+import type { AdminStatusTone } from "@/modules/admin/constants/admin-status-meta";
 import {
   detailHeaderSx,
   detailSubtitleSx,

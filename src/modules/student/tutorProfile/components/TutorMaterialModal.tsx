@@ -148,7 +148,12 @@ export const TutorMaterialModal = ({
                           </Typography>
                         </Box>
                       </Stack>
-                      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexShrink: 0 }}>
+                      <Stack
+                        direction="row"
+                        spacing={1.5}
+                        alignItems="center"
+                        sx={{ flexShrink: 0 }}
+                      >
                         <ReportMaterialFlow
                           materialId={item.id}
                           materialTitle={item.title}

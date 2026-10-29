@@ -24,8 +24,18 @@ import { AgendaLegend } from "@/modules/tutor/weekly-schedule/components/AgendaL
 import { isBeforeToday } from "@/shared/utils/calendarDateUtils";
 
 const MONTH_LABELS = [
-  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 const DAY_LABELS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
 
@@ -110,13 +120,18 @@ export function WeeklyAgendaCalendar({
         gap={2}
         sx={{ mb: 4 }}
       >
-        <Stack direction="row" alignItems="center" spacing={1.5} sx={{
-          bgcolor: "#F4F2FF",
-          border: "1px solid #c6c5d43b",
-          borderRadius: 3,
-          px: 2,
-          py: 1,
-        }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1.5}
+          sx={{
+            bgcolor: "#F4F2FF",
+            border: "1px solid #c6c5d43b",
+            borderRadius: 3,
+            px: 2,
+            py: 1,
+          }}
+        >
           <Typography variant="h5" fontWeight={500}>
             {MONTH_LABELS[weekStart.getMonth()]} {weekStart.getFullYear()}
           </Typography>

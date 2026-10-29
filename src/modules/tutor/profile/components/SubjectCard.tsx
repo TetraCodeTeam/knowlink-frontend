@@ -83,8 +83,8 @@ export default function SubjectCard({ subject }: SubjectCardProps) {
           {isFree
             ? "Gratis"
             : subject.pricePerHour != null
-            ? `$${Number(subject.pricePerHour).toLocaleString("es-AR")}`
-            : "A consultar"}
+              ? `$${Number(subject.pricePerHour).toLocaleString("es-AR")}`
+              : "A consultar"}
         </Typography>
       </Box>
     </Box>

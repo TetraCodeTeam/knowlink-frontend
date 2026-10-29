@@ -5,7 +5,9 @@ import { getErrorMessage } from "@/shared/utils/errors";
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error: unknown) => {
-      useSnackbarStore.getState().showMessage(getErrorMessage(error, "Ocurrió un error inesperado"), "error");
+      useSnackbarStore
+        .getState()
+        .showMessage(getErrorMessage(error, "Ocurrió un error inesperado"), "error");
     },
   }),
   defaultOptions: {

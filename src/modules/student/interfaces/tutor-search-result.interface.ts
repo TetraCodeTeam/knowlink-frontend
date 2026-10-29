@@ -12,4 +12,3 @@ export interface TutorSearchResult {
   /** Materias que matchearon la búsqueda para este tutor, con su carrera. */
   subjects: SubjectSummary[];
 }
-

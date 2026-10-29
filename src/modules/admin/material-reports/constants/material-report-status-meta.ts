@@ -1,14 +1,8 @@
+import type { AdminStatusMeta, AdminStatusTone } from "@/modules/admin/constants/admin-status-meta";
 import { ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
 import type { AdminMaterialReportStatus } from "@/modules/admin/types/admin-material-report-status.type";
 
-export type AdminStatusTone = "warning" | "info" | "success" | "danger";
-
-export interface AdminStatusMeta {
-  label: string;
-  tone: AdminStatusTone;
-  /** Color de la franja lateral de la fila. */
-  accent: string;
-}
+export type { AdminStatusMeta, AdminStatusTone };
 
 /**
  * Metadatos de los estados de una denuncia de material en el admin.

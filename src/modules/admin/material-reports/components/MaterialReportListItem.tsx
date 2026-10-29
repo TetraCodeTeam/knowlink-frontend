@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { Clock } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
-import AdminStatusChip from "@/modules/admin/material-reports/components/AdminStatusChip";
+import AdminStatusChip from "@/modules/admin/components/AdminStatusChip";
 import FileKindIcon from "@/modules/admin/material-reports/components/FileKindIcon";
 import ReportsCountBadge from "@/modules/admin/material-reports/components/ReportsCountBadge";
 import { ADMIN_MATERIAL_REPORT_STATUS_META } from "@/modules/admin/material-reports/constants/material-report-status-meta";

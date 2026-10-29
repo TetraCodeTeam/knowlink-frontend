@@ -5,6 +5,6 @@ export function useActiveHold() {
   return useQuery({
     queryKey: ["active-hold"],
     queryFn: getActiveHold,
-    staleTime: 0, 
+    staleTime: 0,
   });
 }

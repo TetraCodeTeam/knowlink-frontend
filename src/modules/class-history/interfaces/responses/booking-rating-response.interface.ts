@@ -1,4 +1,4 @@
 export interface BookingRatingResponse {
-    visible: boolean;
-    message: string;
+  visible: boolean;
+  message: string;
 }
