@@ -46,7 +46,12 @@ export default function NotificationItem({
     } else if (action.kind === "claim" && notification.referenceId) {
       openClaimPopup(notification.referenceId);
     } else if (action.kind === "navigate") {
-      navigate(action.route);
+      const linksToReference = getNotificationConfig(notification.type).appendReference;
+      navigate(
+        linksToReference && notification.referenceId
+          ? `${action.route}/${notification.referenceId}`
+          : action.route
+      );
     }
     onClose();
   };

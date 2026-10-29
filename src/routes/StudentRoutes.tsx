@@ -1,6 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import StudentLayout from "@/modules/student/layouts/StudentLayout";
-import StudentHomePage from "@/modules/student/pages/StudentHomePage";
+import CommunityFeedPage from "@/modules/community/pages/CommunityFeedPage";
+import MyPostsPage from "@/modules/community/pages/MyPostsPage";
+import PostThreadPage from "@/modules/community/pages/PostThreadPage";
+import TutorPodiumPage from "@/modules/community/pages/TutorPodiumPage";
 import { OwnProfilePage } from "@/modules/student/profile/pages/OwnProfilePage";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
 import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
@@ -14,7 +17,10 @@ export default function StudentRoutes() {
     <Routes>
       <Route element={<StudentLayout />}>
         <Route index element={<Navigate to="home" replace />} />
-        <Route path="home" element={<StudentHomePage />} />
+        <Route path="home" element={<CommunityFeedPage />} />
+        <Route path="community/mine" element={<MyPostsPage />} />
+        <Route path="community/podium" element={<TutorPodiumPage />} />
+        <Route path="community/posts/:postId" element={<PostThreadPage />} />
         <Route path="classes" element={<StudentClassHistoryPage />} />
 
         <Route path="complaints" element={<UnderConstructionPage />} />
