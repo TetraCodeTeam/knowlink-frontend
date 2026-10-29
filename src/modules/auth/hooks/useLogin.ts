@@ -5,10 +5,12 @@ import { AUTH_LOGIN_KEY } from "@/modules/auth/constants";
 import { loginUser } from "@/modules/auth/api/auth.api";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import type { LoginFormValues } from "@/modules/auth/schemas/login.schema";
+import type { AuthRole } from "@/shared/types/role.type";
 
-const ROLE_REDIRECT: Record<string, string> = {
+const ROLE_REDIRECT: Partial<Record<AuthRole, string>> = {
   STUDENT: "/student/profile",
   TUTOR: "/tutor/profile",
+  ADMIN: "/admin/home",
 };
 
 export function useLogin() {
