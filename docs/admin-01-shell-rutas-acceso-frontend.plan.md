@@ -42,9 +42,9 @@ La historia crea el esqueleto del área ADMIN: ruta protegida `/admin/*`, redire
 
 ### Fase 0 — Preparación
 
-- [ ] Confirmar rama `feature/admin-frontend` y árbol limpio.
-- [ ] Commit inicial de los specs y este plan.
-- [ ] Ejecutar línea base: `npm run lint`, `npm run type-check`, `npm run test`, `npm run format:check`.
+- [x] Confirmar rama `feature/admin-frontend` y árbol limpio.
+- [x] Commit inicial de los specs y este plan.
+- [x] Ejecutar línea base: `npm run lint`, `npm run type-check`, `npm run test`, `npm run format:check`.
 
 ### Fase 1 — Rutas y control de acceso
 
@@ -57,12 +57,12 @@ La historia crea el esqueleto del área ADMIN: ruta protegida `/admin/*`, redire
 
 **Tareas**
 
-- [ ] `adminPaths` con las 3 rutas, mismo estilo que `studentPaths`.
-- [ ] `AdminRoutes`: `index` → `home`, las 3 rutas con `UnderConstructionPage`, `*` → `home`.
-- [ ] `RoutesProvider`: ruta `/admin/*` bajo `RoleRoute allowedRole="ADMIN"`.
-- [ ] `RoleRedirect`: ADMIN → `/admin/home`.
-- [ ] `useLogin`: `ADMIN: "/admin/home"`. Opcional: tipar el mapa como `Partial<Record<AuthRole, string>>`.
-- [ ] No tocar las redirecciones actuales de STUDENT/TUTOR.
+- [x] `adminPaths` con las 3 rutas, mismo estilo que `studentPaths`.
+- [x] `AdminRoutes`: `index` → `home`, las 3 rutas con `UnderConstructionPage`, `*` → `home`.
+- [x] `RoutesProvider`: ruta `/admin/*` bajo `RoleRoute allowedRole="ADMIN"`.
+- [x] `RoleRedirect`: ADMIN → `/admin/home`.
+- [x] `useLogin`: `ADMIN: "/admin/home"`. Opcional: tipar el mapa como `Partial<Record<AuthRole, string>>`.
+- [x] No tocar las redirecciones actuales de STUDENT/TUTOR.
 
 **Verificación**
 
@@ -74,37 +74,37 @@ La historia crea el esqueleto del área ADMIN: ruta protegida `/admin/*`, redire
 
 ### Fase 2 — Tokens y tipografía
 
-- [ ] `admin-tokens.ts` tipado (`as const`) con los valores del spec.
-- [ ] Constantes de `fontFamily` para contenido y sidebar.
-- [ ] Plus Jakarta Sans `wght@500;600;700;800` en `index.html`.
-- [ ] No modificar `theme/index.ts` ni la fuente global.
+- [x] `admin-tokens.ts` tipado (`as const`) con los valores del spec.
+- [x] Constantes de `fontFamily` para contenido y sidebar.
+- [x] Plus Jakarta Sans `wght@500;600;700;800` en `index.html`.
+- [x] No modificar `theme/index.ts` ni la fuente global.
 
 ### Fase 3 — Navegación y sidebar
 
-- [ ] `admin-nav-items.ts` tipado, con slot de badge reservado.
-- [ ] `AdminSidebar` de 114 px, logo, 3 ítems, activo por `pathname` con prefijo, footer y logout.
-- [ ] `AdminLayout` con `Outlet`, fondo `fondo3`, `marginLeft` y Plus Jakarta Sans en la raíz.
-- [ ] La sidebar fuerza Inter explícitamente.
+- [x] `admin-nav-items.ts` tipado, con slot de badge reservado.
+- [x] `AdminSidebar` de 114 px, logo, 3 ítems, activo por `pathname` con prefijo, footer y logout.
+- [x] `AdminLayout` con `Outlet`, fondo `fondo3`, `marginLeft` y Plus Jakarta Sans en la raíz.
+- [x] La sidebar fuerza Inter explícitamente.
 
 ### Fase 4 — Placeholders y cierre visual
 
-- [ ] Las 3 rutas montan `UnderConstructionPage`.
-- [ ] Revisión en 1440×1024: ancho, colores, orden, espaciado, 2 líneas en "Reclamos de sesiones".
-- [ ] La fuente del admin no se filtra a student/tutor.
+- [x] Las 3 rutas montan `UnderConstructionPage`.
+- [x] Revisión en 1440×1024: ancho, colores, orden, espaciado, 2 líneas en "Reclamos de sesiones".
+- [x] La fuente del admin no se filtra a student/tutor.
 
 ### Fase 5 — Tests
 
-- [ ] `test/providers/RoutesProvider.test.tsx`
-- [ ] `test/modules/auth/useLogin.test.tsx`
-- [ ] `test/modules/admin/AdminSidebar.test.tsx`
+- [x] `test/providers/RoutesProvider.test.tsx`
+- [x] `test/modules/auth/useLogin.test.tsx`
+- [x] `test/modules/admin/AdminSidebar.test.tsx`
 
 Casos detallados en la sección 7.
 
 ### Fase 6 — Verificación y PR
 
-- [ ] `npm run lint`, `npm run type-check`, `npm run format:check`, `npm run test`.
-- [ ] Prueba manual con ADMIN, STUDENT y TUTOR.
-- [ ] Sin diffs en `student/`, `tutor/` ni `theme/index.ts`.
+- [x] `npm run lint`, `npm run type-check`, `npm run format:check` (ver Fase 6), `npm run test`.
+- [x] Prueba manual con ADMIN, STUDENT y TUTOR.
+- [x] Sin diffs en `student/`, `tutor/` ni `theme/index.ts`.
 - [ ] PR con las decisiones abiertas y el default aplicado.
 
 ## 5. Inventario de archivos
@@ -202,3 +202,24 @@ feat: agrega tokens y tipografía del área administrador
 feat: agrega sidebar y layout del área administrador
 test: cubre acceso y navegación del área administrador
 ```
+
+---
+
+## 11. Resultado de la verificación (Fase 6)
+
+| Check | Resultado |
+|---|---|
+| `npm run lint` | OK, sin warnings |
+| `npm run type-check` | OK |
+| `npm run test` | OK, 26 archivos y 144 tests |
+| `npm run format:check` | Falla por CRLF preexistente (467 archivos ajenos a la historia); los archivos de esta rama pasan Prettier |
+| Prueba manual ADMIN y STUDENT | OK en `npm run dev` |
+| Prueba manual TUTOR | Cubierta por `RoutesProvider.test` |
+| Sin cambios en `student/`, `tutor/`, `theme/index.ts` | OK |
+
+Notas:
+
+- El viewport disponible del browser fue 912x670; las medidas fijas (114 px de sidebar, 102x76 del ítem activo, 79 px del separador) se validaron por estilos calculados.
+- "Reclamos de sesiones" mide 88.5 px de alto por el label en 2 líneas; el resto mide 76 px.
+- El badge del sidebar, la campana de notificaciones y "Solicitudes de validación" quedan fuera de alcance según las decisiones abiertas.
+- `RoleRoute` es solo control de UX; la autorización real sigue en el backend con `@PreAuthorize`.
