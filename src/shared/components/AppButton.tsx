@@ -6,9 +6,10 @@ import {
   softButtonSx,
   softDangerButtonSx,
   outlineButtonSx,
+  darkButtonSx,
 } from "@/shared/styles/buttonSx";
 
-type AppButtonVariant = "primary" | "soft" | "soft-danger" | "outline";
+type AppButtonVariant = "primary" | "soft" | "soft-danger" | "outline" | "dark";
 
 interface AppButtonProps extends Omit<ButtonProps, "variant" | "color"> {
   appVariant?: AppButtonVariant;
@@ -21,6 +22,7 @@ const variantStyles: Record<AppButtonVariant, SxProps<Theme>> = {
   soft: softButtonSx,
   "soft-danger": softDangerButtonSx,
   outline: outlineButtonSx,
+  dark: darkButtonSx,
 };
 
 export default function AppButton({
@@ -37,10 +39,7 @@ export default function AppButton({
       disableElevation
       disabled={disabled || loading}
       startIcon={loading ? <CircularProgress size={16} color="inherit" /> : props.startIcon}
-      sx={[
-        variantStyles[appVariant],
-        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
-      ]}
+      sx={[variantStyles[appVariant], ...(Array.isArray(sx) ? sx : sx ? [sx] : [])]}
       {...props}
     >
       {children}

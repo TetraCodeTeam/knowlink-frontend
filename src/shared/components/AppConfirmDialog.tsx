@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Box,
   Checkbox,
@@ -22,6 +22,8 @@ interface AppConfirmDialogProps {
   cancelLabel?: string;
   requireCheckbox?: boolean;
   checkboxLabel?: string;
+  /** Contenido adicional entre el mensaje y las acciones (ej. un campo de texto). */
+  content?: ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
   isPending: boolean;
@@ -44,6 +46,7 @@ export default function AppConfirmDialog({
   cancelLabel = "Cancelar",
   requireCheckbox = false,
   checkboxLabel = "Entiendo que esta acción es permanente y no se puede revertir",
+  content,
   onConfirm,
   onCancel,
   isPending,
@@ -65,9 +68,9 @@ export default function AppConfirmDialog({
       fullWidth
       PaperProps={{ sx: { borderRadius: 4, textAlign: "center", pt: 1 } }}
     >
-      
-
-      <DialogContent sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
+      >
         <Box
           sx={{
             width: 60,
@@ -90,6 +93,8 @@ export default function AppConfirmDialog({
         <Typography variant="body2" color="text.secondary">
           {message}
         </Typography>
+
+        {content && <Box sx={{ width: "100%", mt: 2, textAlign: "left" }}>{content}</Box>}
 
         {requireCheckbox && (
           <FormControlLabel
