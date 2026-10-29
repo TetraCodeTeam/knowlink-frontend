@@ -57,6 +57,10 @@ export default function StudentSidebar() {
   const unreadCount = data?.count ?? 0;
   const isActive = (path: string, badge?: NavItem["badge"]) => {
     if (badge === "notifications") return isNotificationsOpen;
+    // Home es la comunidad: sus subpáginas (hilos, mis publicaciones, podio) mantienen Home activo.
+    if (path === "/student/home") {
+      return location.pathname === path || location.pathname.startsWith("/student/community/");
+    }
     return location.pathname === path;
   };
 
