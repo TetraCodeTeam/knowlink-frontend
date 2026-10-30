@@ -13,6 +13,13 @@ interface FileFormatMeta {
 export const FILE_FORMAT_META: Record<FileFormat, FileFormatMeta> = {
   PDF: { label: "PDF", icon: FileText, bg: SUPPORT_COLORS.redSoft, fg: SUPPORT_COLORS.red },
   PNG: { label: "PNG", icon: ImageIcon, bg: SUPPORT_COLORS.indigoSoft, fg: SUPPORT_COLORS.indigo },
+  JPG: { label: "JPG", icon: ImageIcon, bg: SUPPORT_COLORS.indigoSoft, fg: SUPPORT_COLORS.indigo },
+  JPEG: {
+    label: "JPEG",
+    icon: ImageIcon,
+    bg: SUPPORT_COLORS.indigoSoft,
+    fg: SUPPORT_COLORS.indigo,
+  },
   XLSX: {
     label: "XLSX",
     icon: FileSpreadsheet,
@@ -21,10 +28,12 @@ export const FILE_FORMAT_META: Record<FileFormat, FileFormatMeta> = {
   },
 };
 
-export const ACCEPTED_FILE_FORMATS: FileFormat[] = ["PDF", "PNG", "XLSX"];
+export const ACCEPTED_FILE_FORMATS: FileFormat[] = ["PDF", "PNG", "XLSX", "JPG", "JPEG"];
 
 export const FILE_FORMAT_MIME_TYPES: Record<FileFormat, string> = {
   PDF: "application/pdf",
   PNG: "image/png",
+  JPG: "image/jpeg",
+  JPEG: "image/jpeg",
   XLSX: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 };
