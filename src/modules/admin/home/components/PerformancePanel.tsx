@@ -43,7 +43,7 @@ export default function PerformancePanel({
   isFetching = false,
 }: PerformancePanelProps) {
   const delta = buildResolutionDeltaCopy(performance.avgResolutionDeltaPct);
-  const status = getUnresolvedStatus(performance.unresolvedPct);
+  const status = getUnresolvedStatus(performance.unresolvedLevel);
 
   return (
     <Box component="section" aria-labelledby="performance-panel-title" sx={panelSx}>

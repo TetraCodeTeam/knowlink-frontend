@@ -1,6 +1,10 @@
 import { ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
 
-export type UnresolvedStatusLevel = "ok" | "warning" | "critical";
+/**
+ * Semáforo que calcula el backend según `unresolvedPct`.
+ * El frontend solo traduce el nivel a etiqueta y color: no recalcula umbrales.
+ */
+export type UnresolvedStatusLevel = "UNDER_CONTROL" | "ACCEPTABLE" | "RISKY" | "CRITICAL";
 
 export interface UnresolvedStatusMeta {
   level: UnresolvedStatusLevel;
@@ -8,29 +12,13 @@ export interface UnresolvedStatusMeta {
   color: string;
 }
 
-/**
- * Umbrales provisionales acordados en el spec (decisión abierta #3):
- * < 15 % bajo control, < 30 % atención, >= 30 % crítico.
- */
-export const UNRESOLVED_STATUS_THRESHOLDS = {
-  warning: 15,
-  critical: 30,
-} as const;
-
 const UNRESOLVED_STATUS_META: Record<UnresolvedStatusLevel, Omit<UnresolvedStatusMeta, "level">> = {
-  ok: { label: "Bajo control", color: ADMIN_TOKENS.emerald600 },
-  warning: { label: "Atención", color: ADMIN_TOKENS.amber700 },
-  critical: { label: "Crítico", color: ADMIN_TOKENS.rose700 },
+  UNDER_CONTROL: { label: "Bajo control", color: ADMIN_TOKENS.emerald600 },
+  ACCEPTABLE: { label: "Aceptable", color: ADMIN_TOKENS.amber700 },
+  RISKY: { label: "Riesgoso", color: ADMIN_TOKENS.rose500 },
+  CRITICAL: { label: "Crítico", color: ADMIN_TOKENS.rose700 },
 };
 
-export function getUnresolvedStatus(pct: number): UnresolvedStatusMeta {
-  let level: UnresolvedStatusLevel = "critical";
-
-  if (pct < UNRESOLVED_STATUS_THRESHOLDS.warning) {
-    level = "ok";
-  } else if (pct < UNRESOLVED_STATUS_THRESHOLDS.critical) {
-    level = "warning";
-  }
-
+export function getUnresolvedStatus(level: UnresolvedStatusLevel): UnresolvedStatusMeta {
   return { level, ...UNRESOLVED_STATUS_META[level] };
 }

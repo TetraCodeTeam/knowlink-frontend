@@ -30,6 +30,7 @@ const SUMMARY: DashboardSummaryResponse = {
     avgResolutionHours: 3.8,
     avgResolutionDeltaPct: 18,
     unresolvedPct: 8.2,
+    unresolvedLevel: "UNDER_CONTROL",
     volumeSplit: { claimsPct: 58, reportsPct: 42 },
   },
 };

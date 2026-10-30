@@ -1,4 +1,12 @@
 import { rawHttpClient } from "@/shared/lib/httpClient";
+import {
+  mapClaimContactInfo,
+  mapSessionClaimDetail,
+  mapSessionClaimList,
+  type ApiClaimContactInfoResponse,
+  type ApiSessionClaimDetailResponse,
+  type ApiSessionClaimListResponse,
+} from "@/modules/admin/session-claims/api/session-claim.mapper";
 import type { AdminClaimContactInfoResponse } from "@/modules/admin/session-claims/interfaces/responses/admin-claim-contact-info.response";
 import type { AdminSessionClaimDetailResponse } from "@/modules/admin/session-claims/interfaces/responses/admin-session-claim-detail.response";
 import type { AdminSessionClaimListResponse } from "@/modules/admin/session-claims/interfaces/responses/admin-session-claim-list.response";
@@ -15,15 +23,18 @@ import {
 const BASE_PATH = "/api/v1/admin/session-claims";
 
 /**
- * El backend de reclamos de sesión todavía no existe. Los mocks están activos por
- * defecto y se pueden apagar con `VITE_ADMIN_SESSION_CLAIMS_MOCKS=false` para usar
- * el contrato real cuando esté disponible.
+ * Los mocks quedan como opt-in para pruebas visuales sin backend:
+ * `VITE_ADMIN_SESSION_CLAIMS_MOCKS=true`. Por defecto la pantalla usa el
+ * contrato real, igual que el resto del panel admin.
  */
-const USE_MOCKS = import.meta.env.VITE_ADMIN_SESSION_CLAIMS_MOCKS !== "false";
+const USE_MOCKS = import.meta.env.VITE_ADMIN_SESSION_CLAIMS_MOCKS === "true";
 
 /**
  * Usa `rawHttpClient` para que la pantalla controle el estado de error y los
  * diálogos muestren el `message` del backend sin duplicar el snackbar global.
+ *
+ * El mapper adapta el envelope `{ page, statusCounts }` y los nombres del
+ * contrato real (`assignedAdmin`, `phoneNumber`, `dni`, etc.) al modelo de vista.
  */
 export async function getSessionClaims(
   filters: AdminSessionClaimListParams
@@ -38,8 +49,8 @@ export async function getSessionClaims(
   if (filters.status !== "ALL") params.status = filters.status;
   if (filters.scope === "mine") params.assignedToMe = true;
 
-  const { data } = await rawHttpClient.get<AdminSessionClaimListResponse>(BASE_PATH, { params });
-  return data;
+  const { data } = await rawHttpClient.get<ApiSessionClaimListResponse>(BASE_PATH, { params });
+  return mapSessionClaimList(data);
 }
 
 export async function getSessionClaimDetail(
@@ -47,10 +58,10 @@ export async function getSessionClaimDetail(
 ): Promise<AdminSessionClaimDetailResponse> {
   if (USE_MOCKS) return getMockSessionClaimDetail(claimId);
 
-  const { data } = await rawHttpClient.get<AdminSessionClaimDetailResponse>(
+  const { data } = await rawHttpClient.get<ApiSessionClaimDetailResponse>(
     `${BASE_PATH}/${claimId}`
   );
-  return data;
+  return mapSessionClaimDetail(data);
 }
 
 export async function assignSessionClaim(claimId: string): Promise<void> {
@@ -64,10 +75,10 @@ export async function getSessionClaimContactInfo(
 ): Promise<AdminClaimContactInfoResponse> {
   if (USE_MOCKS) return getMockClaimContactInfo(claimId);
 
-  const { data } = await rawHttpClient.get<AdminClaimContactInfoResponse>(
+  const { data } = await rawHttpClient.get<ApiClaimContactInfoResponse>(
     `${BASE_PATH}/${claimId}/contact-info`
   );
-  return data;
+  return mapClaimContactInfo(data);
 }
 
 export async function resolveSessionClaim(

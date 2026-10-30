@@ -1,3 +1,4 @@
+import type { UnresolvedStatusLevel } from "@/modules/admin/home/constants/performance-status.constants";
 import type { VolumeSplit } from "@/modules/admin/home/interfaces/responses/volume-split.response";
 
 export interface PerformanceSummary {
@@ -10,5 +11,7 @@ export interface PerformanceSummary {
   avgResolutionDeltaPct: number | null;
   /** Porcentaje de tareas sin resolver del período (0–100). */
   unresolvedPct: number;
+  /** Semáforo calculado por el backend; el frontend no lo recalcula. */
+  unresolvedLevel: UnresolvedStatusLevel;
   volumeSplit: VolumeSplit;
 }

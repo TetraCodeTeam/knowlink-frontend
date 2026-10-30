@@ -8,6 +8,7 @@ const PERFORMANCE: PerformanceSummary = {
   avgResolutionHours: 3.8,
   avgResolutionDeltaPct: 18,
   unresolvedPct: 8.2,
+  unresolvedLevel: "UNDER_CONTROL",
   volumeSplit: { claimsPct: 58, reportsPct: 42 },
 };
 
@@ -78,14 +79,14 @@ describe("PerformancePanel", () => {
     expect(screen.getByText("—")).toBeInTheDocument();
   });
 
-  it("cambia la etiqueta de tareas sin resolver según el umbral", () => {
-    renderPanel({ ...PERFORMANCE, unresolvedPct: 20 });
+  it("cambia la etiqueta según el nivel del backend", () => {
+    renderPanel({ ...PERFORMANCE, unresolvedLevel: "ACCEPTABLE" });
 
-    expect(screen.getByText("Atención")).toBeInTheDocument();
+    expect(screen.getByText("Aceptable")).toBeInTheDocument();
   });
 
-  it("marca crítico desde el umbral superior", () => {
-    renderPanel({ ...PERFORMANCE, unresolvedPct: 35 });
+  it("marca crítico cuando el backend lo indica", () => {
+    renderPanel({ ...PERFORMANCE, unresolvedLevel: "CRITICAL" });
 
     expect(screen.getByText("Crítico")).toBeInTheDocument();
   });
