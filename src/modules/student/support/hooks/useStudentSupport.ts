@@ -5,16 +5,17 @@ import { SUPPORT_UNREAD_COUNT_QUERY_KEY } from "@/modules/student/support/hooks/
 
 export function useStudentSupport() {
   const queryClient = useQueryClient();
-  const { data, isLoading, isError, isSuccess, refetch } = useQuery({
+  const { data, isLoading, isError, dataUpdatedAt, refetch } = useQuery({
     queryKey: ["studentSupport"],
     queryFn: getStudentSupport,
+    staleTime: 0,
   });
 
   useEffect(() => {
-    if (isSuccess) {
+    if (dataUpdatedAt > 0) {
       void queryClient.invalidateQueries({ queryKey: SUPPORT_UNREAD_COUNT_QUERY_KEY });
     }
-  }, [isSuccess, queryClient]);
+  }, [dataUpdatedAt, queryClient]);
 
   return {
     summary: data?.summary,

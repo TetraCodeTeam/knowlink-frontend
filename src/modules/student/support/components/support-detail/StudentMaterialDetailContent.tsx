@@ -24,8 +24,19 @@ function resolutionText(material: StudentMaterialReportDetail): string | null {
     : "La denuncia fue desestimada: el material permanece disponible.";
 }
 
+function availabilityText(material: StudentMaterialReportDetail): { label: string; color: string } {
+  if (material.materialAvailable) {
+    return { label: "Disponible en plataforma", color: SUPPORT_COLORS.success };
+  }
+  if (material.status === "RESOLVED") {
+    return { label: "Se dio de baja", color: SUPPORT_COLORS.danger };
+  }
+  return { label: "No disponible mientras se revisa", color: SUPPORT_COLORS.orange };
+}
+
 export function StudentMaterialDetailContent({ material }: StudentMaterialDetailContentProps) {
   const resolution = resolutionText(material);
+  const availability = availabilityText(material);
 
   return (
     <>
@@ -40,11 +51,11 @@ export function StudentMaterialDetailContent({ material }: StudentMaterialDetail
           <Typography
             sx={{
               fontSize: 14,
-              color: material.materialAvailable ? SUPPORT_COLORS.success : SUPPORT_COLORS.danger,
+              color: availability.color,
               mt: 0.5,
             }}
           >
-            {material.materialAvailable ? "Disponible en plataforma" : "Se dio de baja"}
+            {availability.label}
           </Typography>
         </Box>
       </SupportDetailSection>
