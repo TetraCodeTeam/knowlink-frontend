@@ -8,6 +8,7 @@ import type { DashboardRange } from "@/modules/admin/types/dashboard-range.type"
  */
 export const adminQueryKeys = {
   all: ["admin"] as const,
+  navigationBadges: ["admin", "navigation", "badges"] as const,
   dashboardBase: ["admin", "dashboard"] as const,
   dashboard: (range: DashboardRange) => ["admin", "dashboard", "summary", range] as const,
   materialReportsBase: ["admin", "material-reports"] as const,

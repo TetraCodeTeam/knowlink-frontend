@@ -55,6 +55,7 @@ function expectSessionClaimInvalidations(
   expect(invalidateSpy).toHaveBeenCalledWith({
     queryKey: adminQueryKeys.sessionClaims.detail(claimId),
   });
+  expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: adminQueryKeys.navigationBadges });
   expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: adminQueryKeys.dashboardBase });
 }
 

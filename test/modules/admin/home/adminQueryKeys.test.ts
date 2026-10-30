@@ -11,6 +11,10 @@ describe("adminQueryKeys", () => {
     expect(adminQueryKeys.dashboard("WEEK").slice(0, 2)).toEqual([...adminQueryKeys.dashboardBase]);
   });
 
+  it("expone una clave propia para los badges del sidebar", () => {
+    expect(adminQueryKeys.navigationBadges).toEqual(["admin", "navigation", "badges"]);
+  });
+
   it("cuelga todas las claves del prefijo admin", () => {
     expect(adminQueryKeys.all).toEqual(["admin"]);
     expect(adminQueryKeys.dashboardBase.slice(0, 1)).toEqual([...adminQueryKeys.all]);

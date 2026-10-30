@@ -52,6 +52,7 @@ function expectMaterialReportInvalidations(
   expect(invalidateSpy).toHaveBeenCalledWith({
     queryKey: adminQueryKeys.materialReports.detail(materialId),
   });
+  expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: adminQueryKeys.navigationBadges });
   expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: adminQueryKeys.dashboardBase });
 }
 

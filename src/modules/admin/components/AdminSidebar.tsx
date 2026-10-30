@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { GraduationCap, LogOut } from "lucide-react";
 import { Box, ButtonBase, Divider, Link as MuiLink, Typography, alpha } from "@mui/material";
-import { ADMIN_NAV_ITEMS } from "@/modules/admin/constants/admin-nav-items";
+import { ADMIN_NAV_ITEMS, type AdminNavBadge } from "@/modules/admin/constants/admin-nav-items";
+import AdminNavBadgeCounter from "@/modules/admin/navigation/components/AdminNavBadge";
+import { useAdminNavigationBadges } from "@/modules/admin/navigation/hooks/useAdminNavigationBadges";
+import type { AdminNavigationBadgesResponse } from "@/modules/admin/navigation/interfaces/responses/admin-navigation-badges.response";
 import {
   ADMIN_SIDEBAR_ACTIVE_BG,
   ADMIN_SIDEBAR_FONT_FAMILY,
@@ -14,9 +17,24 @@ import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 
 export const ADMIN_SIDEBAR_WIDTH = 114;
 
+function getPendingCount(
+  badge: AdminNavBadge | undefined,
+  badges: AdminNavigationBadgesResponse | undefined
+): number {
+  if (!badge || !badges) return 0;
+  return badge === "materialReports" ? badges.pendingMaterialReports : badges.pendingSessionClaims;
+}
+
+/** El conteo se anuncia en el nombre accesible del enlace; el badge visual es decorativo. */
+function getLinkLabel(label: string, pending: number): string {
+  if (pending === 0) return label;
+  return `${label}: ${pending} ${pending === 1 ? "pendiente" : "pendientes"}`;
+}
+
 export default function AdminSidebar() {
   const { pathname } = useLocation();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
+  const { badges } = useAdminNavigationBadges();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
@@ -76,14 +94,16 @@ export default function AdminSidebar() {
           gap: "8px",
         }}
       >
-        {ADMIN_NAV_ITEMS.map(({ label, path, icon: Icon }) => {
+        {ADMIN_NAV_ITEMS.map(({ label, path, icon: Icon, badge }) => {
           const active = isActive(path);
+          const pending = getPendingCount(badge, badges);
           return (
             <MuiLink
               key={path}
               component={RouterLink}
               to={path}
               underline="none"
+              aria-label={getLinkLabel(label, pending)}
               aria-current={active ? "page" : undefined}
               sx={{
                 display: "flex",
@@ -98,6 +118,7 @@ export default function AdminSidebar() {
               <Box
                 className="admin-nav-surface"
                 sx={{
+                  position: "relative",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -111,6 +132,7 @@ export default function AdminSidebar() {
                   transition: "background-color 0.15s ease",
                 }}
               >
+                {pending > 0 && <AdminNavBadgeCounter count={pending} />}
                 <Icon size={40} color={ADMIN_TOKENS.fondo3} strokeWidth={active ? 2.2 : 1.8} />
                 <Typography
                   sx={{

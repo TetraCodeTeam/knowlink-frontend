@@ -8,8 +8,7 @@ export interface AdminNavItem {
   path: string;
   icon: LucideIcon;
   /**
-   * Reservado para el contador numérico del sidebar.
-   * La semántica del badge aún no está definida, por eso no se renderiza.
+   * Contador pendiente que se muestra en el sidebar (ver GET /navigation/badges).
    */
   badge?: AdminNavBadge;
 }

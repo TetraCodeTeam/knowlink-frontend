@@ -3,10 +3,21 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/rea
 import { MemoryRouter, useLocation } from "react-router-dom";
 import AdminSidebar from "@/modules/admin/components/AdminSidebar";
 
-const { triggerLogout } = vi.hoisted(() => ({ triggerLogout: vi.fn() }));
+const { triggerLogout, badgesState } = vi.hoisted(() => ({
+  triggerLogout: vi.fn(),
+  badgesState: {
+    current: undefined as
+      | { pendingMaterialReports: number; pendingSessionClaims: number }
+      | undefined,
+  },
+}));
 
 vi.mock("@/modules/auth/logout/hooks/useLogout", () => ({
   useLogout: () => ({ triggerLogout, isPending: false }),
+}));
+
+vi.mock("@/modules/admin/navigation/hooks/useAdminNavigationBadges", () => ({
+  useAdminNavigationBadges: () => ({ badges: badgesState.current }),
 }));
 
 function LocationDisplay() {
@@ -26,6 +37,7 @@ function renderSidebar(path: string) {
 describe("AdminSidebar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    badgesState.current = undefined;
   });
 
   it("renderiza los ítems de navegación y Salir", () => {
@@ -60,6 +72,27 @@ describe("AdminSidebar", () => {
     fireEvent.click(screen.getByRole("link", { name: "Reclamos de sesiones" }));
 
     expect(screen.getByTestId("location")).toHaveTextContent("/admin/session-claims");
+  });
+
+  it("muestra los contadores pendientes en los ítems con badge", () => {
+    badgesState.current = { pendingMaterialReports: 3, pendingSessionClaims: 1 };
+    renderSidebar("/admin/home");
+
+    const reportsLink = screen.getByRole("link", { name: "Denuncias: 3 pendientes" });
+    const claimsLink = screen.getByRole("link", { name: "Reclamos de sesiones: 1 pendiente" });
+
+    expect(within(reportsLink).getByText("3")).toBeInTheDocument();
+    expect(within(claimsLink).getByText("1")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Home" })).not.toHaveTextContent(/\d/);
+  });
+
+  it("oculta los contadores cuando el valor es 0", () => {
+    badgesState.current = { pendingMaterialReports: 0, pendingSessionClaims: 0 };
+    renderSidebar("/admin/home");
+
+    expect(screen.getByRole("link", { name: "Denuncias" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Reclamos de sesiones" })).toBeInTheDocument();
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
   });
 
   it("abre el diálogo de logout y confirma la salida", () => {
