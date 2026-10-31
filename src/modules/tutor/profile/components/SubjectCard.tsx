@@ -1,4 +1,5 @@
-import { Box, Divider, Rating, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Rating, Typography } from "@mui/material";
+import { Pencil } from "lucide-react";
 import type { TutorOwnSubject } from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
 import { STAR_COLOR } from "@/modules/tutor/profile/constants/profileColors.constants";
 import { toModalityList } from "@/modules/tutor/profile/utils/profile.utils";
@@ -6,9 +7,10 @@ import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 
 interface SubjectCardProps {
   subject: TutorOwnSubject;
+  onEdit?: (subject: TutorOwnSubject) => void;
 }
 
-export default function SubjectCard({ subject }: SubjectCardProps) {
+export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
   const hasReviews =
     subject.averageRating !== null && subject.reviewCount !== null && subject.reviewCount > 0;
   const isFree = subject.compensationType === "FREE";
@@ -23,11 +25,28 @@ export default function SubjectCard({ subject }: SubjectCardProps) {
         boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
       }}
     >
-      <Typography
-        sx={{ fontSize: "24px", fontWeight: 700, color: "#1a1a2e", mb: "14px", lineHeight: 1.3 }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
       >
-        {subject.subjectName}
-      </Typography>
+        <Typography
+          sx={{ fontSize: "24px", fontWeight: 700, color: "#1a1a2e", mb: "14px", lineHeight: 1.3 }}
+        >
+          {subject.subjectName}
+        </Typography>
+
+        {onEdit && (
+          <IconButton
+            aria-label={`Editar materia ${subject.subjectName}`}
+            onClick={() => onEdit(subject)}
+          >
+            <Pencil size={20} />
+          </IconButton>
+        )}
+      </Box>
 
       {hasReviews ? (
         <Box sx={{ display: "flex", alignItems: "center", gap: "10px", mb: "16px" }}>
