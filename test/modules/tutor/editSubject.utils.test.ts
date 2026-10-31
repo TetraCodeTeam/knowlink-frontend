@@ -14,6 +14,7 @@ const baseSubject: TutorOwnSubject = {
   compensationType: "PAID",
   pricePerHour: 8000,
   verificationStatus: "ACTIVE",
+  active: true,
 };
 
 describe("toEditSubjectFormValues", () => {
