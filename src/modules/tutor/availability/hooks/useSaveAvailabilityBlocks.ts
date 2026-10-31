@@ -8,8 +8,15 @@ export function useSaveAvailabilityBlocks() {
 
   return useMutation({
     mutationKey: ["save-availability-blocks"],
-    mutationFn: ({ weekStart, weekEnd, blocks }: { weekStart: string; weekEnd: string; blocks: AvailabilityBlockRequest[] }) =>
-      saveWeekAvailabilityBlocks(weekStart, weekEnd, blocks),
+    mutationFn: ({
+      weekStart,
+      weekEnd,
+      blocks,
+    }: {
+      weekStart: string;
+      weekEnd: string;
+      blocks: AvailabilityBlockRequest[];
+    }) => saveWeekAvailabilityBlocks(weekStart, weekEnd, blocks),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["availability-blocks"] });
       toast.success("Disponibilidad guardada correctamente.");

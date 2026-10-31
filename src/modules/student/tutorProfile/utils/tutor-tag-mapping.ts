@@ -18,7 +18,8 @@ export const TUTOR_STATUS_DISPLAY_NAME = {
   VERIFIED: "Tutor Verificado",
 } as const;
 
-export type TutorStatusDisplay = (typeof TUTOR_STATUS_DISPLAY_NAME)[keyof typeof TUTOR_STATUS_DISPLAY_NAME];
+export type TutorStatusDisplay =
+  (typeof TUTOR_STATUS_DISPLAY_NAME)[keyof typeof TUTOR_STATUS_DISPLAY_NAME];
 
 export const TUTOR_STATUS: Record<TutorStatusDisplay, TutorTag> = {
   "Tutor Verificado": {
@@ -34,8 +35,7 @@ export const MODALITY_DISPLAY_NAME = {
   Virtual: "Virtual",
 } as const satisfies Record<Modalidad, string>;
 
-export type ModalityDisplay =
-  (typeof MODALITY_DISPLAY_NAME)[keyof typeof MODALITY_DISPLAY_NAME];
+export type ModalityDisplay = (typeof MODALITY_DISPLAY_NAME)[keyof typeof MODALITY_DISPLAY_NAME];
 
 export const MODALITY: Record<ModalityDisplay, TutorTag> = {
   Presencial: {

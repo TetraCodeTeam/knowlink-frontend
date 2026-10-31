@@ -112,7 +112,7 @@ export default function TutorRegisterWizard({
     return (
       <>
         <Step2AcademicProfile
-          career={isDualRole ? dualRoleCareer : (step1Data.career || "")}
+          career={isDualRole ? dualRoleCareer : step1Data.career || ""}
           defaultValues={step2Data}
           onNext={(data) => void handleStep2Next(data)}
           onBack={() => (isDualRole ? navigate(-1) : goTo(1))}
@@ -139,4 +139,3 @@ export default function TutorRegisterWizard({
     />
   );
 }
-

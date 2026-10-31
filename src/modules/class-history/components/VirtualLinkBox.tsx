@@ -84,7 +84,9 @@ export default function VirtualLinkBox({
           <Box sx={{ flexShrink: 0, mt: "3px" }}>
             <Link2 size={14} color="#666" />
           </Box>
-          <Typography sx={{ fontSize: "0.9rem", color: "#333", wordBreak: "break-all", flex: 1, minWidth: 0 }}>
+          <Typography
+            sx={{ fontSize: "0.9rem", color: "#333", wordBreak: "break-all", flex: 1, minWidth: 0 }}
+          >
             {virtualSessionLink ?? "Aún no se cargó un link"}
           </Typography>
         </Box>
@@ -94,7 +96,8 @@ export default function VirtualLinkBox({
         <Box sx={{ display: "flex", alignItems: "center", gap: "6px", mt: "8px" }}>
           <Info size={14} color="#666" />
           <Typography sx={{ fontSize: "0.78rem", color: "#666" }}>
-            Podés actualizar el link hasta {VIRTUAL_LINK_EDIT_WINDOW_MINUTES} minutos antes de la clase
+            Podés actualizar el link hasta {VIRTUAL_LINK_EDIT_WINDOW_MINUTES} minutos antes de la
+            clase
           </Typography>
         </Box>
       )}

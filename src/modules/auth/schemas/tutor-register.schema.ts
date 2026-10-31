@@ -38,7 +38,9 @@ export const step2Schema = z
   })
   .refine(
     (data) => {
-      const needsAddress = data.subjects.some((s) => s.modality === "IN_PERSON" || s.modality === "BOTH");
+      const needsAddress = data.subjects.some(
+        (s) => s.modality === "IN_PERSON" || s.modality === "BOTH"
+      );
       return !needsAddress || (data.address != null && data.address.trim().length > 0);
     },
     {

@@ -21,7 +21,9 @@ export default function ReportMaterialButton({
       component="button"
       type="button"
       onClick={onClick}
-      aria-label={alreadyReported ? `${materialTitle}: ya denunciado` : `Denunciar ${materialTitle}`}
+      aria-label={
+        alreadyReported ? `${materialTitle}: ya denunciado` : `Denunciar ${materialTitle}`
+      }
       sx={alreadyReported ? reportedLabelSx : reportLinkButtonSx}
     >
       <Flag size={14} />

@@ -23,7 +23,11 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
             </Typography>
           </Stack>
           {subjectRates.length > 3 && (
-            <Button size="medium" onClick={() => setDialogOpen(true)} sx={{ textTransform: "none", fontSize: 16 }}>
+            <Button
+              size="medium"
+              onClick={() => setDialogOpen(true)}
+              sx={{ textTransform: "none", fontSize: 16 }}
+            >
               Ver Todas
             </Button>
           )}
@@ -36,7 +40,11 @@ export const TutorSubjectsCard = ({ subjectRates }: TutorSubjectsCardProps) => {
         </Stack>
       </CardContent>
 
-      <SubjectsDialog open={dialogOpen} onClose={() => setDialogOpen(false)} subjectRates={subjectRates} />
+      <SubjectsDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        subjectRates={subjectRates}
+      />
     </Card>
   );
 };

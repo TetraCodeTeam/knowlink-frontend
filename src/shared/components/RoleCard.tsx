@@ -34,7 +34,8 @@ const CONTENT_BY_STATUS: Record<TutorRoleStatus, StatusContent> = {
       "Cambia tu vista actual para gestionar tus sesiones, materiales y disponibilidad como tutor.",
     actionLabel: "Acceder a la Interfaz de Tutor",
     hint: "Cambia a modo tutor",
-    tooltip: "Vas a ver la plataforma desde la vista de tutor. Podés volver a tu vista de alumno cuando quieras.",
+    tooltip:
+      "Vas a ver la plataforma desde la vista de tutor. Podés volver a tu vista de alumno cuando quieras.",
   },
   INACTIVE: {
     description:
@@ -68,7 +69,7 @@ export const RoleCard = ({ status, onAccessTutorMode }: RoleCardProps) => {
         {content.description}
       </Typography>
 
-      <ButtonBase 
+      <ButtonBase
         onClick={onAccessTutorMode}
         sx={{
           width: "100%",
@@ -87,7 +88,7 @@ export const RoleCard = ({ status, onAccessTutorMode }: RoleCardProps) => {
           },
         }}
       >
-        <Box sx={{color: "#5865C8"}}>
+        <Box sx={{ color: "#5865C8" }}>
           <Typography variant="h6" color="#2d2d2d">
             {content.actionLabel}
           </Typography>

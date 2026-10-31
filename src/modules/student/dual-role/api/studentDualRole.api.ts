@@ -1,5 +1,8 @@
 import { rawHttpClient } from "@/shared/lib/httpClient";
-import type { ActivateTutorRoleRequest, ActivateTutorRoleResponse } from "@/modules/student/dual-role/interfaces/studentDualRole.interface";
+import type {
+  ActivateTutorRoleRequest,
+  ActivateTutorRoleResponse,
+} from "@/modules/student/dual-role/interfaces/studentDualRole.interface";
 
 export async function activateTutorRole(
   data: ActivateTutorRoleRequest

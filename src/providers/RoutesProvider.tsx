@@ -3,16 +3,19 @@ import AuthRoutes from "@/routes/AuthRoutes";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import StudentRoutes from "@/routes/StudentRoutes";
 import TutorRoutes from "@/routes/TutorRoutes";
+import AdminRoutes from "@/routes/AdminRoutes";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import type { AuthRole } from "@/shared/types/role.type";
 
 const isDevAuthBypassEnabled = import.meta.env.DEV && import.meta.env.VITE_AUTH_BYPASS === "true";
 function RoleRedirect() {
   const authResponse = useAuthStore((s) => s.authResponse);
+  if (authResponse?.role === "ADMIN") return <Navigate to="/admin/home" replace />;
   if (authResponse?.role === "TUTOR") return <Navigate to="/tutor/home" replace />;
   return <Navigate to="/student/home" replace />;
 }
 
-function RoleRoute({ allowedRole }: { allowedRole: string }) {
+function RoleRoute({ allowedRole }: { allowedRole: AuthRole }) {
   const authResponse = useAuthStore((s) => s.authResponse);
 
   if (isDevAuthBypassEnabled) {
@@ -40,6 +43,9 @@ export default function RoutesProvider() {
         </Route>
         <Route element={<RoleRoute allowedRole="TUTOR" />}>
           <Route path="/tutor/*" element={<TutorRoutes />} />
+        </Route>
+        <Route element={<RoleRoute allowedRole="ADMIN" />}>
+          <Route path="/admin/*" element={<AdminRoutes />} />
         </Route>
         <Route path="/" element={<RoleRedirect />} />
       </Route>

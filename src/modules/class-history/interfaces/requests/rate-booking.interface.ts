@@ -1,4 +1,4 @@
 export interface RateBookingRequest {
-    score: number;
-    comment?: string | null;
+  score: number;
+  comment?: string | null;
 }

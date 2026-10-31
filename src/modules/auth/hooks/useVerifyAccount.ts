@@ -11,7 +11,8 @@ export function useVerifyAccount() {
     onError: (error: unknown) => {
       const message =
         (error as { response?: { data?: { message?: string; detail?: string } } })?.response?.data
-          ?.message ?? "El enlace es inválido o expiró. Solicitá uno nuevo desde la pantalla de registro.";
+          ?.message ??
+        "El enlace es inválido o expiró. Solicitá uno nuevo desde la pantalla de registro.";
       toast.error(message);
     },
   });

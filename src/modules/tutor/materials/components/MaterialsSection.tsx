@@ -17,7 +17,10 @@ export default function MaterialsSection() {
   const { subjects, isLoading: isSubjectsLoading } = useMySubjectsWithCatalogId();
   const allCatalogSubjectIds = subjects.map((s) => s.catalogSubjectId);
 
-  const { materials, isLoading: isMaterialsLoading } = useGetMaterials(allCatalogSubjectIds, selectedCatalogSubjectId);
+  const { materials, isLoading: isMaterialsLoading } = useGetMaterials(
+    allCatalogSubjectIds,
+    selectedCatalogSubjectId
+  );
   const isLoading = isSubjectsLoading || isMaterialsLoading;
 
   useEffect(() => {
@@ -82,7 +85,11 @@ export default function MaterialsSection() {
             scrollbarWidth: "none",
           }}
         >
-          <Button size="small" onClick={() => setSelectedCatalogSubjectId(undefined)} sx={chipSx(selectedCatalogSubjectId === undefined)}>
+          <Button
+            size="small"
+            onClick={() => setSelectedCatalogSubjectId(undefined)}
+            sx={chipSx(selectedCatalogSubjectId === undefined)}
+          >
             Todo
           </Button>
           {subjects.map((subject) => (
@@ -103,7 +110,11 @@ export default function MaterialsSection() {
           </IconButton>
         )}
 
-        <Button startIcon={<Upload size={15} />} onClick={() => setIsUploadOpen(true)} sx={uploadButtonSx}>
+        <Button
+          startIcon={<Upload size={15} />}
+          onClick={() => setIsUploadOpen(true)}
+          sx={uploadButtonSx}
+        >
           Subir recurso
         </Button>
       </Box>
@@ -112,7 +123,9 @@ export default function MaterialsSection() {
 
       {/* Content */}
       {isLoading ? (
-        <Typography sx={{ color: "#888", fontSize: "16px", py: 2 }}>Cargando materiales...</Typography>
+        <Typography sx={{ color: "#888", fontSize: "16px", py: 2 }}>
+          Cargando materiales...
+        </Typography>
       ) : materials.length === 0 ? (
         <MaterialEmptyState />
       ) : (

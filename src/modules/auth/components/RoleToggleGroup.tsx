@@ -2,10 +2,11 @@ import { BookSearch, NotebookPen } from "lucide-react";
 import { ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import type { Role } from "@/shared/types/role.type";
 
-const ROLE_CONTENT: Record<Role, { icon: typeof NotebookPen; label: string; description: string }> = {
-  TUTOR: { icon: NotebookPen, label: "Tutor", description: "Ofrecer clases" },
-  STUDENT: { icon: BookSearch, label: "Alumno", description: "Busco tutores para estudiar" },
-};
+const ROLE_CONTENT: Record<Role, { icon: typeof NotebookPen; label: string; description: string }> =
+  {
+    TUTOR: { icon: NotebookPen, label: "Tutor", description: "Ofrecer clases" },
+    STUDENT: { icon: BookSearch, label: "Alumno", description: "Busco tutores para estudiar" },
+  };
 
 interface RoleToggleGroupProps {
   value: Role | undefined;
@@ -64,7 +65,7 @@ export default function RoleToggleGroup({
               </Typography>
             )}
           </ToggleButton>
-        ),
+        )
       )}
     </ToggleButtonGroup>
   );

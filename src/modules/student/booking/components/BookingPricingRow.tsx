@@ -23,7 +23,7 @@ export default function BookingPricingRow({
         variant="subtitle1"
         sx={{ color: valueColor, fontWeight: emphasized ? 700 : 500 }}
       >
-        {typeof value === "number" ? formatter.format(value) : value ?? "-"}
+        {typeof value === "number" ? formatter.format(value) : (value ?? "-")}
       </Typography>
     </Box>
   );

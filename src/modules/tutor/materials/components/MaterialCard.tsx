@@ -1,7 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import type { Material } from "@/modules/tutor/materials/interfaces/material.interface";
 import { getFileIconAndColor } from "@/modules/tutor/materials/utils/materials.utils";
-import { fileIconContainerSx, materialRowSx } from "@/modules/tutor/materials/styles/materialsStyles";
+import {
+  fileIconContainerSx,
+  materialRowSx,
+} from "@/modules/tutor/materials/styles/materialsStyles";
 
 interface MaterialCardProps {
   material: Material;

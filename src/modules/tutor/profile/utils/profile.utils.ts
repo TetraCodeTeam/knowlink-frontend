@@ -1,4 +1,7 @@
-import type { TutorModality, TutorOwnSubject } from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
+import type {
+  TutorModality,
+  TutorOwnSubject,
+} from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
 
 export function getInitials(fullName: string): string {
   return fullName

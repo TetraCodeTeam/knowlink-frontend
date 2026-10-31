@@ -42,3 +42,12 @@ export const outlineButtonSx: SxProps<Theme> = {
   border: "1px solid #e2e8f0",
   "&:hover": { bgcolor: "#f8fafc", borderColor: "#cbd5e1" },
 };
+
+export const darkButtonSx: SxProps<Theme> = {
+  ...base,
+  bgcolor: "#0F172A",
+  color: "#fff",
+  border: "none",
+  "&:hover": { bgcolor: "#1E293B" },
+  "&.Mui-disabled": { bgcolor: "#94A3B8", color: "#fff" },
+};

@@ -11,11 +11,17 @@ interface SubjectsDialogProps {
 
 export const SubjectsDialog = ({ open, onClose, subjectRates }: SubjectsDialogProps) => {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth slotProps={{
-      paper: {
-        sx: { borderRadius: 3 },
-      },
-    }}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      slotProps={{
+        paper: {
+          sx: { borderRadius: 3 },
+        },
+      }}
+    >
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <BookOpen size={25} color="#5865C8" />
