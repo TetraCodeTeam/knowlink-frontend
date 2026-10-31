@@ -23,16 +23,20 @@ function attachToken(config: InternalAxiosRequestConfig) {
 
   const { token } = authResponse;
 
-  if (isTokenExpired(token)) {
-    return Promise.reject(new axios.Cancel("Token expirado"));
-  }
-
   const shouldExclude = EXCLUDED_BEARER_ROUTES.some((path) => {
     const urlWithoutBase = config.url?.split("?")[0];
     return urlWithoutBase === path || urlWithoutBase === `${path}/`;
   });
 
-  if (!shouldExclude && token) {
+  if (shouldExclude) {
+    return config;
+  }
+
+  if (isTokenExpired(token)) {
+    return Promise.reject(new axios.Cancel("Token expirado"));
+  }
+
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 

@@ -1,8 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { AUTH_LOGIN_KEY } from "@/modules/auth/constants";
 import { loginUser } from "@/modules/auth/api/auth.api";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import type { LoginFormValues } from "@/modules/auth/schemas/login.schema";
+import type { AuthRole } from "@/shared/types/role.type";
+
+const ROLE_REDIRECT: Partial<Record<AuthRole, string>> = {
+  STUDENT: "/student/profile",
+  TUTOR: "/tutor/profile",
+  ADMIN: "/admin/home",
+};
 
 export function useLogin() {
   const { login } = useAuthStore();
@@ -10,10 +19,17 @@ export function useLogin() {
 
   const { isPending, mutate } = useMutation({
     mutationKey: [AUTH_LOGIN_KEY],
-    mutationFn: loginUser,
+    mutationFn: ({ email, password }: LoginFormValues) => loginUser({ email, password }),
     onSuccess: (authResponse) => {
       login(authResponse);
-      navigate("/");
+      const destination = ROLE_REDIRECT[authResponse.role] ?? "/student/home";
+      navigate(destination, { replace: true });
+    },
+    onError: (error) => {
+      const errorMessage =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "Credenciales incorrectas";
+      toast.error(errorMessage);
     },
   });
 

@@ -1,0 +1,21 @@
+export const STATISTICS_COLORS = {
+  primary: "#5B6ED9",
+  primaryDark: "#3F4BC4",
+  primarySoft: "#EEF0FF",
+  primaryTint: "#ABB2EA",
+  surface: "#F3F2FB",
+  border: "#E3E2F0",
+  textStrong: "#1F2033",
+  textBody: "#45495A",
+  textMuted: "#686C7B",
+  success: "#2E7D4F",
+  successSoft: "#E3F4EA",
+  warning: "#B4531A",
+  warningSoft: "#FDE7D6",
+  danger: "#C0392B",
+  star: "#D99A00",
+  starTrack: "#EDEBFA",
+  // Escala de ocupación: 0–19, 20–39, 40–59, 60 o más.
+  occupancy: ["#EEEDFB", "#C9CCF0", "#8D95E0", "#3F4BC4"],
+  occupancyText: ["#45495A", "#2B3270", "#FFFFFF", "#FFFFFF"],
+} as const;
