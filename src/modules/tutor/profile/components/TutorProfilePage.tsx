@@ -27,6 +27,8 @@ import MaterialsSection from "@/modules/tutor/materials/components/MaterialsSect
 import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
 import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
 import AddSubjectModal from "@/modules/tutor/components/AddSubjectModal";
+import EditSubjectModal from "@/modules/tutor/components/EditSubjectModal";
+import type { TutorOwnSubject } from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";
@@ -37,6 +39,7 @@ export default function TutorProfilePage() {
   const [activeTab, setActiveTab] = useState(0);
   const { data: profile, isLoading, isError } = useMyTutorProfile();
   const [openAddSubject, setOpenAddSubject] = useState(false);
+  const [editingSubject, setEditingSubject] = useState<TutorOwnSubject | null>(null);
   const { hasAvailableSubjects, isLoading: subjectsLoading } = useAvailableSubjects();
   const { openFeedbackDialog, feedbackDialog } = useFeedbackDialog();
 
@@ -291,7 +294,11 @@ export default function TutorProfilePage() {
             }}
           >
             {subjects.map((subject) => (
-              <SubjectCard key={subject.tutorSubjectId} subject={subject} />
+              <SubjectCard
+                key={subject.tutorSubjectId}
+                subject={subject}
+                onEdit={setEditingSubject}
+              />
             ))}
           </Box>
 
@@ -355,6 +362,13 @@ export default function TutorProfilePage() {
         onClose={() => setOpenAddSubject(false)}
         onSuccess={() => handleSubjectAdded()}
       />
+      {editingSubject && (
+        <EditSubjectModal
+          key={editingSubject.tutorSubjectId}
+          subject={editingSubject}
+          onClose={() => setEditingSubject(null)}
+        />
+      )}
     </Box>
   );
 }
