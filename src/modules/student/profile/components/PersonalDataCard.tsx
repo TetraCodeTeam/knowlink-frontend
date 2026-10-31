@@ -1,12 +1,14 @@
-import { IdCard, Mail, Phone, GraduationCap } from "lucide-react";
+import { IdCard, Mail, Phone, GraduationCap, Pencil } from "lucide-react";
 import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 
 import type { ReactNode } from "react";
+import AppButton from "@/shared/components/AppButton";
 
 interface PersonalDataCardProps {
   email: string;
   phoneNumber: string;
   major: string;
+  onEdit?: () => void;
 }
 
 interface ReadOnlyFieldProps {
@@ -47,7 +49,7 @@ const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
   </Box>
 );
 
-export const PersonalDataCard = ({ email, phoneNumber, major }: PersonalDataCardProps) => {
+export const PersonalDataCard = ({ email, phoneNumber, major, onEdit }: PersonalDataCardProps) => {
   return (
     <Paper
       elevation={0}
@@ -68,6 +70,12 @@ export const PersonalDataCard = ({ email, phoneNumber, major }: PersonalDataCard
             Datos Personales
           </Typography>
         </Stack>
+
+        {onEdit && (
+          <AppButton appVariant="outline" onClick={onEdit} startIcon={<Pencil size={16} />}>
+            Editar perfil
+          </AppButton>
+        )}
       </Stack>
 
       <Grid container spacing={2.5}>

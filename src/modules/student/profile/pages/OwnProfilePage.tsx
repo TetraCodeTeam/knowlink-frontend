@@ -1,10 +1,13 @@
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { PersonalDataCard } from "@/modules/student/profile/components/PersonalDataCard";
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
+import { studentPaths } from "@/routes/paths";
 
 export const OwnProfilePage = () => {
+  const navigate = useNavigate();
   const { data: profile, isLoading, isError } = useMyStudentProfile();
 
   if (isLoading) {
@@ -36,6 +39,7 @@ export const OwnProfilePage = () => {
           email={profile.email}
           phoneNumber={profile.phoneNumber}
           major={profile.career}
+          onEdit={() => navigate(studentPaths.editProfile)}
         />
         <TutorRoleCard hasTutorProfile={profile.hasTutorProfile} career={profile.career} />
       </Stack>

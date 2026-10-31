@@ -1,5 +1,7 @@
 export const studentPaths = {
   bookingWithTutor: (tutorId: string) => `/student/tutor/${tutorId}/booking`,
+  profile: "/student/profile",
+  editProfile: "/student/profile/edit",
 };
 
 export const adminPaths = {
