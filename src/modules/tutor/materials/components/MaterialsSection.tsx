@@ -6,11 +6,14 @@ import { useGetMaterials } from "@/modules/tutor/materials/hooks/useGetMaterials
 import MaterialCard from "@/modules/tutor/materials/components/MaterialCard";
 import MaterialEmptyState from "@/modules/tutor/materials/components/MaterialEmptyState";
 import UploadMaterialDialog from "@/modules/tutor/materials/components/UploadMaterialDialog";
+import DeleteMaterialDialog from "@/modules/tutor/materials/components/DeleteMaterialDialog";
+import type { Material } from "@/modules/tutor/materials/interfaces/material.interface";
 import { uploadButtonSx } from "@/modules/tutor/materials/styles/materialsStyles";
 
 export default function MaterialsSection() {
   const [selectedCatalogSubjectId, setSelectedCatalogSubjectId] = useState<string | undefined>();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [materialToDelete, setMaterialToDelete] = useState<Material | null>(null);
   const [hasSubjectOverflow, setHasSubjectOverflow] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -131,12 +134,20 @@ export default function MaterialsSection() {
       ) : (
         <Box>
           {materials.map((material) => (
-            <MaterialCard key={material.id} material={material} />
+            <MaterialCard key={material.id} material={material} onDelete={setMaterialToDelete} />
           ))}
         </Box>
       )}
 
       <UploadMaterialDialog open={isUploadOpen} onClose={() => setIsUploadOpen(false)} />
+
+      {materialToDelete && (
+        <DeleteMaterialDialog
+          material={materialToDelete}
+          open
+          onClose={() => setMaterialToDelete(null)}
+        />
+      )}
     </Box>
   );
 }

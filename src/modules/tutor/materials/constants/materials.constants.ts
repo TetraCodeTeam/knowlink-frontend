@@ -39,3 +39,14 @@ export const VALIDATION_MESSAGES = {
 } as const;
 
 export const ALLOWED_FORMATS = ["PNG", "PDF", "XLSX"];
+
+export const MATERIALS_QUERY_KEY = "materials";
+
+export const DELETE_MATERIAL_MESSAGES = {
+  title: "Eliminar material",
+  confirmLabel: "Eliminar",
+  cancelLabel: "Cancelar",
+  success: "Material eliminado correctamente.",
+  confirm: (materialName: string) =>
+    `¿Estás seguro de que querés eliminar permanentemente ${materialName}?`,
+} as const;
