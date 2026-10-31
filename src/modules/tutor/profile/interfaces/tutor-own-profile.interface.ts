@@ -14,9 +14,13 @@ export interface TutorOwnSubject {
 export interface TutorOwnProfileResponse {
   userId: string;
   fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string | null;
   career: string;
+  dni: string | null;
+  institutionalId: string | null;
   profilePictureUrl: string | null;
   address: string | null;
   mercadoPagoLinked: boolean;

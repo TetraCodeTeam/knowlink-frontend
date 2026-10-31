@@ -4,6 +4,11 @@ export const studentPaths = {
   editProfile: "/student/profile/edit",
 };
 
+export const tutorPaths = {
+  profile: "/tutor/profile",
+  editProfile: "/tutor/profile/edit",
+};
+
 export const adminPaths = {
   home: "/admin/home",
   materialReports: "/admin/material-reports",
