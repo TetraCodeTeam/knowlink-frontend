@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -9,7 +10,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { Mail, Map, Phone } from "lucide-react";
+import { Mail, Map, Pencil, Phone } from "lucide-react";
 import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
 import { getInitials, getUniqueModalities } from "@/modules/tutor/profile/utils/profile.utils";
 import { SECTION_LABEL_SX } from "@/modules/tutor/profile/styles/profileStyles";
@@ -33,8 +34,11 @@ import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";
 import StudentRoleCard from "@/modules/tutor/dual-role/components/StudentRoleCard";
+import AppButton from "@/shared/components/AppButton";
+import { tutorPaths } from "@/routes/paths";
 
 export default function TutorProfilePage() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState(0);
   const { data: profile, isLoading, isError } = useMyTutorProfile();
@@ -219,7 +223,23 @@ export default function TutorProfilePage() {
           >
             <Box sx={{ display: "flex", alignItems: "stretch", p: "36px 40px" }}>
               <Box sx={{ flex: "0 0 40%", pr: "16px" }}>
-                <Typography sx={{ ...SECTION_LABEL_SX, mb: "26px" }}>Datos personales</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: "26px",
+                  }}
+                >
+                  <Typography sx={{ ...SECTION_LABEL_SX, mb: 0 }}>Datos personales</Typography>
+                  <AppButton
+                    appVariant="outline"
+                    onClick={() => navigate(tutorPaths.editProfile)}
+                    startIcon={<Pencil size={16} />}
+                  >
+                    Editar perfil
+                  </AppButton>
+                </Box>
                 <DataItem icon={<Mail size={30} />} label="Correo" value={profile.email} />
                 <DataItem icon={<Phone size={30} />} label="Celular" value={profile.phoneNumber} />
                 <DataItem
