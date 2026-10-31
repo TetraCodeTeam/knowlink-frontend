@@ -33,3 +33,7 @@ export async function uploadMaterial(data: CreateMaterialRequest): Promise<Mater
   const response = await httpClient.post<Material>("/api/v1/materials", formData);
   return response.data;
 }
+
+export async function deleteMaterial(materialId: string): Promise<void> {
+  await httpClient.delete(`/api/v1/materials/${materialId}`);
+}

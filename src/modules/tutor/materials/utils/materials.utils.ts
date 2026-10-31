@@ -1,3 +1,4 @@
+import axios from "axios";
 import { FileText, Image, FileSpreadsheet } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -5,6 +6,7 @@ import {
   FILE_TYPE_ICON_COLORS,
 } from "@/modules/tutor/materials/constants/materials.constants";
 import { ALLOWED_FORMATS } from "@/modules/tutor/materials/constants/materials.constants";
+import type { Material } from "@/modules/tutor/materials/interfaces/material.interface";
 
 export function getFileIconAndColor(format: string): {
   icon: LucideIcon;
@@ -26,6 +28,24 @@ export function getFileIconAndColor(format: string): {
 export function isValidFormat(file: File): boolean {
   const ext = file.name.split(".").pop()?.toUpperCase() ?? "";
   return ALLOWED_FORMATS.includes(ext);
+}
+
+export function getMaterialDisplayName(
+  material: Pick<Material, "name" | "originalFileName">
+): string {
+  const extension = material.originalFileName.split(".").pop()?.toLowerCase();
+  return extension ? `${material.name}.${extension}` : material.name;
+}
+
+/**
+ * Errors where retrying does not change the outcome: the material is not owned
+ * by this tutor (403), it no longer exists (404) or it has reports (409).
+ * A 502 or a network error are retryable.
+ */
+export function isTerminalDeleteError(error: unknown): boolean {
+  if (!axios.isAxiosError(error)) return false;
+  const status = error.response?.status;
+  return status === 403 || status === 404 || status === 409;
 }
 
 export function formatFileSize(bytes: number): string {
