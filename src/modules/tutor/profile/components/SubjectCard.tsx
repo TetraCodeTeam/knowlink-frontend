@@ -4,6 +4,7 @@ import type { TutorOwnSubject } from "@/modules/tutor/profile/interfaces/tutor-o
 import { STAR_COLOR } from "@/modules/tutor/profile/constants/profileColors.constants";
 import { toModalityList } from "@/modules/tutor/profile/utils/profile.utils";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
+import SubjectActiveToggle from "@/modules/tutors/components/SubjectActiveToggle";
 
 interface SubjectCardProps {
   subject: TutorOwnSubject;
@@ -19,7 +20,9 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
   return (
     <Box
       sx={{
-        backgroundColor: "#fff",
+        backgroundColor: subject.active ? "#fff" : "#F6F6FA",
+        border: "1px solid",
+        borderColor: subject.active ? "transparent" : "#E3E2EE",
         borderRadius: "16px",
         p: "24px 26px",
         boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
@@ -30,22 +33,33 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "12px",
         }}
       >
         <Typography
-          sx={{ fontSize: "24px", fontWeight: 700, color: "#1a1a2e", mb: "14px", lineHeight: 1.3 }}
+          sx={{
+            fontSize: "24px",
+            fontWeight: 700,
+            color: subject.active ? "#1a1a2e" : "#767684",
+            mb: "14px",
+            lineHeight: 1.3,
+          }}
         >
           {subject.subjectName}
         </Typography>
 
-        {onEdit && (
-          <IconButton
-            aria-label={`Editar materia ${subject.subjectName}`}
-            onClick={() => onEdit(subject)}
-          >
-            <Pencil size={20} />
-          </IconButton>
-        )}
+        <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
+          <SubjectActiveToggle subject={subject} />
+          {onEdit && (
+            <IconButton
+              aria-label={`Editar materia ${subject.subjectName}`}
+              onClick={() => onEdit(subject)}
+            >
+              <Pencil size={20} />
+            </IconButton>
+          )}
+        </Box>
       </Box>
 
       {hasReviews ? (

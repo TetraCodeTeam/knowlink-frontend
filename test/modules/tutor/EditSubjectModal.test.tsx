@@ -23,6 +23,7 @@ const baseSubject: TutorOwnSubject = {
   compensationType: "PAID",
   pricePerHour: 8000,
   verificationStatus: "ACTIVE",
+  active: true,
 };
 
 const mockedUpdateTutorSubject = vi.mocked(updateTutorSubject);
@@ -53,6 +54,7 @@ describe("EditSubjectModal", () => {
       compensationType: "PAID",
       pricePerHour: 8000,
       verificationStatus: "ACTIVE",
+      active: true,
       averageRating: null,
       reviewCount: null,
     });

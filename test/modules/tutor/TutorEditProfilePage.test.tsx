@@ -53,6 +53,7 @@ const profile: TutorOwnProfileResponse = {
       compensationType: "PAID",
       pricePerHour: 8000,
       verificationStatus: "ACTIVE",
+      active: true,
     },
   ],
   hasStudentProfile: false,

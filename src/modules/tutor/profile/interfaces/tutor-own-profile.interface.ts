@@ -8,7 +8,8 @@ export interface TutorOwnSubject {
   modality: TutorModality;
   compensationType: "FREE" | "PAID";
   pricePerHour: number | null;
-  verificationStatus: string;
+  verificationStatus: "PENDING" | "ACTIVE" | "REJECTED";
+  active: boolean;
 }
 
 export interface TutorOwnProfileResponse {
