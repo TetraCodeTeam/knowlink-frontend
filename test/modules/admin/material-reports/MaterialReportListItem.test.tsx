@@ -1,7 +1,9 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import MaterialReportListItem from "@/modules/admin/material-reports/components/MaterialReportListItem";
 import { makeMaterialReportListItem } from "./fixtures";
+
+const NOW = new Date(2026, 9, 28, 18, 20);
 
 function renderItem(overrides: Parameters<typeof makeMaterialReportListItem>[0] = {}) {
   const onSelect = vi.fn();
@@ -17,6 +19,15 @@ function renderItem(overrides: Parameters<typeof makeMaterialReportListItem>[0] 
 }
 
 describe("MaterialReportListItem", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("muestra una denuncia pendiente con acción para revisar", () => {
     const { onSelect } = renderItem();
 
