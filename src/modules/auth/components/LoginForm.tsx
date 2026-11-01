@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { Box, Divider, InputAdornment, TextField } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
@@ -90,6 +91,22 @@ export default function LoginForm() {
               }}
               sx={inputSx}
             />
+          </Box>
+
+          {/* ─── Olvidé mi contraseña ─── */}
+          <Box sx={{ textAlign: "right", mt: "-8px" }}>
+            <Link
+              to="/auth/forgot-password"
+              style={{
+                color: "#3F4CAE",
+                fontSize: 14,
+                fontWeight: 600,
+                textDecoration: "none",
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
+              Olvidé mi contraseña
+            </Link>
           </Box>
 
           {/* ─── Botón Iniciar Sesión ─── */}

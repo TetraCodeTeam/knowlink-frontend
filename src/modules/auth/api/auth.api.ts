@@ -3,6 +3,7 @@ import type { LoginRequest } from "@/modules/auth/interfaces/requests/login-requ
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";
 import type { StudentRegisterRequest } from "@/modules/auth/interfaces/requests/student-register.interface";
+import type { ResetPasswordRequest } from "@/modules/auth/interfaces/requests/reset-password-request.interface";
 
 export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
   const response = await rawHttpClient.post<AuthResponse>("/api/v1/auth/login", data);
@@ -27,4 +28,12 @@ export async function verifyAccount(userId: string, token: string): Promise<void
 
 export async function resendConfirmationEmail(email: string): Promise<void> {
   await rawHttpClient.post("/api/v1/users/resend-verification-account", { email });
+}
+
+export async function requestPasswordReset(email: string): Promise<void> {
+  await rawHttpClient.post("/api/v1/users/reset-password/email", { email });
+}
+
+export async function resetPassword(data: ResetPasswordRequest): Promise<void> {
+  await rawHttpClient.post("/api/v1/users/reset-password", data);
 }
