@@ -1,18 +1,36 @@
 import { useMemo } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
-import { buildTutorProfileRoute } from "@/modules/student/constants";
+import ActiveFiltersBar from "@/modules/student/components/ActiveFiltersBar";
 import TutorResultCard from "@/modules/student/components/TutorResultCard";
+import { buildTutorProfileRoute, EMPTY_FILTERED_MESSAGE } from "@/modules/student/constants";
+import { useSearchFilters } from "@/modules/student/hooks/useSearchFilters";
+import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
+
+const NO_TUTORS_MESSAGE = "No hay tutores disponibles para esta materia todavía.";
 
 export default function TutoresPorMateriaPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const materiaNombre = searchParams.get("materia") ?? "";
 
-  const { data, isFetching } = useSearchTutorsAndMaterias(materiaNombre);
+  const { effectiveFilters, removeChip, clearFilters, hasActive } = useSearchFilters();
+
+  const { data, isFetching } = useSearchTutorsAndMaterias(materiaNombre, effectiveFilters);
   const tutores = useMemo(() => (Array.isArray(data) ? data : []), [data]);
+
+  const filteredEmpty = !isFetching && tutores.length === 0;
+  const { data: baseData, isFetching: isBaseFetching } = useSearchTutorsAndMaterias(
+    materiaNombre,
+    undefined,
+    { enabled: hasActive && filteredEmpty }
+  );
+  const baseTutores = useMemo(() => (Array.isArray(baseData) ? baseData : []), [baseData]);
+
+  const baseLoading = hasActive && filteredEmpty && isBaseFetching;
+  const emptyMessage =
+    hasActive && baseTutores.length > 0 ? EMPTY_FILTERED_MESSAGE : NO_TUTORS_MESSAGE;
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
@@ -20,12 +38,12 @@ export default function TutoresPorMateriaPage() {
         Tutores que pueden ayudarte en {materiaNombre}
       </Typography>
 
-      {isFetching ? (
+      <ActiveFiltersBar filters={effectiveFilters} onRemove={removeChip} onClear={clearFilters} />
+
+      {isFetching || baseLoading ? (
         <Typography color="text.secondary">Buscando tutores…</Typography>
       ) : tutores.length === 0 ? (
-        <Typography color="text.secondary">
-          No hay tutores disponibles para esta materia todavía.
-        </Typography>
+        <Typography color="text.secondary">{emptyMessage}</Typography>
       ) : (
         <Grid container spacing={3}>
           {tutores.map((tutor) => (

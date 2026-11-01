@@ -1,8 +1,9 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import type { SearchMode } from "../interfaces/search-filters.interface";
 
-export type SearchMode = "materias" | "tutores";
+export type { SearchMode };
 
 interface SearchModeToggleProps {
   value: SearchMode;
