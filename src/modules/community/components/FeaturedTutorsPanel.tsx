@@ -53,12 +53,23 @@ export default function FeaturedTutorsPanel({ fill = false }: FeaturedTutorsPane
           Todavía no hay tutores destacados este mes.
         </Typography>
       ) : (
-        <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, display: "grid", gap: 1.5 }}>
+        // minmax(0, 1fr): sin esto la columna crece al ancho del texto más largo (noWrap) y el botón se sale.
+        <Box
+          component="ul"
+          sx={{
+            listStyle: "none",
+            m: 0,
+            p: 0,
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gap: 1.5,
+          }}
+        >
           {tutors.map((tutor) => (
             <Box
               component="li"
               key={tutor.tutorId}
-              sx={{ display: "flex", alignItems: "center", gap: 1.25 }}
+              sx={{ display: "flex", alignItems: "center", gap: 1.25, minWidth: 0 }}
             >
               <AuthorAvatar
                 fullName={tutor.fullName}
@@ -85,6 +96,7 @@ export default function FeaturedTutorsPanel({ fill = false }: FeaturedTutorsPane
                   onClick={() => navigate(paths.booking?.(tutor.tutorId) ?? paths.home)}
                   aria-label={`Reservar una clase con ${tutor.fullName}`}
                   sx={{
+                    flexShrink: 0,
                     border: "none",
                     cursor: "pointer",
                     bgcolor: "#EEF0FD",

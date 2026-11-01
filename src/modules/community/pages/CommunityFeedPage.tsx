@@ -90,7 +90,7 @@ export default function CommunityFeedPage() {
             ) : null}
           </Box>
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, minWidth: 0 }}>
             <FeedFiltersPanel
               filters={filters}
               counts={counts}
