@@ -122,10 +122,15 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
         </IconButton>
       </DialogTitle>
 
-      <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: "12px !important" }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: "12px !important" }}
+      >
         {/* Material name */}
         <Box>
-          <Typography id="material-name-label" sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
+          <Typography
+            id="material-name-label"
+            sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}
+          >
             Nombre del material*
           </Typography>
           <TextField
@@ -143,7 +148,10 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
 
         {/* Subject dropdown */}
         <Box>
-          <Typography id="subject-select-label" sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}>
+          <Typography
+            id="subject-select-label"
+            sx={{ fontSize: "14px", fontWeight: 600, mb: 1, color: "#333" }}
+          >
             Materia*
           </Typography>
           <FormControl fullWidth>
@@ -202,7 +210,9 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
                 <Trash2 size={18} />
               </IconButton>
               <Upload size={34} color={DROP_AREA_COLORS.text} strokeWidth={1.5} />
-              <Typography sx={{ color: DROP_AREA_COLORS.text, fontWeight: 500, mt: 1.5, fontSize: "16px" }}>
+              <Typography
+                sx={{ color: DROP_AREA_COLORS.text, fontWeight: 500, mt: 1.5, fontSize: "16px" }}
+              >
                 {selectedFile.name}
               </Typography>
             </>

@@ -30,12 +30,7 @@ export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
               {review.studentName}
             </Typography>
             <Stack direction="row" spacing={0.5} alignItems="center">
-              <Rating
-                value={review.rating}
-                readOnly
-                size="small"
-                sx={{ color: "primary.main" }}
-              />
+              <Rating value={review.rating} readOnly size="small" sx={{ color: "primary.main" }} />
               <Typography variant="subtitle1" fontWeight={600} color="text.secondary">
                 {review.rating.toFixed(1)}
               </Typography>

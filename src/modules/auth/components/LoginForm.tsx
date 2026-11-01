@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
 import { Mail, Lock } from "lucide-react";
 import { Box, Divider, InputAdornment, TextField } from "@mui/material";
 import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas/login.schema";
@@ -21,12 +22,18 @@ export default function LoginForm() {
     <>
       <Box component="form" onSubmit={handleSubmit((data) => mutate(data))} noValidate>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-
           {/* ─── Correo electrónico ─── */}
           <Box>
             <Box
               component="label"
-              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+              sx={{
+                display: "block",
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#333",
+                mb: "6px",
+                fontFamily: "Inter, sans-serif",
+              }}
             >
               Correo Electrónico*
             </Box>
@@ -55,7 +62,14 @@ export default function LoginForm() {
           <Box>
             <Box
               component="label"
-              sx={{ display: "block", fontSize: 14, fontWeight: 500, color: "#333", mb: "6px", fontFamily: "Inter, sans-serif" }}
+              sx={{
+                display: "block",
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#333",
+                mb: "6px",
+                fontFamily: "Inter, sans-serif",
+              }}
             >
               Contraseña*
             </Box>
@@ -77,6 +91,22 @@ export default function LoginForm() {
               }}
               sx={inputSx}
             />
+          </Box>
+
+          {/* ─── Olvidé mi contraseña ─── */}
+          <Box sx={{ textAlign: "right", mt: "-8px" }}>
+            <Link
+              to="/auth/forgot-password"
+              style={{
+                color: "#3F4CAE",
+                fontSize: 14,
+                fontWeight: 600,
+                textDecoration: "none",
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
+              Olvidé mi contraseña
+            </Link>
           </Box>
 
           {/* ─── Botón Iniciar Sesión ─── */}
@@ -106,7 +136,9 @@ export default function LoginForm() {
       </Box>
 
       {/* ─── Línea divisora (corta y centrada) ─── */}
-      <Divider sx={{ my: 3, width: "50%", margin: "24px auto 24px auto", borderColor: "#D5D5D5" }} />
+      <Divider
+        sx={{ my: 3, width: "50%", margin: "24px auto 24px auto", borderColor: "#D5D5D5" }}
+      />
     </>
   );
 }

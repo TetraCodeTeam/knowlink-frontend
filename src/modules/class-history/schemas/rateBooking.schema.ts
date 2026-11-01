@@ -6,7 +6,10 @@ export const rateBookingSchema = z.object({
   comment: z
     .string()
     .trim()
-    .max(MAX_RATING_COMMENT_LENGTH, `El comentario no puede superar los ${MAX_RATING_COMMENT_LENGTH} caracteres`)
+    .max(
+      MAX_RATING_COMMENT_LENGTH,
+      `El comentario no puede superar los ${MAX_RATING_COMMENT_LENGTH} caracteres`
+    )
     .optional(),
 });
 

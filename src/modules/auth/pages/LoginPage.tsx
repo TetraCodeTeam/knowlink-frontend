@@ -11,7 +11,6 @@ const DOT_PATTERN = {
 export default function LoginPage() {
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", fontFamily: "Inter, sans-serif" }}>
-
       {/* ══════════════════════════════════
           PANEL IZQUIERDO — fondo lavanda
       ══════════════════════════════════ */}
@@ -30,7 +29,12 @@ export default function LoginPage() {
           <GraduationCap size={32} color="#3F4CAE" />
           <Box
             component="span"
-            sx={{ fontSize: 28, fontWeight: 700, color: "#1a1a2e", fontFamily: "Inter, sans-serif" }}
+            sx={{
+              fontSize: 28,
+              fontWeight: 700,
+              color: "#1a1a2e",
+              fontFamily: "Inter, sans-serif",
+            }}
           >
             KnowLink
           </Box>
@@ -108,8 +112,8 @@ export default function LoginPage() {
                   minWidth: "100%",
                 }}
               >
-                Únete a nuestra comunidad académica. Comparte conocimiento, encuentra tutores y avanza tus metas
-                universitarias.
+                Únete a nuestra comunidad académica. Comparte conocimiento, encuentra tutores y
+                avanza tus metas universitarias.
               </Box>
             </Box>
           </Box>
@@ -134,7 +138,14 @@ export default function LoginPage() {
           {/* Título */}
           <Box
             component="h1"
-            sx={{ fontSize: 42, fontWeight: 800, color: "#1a1a2e", mb: 1.5, fontFamily: "Inter, sans-serif", whiteSpace: "nowrap" }}
+            sx={{
+              fontSize: 42,
+              fontWeight: 800,
+              color: "#1a1a2e",
+              mb: 1.5,
+              fontFamily: "Inter, sans-serif",
+              whiteSpace: "nowrap",
+            }}
           >
             Bienvenido de Nuevo
           </Box>
@@ -153,10 +164,19 @@ export default function LoginPage() {
           {/* Enlace a registro */}
           <Box
             component="p"
-            sx={{ textAlign: "center", mt: 0, color: "#555", fontSize: 15, fontFamily: "Inter, sans-serif" }}
+            sx={{
+              textAlign: "center",
+              mt: 0,
+              color: "#555",
+              fontSize: 15,
+              fontFamily: "Inter, sans-serif",
+            }}
           >
             ¿No tienes cuenta?{" "}
-            <Link to="/auth/register" style={{ color: "#3F4CAE", fontWeight: 600, textDecoration: "none" }}>
+            <Link
+              to="/auth/register"
+              style={{ color: "#3F4CAE", fontWeight: 600, textDecoration: "none" }}
+            >
               Regístrate
             </Link>
           </Box>

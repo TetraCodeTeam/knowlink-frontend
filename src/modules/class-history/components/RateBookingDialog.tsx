@@ -91,7 +91,9 @@ export default function RateBookingDialog({
             )}
           />
 
-          <Typography sx={{ fontSize: "0.8rem", color: errors.score ? "#b91c1c" : "#676767", mt: "6px" }}>
+          <Typography
+            sx={{ fontSize: "0.8rem", color: errors.score ? "#b91c1c" : "#676767", mt: "6px" }}
+          >
             {errors.score?.message ?? "Tocá una estrella para calificar"}
           </Typography>
 
@@ -112,7 +114,9 @@ export default function RateBookingDialog({
             />
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: "6px", mt: "10px", width: "100%" }}>
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: "6px", mt: "10px", width: "100%" }}
+          >
             <Info size={14} color="#676767" />
             <Typography sx={{ fontSize: "0.8rem", color: "#676767" }}>
               No vas a poder modificarla una vez enviada

@@ -5,12 +5,14 @@ import MyPostsPage from "@/modules/community/pages/MyPostsPage";
 import PostThreadPage from "@/modules/community/pages/PostThreadPage";
 import TutorPodiumPage from "@/modules/community/pages/TutorPodiumPage";
 import { OwnProfilePage } from "@/modules/student/profile/pages/OwnProfilePage";
+import { StudentEditProfilePage } from "@/modules/student/profile/pages/StudentEditProfilePage";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
 import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import { TutorProfilePage } from "@/modules/student/tutorProfile/pages/ViewTutorProfile";
 import BookingPreviewPage from "@/modules/student/booking/pages/BookingClassPage";
 import StudentClassHistoryPage from "@/modules/student/pages/StudentClassHistoryPage";
+import { StudentSupportPage } from "@/modules/student/support/pages/StudentSupportPage";
 
 export default function StudentRoutes() {
   return (
@@ -23,8 +25,9 @@ export default function StudentRoutes() {
         <Route path="community/posts/:postId" element={<PostThreadPage />} />
         <Route path="classes" element={<StudentClassHistoryPage />} />
 
-        <Route path="complaints" element={<UnderConstructionPage />} />
+        <Route path="complaints" element={<StudentSupportPage />} />
         <Route path="profile" element={<OwnProfilePage />} />
+        <Route path="profile/edit" element={<StudentEditProfilePage />} />
         <Route path="tutor/:tutorId" element={<TutorProfilePage />} />
         <Route path="tutor/:tutorId/disponibilidad" element={<UnderConstructionPage />} />
         <Route path="tutor/:tutorId/booking" element={<BookingPreviewPage />} />

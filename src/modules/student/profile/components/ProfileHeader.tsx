@@ -8,12 +8,12 @@ interface ProfileHeaderProps {
 
 /**
  * Genera las iniciales para el fallback del avatar cuando no hay
- * foto de perfil cargada 
+ * foto de perfil cargada
  */
 const getInitials = (fullName: string): string => {
   const parts = fullName.trim().split(/\s+/);
   const first = parts[0]?.[0] ?? "";
-  const last = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "";
+  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? "") : "";
   return `${first}${last}`.toUpperCase();
 };
 
@@ -33,7 +33,7 @@ export const ProfileHeader = ({
         borderRadius: 3,
         display: "flex",
         alignItems: "center",
-        border: "0.2px solid #e0e0fa"
+        border: "0.2px solid #e0e0fa",
       }}
     >
       <Stack direction="row" spacing={2.5} alignItems="center">
@@ -54,7 +54,7 @@ export const ProfileHeader = ({
           <Typography variant="h4" component="h1" fontWeight={500}>
             {fullName}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1,  }}>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1 }}>
             {description}
           </Typography>
         </Box>

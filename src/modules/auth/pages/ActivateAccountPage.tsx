@@ -17,10 +17,7 @@ export default function ActivateAccountPage() {
   const handleActivate = () => {
     if (!userId || !token) return;
 
-    mutate(
-      { userId, token },
-      { onSuccess: () => navigate("/auth/login", { replace: true }) },
-    );
+    mutate({ userId, token }, { onSuccess: () => navigate("/auth/login", { replace: true }) });
   };
 
   const isInvalidLink = !userId || !token;
@@ -59,8 +56,8 @@ export default function ActivateAccountPage() {
             ¡Bienvenido a KnowLink!
           </Typography>
           <Typography variant="body1" color="text.secondary" lineHeight={1.7}>
-            Estamos felices de que te unas a nuestra comunidad. Hacé clic en el
-            botón para activar tu cuenta y empezar a explorar la plataforma.
+            Estamos felices de que te unas a nuestra comunidad. Hacé clic en el botón para activar
+            tu cuenta y empezar a explorar la plataforma.
           </Typography>
         </Box>
 
@@ -77,19 +74,14 @@ export default function ActivateAccountPage() {
             }}
           >
             <Typography variant="body2" color="error">
-              El link es inválido o ya expiró. Solicitá un nuevo enlace desde la
-              pantalla de registro.
+              El link es inválido o ya expiró. Solicitá un nuevo enlace desde la pantalla de
+              registro.
             </Typography>
           </Box>
         )}
 
         {/* Botón de activación */}
-        <AppButton
-          fullWidth
-          loading={isPending}
-          disabled={isInvalidLink}
-          onClick={handleActivate}
-        >
+        <AppButton fullWidth loading={isPending} disabled={isInvalidLink} onClick={handleActivate}>
           Activar cuenta
         </AppButton>
       </Box>

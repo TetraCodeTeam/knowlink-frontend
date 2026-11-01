@@ -13,6 +13,7 @@ Aplicación web para la plataforma KnowLink, construida con React 19 + TypeScrip
 | ------------------------------- | ------------------------------------------------------- | ----------------------- |
 | `VITE_BACKEND_URL`              | URL base del backend                                    | `http://localhost:8080` |
 | `VITE_BOOKING_REALTIME_ENABLED` | Activa SSE y comandos reales de hold/reserva/liberación | `false`                 |
+| `VITE_ADMIN_SESSION_CLAIMS_MOCKS` | Usa los mocks de reclamos de sesiones mientras el backend no existe | `true`                 |
 
 ### Booking realtime
 

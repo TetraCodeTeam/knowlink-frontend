@@ -20,7 +20,9 @@ export default function ReportMaterialAlreadyReportedDialog({
       fullWidth
       PaperProps={{ sx: { borderRadius: 4, textAlign: "center", pt: 1 } }}
     >
-      <DialogContent sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}>
+      <DialogContent
+        sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
+      >
         <Box sx={reportIconWrapperSx("#FBE2E2")}>
           <Flag size={32} color="#C62828" />
         </Box>

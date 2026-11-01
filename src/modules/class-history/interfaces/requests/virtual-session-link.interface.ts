@@ -1,3 +1,3 @@
 export interface VirtualSessionLinkRequest {
-    virtualSessionLink: string;
+  virtualSessionLink: string;
 }

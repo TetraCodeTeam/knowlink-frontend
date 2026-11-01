@@ -1,5 +1,8 @@
 import type { SxProps, Theme } from "@mui/material";
-import { UPLOAD_BUTTON_COLORS, DROP_AREA_COLORS } from "@/modules/tutor/materials/constants/materials.constants";
+import {
+  UPLOAD_BUTTON_COLORS,
+  DROP_AREA_COLORS,
+} from "@/modules/tutor/materials/constants/materials.constants";
 
 export const uploadButtonSx: SxProps<Theme> = {
   backgroundColor: UPLOAD_BUTTON_COLORS.background,

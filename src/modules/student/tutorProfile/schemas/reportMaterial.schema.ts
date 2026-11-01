@@ -11,12 +11,18 @@ export const reportMaterialSchema = z
     otherReasonText: z
       .string()
       .trim()
-      .max(MAX_OTHER_REASON_LENGTH, `El motivo no puede superar los ${MAX_OTHER_REASON_LENGTH} caracteres`)
+      .max(
+        MAX_OTHER_REASON_LENGTH,
+        `El motivo no puede superar los ${MAX_OTHER_REASON_LENGTH} caracteres`
+      )
       .optional(),
     comment: z
       .string()
       .trim()
-      .max(MAX_REPORT_COMMENT_LENGTH, `El comentario no puede superar los ${MAX_REPORT_COMMENT_LENGTH} caracteres`)
+      .max(
+        MAX_REPORT_COMMENT_LENGTH,
+        `El comentario no puede superar los ${MAX_REPORT_COMMENT_LENGTH} caracteres`
+      )
       .optional(),
   })
   .refine((data) => data.reason !== "", {

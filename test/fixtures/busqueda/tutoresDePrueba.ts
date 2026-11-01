@@ -27,3 +27,11 @@ export const tutorCarlos: TutorSearchResult = {
 };
 
 export const tutoresDePrueba: TutorSearchResult[] = [tutorAna, tutorCarlos];
+/** Resultados de la búsqueda base sin filtros (para diferenciar AC-5). */
+export const tutoresBase: TutorSearchResult[] = [tutorAna, tutorCarlos];
+
+/** Resultados de una búsqueda con filtros aplicados. */
+export const tutoresFiltrados: TutorSearchResult[] = [tutorAna];
+
+/** Caso sin resultados de la búsqueda base. */
+export const sinTutores: TutorSearchResult[] = [];

@@ -45,7 +45,7 @@ export const FILE_RULES_SECTIONS: FileRuleSection[] = [
     id: "accepted-formats",
     icon: FileType,
     title: "2. Formatos aceptados",
-    body: "Solo se permite la carga de archivos en formato PNG, PDF o XLSX.",
+    body: "Solo se permite la carga de archivos en formato PNG, PDF, XLSX, JPG o JPEG.",
     showFormats: true,
   },
   {

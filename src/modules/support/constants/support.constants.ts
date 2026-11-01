@@ -5,7 +5,7 @@ export const SUPPORT_TABS = [
 
 export type SupportTab = (typeof SUPPORT_TABS)[number]["value"];
 
-export const EMPTY_STATE_ILLUSTRATION_SRC = "/illustrations/documents-bro.svg";
+export const EMPTY_STATE_ILLUSTRATION_SRC = "/No-Results.png";
 export const EMPTY_STATE_TITLE = "Sin registros por ahora";
 export const EMPTY_STATE_DESCRIPTION = "Por el momento no tenés nada pendiente en esta sección.";
 

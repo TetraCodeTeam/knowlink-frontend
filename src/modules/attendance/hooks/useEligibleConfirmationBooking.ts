@@ -72,7 +72,8 @@ export function useEligibleConfirmationBooking(role: Role): EligibleConfirmation
 
       const sessionStart = getSessionStartMs(booking);
       const expiresAt = new Date(booking.confirmationTokenExpiresAt).getTime();
-      const windowStart = role === "TUTOR" ? sessionStart : sessionStart - CONFIRMATION_LEAD_TIME_MS;
+      const windowStart =
+        role === "TUTOR" ? sessionStart : sessionStart - CONFIRMATION_LEAD_TIME_MS;
 
       if (now >= windowStart && now < expiresAt) {
         return { bookingId: booking.bookingId, expiresAt: booking.confirmationTokenExpiresAt };

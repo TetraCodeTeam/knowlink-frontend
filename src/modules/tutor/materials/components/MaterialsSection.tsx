@@ -6,18 +6,24 @@ import { useGetMaterials } from "@/modules/tutor/materials/hooks/useGetMaterials
 import MaterialCard from "@/modules/tutor/materials/components/MaterialCard";
 import MaterialEmptyState from "@/modules/tutor/materials/components/MaterialEmptyState";
 import UploadMaterialDialog from "@/modules/tutor/materials/components/UploadMaterialDialog";
+import DeleteMaterialDialog from "@/modules/tutor/materials/components/DeleteMaterialDialog";
+import type { Material } from "@/modules/tutor/materials/interfaces/material.interface";
 import { uploadButtonSx } from "@/modules/tutor/materials/styles/materialsStyles";
 
 export default function MaterialsSection() {
   const [selectedCatalogSubjectId, setSelectedCatalogSubjectId] = useState<string | undefined>();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [materialToDelete, setMaterialToDelete] = useState<Material | null>(null);
   const [hasSubjectOverflow, setHasSubjectOverflow] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { subjects, isLoading: isSubjectsLoading } = useMySubjectsWithCatalogId();
   const allCatalogSubjectIds = subjects.map((s) => s.catalogSubjectId);
 
-  const { materials, isLoading: isMaterialsLoading } = useGetMaterials(allCatalogSubjectIds, selectedCatalogSubjectId);
+  const { materials, isLoading: isMaterialsLoading } = useGetMaterials(
+    allCatalogSubjectIds,
+    selectedCatalogSubjectId
+  );
   const isLoading = isSubjectsLoading || isMaterialsLoading;
 
   useEffect(() => {
@@ -82,7 +88,11 @@ export default function MaterialsSection() {
             scrollbarWidth: "none",
           }}
         >
-          <Button size="small" onClick={() => setSelectedCatalogSubjectId(undefined)} sx={chipSx(selectedCatalogSubjectId === undefined)}>
+          <Button
+            size="small"
+            onClick={() => setSelectedCatalogSubjectId(undefined)}
+            sx={chipSx(selectedCatalogSubjectId === undefined)}
+          >
             Todo
           </Button>
           {subjects.map((subject) => (
@@ -103,7 +113,11 @@ export default function MaterialsSection() {
           </IconButton>
         )}
 
-        <Button startIcon={<Upload size={15} />} onClick={() => setIsUploadOpen(true)} sx={uploadButtonSx}>
+        <Button
+          startIcon={<Upload size={15} />}
+          onClick={() => setIsUploadOpen(true)}
+          sx={uploadButtonSx}
+        >
           Subir recurso
         </Button>
       </Box>
@@ -112,18 +126,28 @@ export default function MaterialsSection() {
 
       {/* Content */}
       {isLoading ? (
-        <Typography sx={{ color: "#888", fontSize: "16px", py: 2 }}>Cargando materiales...</Typography>
+        <Typography sx={{ color: "#888", fontSize: "16px", py: 2 }}>
+          Cargando materiales...
+        </Typography>
       ) : materials.length === 0 ? (
         <MaterialEmptyState />
       ) : (
         <Box>
           {materials.map((material) => (
-            <MaterialCard key={material.id} material={material} />
+            <MaterialCard key={material.id} material={material} onDelete={setMaterialToDelete} />
           ))}
         </Box>
       )}
 
       <UploadMaterialDialog open={isUploadOpen} onClose={() => setIsUploadOpen(false)} />
+
+      {materialToDelete && (
+        <DeleteMaterialDialog
+          material={materialToDelete}
+          open
+          onClose={() => setMaterialToDelete(null)}
+        />
+      )}
     </Box>
   );
 }

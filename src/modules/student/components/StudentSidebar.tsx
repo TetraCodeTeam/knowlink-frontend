@@ -10,6 +10,7 @@ import { useLogout } from "@/modules/auth/logout/hooks/useLogout";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
 import NotificationsPanel from "@/modules/notifications/components/NotificationsPanel";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
+import { useSupportUnreadCount } from "@/modules/student/support/hooks/useSupportUnreadCount";
 
 interface NavItem {
   icon: React.ElementType;
@@ -38,7 +39,8 @@ export default function StudentSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authResponse } = useAuthStore();
-  const { complaintsCount } = useStudentBadgesStore();
+  const { complaintsCount, setComplaintsCount } = useStudentBadgesStore();
+  const { data: supportUnreadCount } = useSupportUnreadCount();
   const { triggerLogout, isPending: isLoggingOut } = useLogout();
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -55,6 +57,10 @@ export default function StudentSidebar() {
   }, [isNotificationsOpen]);
   const { data } = useUnreadNotificationsCount();
   const unreadCount = data?.count ?? 0;
+
+  useEffect(() => {
+    if (supportUnreadCount) setComplaintsCount(supportUnreadCount.unreadCount);
+  }, [supportUnreadCount, setComplaintsCount]);
   const isActive = (path: string, badge?: NavItem["badge"]) => {
     if (badge === "notifications") return isNotificationsOpen;
     // Home es la comunidad: sus subpáginas (hilos, mis publicaciones, podio) mantienen Home activo.

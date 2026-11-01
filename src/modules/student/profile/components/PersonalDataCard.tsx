@@ -1,12 +1,14 @@
-import { IdCard, Mail, Phone, GraduationCap } from "lucide-react";
+import { IdCard, Mail, Phone, GraduationCap, Pencil } from "lucide-react";
 import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 
 import type { ReactNode } from "react";
+import AppButton from "@/shared/components/AppButton";
 
 interface PersonalDataCardProps {
   email: string;
   phoneNumber: string;
   major: string;
+  onEdit?: () => void;
 }
 
 interface ReadOnlyFieldProps {
@@ -17,7 +19,13 @@ interface ReadOnlyFieldProps {
 
 const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
   <Box>
-    <Typography variant="subtitle2" fontWeight={600} color="#636363" component="p" sx={{ mb: 0.75 }}>
+    <Typography
+      variant="subtitle2"
+      fontWeight={600}
+      color="#636363"
+      component="p"
+      sx={{ mb: 0.75 }}
+    >
       {label}
     </Typography>
     <Stack
@@ -41,9 +49,20 @@ const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
   </Box>
 );
 
-export const PersonalDataCard = ({ email, phoneNumber, major }: PersonalDataCardProps) => {
+export const PersonalDataCard = ({ email, phoneNumber, major, onEdit }: PersonalDataCardProps) => {
   return (
-    <Paper elevation={0} sx={{ pt: 3, pb: 4, pr: 3, pl: 3, borderRadius: 3, height: "100%", border: "0.2px solid #e0e0fa" }}>
+    <Paper
+      elevation={0}
+      sx={{
+        pt: 3,
+        pb: 4,
+        pr: 3,
+        pl: 3,
+        borderRadius: 3,
+        height: "100%",
+        border: "0.2px solid #e0e0fa",
+      }}
+    >
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
         <Stack direction="row" spacing={1} alignItems="center">
           <IdCard size={28} color="#5865C8" />
@@ -51,6 +70,12 @@ export const PersonalDataCard = ({ email, phoneNumber, major }: PersonalDataCard
             Datos Personales
           </Typography>
         </Stack>
+
+        {onEdit && (
+          <AppButton appVariant="outline" onClick={onEdit} startIcon={<Pencil size={16} />}>
+            Editar perfil
+          </AppButton>
+        )}
       </Stack>
 
       <Grid container spacing={2.5}>
@@ -61,7 +86,11 @@ export const PersonalDataCard = ({ email, phoneNumber, major }: PersonalDataCard
           <ReadOnlyField icon={<Phone size={16} />} label="Número de Celular" value={phoneNumber} />
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <ReadOnlyField icon={<GraduationCap size={16} />} label="Carrera Universitaria" value={major} />
+          <ReadOnlyField
+            icon={<GraduationCap size={16} />}
+            label="Carrera Universitaria"
+            value={major}
+          />
         </Grid>
       </Grid>
     </Paper>

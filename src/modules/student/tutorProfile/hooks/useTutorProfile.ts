@@ -13,12 +13,7 @@ const REVIEWS_PREVIEW_SIZE = 10;
 const DIACRITICS_PATTERN = new RegExp("[̀-ͯ]", "g");
 
 const normalizeSubjectName = (name: string) =>
-  name
-    .normalize("NFD")
-    .replace(DIACRITICS_PATTERN, "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
+  name.normalize("NFD").replace(DIACRITICS_PATTERN, "").trim().toLowerCase().replace(/\s+/g, " ");
 
 export const useTutorProfile = (tutorId: string) => {
   return useQuery({

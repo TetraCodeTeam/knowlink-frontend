@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
+import { EMPTY_FILTERED_MESSAGE } from "@/modules/student/constants";
 import { tutorAna, tutorCarlos } from "../../../fixtures/busqueda/tutoresDePrueba";
 
 vi.mock("@/modules/student/hooks/useSearchTutorsAndMaterias", () => ({
@@ -18,9 +19,13 @@ function hookResult(data: unknown[], isFetching = false): HookResult {
   return { data, isFetching } as unknown as HookResult;
 }
 
-function renderPage(materiaNombre = "Álgebra") {
+function renderPage(materiaNombre = "Álgebra", extraSearch = "") {
   return render(
-    <MemoryRouter initialEntries={[`/student/tutores?materia=${encodeURIComponent(materiaNombre)}`]}>
+    <MemoryRouter
+      initialEntries={[
+        `/student/tutores?materia=${encodeURIComponent(materiaNombre)}${extraSearch}`,
+      ]}
+    >
       <TutoresPorMateriaPage />
     </MemoryRouter>
   );
@@ -62,5 +67,22 @@ describe("TutoresPorMateriaPage", () => {
     mockedHook.mockReturnValue(hookResult([tutorAna]));
     renderPage();
     expect(screen.getByText("Álgebra")).toBeInTheDocument();
+  });
+
+  it("con filtros activos y lista vacía muestra el mensaje de filtros", () => {
+    mockedHook.mockImplementation((_query, filters, options) => {
+      if (filters === undefined) {
+        return options?.enabled ? hookResult([tutorAna]) : hookResult([]);
+      }
+
+      return hookResult([]);
+    });
+
+    renderPage("Álgebra", "&modality=VIRTUAL");
+
+    expect(screen.getByText(EMPTY_FILTERED_MESSAGE)).toBeInTheDocument();
+    expect(
+      screen.queryByText("No hay tutores disponibles para esta materia todavía.")
+    ).not.toBeInTheDocument();
   });
 });

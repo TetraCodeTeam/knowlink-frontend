@@ -9,7 +9,10 @@ interface ApiErrorPayload {
 }
 
 export class AttendanceApiError extends Error {
-  constructor(message: string, readonly code?: string) {
+  constructor(
+    message: string,
+    readonly code?: string
+  ) {
     super(message);
     this.name = "AttendanceApiError";
   }
@@ -42,10 +45,7 @@ export async function confirmSessionAttendance(bookingId: string, code: string):
             error,
             "El código ingresado no es válido. Verificalo con tu alumno e intentá de nuevo."
           );
-    throw new AttendanceApiError(
-      message,
-      errorCode
-    );
+    throw new AttendanceApiError(message, errorCode);
   }
 }
 

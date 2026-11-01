@@ -5,6 +5,7 @@ import MyPostsPage from "@/modules/community/pages/MyPostsPage";
 import PostThreadPage from "@/modules/community/pages/PostThreadPage";
 import TutorPodiumPage from "@/modules/community/pages/TutorPodiumPage";
 import TutorProfilePage from "@/modules/tutor/profile/components/TutorProfilePage";
+import { TutorEditProfilePage } from "@/modules/tutor/profile/pages/TutorEditProfilePage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
 import TutorClassHistoryPage from "@/modules/tutor/pages/TutorClassHistoryPage";
 import { WeeklyAgendaPage } from "@/modules/tutor/weekly-schedule/pages/WeeklyAgendaPage";
@@ -25,6 +26,7 @@ export default function TutorRoutes() {
         <Route path="stats" element={<TutorStatisticsPage />} />
         <Route path="requests" element={<SupportPage />} />
         <Route path="profile" element={<TutorProfilePage />} />
+        <Route path="profile/edit" element={<TutorEditProfilePage />} />
         <Route path="availability" element={<WeeklyAgendaPage />} />
       </Route>
     </Routes>

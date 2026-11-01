@@ -8,15 +8,20 @@ export interface TutorOwnSubject {
   modality: TutorModality;
   compensationType: "FREE" | "PAID";
   pricePerHour: number | null;
-  verificationStatus: string;
+  verificationStatus: "PENDING" | "ACTIVE" | "REJECTED";
+  active: boolean;
 }
 
 export interface TutorOwnProfileResponse {
   userId: string;
   fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string | null;
   career: string;
+  dni: string | null;
+  institutionalId: string | null;
   profilePictureUrl: string | null;
   address: string | null;
   mercadoPagoLinked: boolean;

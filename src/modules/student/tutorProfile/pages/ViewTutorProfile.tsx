@@ -54,7 +54,7 @@ export const TutorProfilePage = () => {
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Stack >
+          <Stack>
             <TutorMaterialCard
               material={tutor.material}
               hasConfirmedBooking={tutor.hasConfirmedBooking}
