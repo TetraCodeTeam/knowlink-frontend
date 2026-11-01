@@ -5,6 +5,8 @@ import { COMMUNITY_COLORS, cardSx } from "@/modules/community/styles/community.s
 interface CommunityEmptyStateProps {
   icon: ReactNode;
   message: string;
+  /** Acción opcional bajo el mensaje (por ejemplo, limpiar filtros). */
+  action?: ReactNode;
   /** Estira la tarjeta hasta ocupar el alto que le sobra a su contenedor. */
   fill?: boolean;
 }
@@ -12,6 +14,7 @@ interface CommunityEmptyStateProps {
 export default function CommunityEmptyState({
   icon,
   message,
+  action,
   fill = false,
 }: CommunityEmptyStateProps) {
   return (
@@ -45,6 +48,7 @@ export default function CommunityEmptyState({
       <Typography sx={{ fontSize: 15, color: COMMUNITY_COLORS.muted, maxWidth: 420 }}>
         {message}
       </Typography>
+      {action}
     </Box>
   );
 }

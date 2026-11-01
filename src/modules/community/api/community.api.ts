@@ -1,4 +1,5 @@
 import { httpClient } from "@/shared/lib/httpClient";
+import type { FeedFilters } from "@/modules/community/interfaces/feed-filters.interface";
 import type { CreatePostRequest } from "@/modules/community/interfaces/requests/create-post.interface";
 import type { CreateReplyRequest } from "@/modules/community/interfaces/requests/create-reply.interface";
 import type { UpdatePostRequest } from "@/modules/community/interfaces/requests/update-post.interface";
@@ -7,10 +8,12 @@ import type { CommunityPost } from "@/modules/community/interfaces/responses/com
 import type { CommunityPostDetail } from "@/modules/community/interfaces/responses/community-post-detail.interface";
 import type { CommunityReply } from "@/modules/community/interfaces/responses/community-reply.interface";
 import type { CommunitySubject } from "@/modules/community/interfaces/responses/community-subject.interface";
+import type { FeedCounts } from "@/modules/community/interfaces/responses/feed-counts.interface";
 import type { HelpfulMark } from "@/modules/community/interfaces/responses/helpful-mark.interface";
 import type { MyPodiumPosition } from "@/modules/community/interfaces/responses/my-podium-position.interface";
 import type { PagedPosts } from "@/modules/community/interfaces/responses/paged-posts.interface";
 import type { TutorPodium } from "@/modules/community/interfaces/responses/tutor-podium.interface";
+import { toFeedFilterParams } from "@/modules/community/utils/feed-filter-params";
 
 const BASE = "/api/v1/community";
 
@@ -23,8 +26,23 @@ function buildMultipart(request: object, file: File | null): FormData {
   return formData;
 }
 
-export async function getCommunityFeed(page: number, size: number): Promise<PagedPosts> {
-  const response = await httpClient.get<PagedPosts>(`${BASE}/posts`, { params: { page, size } });
+export async function getCommunityFeed(
+  page: number,
+  size: number,
+  filters: FeedFilters
+): Promise<PagedPosts> {
+  const response = await httpClient.get<PagedPosts>(`${BASE}/posts`, {
+    params: { page, size, ...toFeedFilterParams(filters) },
+  });
+  return response.data;
+}
+
+/** Cantidades por tipo de consulta con los demás filtros aplicados (el tipo no se envía). */
+export async function getFeedCounts(filters: FeedFilters): Promise<FeedCounts> {
+  const { type: _type, ...withoutType } = toFeedFilterParams(filters);
+  const response = await httpClient.get<FeedCounts>(`${BASE}/posts/counts`, {
+    params: withoutType,
+  });
   return response.data;
 }
 
@@ -115,8 +133,11 @@ export async function unmarkReplyHelpful(postId: string, replyId: string): Promi
   return response.data;
 }
 
-export async function getCommunitySubjects(): Promise<CommunitySubject[]> {
-  const response = await httpClient.get<CommunitySubject[]>(`${BASE}/subjects`);
+/** Con `careerId`: las materias de esa carrera más las básicas; sin él, todo el catálogo. */
+export async function getCommunitySubjects(careerId?: string | null): Promise<CommunitySubject[]> {
+  const response = await httpClient.get<CommunitySubject[]>(`${BASE}/subjects`, {
+    params: { careerId: careerId ?? undefined },
+  });
   return response.data;
 }
 

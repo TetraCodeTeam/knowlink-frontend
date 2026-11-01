@@ -4,10 +4,11 @@ import { COMMUNITY_QUERY_KEYS } from "@/modules/community/constants/community-qu
 
 const SUBJECTS_STALE_TIME_MS = 1000 * 60 * 30;
 
-export function useCommunitySubjects(enabled = true) {
+/** Sin `careerId` devuelve todo el catálogo; con él, las materias de esa carrera más las básicas. */
+export function useCommunitySubjects(enabled = true, careerId: string | null = null) {
   const query = useQuery({
-    queryKey: COMMUNITY_QUERY_KEYS.subjects,
-    queryFn: getCommunitySubjects,
+    queryKey: COMMUNITY_QUERY_KEYS.subjectsByCareer(careerId),
+    queryFn: () => getCommunitySubjects(careerId),
     enabled,
     staleTime: SUBJECTS_STALE_TIME_MS,
   });

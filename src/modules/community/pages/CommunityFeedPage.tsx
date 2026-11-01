@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { MessagesSquare } from "lucide-react";
+import { MessagesSquare, SearchX } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import CommunityEmptyState from "@/modules/community/components/CommunityEmptyState";
 import CommunityHeader from "@/modules/community/components/CommunityHeader";
 import CreatePostDialog from "@/modules/community/components/CreatePostDialog";
 import FeaturedTutorsPanel from "@/modules/community/components/FeaturedTutorsPanel";
+import FeedFiltersPanel from "@/modules/community/components/FeedFiltersPanel";
 import MyPostsPanel from "@/modules/community/components/MyPostsPanel";
 import PostCard from "@/modules/community/components/PostCard";
 import PostComposerCard from "@/modules/community/components/PostComposerCard";
 import { TOPBAR_HEIGHT } from "@/modules/student/components/StudentTopbar";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import { useCommunityFeed } from "@/modules/community/hooks/useCommunityFeed";
+import { useFeedCounts } from "@/modules/community/hooks/useFeedCounts";
+import { useFeedFilters } from "@/modules/community/hooks/useFeedFilters";
 import {
   COMMUNITY_COLORS,
   cardSx,
@@ -22,8 +25,10 @@ import {
 import type { PostType } from "@/modules/community/types/post-type.type";
 
 export default function CommunityFeedPage() {
+  const { filters, activeCount, setType, applyDraft, clear } = useFeedFilters();
   const { posts, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } =
-    useCommunityFeed();
+    useCommunityFeed(filters);
+  const { counts } = useFeedCounts(filters);
   const { role } = useCommunityViewer();
   // El layout del alumno tiene topbar fija; el del tutor no.
   const minHeight = role === "STUDENT" ? `calc(100vh - ${TOPBAR_HEIGHT}px)` : "100vh";
@@ -51,6 +56,17 @@ export default function CommunityFeedPage() {
                   Reintentar
                 </AppButton>
               </Box>
+            ) : posts.length === 0 && activeCount > 0 ? (
+              <CommunityEmptyState
+                fill
+                icon={<SearchX size={22} color="#5B6ED9" />}
+                message="No se encontraron publicaciones para los filtros seleccionados."
+                action={
+                  <AppButton appVariant="soft" onClick={clear}>
+                    Limpiar filtros
+                  </AppButton>
+                }
+              />
             ) : posts.length === 0 ? (
               <CommunityEmptyState
                 fill
@@ -75,6 +91,14 @@ export default function CommunityFeedPage() {
           </Box>
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+            <FeedFiltersPanel
+              filters={filters}
+              counts={counts}
+              activeCount={activeCount}
+              onTypeChange={setType}
+              onApply={applyDraft}
+              onClear={clear}
+            />
             <MyPostsPanel />
             <FeaturedTutorsPanel fill={posts.length === 0} />
           </Box>
