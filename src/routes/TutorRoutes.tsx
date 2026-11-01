@@ -1,6 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import TutorLayout from "@/modules/tutor/layouts/TutorLayout";
-import TutorHomePage from "@/modules/tutor/pages/TutorHomePage";
+import CommunityFeedPage from "@/modules/community/pages/CommunityFeedPage";
+import MyPostsPage from "@/modules/community/pages/MyPostsPage";
+import PostThreadPage from "@/modules/community/pages/PostThreadPage";
+import TutorPodiumPage from "@/modules/community/pages/TutorPodiumPage";
 import TutorProfilePage from "@/modules/tutor/profile/components/TutorProfilePage";
 import { TutorEditProfilePage } from "@/modules/tutor/profile/pages/TutorEditProfilePage";
 import UnderConstructionPage from "@/shared/components/UnderConstructionPage";
@@ -14,7 +17,10 @@ export default function TutorRoutes() {
     <Routes>
       <Route element={<TutorLayout />}>
         <Route index element={<Navigate to="home" replace />} />
-        <Route path="home" element={<TutorHomePage />} />
+        <Route path="home" element={<CommunityFeedPage />} />
+        <Route path="community/mine" element={<MyPostsPage />} />
+        <Route path="community/podium" element={<TutorPodiumPage />} />
+        <Route path="community/posts/:postId" element={<PostThreadPage />} />
         <Route path="classes" element={<TutorClassHistoryPage />} />
         <Route path="content" element={<UnderConstructionPage />} />
         <Route path="stats" element={<TutorStatisticsPage />} />

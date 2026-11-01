@@ -10,6 +10,7 @@ import {
   FileExclamationPoint,
   KeyRound,
   MessageSquare,
+  MessagesSquare,
   Star,
   Timer,
   TimerOff,
@@ -27,6 +28,8 @@ interface NotificationTypeConfig {
   iconColor: string;
   action: { kind: NotificationActionKind; label: string };
   routes: Record<Role, string | null>;
+  /** Si es true, la navegación agrega `/<referenceId>` a la ruta (ej. el hilo de la comunidad). */
+  appendReference?: boolean;
 }
 
 const GREEN_TILE = "#DDF5E6";
@@ -157,6 +160,14 @@ export const NOTIFICATION_TYPE_CONFIG: Record<NotificationType, NotificationType
     iconColor: LAVENDER_ICON,
     action: { kind: "navigate", label: "Ver" },
     routes: { STUDENT: "/student/complaints", TUTOR: "/tutor/requests" },
+  },
+  COMMUNITY_REPLY: {
+    icon: MessagesSquare,
+    tileColor: LAVENDER_TILE,
+    iconColor: LAVENDER_ICON,
+    action: { kind: "navigate", label: "Ver respuesta" },
+    routes: { STUDENT: "/student/community/posts", TUTOR: "/tutor/community/posts" },
+    appendReference: true,
   },
   MATERIAL_REPORT_UPDATE: {
     icon: FileExclamationPoint,

@@ -17,6 +17,7 @@ export const NOTIFICATION_TYPE_VALUES = [
   "SESSION_CLAIM_UPDATE",
   "SESSION_CLAIM_COMMENT",
   "MATERIAL_REPORT_UPDATE",
+  "COMMUNITY_REPLY",
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPE_VALUES)[number];
