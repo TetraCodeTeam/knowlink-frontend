@@ -1,9 +1,11 @@
 import type { Modifier } from "@popperjs/core";
 import { useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import {
+  Badge,
   Box,
   ClickAwayListener,
+  IconButton,
   InputAdornment,
   Popper,
   TextField,
@@ -11,6 +13,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import TuneIcon from "@mui/icons-material/Tune";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import {
   buildMateriaTutorsRoute,
@@ -19,8 +22,10 @@ import {
   MAX_SEARCH_SUGGESTIONS,
   TUTOR_ROLE,
 } from "../constants";
+import { useSearchFilters } from "../hooks/useSearchFilters";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
 import { deriveMateriasFromTutors } from "../utils/derive-materias";
+import SearchFiltersPopover from "./SearchFiltersPopover";
 import SearchResultsPanel from "./SearchResultsPanel";
 
 const SEARCH_BAR_PLACEHOLDER = "Busca tutores, materias";
@@ -68,6 +73,11 @@ export default function SearchBar() {
   const anchorRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [open, setOpen] = useState(false);
+  const [filtersAnchor, setFiltersAnchor] = useState<HTMLElement | null>(null);
+
+  const matchesSearchPage = useMatch("/student/buscar");
+  const matchesTutoresPage = useMatch("/student/tutores");
+  const { mode, filters, setFilters, activeFilterCount } = useSearchFilters();
 
   // Se dispara una solicitud por cada carácter ingresado (sin debounce),
   // según lo pedido: GET /api/v1/tutors/search/{query}.
@@ -77,6 +87,7 @@ export default function SearchBar() {
   const materias = useMemo(() => deriveMateriasFromTutors(tutors), [tutors]);
 
   const showPanel = open && inputValue.trim().length > 0;
+  const showFiltersButton = !isTutorModeActive && Boolean(matchesSearchPage || matchesTutoresPage);
 
   const handleSelectMateria = (nombre: string) => {
     navigate(buildMateriaTutorsRoute(nombre));
@@ -148,6 +159,34 @@ export default function SearchBar() {
                   <SearchIcon sx={{ color: "action.active", fontSize: 20 }} />
                 </InputAdornment>
               ),
+              endAdornment: showFiltersButton ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="Filtros avanzados"
+                    size="small"
+                    onClick={(event) => {
+                      setOpen(false);
+                      setFiltersAnchor(event.currentTarget);
+                    }}
+                    sx={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: "10px",
+                      backgroundColor: "#DCD9F5",
+                      color: "#3f4a9e",
+                      "&:hover": { backgroundColor: "#d0ccf0" },
+                    }}
+                  >
+                    <Badge
+                      badgeContent={activeFilterCount}
+                      overlap="circular"
+                      sx={{ "& .MuiBadge-badge": { backgroundColor: "#5865C8" } }}
+                    >
+                      <TuneIcon sx={{ fontSize: 20 }} />
+                    </Badge>
+                  </IconButton>
+                </InputAdornment>
+              ) : undefined,
             },
           }}
           sx={pillInputSx}
@@ -168,6 +207,17 @@ export default function SearchBar() {
             onSelectTutor={handleSelectTutor}
           />
         </Popper>
+        <SearchFiltersPopover
+          anchorEl={filtersAnchor}
+          open={Boolean(filtersAnchor)}
+          mode={mode}
+          filters={filters}
+          onApply={(next) => {
+            setFilters(next);
+            setFiltersAnchor(null);
+          }}
+          onClose={() => setFiltersAnchor(null)}
+        />
       </Box>
     </ClickAwayListener>
   );

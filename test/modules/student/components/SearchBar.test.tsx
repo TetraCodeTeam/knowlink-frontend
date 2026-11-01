@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, useLocation } from "react-router-dom";
 import SearchBar from "@/modules/student/components/SearchBar";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
@@ -28,10 +28,16 @@ function hookResult(data: TutorSearchResult[], isFetching = false): HookResult {
   return { data, isFetching } as unknown as HookResult;
 }
 
-function renderSearchBar() {
+function LocationProbe() {
+  const location = useLocation();
+  return <div data-testid="location">{`${location.pathname}${location.search}`}</div>;
+}
+
+function renderSearchBar(initialEntries: string[] = ["/"]) {
   return render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={initialEntries}>
       <SearchBar />
+      <LocationProbe />
     </MemoryRouter>
   );
 }
@@ -138,5 +144,61 @@ describe("US-46 / CP-003 — Barra de búsqueda unificada", () => {
     await user.click(screen.getByText(getTextContent("Ana García")));
 
     expect(screen.queryByText("Tutores")).not.toBeInTheDocument();
+  });
+});
+
+describe("US-49 — botón de filtros en la barra", () => {
+  beforeEach(() => {
+    useAuthStore.setState({ authResponse: undefined, isAuthenticated: false });
+    mockedHook.mockReset();
+    mockedHook.mockReturnValue(hookResult([]));
+  });
+
+  it("no muestra el ícono fuera de las rutas de búsqueda", () => {
+    renderSearchBar(["/student/home"]);
+
+    expect(screen.queryByRole("button", { name: "Filtros avanzados" })).not.toBeInTheDocument();
+  });
+
+  it("muestra el ícono en /student/buscar", () => {
+    renderSearchBar(["/student/buscar?q=Ana"]);
+
+    expect(screen.getByRole("button", { name: "Filtros avanzados" })).toBeInTheDocument();
+  });
+
+  it("muestra el ícono en /student/tutores", () => {
+    renderSearchBar(["/student/tutores?materia=%C3%81lgebra"]);
+
+    expect(screen.getByRole("button", { name: "Filtros avanzados" })).toBeInTheDocument();
+  });
+
+  it("no muestra el ícono en modo TUTOR", () => {
+    useAuthStore.setState({
+      authResponse: {
+        userId: "u1",
+        email: "tutor@test.com",
+        fullName: "Tutor",
+        token: "token",
+        role: "TUTOR",
+      },
+      isAuthenticated: true,
+    });
+
+    renderSearchBar(["/student/buscar?q=Ana"]);
+
+    expect(screen.queryByRole("button", { name: "Filtros avanzados" })).not.toBeInTheDocument();
+  });
+
+  it("'Aplicar' escribe los params en la URL conservando q", async () => {
+    const user = userEvent.setup();
+    renderSearchBar(["/student/buscar?q=Sistemas"]);
+
+    await user.click(screen.getByRole("button", { name: "Filtros avanzados" }));
+    await user.click(screen.getByRole("button", { name: "Virtual" }));
+    await user.click(screen.getByRole("button", { name: "Aplicar Filtros" }));
+
+    const location = screen.getByTestId("location").textContent ?? "";
+    expect(location).toContain("q=Sistemas");
+    expect(location).toContain("modality=VIRTUAL");
   });
 });
