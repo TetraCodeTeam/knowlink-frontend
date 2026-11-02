@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import AuthRoutes from "@/routes/AuthRoutes";
+import LandingPage from "@/modules/landing/pages/LandingPage";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import StudentRoutes from "@/routes/StudentRoutes";
 import TutorRoutes from "@/routes/TutorRoutes";
@@ -35,6 +36,11 @@ export default function RoutesProvider() {
     <Routes>
       {/* Public routes */}
       <Route path="/auth/*" element={<AuthRoutes />} />
+      {/* La landing es la puerta de entrada; quien ya tiene sesión va directo a su panel. */}
+      <Route
+        path="/"
+        element={isAuthenticated || isDevAuthBypassEnabled ? <RoleRedirect /> : <LandingPage />}
+      />
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
@@ -47,7 +53,6 @@ export default function RoutesProvider() {
         <Route element={<RoleRoute allowedRole="ADMIN" />}>
           <Route path="/admin/*" element={<AdminRoutes />} />
         </Route>
-        <Route path="/" element={<RoleRedirect />} />
       </Route>
 
       {/* Fallback */}
