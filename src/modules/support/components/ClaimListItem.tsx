@@ -66,6 +66,12 @@ export function ClaimListItem({ claim, onViewDetail, selected = false }: ClaimLi
             ·
           </Box>
           <span>{claim.studentName}</span>
+          <Box component="span" sx={metaSeparatorSx} aria-hidden="true">
+            ·
+          </Box>
+          <span>
+            {claim.claimantRole === "TUTOR" ? "Iniciado por vos" : "Iniciado por el alumno"}
+          </span>
         </Box>
 
         <Typography noWrap sx={itemReasonSx}>
