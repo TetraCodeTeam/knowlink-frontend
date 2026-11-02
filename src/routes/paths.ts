@@ -14,3 +14,8 @@ export const adminPaths = {
   materialReports: "/admin/material-reports",
   sessionClaims: "/admin/session-claims",
 };
+
+export const authPaths = {
+  login: "/auth/login",
+  register: "/auth/register",
+};
