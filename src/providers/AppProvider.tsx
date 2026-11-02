@@ -6,6 +6,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import RoutesProvider from "@/providers/RoutesProvider";
 import { SnackbarProvider } from "@/providers/SnackbarProvider";
+import ScrollToTop from "@/shared/components/ScrollToTop";
 import { queryClient } from "@/shared/lib/queryClient";
 import theme from "@/theme";
 
@@ -16,6 +17,7 @@ export default function AppProvider() {
         <ThemeProvider theme={theme}>
           <BrowserRouter>
             <CssBaseline />
+            <ScrollToTop />
             <RoutesProvider />
             <SnackbarProvider />
             {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
