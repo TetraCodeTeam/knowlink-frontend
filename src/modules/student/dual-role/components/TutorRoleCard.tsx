@@ -53,37 +53,37 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
     <>
       <Paper
         elevation={0}
-        sx={{ pt: 3, pb: 3, pr: 3, pl: 3, borderRadius: 3, border: "0.2px solid #e0e0fa" }}
+        sx={{ pt: 2, pb: 2, pr: 2.5, pl: 2.5, borderRadius: 3, border: "0.2px solid #e0e0fa" }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
-          <GraduationCap size={28} color="#5865C8" />
-          <Typography variant="h6" component="h2" fontWeight={500}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+          <GraduationCap size={24} color="#5865C8" />
+          <Typography variant="h6" component="h2" fontWeight={500} sx={{ fontSize: 18 }}>
             Rol Tutor
           </Typography>
         </Box>
 
-        <Typography sx={{ color: "#636363", fontSize: "14px", lineHeight: 1.6, mb: 2 }}>
+        <Typography sx={{ color: "#636363", fontSize: "13px", lineHeight: 1.55, mb: 1.5 }}>
           {hasTutorProfile
             ? "Cambia tu vista actual para gestionar tus sesiones, materiales y disponibilidad como tutor."
             : "Tu perfil de tutor no está activo actualmente. Configura tu perfil para comenzar a impartir sesiones y compartir tus conocimientos."}
         </Typography>
 
         {hasTutorProfile ? (
-          <Box sx={{ backgroundColor: "#EEEDFE", borderRadius: 2, p: 2.5 }}>
+          <Box sx={{ backgroundColor: "#EEEDFE", borderRadius: 2, p: 1.75 }}>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <Typography fontWeight={600} fontSize="17px">
+              <Typography fontWeight={600} fontSize="15px">
                 Acceder a la Interfaz de Tutor
               </Typography>
               <Switch
                 checked={isSwitching}
                 onChange={() => void handleSwitchToggle()}
                 disabled={isSwitching}
-                sx={{ transform: "scale(1.25)", transformOrigin: "right center" }}
+                sx={{ transform: "scale(1.1)", transformOrigin: "right center" }}
               />
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.75 }}>
               <Info size={15} color="#5865C8" />
-              <Typography sx={{ fontSize: "15px", color: "#5865C8" }}>
+              <Typography sx={{ fontSize: "13px", color: "#5865C8" }}>
                 Cambia a modo tutor
               </Typography>
             </Box>
@@ -93,7 +93,7 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
             sx={{
               backgroundColor: "#EEEDFE",
               borderRadius: 2,
-              p: 2.5,
+              p: 1.75,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -101,14 +101,16 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <Info size={18} color="#6B7280" />
-              <Typography sx={{ fontSize: "16px", color: "#6B7280", fontWeight: 500 }}>
+              <Info size={16} color="#6B7280" />
+              <Typography sx={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
                 Perfil Pendiente de Activación
               </Typography>
             </Box>
             <AppButton
               appVariant="primary"
-              startIcon={<Zap size={17} />}
+              size="small"
+              sx={{ py: 0.75, fontSize: 14 }}
+              startIcon={<Zap size={15} />}
               onClick={() => setShowConfirmDialog(true)}
             >
               Activar Rol Tutor

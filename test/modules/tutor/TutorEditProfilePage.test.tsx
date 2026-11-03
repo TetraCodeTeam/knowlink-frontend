@@ -94,7 +94,7 @@ describe("TutorEditProfilePage", () => {
     expect(
       await screen.findByText("La dirección es obligatoria para clases presenciales")
     ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Guardar" })).toBeDisabled();
   });
 
   it("guarda biografía y dirección sin enviar el email y actualiza el cache", async () => {
@@ -112,7 +112,7 @@ describe("TutorEditProfilePage", () => {
     const phoneInput = screen.getByPlaceholderText("Teléfono celular");
     await user.clear(phoneInput);
     await user.type(phoneInput, "3534777777");
-    await user.click(screen.getByRole("button", { name: "Guardar cambios" }));
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
 
     await waitFor(() =>
       expect(mockedUpdate).toHaveBeenCalledWith({

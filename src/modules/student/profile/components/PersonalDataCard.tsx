@@ -24,7 +24,7 @@ const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
       fontWeight={600}
       color="#636363"
       component="p"
-      sx={{ mb: 0.75 }}
+      sx={{ mb: 0.5, fontSize: 12.5 }}
     >
       {label}
     </Typography>
@@ -33,8 +33,8 @@ const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
       spacing={1}
       alignItems="center"
       sx={{
-        px: 1.5,
-        py: 1,
+        px: 1.25,
+        py: 0.75,
         borderRadius: 2,
         border: "1px solid",
         borderColor: "#E0E0FA",
@@ -42,7 +42,7 @@ const ReadOnlyField = ({ icon, label, value }: ReadOnlyFieldProps) => (
       }}
     >
       <Box sx={{ display: "flex", color: "#636363" }}>{icon}</Box>
-      <Typography variant="body1" sx={{ color: "#636363" }}>
+      <Typography variant="body2" sx={{ color: "#636363", minWidth: 0, overflowWrap: "anywhere" }}>
         {value}
       </Typography>
     </Stack>
@@ -54,31 +54,37 @@ export const PersonalDataCard = ({ email, phoneNumber, major, onEdit }: Personal
     <Paper
       elevation={0}
       sx={{
-        pt: 3,
-        pb: 4,
-        pr: 3,
-        pl: 3,
+        pt: 2,
+        pb: 2,
+        pr: 2.5,
+        pl: 2.5,
         borderRadius: 3,
         height: "100%",
         border: "0.2px solid #e0e0fa",
       }}
     >
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 1 }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <IdCard size={28} color="#5865C8" />
-          <Typography variant="h6" component="h2" fontWeight={500}>
+          <IdCard size={24} color="#5865C8" />
+          <Typography variant="h6" component="h2" fontWeight={500} sx={{ fontSize: 18 }}>
             Datos Personales
           </Typography>
         </Stack>
 
         {onEdit && (
-          <AppButton appVariant="outline" onClick={onEdit} startIcon={<Pencil size={16} />}>
+          <AppButton
+            appVariant="outline"
+            size="small"
+            sx={{ py: 0.75, fontSize: 14 }}
+            onClick={onEdit}
+            startIcon={<Pencil size={15} />}
+          >
             Editar perfil
           </AppButton>
         )}
       </Stack>
 
-      <Grid container spacing={2.5}>
+      <Grid container spacing={1.75}>
         <Grid size={{ xs: 12, sm: 6 }}>
           <ReadOnlyField icon={<Mail size={16} />} label="Correo Electrónico" value={email} />
         </Grid>

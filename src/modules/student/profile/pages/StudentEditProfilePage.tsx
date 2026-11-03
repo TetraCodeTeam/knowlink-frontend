@@ -1,8 +1,9 @@
-import { Box, CircularProgress, Paper, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import type { UseFormSetError } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import EditProfileForm from "@/modules/users/components/EditProfileForm";
+import EditProfileLayout from "@/modules/users/components/EditProfileLayout";
 import type { EditProfileFormValues } from "@/modules/users/schemas/editProfile.schema";
 import type { UpdateStudentProfileRequest } from "@/modules/users/interfaces/requests/edit-profile.interface";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
@@ -71,27 +72,19 @@ export const StudentEditProfilePage = () => {
   };
 
   return (
-    <Paper elevation={0} sx={{ mx: "auto", borderRadius: 3, border: "0.2px solid #e0e0fa" }}>
-      <Stack spacing={3} sx={{ pr: 5, pl: 5, pt: 3, pb: 3 }}>
-        <Box>
-          <Typography variant="h4" component="h1" fontWeight={700}>
-            Editar perfil
-          </Typography>
-          <Typography color="text.secondary">
-            Actualizá tus datos personales. Tu correo electrónico no puede modificarse.
-          </Typography>
-        </Box>
-
-        <EditProfileForm
-          key={profile.userId}
-          variant="student"
-          email={profile.email}
-          defaultValues={defaultValues}
-          isPending={isPending}
-          onSubmit={handleSubmit}
-          onCancel={() => navigate(studentPaths.profile)}
-        />
-      </Stack>
-    </Paper>
+    <EditProfileLayout
+      role="STUDENT"
+      fullName={`${profile.firstName} ${profile.lastName}`}
+      profilePictureUrl={profile.profilePictureUrl}
+    >
+      <EditProfileForm
+        key={profile.userId}
+        variant="student"
+        email={profile.email}
+        defaultValues={defaultValues}
+        isPending={isPending}
+        onSubmit={handleSubmit}
+      />
+    </EditProfileLayout>
   );
 };
