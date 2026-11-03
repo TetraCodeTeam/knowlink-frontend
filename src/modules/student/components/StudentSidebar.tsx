@@ -83,6 +83,13 @@ export default function StudentSidebar() {
 
   const handleCloseNotifications = () => setIsNotificationsOpen(false);
 
+  // Al ir a otra sección se cierra el panel de notificaciones (y el foco no vuelve a su botón).
+  const goTo = (path: string) => {
+    wasNotificationsOpenRef.current = false;
+    setIsNotificationsOpen(false);
+    navigate(path);
+  };
+
   const getBadgeCount = (badge?: NavItem["badge"]) => {
     if (badge === "notifications") return unreadCount;
     if (badge === "complaints") return complaintsCount;
@@ -143,14 +150,14 @@ export default function StudentSidebar() {
               aria-label={getAriaLabel(label, badge)}
               aria-haspopup={isNotifications ? "dialog" : undefined}
               aria-expanded={isNotifications ? isNotificationsOpen : undefined}
-              onClick={isNotifications ? handleNotificationsClick : () => navigate(path)}
+              onClick={isNotifications ? handleNotificationsClick : () => goTo(path)}
               onKeyDown={
                 isNotifications
                   ? handleNotificationsKeyDown
                   : (e) => {
                       if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault();
-                        navigate(path);
+                        goTo(path);
                       }
                     }
               }
@@ -206,11 +213,11 @@ export default function StudentSidebar() {
         <Box
           role="button"
           tabIndex={0}
-          onClick={() => navigate("/student/profile")}
+          onClick={() => goTo("/student/profile")}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              navigate("/student/profile");
+              goTo("/student/profile");
             }
           }}
           sx={{

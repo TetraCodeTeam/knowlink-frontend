@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { ArrowLeftToLine } from "lucide-react";
 import { Box, IconButton, Typography } from "@mui/material";
+import { keyframes } from "@mui/material/styles";
 import NotificationsList from "@/modules/notifications/components/NotificationsList";
 import OtherRoleBanner from "@/modules/notifications/components/OtherRoleBanner";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 import type { NotificationsPanelProps } from "@/modules/notifications/components/NotificationsPanel.types";
 import type { NotificationReadFilter } from "@/modules/notifications/types/notification-read-filter.type";
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
 
 const TABS: { label: string; status: NotificationReadFilter }[] = [
   { label: "No Leído", status: "UNREAD" },
@@ -39,7 +45,15 @@ export default function NotificationsPanel({
         aria-hidden
         data-testid="notifications-backdrop"
         onClick={onClose}
-        sx={{ position: "fixed", inset: 0, zIndex: 99 }}
+        sx={{
+          position: "fixed",
+          // Oscurece todo menos el menú lateral, para destacar que se está en Notificaciones.
+          inset: `0 0 0 ${sidebarWidth}px`,
+          backgroundColor: "rgba(17, 17, 40, 0.45)",
+          animation: `${fadeIn} 0.2s ease-out`,
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          zIndex: 99,
+        }}
       />
       <Box
         role="dialog"
