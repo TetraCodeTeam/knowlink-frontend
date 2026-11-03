@@ -10,18 +10,23 @@ export default function ClassHistoryEmptyState() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "16px",
+        gap: "10px",
       }}
     >
       <Box
         component="img"
         src="/no-classes.png"
         alt="Sin clases"
-        sx={{ width: 420, maxWidth: "90%" }}
+        sx={{ width: { xs: 240, md: 320 }, maxWidth: "90%" }}
       />
       <Typography
-        variant="h5"
-        sx={{ color: "#666", maxWidth: "560px", lineHeight: 1.6, textAlign: "center" }}
+        sx={{
+          color: "#666",
+          fontSize: { xs: 15, md: 17 },
+          maxWidth: "560px",
+          lineHeight: 1.6,
+          textAlign: "center",
+        }}
       >
         {EMPTY_STATE_MESSAGE}
       </Typography>

@@ -37,18 +37,18 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
     <Box sx={cardContainerSx}>
       <Box sx={{ display: "flex", alignItems: "flex-start" }}>
         <Box sx={timeColumnSx}>
-          <Typography sx={{ fontSize: "0.95rem", fontWeight: 500, color: "#333" }}>
+          <Typography sx={{ fontSize: "0.85rem", fontWeight: 500, color: "#333" }}>
             {formatTime(item.startTime)}
           </Typography>
           <Box sx={timeTickSx} />
-          <Typography sx={{ fontSize: "0.95rem", fontWeight: 500, color: "#333" }}>
+          <Typography sx={{ fontSize: "0.85rem", fontWeight: 500, color: "#333" }}>
             {formatTime(item.endTime)}
           </Typography>
         </Box>
 
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <Typography sx={{ fontSize: "1.4rem", fontWeight: 700, color: "#1a1a2e" }}>
+            <Typography sx={{ fontSize: "1.1rem", fontWeight: 700, color: "#1a1a2e" }}>
               {item.subjectName}
             </Typography>
             <IconButton
@@ -56,21 +56,29 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
               onClick={() => setExpanded((e) => !e)}
               aria-label={expanded ? "Contraer detalle" : "Expandir detalle"}
             >
-              {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </IconButton>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: "12px", mt: "10px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "8px 10px",
+              mt: "6px",
+            }}
+          >
             <Avatar
               src={item.otherPartyProfilePictureUrl ?? undefined}
-              sx={{ width: 40, height: 40, fontSize: "1.1rem" }}
+              sx={{ width: 32, height: 32, fontSize: "0.95rem" }}
             >
               {item.otherPartyFullName[0]?.toUpperCase()}
             </Avatar>
-            <Typography variant="h6" sx={{ fontWeight: 400, color: "#333" }}>
+            <Typography sx={{ fontSize: "0.95rem", fontWeight: 400, color: "#333" }}>
               {item.otherPartyFullName}
             </Typography>
-            <Box sx={{ ml: "10px" }}>
+            <Box sx={{ ml: { sm: "6px" } }}>
               <ModalityChip modality={item.modality} size="sm" />
             </Box>
             {item.status === "NOT_CONFIRMED" && (
@@ -91,21 +99,22 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
 
       {expanded && (
         <>
-          <Divider sx={{ my: "16px" }} />
+          <Divider sx={{ my: "10px" }} />
           {isLoading ? (
-            <Typography sx={{ fontSize: "0.95rem", color: "#888" }}>Cargando detalle...</Typography>
+            <Typography sx={{ fontSize: "0.85rem", color: "#888" }}>Cargando detalle...</Typography>
           ) : isError || !detail ? (
-            <Typography sx={{ fontSize: "0.95rem", color: "#c0392b" }}>
+            <Typography sx={{ fontSize: "0.85rem", color: "#c0392b" }}>
               No se pudo cargar el detalle. Intentá de nuevo.
             </Typography>
           ) : (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               <Box
                 sx={{
                   display: "flex",
+                  flexWrap: { xs: "wrap", sm: "nowrap" },
                   alignItems: "flex-end",
                   justifyContent: "space-between",
-                  gap: "16px",
+                  gap: "12px",
                 }}
               >
                 <Box
@@ -118,16 +127,16 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                   }}
                 >
                   <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <Clock size={18} color="#666" />
-                    <Typography sx={{ fontSize: "0.95rem", color: "#333" }}>
+                    <Clock size={16} color="#666" />
+                    <Typography sx={{ fontSize: "0.85rem", color: "#333" }}>
                       {formatDurationLabel(detail.startTime, detail.endTime)} (
                       {formatTime(detail.startTime)} a {formatTime(detail.endTime)})
                     </Typography>
                   </Box>
 
                   <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <DollarSign size={18} color="#666" />
-                    <Typography sx={{ fontSize: "0.95rem", color: "#333" }}>
+                    <DollarSign size={16} color="#666" />
+                    <Typography sx={{ fontSize: "0.85rem", color: "#333" }}>
                       {formatPriceLabel(detail.amount)}
                     </Typography>
                   </Box>
@@ -135,14 +144,14 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                   <Box sx={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                     <Box sx={{ flexShrink: 0, mt: "2px" }}>
                       {detail.modality === "VIRTUAL" ? (
-                        <Laptop2 size={18} color="#666" />
+                        <Laptop2 size={16} color="#666" />
                       ) : (
-                        <MapPin size={18} color="#666" />
+                        <MapPin size={16} color="#666" />
                       )}
                     </Box>
                     <Typography
                       sx={{
-                        fontSize: "0.95rem",
+                        fontSize: "0.85rem",
                         color: "#333",
                         flex: 1,
                         minWidth: 0,

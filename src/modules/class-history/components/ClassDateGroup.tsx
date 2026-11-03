@@ -17,10 +17,15 @@ interface ClassDateGroupProps {
 
 export default function ClassDateGroup({ group, role, category }: ClassDateGroupProps) {
   return (
-    <Box sx={{ mb: "28px" }}>
+    <Box sx={{ mb: "16px" }}>
       <Box sx={dateHeaderSx}>
         <Typography
-          sx={{ fontSize: "1.1rem", fontWeight: 600, color: "#1a1a2e", whiteSpace: "nowrap" }}
+          sx={{
+            fontSize: "0.95rem",
+            fontWeight: 600,
+            color: "#1a1a2e",
+            whiteSpace: { xs: "normal", sm: "nowrap" },
+          }}
         >
           {formatDateHeader(group.sessionDate)}
         </Typography>

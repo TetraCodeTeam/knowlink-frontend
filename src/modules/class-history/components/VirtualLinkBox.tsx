@@ -50,7 +50,7 @@ export default function VirtualLinkBox({
     <Box sx={virtualLinkBoxSx(editable)}>
       <Box sx={{ display: "flex", alignItems: "center", gap: "8px", mb: "10px" }}>
         <Video size={16} color="#5865C8" />
-        <Typography sx={{ fontSize: "0.9rem", fontWeight: 600, color: "#333" }}>
+        <Typography sx={{ fontSize: "0.85rem", fontWeight: 600, color: "#333" }}>
           Enlace de la videollamada para el alumno
         </Typography>
         {!editable && <Info size={14} color="#999" />}
@@ -72,7 +72,7 @@ export default function VirtualLinkBox({
             helperText={error ?? undefined}
             sx={{
               "& .MuiOutlinedInput-root": { backgroundColor: "#FFFFFF" },
-              "& .MuiInputBase-input": { fontSize: "0.9rem" },
+              "& .MuiInputBase-input": { fontSize: "0.85rem" },
             }}
           />
           <AppButton appVariant="primary" onClick={() => void handleSave()} loading={isPending}>
@@ -85,7 +85,13 @@ export default function VirtualLinkBox({
             <Link2 size={14} color="#666" />
           </Box>
           <Typography
-            sx={{ fontSize: "0.9rem", color: "#333", wordBreak: "break-all", flex: 1, minWidth: 0 }}
+            sx={{
+              fontSize: "0.85rem",
+              color: "#333",
+              wordBreak: "break-all",
+              flex: 1,
+              minWidth: 0,
+            }}
           >
             {virtualSessionLink ?? "Aún no se cargó un link"}
           </Typography>

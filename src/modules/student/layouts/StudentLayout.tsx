@@ -19,6 +19,7 @@ export default function StudentLayout() {
       <Box
         sx={{
           flex: 1,
+          minWidth: 0,
           marginLeft: `${SIDEBAR_WIDTH}px`,
           display: "flex",
           flexDirection: "column",
