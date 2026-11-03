@@ -15,8 +15,10 @@ import {
   mainCardSx,
   pageLayoutSx,
   pageTitleSx,
+  tabPanelSx,
   tabsSx,
 } from "@/modules/support/styles/supportPage.styles";
+import { getPageScaleSx } from "@/shared/utils/page-height.utils";
 
 export function SupportPage() {
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ export function SupportPage() {
   const handleGoToClassHistory = useCallback(() => navigate("/tutor/classes"), [navigate]);
 
   return (
-    <Box sx={pageLayoutSx}>
+    <Box sx={{ ...pageLayoutSx, ...getPageScaleSx("TUTOR") }}>
       <Box component="section" sx={mainCardSx}>
         <Typography component="h1" sx={pageTitleSx}>
           Soporte y solicitudes
@@ -61,6 +63,7 @@ export function SupportPage() {
 
         <Box
           role="tabpanel"
+          sx={tabPanelSx}
           id={`support-panel-${activeTab}`}
           aria-labelledby={`support-tab-${activeTab}`}
         >

@@ -20,7 +20,7 @@ export function SideInfoCard({ icon, iconBg, iconColor, title, children }: SideI
   return (
     <Box component="section" sx={{ ...sideCardSx }}>
       <Box sx={sideCardHeaderSx}>
-        <Box sx={{ ...getIconBoxSx(iconBg, iconColor), width: 32, height: 32 }}>{icon}</Box>
+        <Box sx={{ ...getIconBoxSx(iconBg, iconColor), width: 28, height: 28 }}>{icon}</Box>
         <Box component="h3" sx={{ ...sideCardTitleSx, m: 0 }}>
           {title}
         </Box>

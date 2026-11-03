@@ -29,7 +29,7 @@ interface SummaryCardProps {
 export function SummaryCard({ title, tiles }: SummaryCardProps) {
   return (
     <Box component="section" sx={sideCardSx}>
-      <Box component="h3" sx={{ ...sideCardTitleSx, m: 0, mb: 1.5 }}>
+      <Box component="h3" sx={{ ...sideCardTitleSx, m: 0, mb: 1.25 }}>
         {title}
       </Box>
       <Box sx={summaryGridSx}>
