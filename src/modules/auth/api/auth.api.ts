@@ -1,5 +1,6 @@
 import { rawHttpClient } from "@/shared/lib/httpClient";
 import type { LoginRequest } from "@/modules/auth/interfaces/requests/login-request.interface";
+import type { ReactivateRequest } from "@/modules/auth/interfaces/requests/reactivate-request.interface";
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";
 import type { StudentRegisterRequest } from "@/modules/auth/interfaces/requests/student-register.interface";
@@ -7,6 +8,11 @@ import type { ResetPasswordRequest } from "@/modules/auth/interfaces/requests/re
 
 export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
   const response = await rawHttpClient.post<AuthResponse>("/api/v1/auth/login", data);
+  return response.data;
+}
+
+export async function reactivateAccount(data: ReactivateRequest): Promise<AuthResponse> {
+  const response = await rawHttpClient.post<AuthResponse>("/api/v1/auth/reactivate", data);
   return response.data;
 }
 

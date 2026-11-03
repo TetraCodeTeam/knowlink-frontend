@@ -7,6 +7,7 @@ import TutorRegisterPage from "@/modules/auth/pages/TutorRegisterPage";
 import StudentRegisterPage from "@/modules/auth/pages/StudentRegisterPage";
 import ForgotPasswordPage from "@/modules/auth/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/modules/auth/pages/ResetPasswordPage";
+import ReactivateAccountPage from "@/modules/auth/pages/ReactivateAccountPage";
 
 export default function AuthRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AuthRoutes() {
       <Route path="activate" element={<ActivateAccountPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
+      <Route path="reactivate" element={<ReactivateAccountPage />} />
     </Routes>
   );
 }

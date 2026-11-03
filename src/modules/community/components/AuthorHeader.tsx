@@ -21,9 +21,11 @@ export default function AuthorHeader({
   showRoleLabel = false,
 }: AuthorHeaderProps) {
   const { paths } = useCommunityViewer();
-  // Solo los tutores tienen perfil público, y solo los alumnos pueden abrirlo.
+  // Solo los tutores con perfil activo tienen perfil público, y solo los alumnos pueden abrirlo.
   const profilePath =
-    author.role === "TUTOR" && paths.tutorProfile ? paths.tutorProfile(author.userId) : null;
+    author.role === "TUTOR" && author.canBookClass && paths.tutorProfile
+      ? paths.tutorProfile(author.userId)
+      : null;
   const isTutor = author.role === "TUTOR";
 
   return (

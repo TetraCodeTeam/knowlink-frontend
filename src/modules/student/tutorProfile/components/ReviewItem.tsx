@@ -6,6 +6,15 @@ interface ReviewItemProps {
   showSubject?: boolean;
 }
 
+const getInitials = (fullName: string): string => {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? "") : "";
+  return `${first}${last}`.toUpperCase();
+};
+
 export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
   const hasSubject = Boolean(review.subject?.trim());
 
@@ -23,7 +32,9 @@ export const ReviewItem = ({ review, showSubject = true }: ReviewItemProps) => {
           src={review.studentAvatarUrl ?? undefined}
           alt={review.studentName}
           sx={{ width: 56, height: 56 }}
-        />
+        >
+          {getInitials(review.studentName)}
+        </Avatar>
         <Box sx={{ flex: 1 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6" fontWeight={600}>

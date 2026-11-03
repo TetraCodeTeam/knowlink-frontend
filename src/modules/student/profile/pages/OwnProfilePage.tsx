@@ -4,6 +4,7 @@ import { PersonalDataCard } from "@/modules/student/profile/components/PersonalD
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
+import AccountManagementSection from "@/modules/users/components/AccountManagementSection";
 import { studentPaths } from "@/routes/paths";
 
 export const OwnProfilePage = () => {
@@ -43,14 +44,7 @@ export const OwnProfilePage = () => {
         />
         <TutorRoleCard hasTutorProfile={profile.hasTutorProfile} career={profile.career} />
       </Stack>
-      {/* </Grid> */}
-      {/* <Grid size={{ xs: 12, md: 4 }}>
-          <AccountManagementCard
-            onDeactivateAccount={() => console.log("Abrir confirmación de desactivación de cuenta")}
-            onDeleteAccount={() => console.log("Abrir confirmación de eliminación de cuenta")}
-          />
-        </Grid> */}
-      {/* </Grid> */}
+      <AccountManagementSection classesPath={studentPaths.classes} />
     </Stack>
   );
 };
