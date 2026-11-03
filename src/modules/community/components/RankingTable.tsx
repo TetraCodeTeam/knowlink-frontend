@@ -31,7 +31,17 @@ export default function RankingTable({ tutors }: RankingTableProps) {
           Todavía no hay más tutores en el ranking de este mes.
         </Box>
       ) : (
-        <Box component="ol" sx={{ listStyle: "none", m: 0, p: 0, display: "grid", gap: 1.25 }}>
+        <Box
+          component="ol"
+          sx={{
+            listStyle: "none",
+            m: 0,
+            p: 0,
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gap: 1.25,
+          }}
+        >
           {tutors.map((tutor) => {
             const profilePath = paths.tutorProfile?.(tutor.tutorId);
             return (
@@ -41,6 +51,7 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                 sx={{
                   ...cardSx,
                   display: "flex",
+                  flexWrap: { xs: "wrap", sm: "nowrap" },
                   alignItems: "center",
                   gap: 2,
                   borderLeft: "4px solid #4F46E5",
@@ -67,7 +78,7 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                   verified={tutor.verified}
                   size={52}
                 />
-                <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Box sx={{ minWidth: 0, flex: "1 1 180px" }}>
                   <Box sx={{ display: "flex", alignItems: "baseline", gap: 1, flexWrap: "wrap" }}>
                     <Typography sx={{ fontSize: 17, fontWeight: 700 }}>{tutor.fullName}</Typography>
                     {tutor.averageRating != null ? (
@@ -97,6 +108,8 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                           key={subject}
                           sx={{
                             ...chipSx,
+                            whiteSpace: "normal",
+                            maxWidth: "100%",
                             bgcolor: "#E8EAFB",
                             color: COMMUNITY_COLORS.primaryDark,
                           }}
