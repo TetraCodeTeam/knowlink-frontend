@@ -1,20 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { AUTH_LOGIN_KEY } from "@/modules/auth/constants";
+import {
+  ACCOUNT_DEACTIVATED_CODE,
+  AUTH_LOGIN_KEY,
+  REACTIVATE_ROUTE,
+} from "@/modules/auth/constants";
 import { loginUser } from "@/modules/auth/api/auth.api";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { useReactivationStore } from "@/modules/auth/hooks/useReactivationStore";
 import type { LoginFormValues } from "@/modules/auth/schemas/login.schema";
-import type { AuthRole } from "@/shared/types/role.type";
-
-const ROLE_REDIRECT: Partial<Record<AuthRole, string>> = {
-  STUDENT: "/student/profile",
-  TUTOR: "/tutor/profile",
-  ADMIN: "/admin/home",
-};
+import type { ErrorResponse } from "@/shared/interfaces/error-response.interface";
+import { getRoleDestination } from "@/modules/auth/utils/role-redirect";
 
 export function useLogin() {
   const { login } = useAuthStore();
+  const { setPendingCredentials } = useReactivationStore();
   const navigate = useNavigate();
 
   const { isPending, mutate } = useMutation({
@@ -22,13 +23,19 @@ export function useLogin() {
     mutationFn: ({ email, password }: LoginFormValues) => loginUser({ email, password }),
     onSuccess: (authResponse) => {
       login(authResponse);
-      const destination = ROLE_REDIRECT[authResponse.role] ?? "/student/home";
-      navigate(destination, { replace: true });
+      navigate(getRoleDestination(authResponse.role), { replace: true });
     },
-    onError: (error) => {
-      const errorMessage =
-        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "Credenciales incorrectas";
+    onError: (error: unknown, variables: LoginFormValues) => {
+      const response = (error as { response?: { status?: number; data?: ErrorResponse } } | null)
+        ?.response;
+
+      if (response?.status === 403 && response.data?.detail === ACCOUNT_DEACTIVATED_CODE) {
+        setPendingCredentials(variables);
+        navigate(REACTIVATE_ROUTE);
+        return;
+      }
+
+      const errorMessage = response?.data?.message ?? "Credenciales incorrectas";
       toast.error(errorMessage);
     },
   });

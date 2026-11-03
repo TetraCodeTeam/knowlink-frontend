@@ -50,7 +50,7 @@ export default function ReplyCard({
   const draftInvalid = draft.trim().length === 0 || draft.length > REPLY_MAX_LENGTH;
 
   const bookingPath =
-    reply.bookingCard && !reply.ownedByMe && paths.booking
+    reply.bookingCard && reply.author.canBookClass && !reply.ownedByMe && paths.booking
       ? paths.booking(reply.author.userId)
       : null;
 
