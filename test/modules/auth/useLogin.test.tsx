@@ -64,11 +64,11 @@ describe("useLogin - destino por rol", () => {
     expect(await loginAs("ADMIN")).toBe("/admin/home");
   });
 
-  it("conserva el destino de STUDENT", async () => {
-    expect(await loginAs("STUDENT")).toBe("/student/profile");
+  it("navega a /student/home cuando el rol es STUDENT", async () => {
+    expect(await loginAs("STUDENT")).toBe("/student/home");
   });
 
-  it("conserva el destino de TUTOR", async () => {
-    expect(await loginAs("TUTOR")).toBe("/tutor/profile");
+  it("navega a /tutor/home cuando el rol es TUTOR", async () => {
+    expect(await loginAs("TUTOR")).toBe("/tutor/home");
   });
 });

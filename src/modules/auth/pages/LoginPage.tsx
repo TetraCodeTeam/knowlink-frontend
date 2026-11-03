@@ -173,12 +173,18 @@ export default function LoginPage() {
             }}
           >
             ¿No tienes cuenta?{" "}
-            <Link
+            <Box
+              component={Link}
               to="/auth/register"
-              style={{ color: "#3F4CAE", fontWeight: 600, textDecoration: "none" }}
+              sx={{
+                color: "#3F4CAE",
+                fontWeight: 600,
+                textDecoration: "none",
+                "&:hover, &:focus-visible": { textDecoration: "underline" },
+              }}
             >
               Regístrate
-            </Link>
+            </Box>
           </Box>
         </Box>
       </Box>
