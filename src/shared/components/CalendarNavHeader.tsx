@@ -15,7 +15,12 @@ export default function CalendarNavHeader({ label, onPrev, onNext }: CalendarNav
       </IconButton>
       <Typography
         variant="subtitle1"
-        sx={{ fontWeight: 700, color: "#1a1a2e", minWidth: 220, textAlign: "center" }}
+        sx={{
+          fontWeight: 700,
+          color: "#1a1a2e",
+          minWidth: { xs: 150, sm: 220 },
+          textAlign: "center",
+        }}
       >
         {label}
       </Typography>

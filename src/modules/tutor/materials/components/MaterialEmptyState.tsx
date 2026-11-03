@@ -8,9 +8,14 @@ export default function MaterialEmptyState() {
         component="img"
         src="/upload-material.png"
         alt="Sin materiales"
-        sx={{ width: 260, height: 260, objectFit: "contain", opacity: 0.85 }}
+        sx={{
+          width: { xs: 160, md: 190 },
+          height: { xs: 160, md: 190 },
+          objectFit: "contain",
+          opacity: 0.85,
+        }}
       />
-      <Typography sx={{ fontSize: "18px", fontWeight: 500, color: "#231D58", maxWidth: 400 }}>
+      <Typography sx={{ fontSize: "15px", fontWeight: 500, color: "#231D58", maxWidth: 400 }}>
         Actualmente no hay material de estudio cargado en esta sección
       </Typography>
     </Box>

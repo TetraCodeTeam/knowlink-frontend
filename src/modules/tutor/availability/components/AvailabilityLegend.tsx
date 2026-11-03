@@ -8,23 +8,23 @@ export default function AvailabilityLegend() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        gap: 3,
+        gap: 2,
         flexWrap: "wrap",
-        mb: 2,
+        mb: 1.5,
       }}
     >
       {AVAILABILITY_LEGEND.map((item) => (
         <Box key={item.label} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
             sx={{
-              width: 14,
-              height: 14,
+              width: 11,
+              height: 11,
               borderRadius: "4px",
               bgcolor: item.color,
               border: item.color === "#f7f7fb" ? "1px solid #e2e2ec" : "none",
             }}
           />
-          <Typography variant="body1" color="text.secondary">
+          <Typography fontSize={13} color="text.secondary">
             {item.label}
           </Typography>
         </Box>

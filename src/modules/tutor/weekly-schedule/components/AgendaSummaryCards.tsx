@@ -32,8 +32,8 @@ function StatChip({
         <Box
           component="span"
           sx={{
-            width: 12,
-            height: 12,
+            width: 10,
+            height: 10,
             borderRadius: "50%",
             bgcolor: dotColor,
             ml: "8px !important",
@@ -57,8 +57,8 @@ export function AgendaSummaryCards({
   return (
     <Stack
       direction={{ xs: "column", sm: "row" }}
-      spacing={4.5}
-      sx={{ bgcolor: "#ffffff4d", borderRadius: 3, px: 2, py: 2 }}
+      spacing={{ xs: 1.5, sm: 2 }}
+      sx={{ bgcolor: "#ffffff4d", borderRadius: 3, px: 1.5, py: 1.25 }}
     >
       <Box sx={agendaSummaryCardSx}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -68,14 +68,14 @@ export function AgendaSummaryCards({
             chipBg={bookingsColor.chipBg}
           />
           <Box sx={agendaStatIconBoxSx(bookingsColor.iconBg)}>
-            <CircleCheckBig size={23} color={bookingsColor.iconColor} />
+            <CircleCheckBig size={18} color={bookingsColor.iconColor} />
           </Box>
         </Stack>
         <Stack direction="row" alignItems="baseline" spacing={1}>
-          <Typography variant="h4" fontWeight={700}>
+          <Typography fontSize={26} fontWeight={700} lineHeight={1.1}>
             {confirmedBookings}
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography fontSize={15} color="text.secondary">
             Reservas confirmadas
           </Typography>
         </Stack>
@@ -89,14 +89,14 @@ export function AgendaSummaryCards({
             chipBg={availabilityColor.chipBg}
           />
           <Box sx={agendaStatIconBoxSx(availabilityColor.iconBg)}>
-            <Clock size={23} color={availabilityColor.iconColor} />
+            <Clock size={18} color={availabilityColor.iconColor} />
           </Box>
         </Stack>
         <Stack direction="row" alignItems="baseline" spacing={1}>
-          <Typography variant="h4" fontWeight={700}>
+          <Typography fontSize={26} fontWeight={700} lineHeight={1.1}>
             {freeBlocks}
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography fontSize={15} color="text.secondary">
             Bloques libres
           </Typography>
         </Stack>
@@ -110,20 +110,20 @@ export function AgendaSummaryCards({
             chipBg={nextSessionColor.chipBg}
           />
           <Box sx={agendaStatIconBoxSx(nextSessionColor.iconBg)}>
-            <CalendarClock size={23} color={nextSessionColor.iconColor} />
+            <CalendarClock size={18} color={nextSessionColor.iconColor} />
           </Box>
         </Stack>
         {nextSession ? (
           <Box>
-            <Typography variant="h6" fontWeight={700} lineHeight={1.3}>
+            <Typography fontSize={16} fontWeight={700} lineHeight={1.3}>
               {nextSession.subjectName}
             </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
+            <Typography fontSize={13} color="text.secondary">
               {nextSession.dateLabel} • {nextSession.timeLabel}
             </Typography>
           </Box>
         ) : (
-          <Typography variant="h6" color="text.secondary">
+          <Typography fontSize={15} color="text.secondary">
             Aún no hay clases agendadas
           </Typography>
         )}

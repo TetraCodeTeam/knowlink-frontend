@@ -20,11 +20,11 @@ export default function MaterialCard({ material, onDelete }: MaterialCardProps) 
   return (
     <Box sx={materialRowSx}>
       <Box sx={fileIconContainerSx(bgColor)}>
-        <Icon size={20} color={iconColor} strokeWidth={1.8} />
+        <Icon size={18} color={iconColor} strokeWidth={1.8} />
       </Box>
       <Typography
         sx={{
-          fontSize: "17px",
+          fontSize: "14px",
           fontWeight: 500,
           color: "#231D58",
           flex: 1,
@@ -46,7 +46,7 @@ export default function MaterialCard({ material, onDelete }: MaterialCardProps) 
           "&:hover": { backgroundColor: "#F4E4E4" },
         }}
       >
-        <Trash2 size={18} />
+        <Trash2 size={16} />
       </IconButton>
     </Box>
   );

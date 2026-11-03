@@ -11,11 +11,11 @@ export default function AvailabilityWeekCustomizationBanner({
   isPending,
 }: AvailabilityWeekCustomizationBannerProps) {
   return (
-    <Alert severity="warning" sx={{ mt: 2 }}>
-      <Typography variant="body2" fontWeight={600}>
+    <Alert severity="warning" sx={{ mt: 1.5, py: 0.5 }}>
+      <Typography fontSize={13} fontWeight={600}>
         Esta semana tiene un horario distinto a tu horario habitual.
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 1.5 }}>
+      <Typography fontSize={12.5} color="text.secondary" sx={{ mt: 0.5, mb: 1 }}>
         Podés quitar esta excepción. El cambio se va a reflejar la próxima vez que actualices tu
         horario habitual, no de inmediato.
       </Typography>

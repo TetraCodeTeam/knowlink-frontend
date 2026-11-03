@@ -51,7 +51,7 @@ export default function MaterialsSection() {
   const chipSx = (active: boolean) => ({
     borderRadius: "20px",
     textTransform: "none",
-    fontSize: "15px",
+    fontSize: "13px",
     fontWeight: active ? 600 : 400,
     whiteSpace: "nowrap",
     flexShrink: 0,
@@ -59,8 +59,8 @@ export default function MaterialsSection() {
     backgroundColor: active ? "#5865C8" : "transparent",
     color: active ? "#FFFFFF" : "#5865C8",
     border: `1px solid ${active ? "#5865C8" : "#C1BFE7"}`,
-    px: 2.5,
-    py: 0.75,
+    px: 2,
+    py: 0.5,
     "&:hover": {
       backgroundColor: active ? "#4954B5" : "#EEEDFE",
     },
@@ -69,7 +69,15 @@ export default function MaterialsSection() {
   return (
     <Box>
       {/* Filter bar */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: { xs: "wrap", sm: "nowrap" },
+          gap: 0.5,
+          mb: 1.5,
+        }}
+      >
         {hasSubjectOverflow && (
           <IconButton size="small" onClick={() => scroll("left")} aria-label="Desplazar izquierda">
             <ChevronLeft size={18} />
@@ -80,9 +88,9 @@ export default function MaterialsSection() {
           ref={scrollRef}
           sx={{
             display: "flex",
-            gap: 2,
+            gap: 1,
             overflowX: "auto",
-            flex: 1,
+            flex: { xs: "1 1 100%", sm: 1 },
             minWidth: 0,
             "&::-webkit-scrollbar": { display: "none" },
             scrollbarWidth: "none",
@@ -122,11 +130,11 @@ export default function MaterialsSection() {
         </Button>
       </Box>
 
-      <Divider sx={{ mb: 2 }} />
+      <Divider sx={{ mb: 1.5 }} />
 
       {/* Content */}
       {isLoading ? (
-        <Typography sx={{ color: "#888", fontSize: "16px", py: 2 }}>
+        <Typography sx={{ color: "#888", fontSize: "14px", py: 2 }}>
           Cargando materiales...
         </Typography>
       ) : materials.length === 0 ? (
