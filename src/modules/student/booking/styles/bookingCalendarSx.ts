@@ -15,6 +15,17 @@ const PAST_COLOR = BOOKING_STATUS_META.PAST.color;
 export const bookingCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
+  // Escala compacta (la base la comparten otros calendarios).
+  p: { xs: 1.5, md: 2 },
+  "& .fc-col-header-cell": { bgcolor: "transparent", borderColor: "#ececf4", py: 0.25 },
+  "& .fc-timegrid-axis": { borderColor: "#ececf4", width: { xs: "44px", md: "56px" } },
+  "& .fc-timegrid-slot-label": {
+    fontSize: { xs: "0.68rem", md: "0.78rem" },
+    color: "#8a8aa3",
+    fontWeight: 500,
+  },
+  "& .fc-timegrid-slot": { borderColor: "#f2f2f8", height: "1.25em" },
+
   "& .fc-bg-event.fc-past-now": {
     bgcolor: "rgba(138, 138, 163, 0.1) !important",
     borderBottom: "2px solid #5B6ED9",

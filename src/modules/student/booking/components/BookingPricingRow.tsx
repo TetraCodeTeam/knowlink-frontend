@@ -11,18 +11,15 @@ export default function BookingPricingRow({
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Typography
-        variant="subtitle1"
         sx={{
+          fontSize: 14,
           color: emphasized ? "text.primary" : "text.secondary",
           fontWeight: emphasized ? 700 : 400,
         }}
       >
         {label}
       </Typography>
-      <Typography
-        variant="subtitle1"
-        sx={{ color: valueColor, fontWeight: emphasized ? 700 : 500 }}
-      >
+      <Typography sx={{ fontSize: 14, color: valueColor, fontWeight: emphasized ? 700 : 500 }}>
         {typeof value === "number" ? formatter.format(value) : (value ?? "-")}
       </Typography>
     </Box>

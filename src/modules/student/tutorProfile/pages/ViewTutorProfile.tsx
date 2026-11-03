@@ -37,12 +37,20 @@ export const TutorProfilePage = () => {
   };
 
   return (
-    <Stack spacing={3} sx={{ maxWidth: 1900, mx: "auto", p: { xs: 1, sm: 4 }, bgcolor: "#F4F3FB" }}>
+    <Stack
+      spacing={2}
+      sx={{
+        maxWidth: 1900,
+        mx: "auto",
+        p: { xs: 1.5, sm: 2.5, md: "16px 32px" },
+        bgcolor: "#F4F3FB",
+      }}
+    >
       <TutorProfileHeader tutor={tutor} onReservar={handleReservar} />
 
-      <Grid container columnSpacing={4} rowSpacing={2}>
+      <Grid container columnSpacing={2.5} rowSpacing={2}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <Stack spacing={3}>
+          <Stack spacing={2}>
             <TutorAboutCard about={tutor.about} />
             <TutorSubjectsCard subjectRates={tutor.subjectRates} />
             <TutorReviewsCard

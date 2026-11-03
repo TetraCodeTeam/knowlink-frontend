@@ -11,16 +11,16 @@ export default function BookingSlotSelectionSummary({ slot }: BookingSlotSelecti
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 1,
-          py: 2,
+          gap: 0.75,
+          py: 1.5,
           px: 1,
           borderRadius: 2,
           bgcolor: "#EEEDFE",
           textAlign: "center",
         }}
       >
-        <CalendarArrowDown size={25} color="#494949" />
-        <Typography variant="subtitle2" sx={{ color: "text.secondary", px: 5 }}>
+        <CalendarArrowDown size={22} color="#494949" />
+        <Typography sx={{ fontSize: 13, color: "text.secondary", px: 2 }}>
           Selecciona un horario en el calendario para continuar
         </Typography>
       </Box>
@@ -32,19 +32,19 @@ export default function BookingSlotSelectionSummary({ slot }: BookingSlotSelecti
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 1.5,
-        py: 1.5,
-        px: 2,
+        gap: 1.25,
+        py: 1,
+        px: 1.75,
         borderRadius: 2,
         bgcolor: "#eef2ff",
       }}
     >
-      <CalendarArrowDown size={30} color="#3A48AD" />
+      <CalendarArrowDown size={24} color="#3A48AD" />
       <Box>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600, textTransform: "capitalize" }}>
+        <Typography sx={{ fontSize: 14, fontWeight: 600, textTransform: "capitalize" }}>
           {slot.date}
         </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+        <Typography sx={{ fontSize: 13, color: "text.secondary" }}>
           {slot.startTime} - {slot.endTime}
         </Typography>
       </Box>

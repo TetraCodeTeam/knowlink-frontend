@@ -39,29 +39,29 @@ export const TutorMaterialCard = ({
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
-      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
-        <Stack direction="row" spacing={1} alignItems="center" mb={1.5}>
-          <FolderOpen size={25} color="#5865C8" />
-          <Typography variant="h5" fontWeight={500}>
+      <CardContent sx={{ p: { xs: 1.75, md: 2 }, "&:last-child": { pb: { xs: 1.75, md: 2 } } }}>
+        <Stack direction="row" spacing={1} alignItems="center" mb={1}>
+          <FolderOpen size={20} color="#5865C8" />
+          <Typography fontSize={18} fontWeight={500}>
             Material Académico
           </Typography>
         </Stack>
 
         {!hasConfirmedBooking ? (
-          <Box sx={{ textAlign: "center", py: 3 }}>
+          <Box sx={{ textAlign: "center", py: 2 }}>
             <Box sx={{ opacity: 0.5, display: "inline-flex" }}>
-              <FolderLock size={35} color="#5865C8" />
+              <FolderLock size={28} color="#5865C8" />
             </Box>
-            <Typography variant="subtitle1" fontWeight={600} mt={1}>
+            <Typography fontSize={14} fontWeight={600} mt={1}>
               Material Bloqueado
             </Typography>
-            <Typography variant="subtitle2" color="text.secondary">
+            <Typography fontSize={12.5} color="text.secondary">
               Reservá y completá una sesión con este tutor para acceder a su material de estudio.
             </Typography>
           </Box>
         ) : (
           <>
-            <Stack spacing={2}>
+            <Stack spacing={1.25}>
               {Object.entries(preview).map(([subject, items]) => (
                 <Box key={subject}>
                   <Stack
@@ -71,7 +71,7 @@ export const TutorMaterialCard = ({
                     mb={1}
                     mt={2}
                   >
-                    <Typography variant="subtitle1" color="#494949" fontWeight={550}>
+                    <Typography fontSize={14} color="#494949" fontWeight={550}>
                       {subject}
                     </Typography>
                     {subjectsWithMoreItems.includes(subject) && (
@@ -92,7 +92,7 @@ export const TutorMaterialCard = ({
                       </Typography>
                     )}
                   </Stack>
-                  <Stack spacing={2}>
+                  <Stack spacing={1.25}>
                     {items.map((item) => {
                       const FileIcon = FILE_TYPE_ICON[item.fileType];
                       return (
@@ -102,19 +102,19 @@ export const TutorMaterialCard = ({
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            p: 1.5,
+                            p: 1.25,
                             borderRadius: 3,
                             bgcolor: "#F4F3FB",
                             border: "1px solid #E0E0FA",
                           }}
                         >
                           <Stack direction="row" spacing={1.5} alignItems="center">
-                            <FileIcon size={20} color="#5865C8" />
+                            <FileIcon size={18} color="#5865C8" />
                             <Box>
-                              <Typography variant="subtitle1" fontWeight={550}>
+                              <Typography fontSize={14} fontWeight={550}>
                                 {item.title}
                               </Typography>
-                              <Typography variant="subtitle2" color="text.secondary">
+                              <Typography fontSize={12.5} color="text.secondary">
                                 {formatMaterialMetadata(item)}
                               </Typography>
                             </Box>

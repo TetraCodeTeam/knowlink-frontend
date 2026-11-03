@@ -137,7 +137,7 @@ export default function BookingClassPage() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: 4 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: { xs: 1.5, md: "16px 32px" } }}>
       {activeHoldElsewhere && (
         <Alert
           severity="info"
@@ -157,8 +157,15 @@ export default function BookingClassPage() {
         </Alert>
       )}
 
-      <Box sx={{ display: "flex", gap: 4, alignItems: "stretch" }}>
-        <Box sx={{ flex: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", lg: "row" },
+          gap: 2.5,
+          alignItems: "stretch",
+        }}
+      >
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <BookingCalendar
             bookingSlots={bookingSlots}
             minimumNoticeMinutes={minimumNoticeMinutes}

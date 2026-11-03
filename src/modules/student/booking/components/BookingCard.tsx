@@ -61,18 +61,17 @@ export default function BookingCard({
       onSubmit={handleSubmit(handleReserve)}
       elevation={0}
       sx={{
-        width: 350,
-        p: 4,
+        width: { xs: "100%", lg: 320 },
+        flexShrink: 0,
+        p: { xs: 2, md: 2.5 },
         borderRadius: 3,
         border: "1px solid #e2e8f0",
         display: "flex",
         flexDirection: "column",
-        gap: 2.5,
+        gap: 1.75,
       }}
     >
-      <Typography variant="h5" sx={{ fontWeight: 700 }}>
-        Reserva una clase
-      </Typography>
+      <Typography sx={{ fontSize: 19, fontWeight: 700 }}>Reserva una clase</Typography>
 
       {selectedSlot && (
         <BookingCountdownTimer
@@ -90,9 +89,7 @@ export default function BookingCard({
       )}
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
-          Materia
-        </Typography>
+        <Typography sx={{ fontSize: 14, fontWeight: 550 }}>Materia</Typography>
         <Controller
           name="tutorSubjectId"
           control={control}
@@ -128,14 +125,12 @@ export default function BookingCard({
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
-          Tema a tratar
-        </Typography>
+        <Typography sx={{ fontSize: 14, fontWeight: 550 }}>Tema a tratar</Typography>
         <TextField
           {...register("topic")}
           placeholder="Ingresa el tema a tratar para que el tutor esté lo más preparado posible"
           multiline
-          minRows={3}
+          minRows={2}
           size="small"
           error={Boolean(errors.topic)}
           helperText={errors.topic?.message}
@@ -148,9 +143,7 @@ export default function BookingCard({
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
-          Modalidad
-        </Typography>
+        <Typography sx={{ fontSize: 14, fontWeight: 550 }}>Modalidad</Typography>
         <Controller
           name="modality"
           control={control}
@@ -251,11 +244,19 @@ export default function BookingCard({
         disabled={!canSubmit}
         loading={isSubmitting}
         fullWidth
+        size="small"
+        sx={{ py: 0.9, fontSize: 14 }}
       >
         {isConfirmedForCurrentSlot ? "Reservado" : "Reservar"}
       </AppButton>
 
-      <AppButton appVariant="outline" onClick={() => setIsBackDialogOpen(true)} fullWidth>
+      <AppButton
+        appVariant="outline"
+        onClick={() => setIsBackDialogOpen(true)}
+        fullWidth
+        size="small"
+        sx={{ py: 0.9, fontSize: 14 }}
+      >
         Volver
       </AppButton>
 
