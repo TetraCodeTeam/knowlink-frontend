@@ -1,0 +1,157 @@
+sistema: "KnowLink"
+historia_usuario:
+  id: "US-04"
+  nombre: "Desactivación temporal de la cuenta"
+  estimacion_sp: 2
+  descripcion: >
+    Como usuario registrado, quiero poder desactivar temporalmente mi cuenta,
+    para dejar de usar la plataforma por un tiempo manteniendo mi información
+    para cuando quiera volver.
+
+caso_prueba:
+  id: "CP-001"
+  objetivo: >
+    Validar el flujo de desactivación de cuenta en el frontend: confirmación
+    explícita, bloqueo por reservas activas, cierre de sesión al confirmar,
+    tolerancia a autores enmascarados en comunidad y redirección al flujo de
+    reactivación de cuentas desactivadas (US-40).
+  prioridad: "Baja"
+  tipo_testing: "Funcional"
+  ambiente: "Desarrollo"
+  niveles: ["unit", "integration"]
+  comentario_po: null
+  notas: >
+    Los tests viven en test/ espejando la ruta de src/. La mutación usa
+    rawHttpClient para manejar manualmente el 409 y no disparar el logout
+    automático del 401. La desactivación es reversible: no se usa el checkbox
+    de confirmación permanente.
+
+pruebas:
+  - id: "CP-001.01"
+    descripcion: "El diálogo de confirmación muestra qué implica desactivar la cuenta"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      DeactivateAccountDialog muestra el texto de la sección 4.4, Cancelar
+      invoca onCancel sin onConfirm y Desactivar cuenta invoca onConfirm.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.02"
+    descripcion: "Con isPending se deshabilitan ambos botones del diálogo"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Cancelar y Desactivar cuenta quedan deshabilitados mientras la mutación
+      está en curso.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.03"
+    descripcion: "Abrir la confirmación no envía la petición de desactivación"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al hacer clic en Desactivar cuenta se abre el diálogo y
+      deactivateMyAccount no se llama.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.04"
+    descripcion: "Cancelar no envía la petición de desactivación"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al cancelar se cierra el diálogo, no se llama a deactivateMyAccount y la
+      sesión sigue abierta.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.05"
+    descripcion: "Confirmar ejecuta la desactivación una sola vez"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al confirmar se llama a deactivateMyAccount exactamente una vez.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.06"
+    descripcion: "El bloqueo por reservas activas muestra el mensaje exacto y permite ir a clases"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante 409 ACCOUNT_HAS_ACTIVE_BOOKINGS se cierra la confirmación, se muestra
+      "No podés dar de baja tu cuenta con reservas activas pendientes", no se
+      cierra la sesión ni se muestra toast de error, y "Ir a mis clases" navega
+      al path de clases recibido.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.07"
+    descripcion: "El éxito limpia la sesión, navega al login y muestra un toast"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      useDeactivateAccount llama a logout(), navega a /auth/login y muestra el
+      toast de éxito sin llamar al endpoint de logout.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.08"
+    descripcion: "401 y ACCOUNT_NOT_ACTIVE cierran sesión y redirigen al login"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante 401 o detail ACCOUNT_NOT_ACTIVE se llama a logout(), se navega a
+      /auth/login y no se muestra toast de error.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.09"
+    descripcion: "Otro error muestra el mensaje del backend"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante un error distinto se muestra error.response.data.message en un toast
+      y no se cierra la sesión.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.10"
+    descripcion: "La tarjeta de gestión de cuenta oculta Eliminar cuenta"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Sin onDeleteAccount no se renderiza el botón Eliminar cuenta; con la prop
+      definida sí se renderiza.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.11"
+    descripcion: "Los perfiles de alumno y tutor muestran la gestión de cuenta"
+    modulo: "front"
+    nivel: "integration"
+    salida_esperada: >
+      OwnProfilePage y TutorProfilePage renderizan la sección Gestión de Cuenta
+      con el botón Desactivar cuenta.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.12"
+    descripcion: "El login de una cuenta desactivada navega al flujo de reactivación"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante 403 con detail ACCOUNT_DEACTIVATED, useLogin guarda las credenciales
+      en memoria, navega a /auth/reactivate y no muestra toast de error (US-40).
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.13"
+    descripcion: "La comunidad tolera autores enmascarados sin CTA de reserva"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Un autor con fullName "Usuario desactivado", avatar, carrera y rating
+      nulos, verified false y canBookClass false se renderiza sin link a su
+      perfil y sin CTA de reserva.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.14"
+    descripcion: "Las reseñas del tutor usan iniciales cuando el autor no tiene avatar"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      ReviewItem muestra las iniciales del autor enmascarado en lugar de un
+      avatar vacío.
+    resultado: "PENDING"
+    salida_obtenida: null

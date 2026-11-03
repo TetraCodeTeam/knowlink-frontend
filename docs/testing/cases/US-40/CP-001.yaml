@@ -1,0 +1,115 @@
+sistema: "KnowLink"
+historia_usuario:
+  id: "US-40"
+  nombre: "Reactivar cuenta desactivada"
+  estimacion_sp: 5
+  descripcion: >
+    Como usuario que desactivó temporalmente su cuenta, quiero poder
+    reactivarla fácilmente para retomar mi actividad con todos mis datos
+    intactos.
+
+caso_prueba:
+  id: "CP-001"
+  objetivo: >
+    Validar el flujo de reactivación de cuentas desactivadas en el frontend:
+    login con 403 ACCOUNT_DEACTIVATED, pantalla intermedia sin toast de error,
+    cancelación sin llamadas a la API, reactivación exitosa con nuevo JWT y
+    destino por rol, y manejo del 401.
+  prioridad: "Baja"
+  tipo_testing: "Funcional"
+  ambiente: "Desarrollo"
+  niveles: ["unit"]
+  comentario_po: null
+  notas: >
+    Los tests viven en test/modules/auth/ espejando la ruta de src/. Las
+    credenciales del paso intermedio se guardan solo en memoria (store de
+    Zustand sin persist): no se usan query string, location.state ni storage
+    del navegador. La verificación manual requiere el backend de US-40 con un
+    usuario en estado DEACTIVATED.
+
+pruebas:
+  - id: "CP-001.01"
+    descripcion: "El login de una cuenta desactivada navega a la pantalla intermedia"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante 403 con detail ACCOUNT_DEACTIVATED, useLogin guarda las credenciales
+      en memoria, navega a /auth/reactivate y no muestra toast de error.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.02"
+    descripcion: "Un 401 u otro error de login conserva el toast y no navega"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante 401, 500 o un 403 sin ACCOUNT_DEACTIVATED se muestra el message del
+      backend en un toast y se permanece en /auth/login sin guardar credenciales.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.03"
+    descripcion: "La pantalla de reactivación sin credenciales redirige al login"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al entrar a /auth/reactivate sin credenciales pendientes (por ejemplo,
+      recargando la página) se redirige a /auth/login y no se muestran los
+      botones del flujo.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.04"
+    descripcion: "La pantalla de reactivación muestra título, texto y botones"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Con credenciales pendientes se muestra "Tu cuenta está desactivada",
+      "¿Querés reactivarla?" y los botones "Reactivar cuenta" y "Cancelar".
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.05"
+    descripcion: "Cancelar no llama a la API, limpia credenciales y vuelve al login"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al hacer clic en Cancelar no se llama a reactivateAccount, el store de
+      reactivación queda vacío y se navega a /auth/login.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.06"
+    descripcion: "Reactivar con éxito inicia sesión, navega al destino del rol y muestra el toast"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Al confirmar se llama a reactivateAccount con las credenciales pendientes,
+      se ejecuta login(authResponse), se navega con replace a
+      getRoleDestination(role) y se muestra el toast
+      "¡Tu cuenta fue reactivada correctamente. ¡Bienvenido de nuevo!".
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.07"
+    descripcion: "Un 401 al reactivar muestra el error y vuelve al login"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Ante 401 se muestra el message del backend en un toast, se limpian las
+      credenciales y se navega a /auth/login. Otro error muestra el mensaje y
+      no navega.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.08"
+    descripcion: "Con la mutación pendiente ambos botones se deshabilitan"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      Mientras reactivateAccount está en curso, el botón primario muestra
+      "Reactivando..." y tanto ese botón como Cancelar quedan deshabilitados.
+    resultado: "PENDING"
+    salida_obtenida: null
+  - id: "CP-001.09"
+    descripcion: "getRoleDestination resuelve el destino de cada rol"
+    modulo: "front"
+    nivel: "unit"
+    salida_esperada: >
+      STUDENT devuelve /student/profile, TUTOR devuelve /tutor/profile y ADMIN
+      devuelve /admin/home.
+    resultado: "PENDING"
+    salida_obtenida: null

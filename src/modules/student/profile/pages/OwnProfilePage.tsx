@@ -1,20 +1,15 @@
 import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { AccountManagementCard } from "@/modules/student/profile/components/AccountManagementCard";
 import { PersonalDataCard } from "@/modules/student/profile/components/PersonalDataCard";
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
+import AccountManagementSection from "@/modules/users/components/AccountManagementSection";
 import { studentPaths } from "@/routes/paths";
 import { getPageScaleSx } from "@/shared/utils/page-height.utils";
 
 /** Hace que las tarjetas hijas crezcan para repartirse el alto del contenedor. */
 const stretchChildrenSx = { "& > .MuiPaper-root": { flex: 1 } };
-
-/** El backend todavía no expone endpoints para desactivar ni eliminar la cuenta. */
-const showAccountActionUnavailable = () =>
-  toast.info("Esta acción todavía no está disponible. La gestión de cuenta llegará pronto.");
 
 export const OwnProfilePage = () => {
   const navigate = useNavigate();
@@ -61,10 +56,7 @@ export const OwnProfilePage = () => {
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <AccountManagementCard
-            onDeactivateAccount={showAccountActionUnavailable}
-            onDeleteAccount={showAccountActionUnavailable}
-          />
+          <AccountManagementSection classesPath={studentPaths.classes} />
         </Grid>
       </Grid>
     </Stack>

@@ -36,6 +36,7 @@ import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";
 import StudentRoleCard from "@/modules/tutor/dual-role/components/StudentRoleCard";
+import AccountManagementSection from "@/modules/users/components/AccountManagementSection";
 import AppButton from "@/shared/components/AppButton";
 import { tutorPaths } from "@/routes/paths";
 
@@ -324,6 +325,9 @@ export default function TutorProfilePage() {
           </Box>
           <Box sx={{ mt: 2 }}>
             <StudentRoleCard hasStudentProfile={profile.hasStudentProfile} />
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <AccountManagementSection classesPath={tutorPaths.classes} />
           </Box>
         </>
       )}
