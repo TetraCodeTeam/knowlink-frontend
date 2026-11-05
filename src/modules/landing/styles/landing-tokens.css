@@ -1,0 +1,24 @@
+/*
+ * Tokens de la landing. Van en :root (con prefijo --kl-) porque los diálogos de MUI se montan fuera del
+ * árbol de la página y, si no, no heredarían los colores.
+ */
+:root {
+  --kl-bg: #1a1f5c;
+  --kl-paper: #e4e8f8;
+  --kl-ink: #0e1238;
+  --kl-ink-2: #2a3070;
+  --kl-ink-3: #4a5290;
+  --kl-line: rgba(228, 232, 248, 0.16);
+  --kl-line-d: rgba(14, 18, 56, 0.14);
+  --kl-ghost: #212876;
+  --kl-orange: #e8732a;
+  --kl-orange-2: #f3a15e;
+  --kl-teal: #59c9d6;
+  --kl-panel: #0f1340;
+  --kl-panel-2: #1a2166;
+  --kl-primary: #5b6ed9;
+  --kl-ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --kl-serif: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --kl-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --kl-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

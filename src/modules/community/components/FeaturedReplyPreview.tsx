@@ -10,10 +10,15 @@ import { getFirstName } from "@/modules/community/utils/get-first-name";
 
 interface FeaturedReplyPreviewProps {
   featured: FeaturedReply;
+  /** Modo invitado: en lugar de enlazar a la reserva, avisa que hace falta una cuenta. */
+  onGuestBooking?: () => void;
 }
 
 /** Respuesta destacada de una publicación resuelta, tal como se ve en el feed. */
-export default function FeaturedReplyPreview({ featured }: FeaturedReplyPreviewProps) {
+export default function FeaturedReplyPreview({
+  featured,
+  onGuestBooking,
+}: FeaturedReplyPreviewProps) {
   const { paths, userId } = useCommunityViewer();
   const { author } = featured;
   const bookingPath =
@@ -36,10 +41,14 @@ export default function FeaturedReplyPreview({ featured }: FeaturedReplyPreviewP
       <FormattedText text={featured.excerpt} sx={{ fontSize: 13.5, mt: 0.75 }} />
       {bookingPath ? (
         <Typography
-          component={Link}
-          to={bookingPath}
+          {...(onGuestBooking
+            ? { component: "button", type: "button", onClick: onGuestBooking }
+            : { component: Link, to: bookingPath })}
           sx={{
             ...linkSx,
+            ...(onGuestBooking
+              ? { background: "none", border: 0, p: 0, fontFamily: "inherit", cursor: "pointer" }
+              : {}),
             display: "inline-flex",
             alignItems: "center",
             gap: 0.5,
