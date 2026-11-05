@@ -11,6 +11,7 @@ import PostBadges from "@/modules/community/components/PostBadges";
 import ReplyButton from "@/modules/community/components/ReplyButton";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import type { CommunityPost } from "@/modules/community/interfaces/responses/community-post.interface";
+import type { PostGuestAction } from "@/modules/community/types/post-guest-action.type";
 import {
   COMMUNITY_COLORS,
   cardSx,
@@ -26,6 +27,11 @@ interface PostCardProps {
   onReply?: () => void;
   /** Solo en "detail": acciones del autor (editar, resolver, eliminar), que reemplazan a "Responder". */
   ownerActions?: ReactNode;
+  /**
+   * Modo invitado (landing): la publicación es de solo lectura y cualquier intento de participar (abrir
+   * el hilo, responder, marcar como útil o reservar) llama a este manejador en vez de navegar.
+   */
+  onGuestAction?: (action: PostGuestAction) => void;
 }
 
 const CLAMP_LINES = 5;
@@ -39,7 +45,22 @@ const titleSx = {
   color: COMMUNITY_COLORS.text,
 };
 
-export default function PostCard({ post, variant = "feed", onReply, ownerActions }: PostCardProps) {
+const guestButtonSx = {
+  background: "none",
+  border: 0,
+  p: 0,
+  fontFamily: "inherit",
+  textAlign: "left",
+  cursor: "pointer",
+} as const;
+
+export default function PostCard({
+  post,
+  variant = "feed",
+  onReply,
+  ownerActions,
+  onGuestAction,
+}: PostCardProps) {
   const navigate = useNavigate();
   const { paths } = useCommunityViewer();
   const isDetail = variant === "detail";
@@ -48,7 +69,13 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
   const threadPath = paths.post(post.postId);
   const repliesLabel = `${post.replyCount} ${post.replyCount === 1 ? "respuesta" : "respuestas"}`;
 
+  const isGuest = onGuestAction !== undefined;
+
   const handleReply = () => {
+    if (onGuestAction) {
+      onGuestAction("reply");
+      return;
+    }
     if (isDetail) {
       onReply?.();
       return;
@@ -82,6 +109,15 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
         <Typography component="h2" sx={titleSx}>
           {post.title}
         </Typography>
+      ) : onGuestAction ? (
+        <Typography
+          component="button"
+          type="button"
+          onClick={() => onGuestAction("thread")}
+          sx={{ ...titleSx, ...linkSx, ...guestButtonSx, width: "100%" }}
+        >
+          {post.title}
+        </Typography>
       ) : (
         <Typography component={Link} to={threadPath} sx={{ ...titleSx, ...linkSx }}>
           {post.title}
@@ -106,7 +142,10 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
       {post.attachment ? <AttachmentView attachment={post.attachment} /> : null}
 
       {!isDetail && post.status === "RESOLVED" && post.featuredReply ? (
-        <FeaturedReplyPreview featured={post.featuredReply} />
+        <FeaturedReplyPreview
+          featured={post.featuredReply}
+          onGuestBooking={onGuestAction ? () => onGuestAction("book") : undefined}
+        />
       ) : null}
 
       {isOpenHelpRequest ? (
@@ -143,8 +182,9 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
             </Box>
           ) : (
             <Box
-              component={Link}
-              to={`${threadPath}#respuestas`}
+              {...(onGuestAction
+                ? { component: "button", type: "button", onClick: () => onGuestAction("thread") }
+                : { component: Link, to: `${threadPath}#respuestas` })}
               aria-label={`Ver ${repliesLabel}`}
               sx={{
                 display: "inline-flex",
@@ -153,6 +193,7 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
                 fontSize: 13.5,
                 color: "inherit",
                 textDecoration: "none",
+                ...(isGuest ? guestButtonSx : {}),
                 "&:hover": { color: COMMUNITY_COLORS.primaryDark, textDecoration: "underline" },
               }}
             >
@@ -167,6 +208,14 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
           ) : null}
           {post.helpfulCount > 0 ? (
             <Box
+              {...(onGuestAction
+                ? {
+                    component: "button",
+                    type: "button",
+                    onClick: () => onGuestAction("helpful"),
+                    "aria-label": "Marcar como útil",
+                  }
+                : {})}
               sx={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -174,6 +223,9 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
                 fontSize: 13.5,
                 color: COMMUNITY_COLORS.primaryDark,
                 fontWeight: 600,
+                ...(isGuest
+                  ? { ...guestButtonSx, "&:hover": { textDecoration: "underline" } }
+                  : {}),
               }}
             >
               <ThumbsUp size={16} aria-hidden />
@@ -197,7 +249,11 @@ export default function PostCard({ post, variant = "feed", onReply, ownerActions
         ) : isOpen ? (
           <ReplyButton onClick={handleReply} />
         ) : !isDetail ? (
-          <AppButton size="small" appVariant="soft" onClick={() => navigate(threadPath)}>
+          <AppButton
+            size="small"
+            appVariant="soft"
+            onClick={() => (onGuestAction ? onGuestAction("thread") : navigate(threadPath))}
+          >
             Ver hilo
           </AppButton>
         ) : null}

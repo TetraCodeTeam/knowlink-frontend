@@ -7,6 +7,8 @@ import type { PostType } from "@/modules/community/types/post-type.type";
 
 interface PostComposerCardProps {
   onCompose: (type: PostType) => void;
+  /** Nombre a mostrar en el avatar cuando no hay sesión (landing). */
+  displayName?: string;
 }
 
 const actionSx = {
@@ -19,8 +21,9 @@ const actionSx = {
   borderRadius: "8px",
 };
 
-export default function PostComposerCard({ onCompose }: PostComposerCardProps) {
-  const { fullName } = useCommunityViewer();
+export default function PostComposerCard({ onCompose, displayName }: PostComposerCardProps) {
+  const viewer = useCommunityViewer();
+  const fullName = displayName ?? viewer.fullName;
 
   return (
     <Box sx={cardSx}>
