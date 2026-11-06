@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { deleteMaterial } from "@/modules/tutor/materials/api/materials.api";
 import { useDeleteMaterial } from "@/modules/tutor/materials/hooks/useDeleteMaterial";
 import { makeMaterial } from "./fixtures";
@@ -13,7 +13,7 @@ vi.mock("@/modules/tutor/materials/api/materials.api", () => ({
   deleteMaterial: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

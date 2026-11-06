@@ -1,5 +1,5 @@
 import { getMaterialDownloadUrl } from "@/modules/student/tutorProfile/api/getTutorProfile";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 
 export const useTutorMaterialDownload = () => {
   const downloadMaterial = async (materialId: string) => {

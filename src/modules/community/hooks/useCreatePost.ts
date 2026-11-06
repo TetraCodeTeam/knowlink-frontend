@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { createPost } from "@/modules/community/api/community.api";
 import { COMMUNITY_QUERY_KEYS } from "@/modules/community/constants/community-query-keys";
 import type { CreatePostFormData } from "@/modules/community/schemas/create-post.schema";

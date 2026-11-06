@@ -11,7 +11,7 @@ vi.mock("@/modules/tutor/materials/api/materials.api", () => ({
   deleteMaterial: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

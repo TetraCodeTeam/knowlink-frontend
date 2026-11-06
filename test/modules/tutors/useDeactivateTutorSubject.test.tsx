@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { deactivateTutorSubject } from "@/modules/tutors/api/tutor-subjects.api";
 import { useDeactivateTutorSubject } from "@/modules/tutors/hooks/useDeactivateTutorSubject";
 import type { TutorSubjectResponse } from "@/modules/tutor/interfaces/TutorSubjectResponse";
@@ -12,7 +12,7 @@ vi.mock("@/modules/tutors/api/tutor-subjects.api", () => ({
   reactivateTutorSubject: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn(), warning: vi.fn(), info: vi.fn() },
 }));
 

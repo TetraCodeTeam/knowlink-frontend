@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { toBlockEndTime } from "@/shared/utils/dayTime.utils";
 import { useAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useAvailabilityBlocks";
 import { useSaveAvailabilityBlocks } from "@/modules/tutor/availability/hooks/useSaveAvailabilityBlocks";

@@ -313,7 +313,7 @@ catch (error: unknown) {
 }
 ```
 
-No usar `alert()`. Errores generales van con `toast.error` (sonner);
+No usar `alert()`. Errores generales van con `toast.error` (`@/shared/lib/toast`, que envuelve a sonner y le pone la cara de Frankie);
 errores de un campo específico de un formulario van con `setError` de
 react-hook-form.
 

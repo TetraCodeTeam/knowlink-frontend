@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import ForgotPasswordPage from "@/modules/auth/pages/ForgotPasswordPage";
 import { requestPasswordReset } from "@/modules/auth/api/auth.api";
 
@@ -11,7 +11,7 @@ vi.mock("@/modules/auth/api/auth.api", () => ({
   requestPasswordReset: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { reactivateAccount } from "@/modules/auth/api/auth.api";
 import { ACCOUNT_REACTIVATED_MESSAGE, AUTH_REACTIVATE_KEY } from "@/modules/auth/constants";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";

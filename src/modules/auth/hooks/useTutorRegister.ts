@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { registerTutor } from "@/modules/auth/api/auth.api";
 import { AUTH_TUTOR_REGISTER_KEY } from "@/modules/auth/constants";
 import type { TutorRegisterRequest } from "@/modules/auth/interfaces/requests/tutor-register.interface";

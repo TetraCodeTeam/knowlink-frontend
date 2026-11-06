@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { updatePost } from "@/modules/community/api/community.api";
 import { COMMUNITY_QUERY_KEYS } from "@/modules/community/constants/community-query-keys";
 import type { UpdatePostRequest } from "@/modules/community/interfaces/requests/update-post.interface";

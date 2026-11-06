@@ -3,7 +3,7 @@ import { Box, Paper, Switch, Typography } from "@mui/material";
 import { GraduationCap, Info, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import AppButton from "@/shared/components/AppButton";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useSwitchToTutorRole } from "@/modules/student/dual-role/hooks/useSwitchToTutorRole";

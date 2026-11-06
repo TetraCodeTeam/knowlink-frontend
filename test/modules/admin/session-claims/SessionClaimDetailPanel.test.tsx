@@ -16,7 +16,7 @@ vi.mock("@/modules/admin/session-claims/api/admin-session-claims.api", () => ({
   resolveSessionClaim: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

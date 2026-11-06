@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { updateMinNoticeMinutes } from "@/modules/tutor/availability/api/tutor-notice.api";
 
 export function useUpdateMinNoticeMinutes() {

@@ -9,7 +9,7 @@ import { useTutorRegister } from "@/modules/auth/hooks/useTutorRegister";
 import { useActivateTutorRole } from "@/modules/student/dual-role/hooks/useActivateTutorRole";
 import RoleRedirectDialog from "@/modules/student/dual-role/components/RoleRedirectDialog";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 
 interface Credentials {
   email: string;

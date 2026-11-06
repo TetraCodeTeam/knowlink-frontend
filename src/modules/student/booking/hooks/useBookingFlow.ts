@@ -1,7 +1,7 @@
 //hook para manejar el flujo de reserva de un slot seleccionado, incluyendo la gestión del estado de envío, confirmación y expiración de la reserva.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import type { UseFormReset } from "react-hook-form";
 import type { BookingCardProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import {

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { requestPasswordReset } from "@/modules/auth/api/auth.api";
 import { AUTH_FORGOT_PASSWORD_KEY } from "@/modules/auth/constants";
 

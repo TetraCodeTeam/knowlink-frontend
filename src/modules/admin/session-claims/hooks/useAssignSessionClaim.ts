@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { assignSessionClaim } from "@/modules/admin/session-claims/api/admin-session-claims.api";
 import { SESSION_CLAIM_MESSAGES } from "@/modules/admin/session-claims/constants/session-claims.constants";
 import { invalidateSessionClaimQueries } from "@/modules/admin/session-claims/utils/invalidate-session-claim-queries";
