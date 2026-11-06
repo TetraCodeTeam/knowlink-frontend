@@ -2,10 +2,9 @@ import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogActions, DialogContent, Box, Typography, TextField } from "@mui/material";
-import { Info, Star } from "lucide-react";
+import { Info } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import StarRatingInput from "@/modules/class-history/components/StarRatingInput";
-import { cancelDialogIconWrapperSx } from "@/modules/class-history/styles/classHistoryStyles";
 import { formatSessionDateLabel } from "@/modules/class-history/utils/classHistory.utils";
 import { MAX_RATING_COMMENT_LENGTH } from "@/modules/class-history/constants/classHistory.constants";
 import {
@@ -14,6 +13,7 @@ import {
 } from "@/modules/class-history/schemas/rateBooking.schema";
 import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/responses/booking-history-detail.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface RateBookingDialogProps {
   open: boolean;
@@ -70,9 +70,7 @@ export default function RateBookingDialog({
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
         >
-          <Box sx={cancelDialogIconWrapperSx("#FBF3DE")}>
-            <Star size={32} color="#E4CF8C" />
-          </Box>
+          <FrankieHero mood="happy" accessories={["sparkles"]} />
 
           <Typography variant="h6" fontWeight={700} mb={1}>
             Calificá tu sesión

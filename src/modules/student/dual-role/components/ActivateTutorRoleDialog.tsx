@@ -1,6 +1,6 @@
-import { Box, Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
-import { TriangleAlert } from "lucide-react";
+import { Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface ActivateTutorRoleDialogProps {
   open: boolean;
@@ -22,21 +22,7 @@ export default function ActivateTutorRoleDialog({
       PaperProps={{ sx: { borderRadius: 4 } }}
     >
       <DialogContent sx={{ textAlign: "center", pt: 4, pb: 2, px: 4 }}>
-        <Box
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "50%",
-            backgroundColor: "#FFF7ED",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mx: "auto",
-            mb: 2,
-          }}
-        >
-          <TriangleAlert size={30} color="#92400E" />
-        </Box>
+        <FrankieHero mood="thinking" style={{ marginInline: "auto" }} />
         <Typography variant="h6" fontWeight={600} mb={1}>
           ¿Activar tu perfil de tutor?
         </Typography>

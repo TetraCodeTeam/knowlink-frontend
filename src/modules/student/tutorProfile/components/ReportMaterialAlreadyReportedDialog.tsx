@@ -1,7 +1,6 @@
-import { Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
-import { Flag } from "lucide-react";
+import { Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
-import { reportIconWrapperSx } from "@/modules/student/tutorProfile/styles/reportMaterialStyles";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface ReportMaterialAlreadyReportedDialogProps {
   open: boolean;
@@ -23,9 +22,7 @@ export default function ReportMaterialAlreadyReportedDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
       >
-        <Box sx={reportIconWrapperSx("#FBE2E2")}>
-          <Flag size={32} color="#C62828" />
-        </Box>
+        <FrankieHero mood="thinking" />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           Ya denunciaste este material anteriormente
