@@ -1,7 +1,7 @@
 import { useRef, type ChangeEvent, type ReactNode } from "react";
 import { Avatar, Box, CircularProgress, IconButton, Paper, Typography } from "@mui/material";
 import { Pencil } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { useUploadProfilePicture } from "@/modules/users/hooks/useUploadProfilePicture";
 import {
   PROFILE_PICTURE_ACCEPT,
@@ -9,6 +9,7 @@ import {
 } from "@/modules/users/utils/validate-profile-picture";
 import type { Role } from "@/shared/types/role.type";
 import { getPageMinHeight } from "@/shared/utils/page-height.utils";
+import FrankieIllustration from "@/shared/frankie/FrankieIllustration";
 
 interface EditProfileLayoutProps {
   role: Role;
@@ -86,11 +87,10 @@ export default function EditProfileLayout({
             p: 3,
           }}
         >
-          <Box
-            component="img"
-            src="/register-image.png"
-            alt=""
-            sx={{ width: "100%", maxWidth: 360 }}
+          <FrankieIllustration
+            mood="happy"
+            accessories={["sparkles"]}
+            message="Un perfil al día ayuda a que la comunidad te conozca."
           />
         </Box>
 

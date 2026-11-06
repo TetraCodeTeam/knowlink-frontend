@@ -1,15 +1,15 @@
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
+import FrankieIllustration from "@/shared/frankie/FrankieIllustration";
 import RegisterForm from "../components/RegisterForm";
 import { Box, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function RegisterPage() {
   const illustration = (
-    <Box
-      component="img"
-      src="/register-image.png"
-      alt="Estudiante con libros"
-      sx={{ width: "100%" }}
+    <FrankieIllustration
+      mood="happy"
+      accessories={["sparkles"]}
+      message="¡Hola! Soy Frankie. Elegí cómo querés empezar y yo te acompaño."
     />
   );
 
