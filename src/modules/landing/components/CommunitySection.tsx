@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Eye, SearchX } from "lucide-react";
+import { ArrowRight, Eye } from "lucide-react";
 import AuthorAvatar from "@/modules/community/components/AuthorAvatar";
 import CommunityEmptyState from "@/modules/community/components/CommunityEmptyState";
 import PostCard from "@/modules/community/components/PostCard";
@@ -137,7 +137,9 @@ export default function CommunitySection() {
 
               {visible.length === 0 ? (
                 <CommunityEmptyState
-                  icon={<SearchX size={22} color="#5B6ED9" />}
+                  mood="thinking"
+                  accessories={["magnifier"]}
+                  title="No encontramos publicaciones"
                   message="No se encontraron publicaciones para los filtros seleccionados."
                   action={
                     hasFilters ? (

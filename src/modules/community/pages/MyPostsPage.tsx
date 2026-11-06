@@ -14,6 +14,7 @@ import {
 import AppButton from "@/shared/components/AppButton";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import CommunityEmptyState from "@/modules/community/components/CommunityEmptyState";
+import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import EditPostDialog from "@/modules/community/components/EditPostDialog";
 import {
   POST_TYPE_SHORT_LABEL,
@@ -137,17 +138,17 @@ export default function MyPostsPage() {
             <CircularProgress aria-label="Cargando tus publicaciones" />
           </Box>
         ) : isError ? (
-          <Box sx={{ ...cardSx, textAlign: "center" }}>
-            <Typography sx={{ color: COMMUNITY_COLORS.muted, mb: 1.5 }}>
-              No pudimos cargar tus publicaciones.
-            </Typography>
-            <AppButton appVariant="soft" onClick={() => void refetch()}>
-              Reintentar
-            </AppButton>
+          <Box sx={cardSx}>
+            <FrankieErrorState
+              message="No pudimos cargar tus publicaciones."
+              onRetry={() => void refetch()}
+            />
           </Box>
         ) : posts.length === 0 ? (
           <CommunityEmptyState
-            icon={<FolderOpen size={22} color="#5B6ED9" />}
+            mood={date ? "thinking" : "happy"}
+            accessories={date ? ["question"] : ["sparkles"]}
+            title={date ? "Nada en esa fecha" : "Tu primera publicación te espera"}
             message={
               date
                 ? "No publicaste nada en la fecha seleccionada."

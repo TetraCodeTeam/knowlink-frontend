@@ -1,5 +1,4 @@
 import { Box, Skeleton, Typography } from "@mui/material";
-import { FileText } from "lucide-react";
 import AdminListEmptyState from "@/modules/admin/components/AdminListEmptyState";
 import AdminPagination from "@/modules/admin/components/AdminPagination";
 import MaterialReportListItem from "@/modules/admin/material-reports/components/MaterialReportListItem";
@@ -13,7 +12,6 @@ import {
   listSx,
   skeletonStackSx,
 } from "@/modules/admin/styles/admin-list.styles";
-import { ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
 
 interface MaterialReportListProps {
   reports: AdminMaterialReportListItemResponse[];
@@ -54,10 +52,7 @@ export default function MaterialReportList({
           ))}
         </Box>
       ) : reports.length === 0 ? (
-        <AdminListEmptyState
-          message={MATERIAL_REPORT_MESSAGES.emptyList}
-          icon={<FileText size={38} color={ADMIN_TOKENS.slate400} aria-hidden="true" />}
-        />
+        <AdminListEmptyState message={MATERIAL_REPORT_MESSAGES.emptyList} />
       ) : (
         <>
           <Box component="ul" sx={listSx}>

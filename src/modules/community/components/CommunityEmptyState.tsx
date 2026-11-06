@@ -1,9 +1,14 @@
 import type { ReactNode } from "react";
-import { Box, Typography } from "@mui/material";
-import { COMMUNITY_COLORS, cardSx } from "@/modules/community/styles/community.styles";
+import { Box } from "@mui/material";
+import { cardSx } from "@/modules/community/styles/community.styles";
+import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
+import type { FrankieAccessory, FrankieMood } from "@/shared/frankie/frankie.types";
 
 interface CommunityEmptyStateProps {
-  icon: ReactNode;
+  /** Expresión de Frankie según la situación (sin resultados, nada todavía, etc.). */
+  mood: FrankieMood;
+  accessories?: FrankieAccessory[];
+  title?: string;
   message: string;
   /** Acción opcional bajo el mensaje (por ejemplo, limpiar filtros). */
   action?: ReactNode;
@@ -12,43 +17,25 @@ interface CommunityEmptyStateProps {
 }
 
 export default function CommunityEmptyState({
-  icon,
+  mood,
+  accessories,
+  title,
   message,
   action,
   fill = false,
 }: CommunityEmptyStateProps) {
   return (
-    <Box
-      sx={{
-        ...cardSx,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 1.5,
-        textAlign: "center",
-        py: 4,
-        ...(fill ? { flex: 1 } : {}),
-      }}
-    >
-      <Box
-        aria-hidden
-        sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "50%",
-          bgcolor: COMMUNITY_COLORS.lavender,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {icon}
-      </Box>
-      <Typography sx={{ fontSize: 15, color: COMMUNITY_COLORS.muted, maxWidth: 420 }}>
-        {message}
-      </Typography>
-      {action}
+    <Box sx={{ ...cardSx, display: "flex", ...(fill ? { flex: 1 } : {}) }}>
+      <FrankieEmptyState
+        compact
+        fill
+        mood={mood}
+        accessories={accessories}
+        size={210}
+        title={title}
+        message={message}
+        action={action}
+      />
     </Box>
   );
 }

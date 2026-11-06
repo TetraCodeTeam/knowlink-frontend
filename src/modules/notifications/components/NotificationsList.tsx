@@ -1,5 +1,6 @@
-import { Alert, Box, Button, Skeleton, Typography } from "@mui/material";
-import { Bell } from "lucide-react";
+import { Box, Button, Skeleton } from "@mui/material";
+import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
+import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import NotificationItem from "@/modules/notifications/components/NotificationItem";
 import { useNotifications } from "@/modules/notifications/hooks/useNotifications";
 import { useMarkNotificationAsRead } from "@/modules/notifications/hooks/useMarkNotificationAsRead";
@@ -36,16 +37,10 @@ export default function NotificationsList({ status, onClose }: NotificationsList
 
   if (isError) {
     return (
-      <Alert
-        severity="error"
-        action={
-          <Button color="inherit" size="small" onClick={() => refetch()}>
-            Reintentar
-          </Button>
-        }
-      >
-        No pudimos cargar tus notificaciones.
-      </Alert>
+      <FrankieErrorState
+        message="No pudimos cargar tus notificaciones."
+        onRetry={() => void refetch()}
+      />
     );
   }
 
@@ -54,38 +49,14 @@ export default function NotificationsList({ status, onClose }: NotificationsList
   if (notifications.length === 0) {
     const empty = EMPTY_STATE[status];
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 1.5,
-          py: 8,
-          px: 3,
-          textAlign: "center",
-        }}
-      >
-        <Box
-          sx={{
-            width: 88,
-            height: 88,
-            borderRadius: "50%",
-            backgroundColor: "#EDEBFA",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Bell size={40} color="#5865C8" />
-        </Box>
-        <Typography sx={{ fontSize: "16px", fontWeight: 700, color: "#5865C8" }}>
-          {empty.title}
-        </Typography>
-        <Typography sx={{ fontSize: "13px", color: "#6B6B80", maxWidth: 260 }}>
-          {empty.subtitle}
-        </Typography>
-      </Box>
+      <FrankieEmptyState
+        compact
+        mood={status === "READ" ? "thinking" : "happy"}
+        accessories={status === "READ" ? ["question"] : ["sparkles"]}
+        size={190}
+        title={empty.title}
+        message={empty.subtitle}
+      />
     );
   }
 

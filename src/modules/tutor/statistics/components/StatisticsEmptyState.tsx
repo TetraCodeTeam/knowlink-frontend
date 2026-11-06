@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AppButton from "@/shared/components/AppButton";
+import Frankie from "@/shared/frankie/Frankie";
 import { STATISTICS_COLORS } from "@/modules/tutor/statistics/constants/statistics-colors.constants";
 import { TUTOR_STATISTICS_PATHS } from "@/modules/tutor/statistics/constants/statistics.constants";
 import { cardSx } from "@/modules/tutor/statistics/styles/statistics.styles";
@@ -23,20 +23,7 @@ export default function StatisticsEmptyState() {
         px: 3,
       }}
     >
-      <Box
-        sx={{
-          width: 96,
-          height: 96,
-          borderRadius: "50%",
-          bgcolor: STATISTICS_COLORS.starTrack,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: 3,
-        }}
-      >
-        <BarChart3 size={40} color={STATISTICS_COLORS.primary} aria-hidden />
-      </Box>
+      <Frankie mood="thinking" size={220} entrance style={{ marginBottom: 12 }} />
       <Typography component="h2" sx={{ fontSize: 22, fontWeight: 600, mb: 1.5 }}>
         Todavía no tenés actividad en este período
       </Typography>
