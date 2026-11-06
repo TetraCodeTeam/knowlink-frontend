@@ -13,6 +13,7 @@ import { TutorProfilePage } from "@/modules/student/tutorProfile/pages/ViewTutor
 import BookingPreviewPage from "@/modules/student/booking/pages/BookingClassPage";
 import StudentClassHistoryPage from "@/modules/student/pages/StudentClassHistoryPage";
 import { StudentSupportPage } from "@/modules/student/support/pages/StudentSupportPage";
+import NotFoundPage from "@/shared/frankie/NotFoundPage";
 
 export default function StudentRoutes() {
   return (
@@ -33,6 +34,7 @@ export default function StudentRoutes() {
         <Route path="tutor/:tutorId/booking" element={<BookingPreviewPage />} />
         <Route path="tutores" element={<TutoresPorMateriaPage />} />
         <Route path="buscar" element={<SearchResultsPage />} />
+        <Route path="*" element={<NotFoundPage embedded />} />
       </Route>
     </Routes>
   );

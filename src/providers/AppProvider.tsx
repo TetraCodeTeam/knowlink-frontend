@@ -7,6 +7,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import RoutesProvider from "@/providers/RoutesProvider";
 import { SnackbarProvider } from "@/providers/SnackbarProvider";
 import ScrollToTop from "@/shared/components/ScrollToTop";
+import AppErrorBoundary from "@/shared/frankie/AppErrorBoundary";
 import { queryClient } from "@/shared/lib/queryClient";
 import theme from "@/theme";
 
@@ -18,7 +19,9 @@ export default function AppProvider() {
           <BrowserRouter>
             <CssBaseline />
             <ScrollToTop />
-            <RoutesProvider />
+            <AppErrorBoundary>
+              <RoutesProvider />
+            </AppErrorBoundary>
             <SnackbarProvider />
             {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
           </BrowserRouter>
