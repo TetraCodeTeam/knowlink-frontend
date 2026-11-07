@@ -26,7 +26,6 @@ import { useCreateTutorSubject } from "@/modules/tutor/hooks/Usecreatetutorsubje
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
-import { prefetchSuccessAnimation } from "@/shared/components/success-animation.utils";
 import AppButton from "@/shared/components/AppButton";
 
 interface Props {
@@ -111,8 +110,6 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
         : null;
 
     if (!free && pricePerHour == null) return;
-
-    prefetchSuccessAnimation();
 
     mutate(
       {

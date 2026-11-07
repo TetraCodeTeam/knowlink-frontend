@@ -11,6 +11,7 @@ import TutorClassHistoryPage from "@/modules/tutor/pages/TutorClassHistoryPage";
 import { WeeklyAgendaPage } from "@/modules/tutor/weekly-schedule/pages/WeeklyAgendaPage";
 import { SupportPage } from "@/modules/support/pages/SupportPage";
 import TutorStatisticsPage from "@/modules/tutor/statistics/pages/TutorStatisticsPage";
+import NotFoundPage from "@/shared/frankie/NotFoundPage";
 
 export default function TutorRoutes() {
   return (
@@ -28,6 +29,7 @@ export default function TutorRoutes() {
         <Route path="profile" element={<TutorProfilePage />} />
         <Route path="profile/edit" element={<TutorEditProfilePage />} />
         <Route path="availability" element={<WeeklyAgendaPage />} />
+        <Route path="*" element={<NotFoundPage embedded />} />
       </Route>
     </Routes>
   );

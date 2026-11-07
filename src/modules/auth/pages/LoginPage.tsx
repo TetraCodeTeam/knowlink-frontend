@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
 import LoginForm from "@/modules/auth/components/LoginForm";
+import FrankieIllustration from "@/shared/frankie/FrankieIllustration";
 
 const DOT_PATTERN = {
   backgroundImage: "radial-gradient(circle, rgba(147,132,210,0.3) 1.5px, transparent 1.5px)",
@@ -65,16 +66,11 @@ export default function LoginPage() {
               minHeight: 240,
             }}
           >
-            {/*
-              Descargá la ilustración desde: https://storyset.com
-              Buscá "Working" o "Studying" → estilo "Amico"
-              Guardala en la carpeta public/ como: studying-illustration.png
-            */}
-            <Box
-              component="img"
-              src="/studying-illustration.png"
-              alt="Persona estudiando"
-              sx={{ width: "100%", maxWidth: 320, height: "auto", objectFit: "contain" }}
+            <FrankieIllustration
+              mood="happy"
+              accessories={["sparkles"]}
+              message="¡Qué bueno verte de nuevo! Te estaba esperando."
+              maxWidth={320}
             />
           </Box>
 

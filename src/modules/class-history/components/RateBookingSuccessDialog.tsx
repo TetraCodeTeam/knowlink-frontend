@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, Box, IconButton, Typography } from "@mui/material";
-import { BadgeCheck, X } from "lucide-react";
-import { cancelDialogIconWrapperSx } from "@/modules/class-history/styles/classHistoryStyles";
+import { Dialog, DialogContent, IconButton, Typography } from "@mui/material";
+import { X } from "lucide-react";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface RateBookingSuccessDialogProps {
   open: boolean;
@@ -39,9 +39,7 @@ export default function RateBookingSuccessDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 3, px: 4, pb: 4 }}
       >
-        <Box sx={cancelDialogIconWrapperSx("#EEEDFE")}>
-          <BadgeCheck size={32} color="#2255C4" />
-        </Box>
+        <FrankieHero mood="love" />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           Calificación enviada

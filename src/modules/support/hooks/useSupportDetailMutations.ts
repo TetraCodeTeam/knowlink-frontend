@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { addTutorClaimComment } from "@/modules/support/api/supportClaims.api";
 import { submitMaterialDefense } from "@/modules/support/api/supportMaterials.api";
 

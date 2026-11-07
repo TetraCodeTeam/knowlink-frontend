@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { removeMaterial } from "@/modules/admin/material-reports/api/admin-material-reports.api";
 import { MATERIAL_REPORT_MESSAGES } from "@/modules/admin/material-reports/constants/material-reports.constants";
 import { invalidateMaterialReportQueries } from "@/modules/admin/material-reports/utils/invalidate-material-report-queries";

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Box } from "@mui/material";
 import { Navigate, useNavigate } from "react-router-dom";
 import AuthLayout from "@/modules/auth/layouts/AuthLayout";
 import StudentAccountForm from "@/modules/auth/components/student-register/StudentAccountForm";
 import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
 import { useStudentRegister } from "@/modules/auth/hooks/useStudentRegister";
 import type { StudentAccountData } from "@/modules/auth/schemas/user-register.schema";
+import FrankieIllustration from "@/shared/frankie/FrankieIllustration";
 
 export default function StudentRegisterPage() {
   const [credentials] = useState(() => useRegistrationStore.getState().credentials);
@@ -30,11 +30,10 @@ export default function StudentRegisterPage() {
   };
 
   const illustration = (
-    <Box
-      component="img"
-      src="/register-image.png"
-      alt="Estudiante con libros"
-      sx={{ width: "100%" }}
+    <FrankieIllustration
+      mood="love"
+      accessories={["hearts"]}
+      message="Un paso más y ya sos parte. ¡Vas a aprender un montón!"
     />
   );
 

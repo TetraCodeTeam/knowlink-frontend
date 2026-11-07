@@ -1,7 +1,6 @@
-import { Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
-import { TimerOff } from "lucide-react";
+import { Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
-import { cancelDialogIconWrapperSx } from "@/modules/class-history/styles/classHistoryStyles";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface RateBookingExpiredDialogProps {
   open: boolean;
@@ -20,9 +19,7 @@ export default function RateBookingExpiredDialog({ open, onClose }: RateBookingE
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
       >
-        <Box sx={cancelDialogIconWrapperSx("#FBF3DE")}>
-          <TimerOff size={32} color="#B8860B" />
-        </Box>
+        <FrankieHero mood="sad" accessories={[]} />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           El plazo para calificar venció

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import DismissReportDialog from "@/modules/admin/material-reports/components/DismissReportDialog";
 import { dismissMaterialReport } from "@/modules/admin/material-reports/api/admin-material-reports.api";
 
@@ -13,7 +13,7 @@ vi.mock("@/modules/admin/material-reports/api/admin-material-reports.api", () =>
   dismissMaterialReport: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

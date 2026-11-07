@@ -20,7 +20,7 @@
 - Llamadas HTTP solo en `api/`, usando la instancia Axios de `shared/lib/httpClient`
 - Data fetching con `useQuery`/`useMutation` en `hooks/` — nunca `useEffect` + `fetch`/`axios` en componentes
 - Formularios: siempre `react-hook-form` + `zodResolver` — schema en `schemas/`
-- Toasts/notificaciones: usar `sonner`
+- Toasts/notificaciones: `import { toast } from "@/shared/lib/toast"` (envuelve a `sonner` con Frankie); nunca importar `sonner` directo. Estados vacíos, errores y confirmaciones: ver `docs/frankie.md`
 - Íconos: preferir `lucide-react`, fallback `react-icons`
 - Estilos: MUI para estructura, Tailwind para utilidades
 - Prettier: doble comilla, punto y coma, printWidth 100, 2 espacios (ver `.prettierrc.json`)

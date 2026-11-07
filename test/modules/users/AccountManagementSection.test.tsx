@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, useLocation } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { deactivateMyAccount, deleteMyAccount } from "@/modules/users/api/users.api";
 import AccountManagementSection from "@/modules/users/components/AccountManagementSection";
 import { ACCOUNT_DELETED_MESSAGE, ACTIVE_BOOKINGS_BLOCK_MESSAGE } from "@/modules/users/constants";
@@ -13,7 +13,7 @@ vi.mock("@/modules/users/api/users.api", () => ({
   deleteMyAccount: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn(), warning: vi.fn(), info: vi.fn() },
 }));
 

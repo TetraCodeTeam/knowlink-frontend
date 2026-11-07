@@ -1,4 +1,4 @@
-import { Alert } from "@mui/material";
+import FrankieCallout from "@/shared/frankie/FrankieCallout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
@@ -63,9 +63,9 @@ export default function DeleteAccountDialog({ open, onClose }: DeleteAccountDial
             {...register("password")}
           />
           {blockedMessage ? (
-            <Alert severity="warning" sx={{ mt: 1 }}>
+            <FrankieCallout kind="warning" sx={{ mt: 1 }}>
               {blockedMessage}
-            </Alert>
+            </FrankieCallout>
           ) : null}
         </>
       }

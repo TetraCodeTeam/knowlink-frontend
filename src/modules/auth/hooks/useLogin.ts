@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import {
   ACCOUNT_DEACTIVATED_CODE,
   AUTH_LOGIN_KEY,

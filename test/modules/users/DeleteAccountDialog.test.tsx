@@ -9,7 +9,7 @@ vi.mock("@/modules/users/api/users.api", () => ({
   deleteMyAccount: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn(), warning: vi.fn(), info: vi.fn() },
 }));
 

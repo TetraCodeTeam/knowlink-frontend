@@ -2,7 +2,7 @@ import { useRef } from "react";
 import type { ChangeEvent } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Paperclip, Undo2, X } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { ATTACHMENT_ACCEPT } from "@/modules/community/constants/community.constants";
 import type { CommunityAttachment } from "@/modules/community/interfaces/responses/community-attachment.interface";
 import { COMMUNITY_COLORS, chipSx } from "@/modules/community/styles/community.styles";

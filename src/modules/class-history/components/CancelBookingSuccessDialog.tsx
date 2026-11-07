@@ -1,10 +1,9 @@
-import { Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
-import { CalendarCheck2 } from "lucide-react";
+import { Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
-import { cancelDialogIconWrapperSx } from "@/modules/class-history/styles/classHistoryStyles";
 import type { BookingCancellationResponse } from "@/modules/class-history/interfaces/responses/booking-cancellation-response.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 import type { RefundPolicy } from "@/modules/class-history/types/refund-policy.type";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface CancelBookingSuccessDialogProps {
   open: boolean;
@@ -43,9 +42,7 @@ export default function CancelBookingSuccessDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
       >
-        <Box sx={cancelDialogIconWrapperSx("#EEEDFE")}>
-          <CalendarCheck2 size={32} color="#5865C8" />
-        </Box>
+        <FrankieHero mood="happy" accessories={[]} />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           Clase cancelada
