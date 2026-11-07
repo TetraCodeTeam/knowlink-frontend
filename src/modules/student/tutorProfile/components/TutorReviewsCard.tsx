@@ -26,11 +26,11 @@ export const TutorReviewsCard = ({
 
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
-      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
+      <CardContent sx={{ p: { xs: 1.75, md: 2 }, "&:last-child": { pb: { xs: 1.75, md: 2 } } }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <MessagesSquare size={25} color="#5865C8" />
-            <Typography variant="h5" fontWeight={500}>
+            <MessagesSquare size={20} color="#5865C8" />
+            <Typography fontSize={18} fontWeight={500}>
               Reseñas
             </Typography>
           </Stack>
@@ -38,7 +38,7 @@ export const TutorReviewsCard = ({
             <Button
               size="small"
               onClick={() => openDialog()}
-              sx={{ textTransform: "none", fontSize: 16 }}
+              sx={{ textTransform: "none", fontSize: 14 }}
             >
               Ver Todas
             </Button>
@@ -46,7 +46,7 @@ export const TutorReviewsCard = ({
         </Stack>
 
         {hasRatings && previewReviews.length > 0 ? (
-          <Stack spacing={2}>
+          <Stack spacing={1.25}>
             {previewReviews.map((review) => (
               <ReviewItem key={review.id} review={review} />
             ))}

@@ -7,56 +7,56 @@ export type SummaryTone = "neutral" | "info";
 export const sideColumnSx = {
   display: "flex",
   flexDirection: "column",
-  gap: 2.5,
+  gap: 2,
 } satisfies SxProps<Theme>;
 
-export const sideCardSx = { ...cardBase, p: 2.5 } satisfies SxProps<Theme>;
+export const sideCardSx = { ...cardBase, p: 2 } satisfies SxProps<Theme>;
 
 export const sideCardHeaderSx = {
   display: "flex",
   alignItems: "center",
-  gap: 1.25,
-  mb: 1.5,
+  gap: 1,
+  mb: 1,
 } satisfies SxProps<Theme>;
 
-export const sideCardTitleSx = { fontSize: 16, fontWeight: 600 } satisfies SxProps<Theme>;
+export const sideCardTitleSx = { fontSize: 15, fontWeight: 600 } satisfies SxProps<Theme>;
 
 export const sideCardBodySx = {
-  fontSize: 14,
-  lineHeight: 1.5,
+  fontSize: 13,
+  lineHeight: 1.45,
   color: "text.secondary",
 } satisfies SxProps<Theme>;
 
 export const summaryGridSx = {
   display: "grid",
   gridTemplateColumns: "1fr 1fr",
-  gap: 1.5,
+  gap: 1.25,
 } satisfies SxProps<Theme>;
 
 export const getSummaryTileSx = (tone: SummaryTone): SxProps<Theme> => ({
   position: "relative",
-  p: 1.5,
+  p: 1.25,
   borderRadius: 2,
   bgcolor: tone === "info" ? SUPPORT_COLORS.surfaceInfo : SUPPORT_COLORS.surface,
 });
 
 export const summaryValueSx = (tone: SummaryTone): SxProps<Theme> => ({
-  fontSize: 26,
+  fontSize: 22,
   fontWeight: 600,
   lineHeight: 1.1,
   color: tone === "info" ? "primary.main" : "text.primary",
 });
 
 export const summaryLabelSx = {
-  fontSize: 15,
+  fontSize: 13,
   color: "text.secondary",
-  mt: 0.5,
+  mt: 0.25,
 } satisfies SxProps<Theme>;
 
 export const summaryCaptionSx = {
-  fontSize: 12,
+  fontSize: 11,
   color: "warning.dark",
-  mt: 0.25,
+  mt: 0.15,
 } satisfies SxProps<Theme>;
 
 export const summaryTileIconSx = {
@@ -69,10 +69,10 @@ export const summaryTileIconSx = {
 
 export const sideLinkSx = {
   display: "flex",
-  mt: 1.5,
+  mt: 1,
   p: 0,
   minWidth: "auto",
-  fontSize: 12.5,
+  fontSize: 12,
   fontWeight: 600,
   textTransform: "none",
   justifyContent: "flex-start",
@@ -82,9 +82,9 @@ export const sideBadgeSx = {
   display: "inline-flex",
   alignItems: "center",
   gap: 0.75,
-  mt: 1.5,
-  px: 1.5,
-  py: 0.75,
+  mt: 1,
+  px: 1.25,
+  py: 0.5,
   borderRadius: 1.5,
   bgcolor: "background.default",
   border: 1,

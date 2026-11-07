@@ -28,27 +28,25 @@ export default function MinNoticeHoursPanel() {
 
   return (
     <Box sx={minNoticePanelSx}>
-      <Box
-        sx={{ display: "flex", alignItems: "center", gap: 1, justifyContent: "center", mb: 1.5 }}
-      >
-        <AlarmClock size={22} />
-        <Typography variant="h5" fontWeight={700}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, justifyContent: "center", mb: 1 }}>
+        <AlarmClock size={18} />
+        <Typography fontSize={{ xs: 16, md: 18 }} fontWeight={700}>
           Antelación mínima para reservar
         </Typography>
       </Box>
 
       <Typography
-        variant="body1"
+        fontSize={14}
         color="text.secondary"
         textAlign="center"
-        mb={1.5}
+        mb={1}
         sx={{ maxWidth: 590, mx: "auto" }}
       >
         ¿Con cuánto tiempo de antelación necesitás recibir reservas? Los alumnos solo podrán
         reservar clases que comiencen después de este margen de tiempo.
       </Typography>
 
-      <Typography variant="body2" color="text.secondary" display="block" textAlign="center" mb={3}>
+      <Typography fontSize={12.5} color="text.secondary" display="block" textAlign="center" mb={2}>
         Ejemplo: Si eliges 2 horas, una clase a las 17:00 dejará de estar disponible para reservas a
         las 15:01.
       </Typography>
@@ -56,10 +54,10 @@ export default function MinNoticeHoursPanel() {
       <Box
         sx={{
           display: "flex",
-          gap: 1.5,
+          gap: 1,
           justifyContent: "center",
           flexWrap: "wrap",
-          mb: effectiveSelection === "OTHER" ? 2 : 3,
+          mb: effectiveSelection === "OTHER" ? 1.5 : 2,
         }}
       >
         {presets.map((preset) => (
@@ -91,7 +89,7 @@ export default function MinNoticeHoursPanel() {
             justifyContent: "center",
             maxWidth: 400,
             mx: "auto",
-            mb: 3,
+            mb: 2,
           }}
         >
           <TextField
@@ -121,6 +119,8 @@ export default function MinNoticeHoursPanel() {
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <AppButton
           appVariant="primary"
+          size="small"
+          sx={{ py: 0.75, fontSize: 14 }}
           onClick={save}
           loading={isPending}
           disabled={isSaveDisabled}

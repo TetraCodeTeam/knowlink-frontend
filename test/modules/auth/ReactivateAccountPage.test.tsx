@@ -43,7 +43,7 @@ function renderPage() {
         <Routes>
           <Route path="/auth/reactivate" element={<ReactivateAccountPage />} />
           <Route path="/auth/login" element={<div>login</div>} />
-          <Route path="/student/profile" element={<div>student profile</div>} />
+          <Route path="/student/home" element={<div>student home</div>} />
         </Routes>
         <LocationDisplay />
       </MemoryRouter>
@@ -100,7 +100,7 @@ describe("ReactivateAccountPage", () => {
     await user.click(screen.getByRole("button", { name: "Reactivar cuenta" }));
 
     await waitFor(() =>
-      expect(screen.getByTestId("location")).toHaveTextContent("/student/profile")
+      expect(screen.getByTestId("location")).toHaveTextContent("/student/home")
     );
     expect(reactivateAccount).toHaveBeenCalledWith(CREDENTIALS);
     expect(useAuthStore.getState().isAuthenticated).toBe(true);
@@ -163,7 +163,7 @@ describe("ReactivateAccountPage", () => {
       resolveReactivation(AUTH_RESPONSE);
     });
     await waitFor(() =>
-      expect(screen.getByTestId("location")).toHaveTextContent("/student/profile")
+      expect(screen.getByTestId("location")).toHaveTextContent("/student/home")
     );
   });
 });

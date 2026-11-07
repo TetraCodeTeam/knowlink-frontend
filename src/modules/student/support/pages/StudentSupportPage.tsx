@@ -14,8 +14,10 @@ import {
   mainCardSx,
   pageLayoutSx,
   pageTitleSx,
+  tabPanelSx,
   tabsSx,
 } from "@/modules/support/styles/supportPage.styles";
+import { getPageScaleSx } from "@/shared/utils/page-height.utils";
 
 export function StudentSupportPage() {
   const [isRulesOpen, setIsRulesOpen] = useState(false);
@@ -27,7 +29,7 @@ export function StudentSupportPage() {
   const handleCloseRules = useCallback(() => setIsRulesOpen(false), []);
 
   return (
-    <Box sx={pageLayoutSx}>
+    <Box sx={{ ...pageLayoutSx, ...getPageScaleSx("STUDENT") }}>
       <Box component="section" sx={mainCardSx}>
         <Typography component="h1" sx={pageTitleSx}>
           Mis reclamos
@@ -52,6 +54,7 @@ export function StudentSupportPage() {
 
         <Box
           role="tabpanel"
+          sx={tabPanelSx}
           id={`support-panel-${activeTab}`}
           aria-labelledby={`support-tab-${activeTab}`}
         >

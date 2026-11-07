@@ -6,13 +6,15 @@ import InfoTooltip from "@/shared/components/InfoTooltip";
 
 export default function BookingCalendarLegend() {
   return (
-    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+    <Box
+      sx={{ display: "flex", gap: { xs: 1.5, md: 2 }, flexWrap: "wrap", justifyContent: "center" }}
+    >
       {BOOKING_CALENDAR_LEGEND.map((item) => (
         <Box key={item.label} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
             sx={{
-              width: 15,
-              height: 15,
+              width: 11,
+              height: 11,
               borderRadius: "4px",
               bgcolor: item.color,
               border: item.color === "#f7f7fb" ? "1px solid #e2e2ec" : "none",
@@ -24,7 +26,7 @@ export default function BookingCalendarLegend() {
           {item.description && (
             <InfoTooltip message={item.description}>
               <Box component="span" sx={{ display: "inline-flex", cursor: "help" }}>
-                <Info size={14} color="#8a8aa3" />
+                <Info size={13} color="#8a8aa3" />
               </Box>
             </InfoTooltip>
           )}

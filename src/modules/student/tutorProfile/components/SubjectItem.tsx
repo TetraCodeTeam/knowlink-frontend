@@ -31,17 +31,17 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
-        p: 2,
+        p: { xs: 1.5, md: 1.5 },
         borderRadius: 3,
         bgcolor: "#F4F3FB",
         border: "1px solid #E0E0FA",
       }}
     >
       <Box>
-        <Typography variant="h6" fontWeight={500}>
+        <Typography fontSize={16} fontWeight={500}>
           {subject.name}
         </Typography>
-        <Stack direction="row" spacing={3} alignItems="center" mt={1} flexWrap="wrap" useFlexGap>
+        <Stack direction="row" spacing={2} alignItems="center" mt={0.5} flexWrap="wrap" useFlexGap>
           <Stack
             direction="row"
             spacing={1}
@@ -53,7 +53,6 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
             <Typography
               component="button"
               type="button"
-              variant="subtitle1"
               color="primary"
               onClick={() =>
                 openDialog({ subjectId: subject.subjectId ?? null, subjectName: subject.name })
@@ -65,6 +64,7 @@ export const SubjectRateItem = ({ subject }: SubjectRateItemProps) => {
                 border: 0,
                 padding: 0,
                 font: "inherit",
+                fontSize: "13px",
                 whiteSpace: "nowrap",
               }}
             >

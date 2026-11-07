@@ -68,16 +68,23 @@ describe("EditSubjectModal", () => {
     expect(nameInput).toBeDisabled();
     expect(screen.getByLabelText("Precio por hora")).toHaveValue(8000);
     expect(screen.getByRole("button", { name: "Virtual" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("mantiene Guardar cambios deshabilitado sin cambios y lo habilita al modificar un dato", async () => {
+    const user = userEvent.setup();
+    renderModal();
+
+    expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeDisabled();
+
+    await user.click(screen.getByRole("button", { name: "Presencial" }));
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeEnabled()
     );
-  });
 
-  it("habilita Guardar cambios con datos válidos", async () => {
-    renderModal();
-
+    // Volver al valor original lo deshabilita otra vez.
+    await user.click(screen.getByRole("button", { name: "Presencial" }));
     await waitFor(() =>
-      expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeEnabled()
+      expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeDisabled()
     );
   });
 

@@ -81,14 +81,15 @@ export function WeeklyAgendaCalendar({
 
   const dayHeaderContent = useCallback(
     ({ date, isToday }: DayHeaderContentArg) => (
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.25 }}>
         <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
           {DAY_LABELS[date.getDay()]}
         </Typography>
         <Box
           sx={{
-            width: 32,
-            height: 32,
+            width: 26,
+            height: 26,
+            fontSize: 14,
             borderRadius: "50%",
             display: "grid",
             placeItems: "center",
@@ -117,47 +118,49 @@ export function WeeklyAgendaCalendar({
         alignItems="center"
         justifyContent="space-between"
         flexWrap="wrap"
-        gap={2}
-        sx={{ mb: 4 }}
+        gap={1.5}
+        sx={{ mb: 2 }}
       >
         <Stack
           direction="row"
           alignItems="center"
-          spacing={1.5}
+          spacing={1}
           sx={{
             bgcolor: "#F4F2FF",
             border: "1px solid #c6c5d43b",
             borderRadius: 3,
-            px: 2,
-            py: 1,
+            px: 1.5,
+            py: 0.5,
           }}
         >
-          <Typography variant="h5" fontWeight={500}>
+          <Typography fontSize={{ xs: 17, md: 20 }} fontWeight={500}>
             {MONTH_LABELS[weekStart.getMonth()]} {weekStart.getFullYear()}
           </Typography>
           <IconButton size="small" onClick={onPreviousWeek} aria-label="Semana anterior">
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </IconButton>
-          <Typography variant="body1" color="text.secondary">
+          <Typography fontSize={14} color="text.secondary">
             {buildWeekRangeLabel(weekStart)}
           </Typography>
           <IconButton size="small" onClick={onNextWeek} aria-label="Semana siguiente">
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </IconButton>
         </Stack>
 
         <AgendaLegend />
       </Stack>
 
-      <FullCalendar
-        key={weekStart.toISOString()}
-        {...WEEKLY_AGENDA_CALENDAR_CONFIG}
-        initialDate={weekStart}
-        events={events}
-        eventContent={renderEventContent}
-        dayHeaderContent={dayHeaderContent}
-        dayCellClassNames={dayCellClassNames}
-      />
+      <Box sx={{ overflowX: "auto", "& .fc": { minWidth: { xs: 560, md: 0 } } }}>
+        <FullCalendar
+          key={weekStart.toISOString()}
+          {...WEEKLY_AGENDA_CALENDAR_CONFIG}
+          initialDate={weekStart}
+          events={events}
+          eventContent={renderEventContent}
+          dayHeaderContent={dayHeaderContent}
+          dayCellClassNames={dayCellClassNames}
+        />
+      </Box>
     </Box>
   );
 }

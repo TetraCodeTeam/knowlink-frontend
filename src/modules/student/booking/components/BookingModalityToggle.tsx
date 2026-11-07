@@ -16,7 +16,7 @@ export default function BookingModalityToggle({
       sx={{
         display: "flex",
         gap: 0.5,
-        p: 1,
+        p: 0.5,
         borderRadius: 3,
         bgcolor: "#E0E0FA",
       }}
@@ -42,7 +42,7 @@ export default function BookingModalityToggle({
               gap: 0.5,
               border: "none",
               borderRadius: 2.5,
-              py: 1,
+              py: 0.75,
               px: 1,
               fontSize: 14,
               fontWeight: 600,

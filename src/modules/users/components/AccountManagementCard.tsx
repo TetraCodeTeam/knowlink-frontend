@@ -12,23 +12,25 @@ export default function AccountManagementCard({
   onDeleteAccount,
 }: AccountManagementCardProps) {
   return (
-    <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: "0.2px solid #e5897b7a" }}>
-      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
-        <ShieldAlert size={28} color="#E58A7B" />
-        <Typography variant="h5" component="h2" fontWeight={500}>
+    <Paper elevation={0} sx={{ p: 2.5, borderRadius: 3, border: "0.2px solid #e5897b7a" }}>
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+        <ShieldAlert size={24} color="#E58A7B" />
+        <Typography component="h2" fontWeight={500} sx={{ fontSize: 18 }}>
           Gestión de Cuenta
         </Typography>
       </Stack>
 
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 3 }}>
+      <Typography color="text.secondary" sx={{ mb: 2, fontSize: 13 }}>
         Podés desactivar tu cuenta temporalmente o eliminarla definitivamente.
       </Typography>
 
-      <Stack spacing={2.5}>
+      <Stack spacing={1.5}>
         {onDeactivateAccount ? (
           <AppButton
             appVariant="outline"
-            startIcon={<ClockAlert size={20} color="#585858" />}
+            size="small"
+            sx={{ py: 0.75, fontSize: 14 }}
+            startIcon={<ClockAlert size={18} color="#585858" />}
             fullWidth
             onClick={onDeactivateAccount}
           >
@@ -38,7 +40,9 @@ export default function AccountManagementCard({
         {onDeleteAccount ? (
           <AppButton
             appVariant="soft-danger"
-            startIcon={<Trash2 size={20} color="#b94c3c" />}
+            size="small"
+            sx={{ py: 0.75, fontSize: 14 }}
+            startIcon={<Trash2 size={18} color="#b94c3c" />}
             fullWidth
             onClick={onDeleteAccount}
           >

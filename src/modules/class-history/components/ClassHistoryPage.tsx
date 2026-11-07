@@ -6,6 +6,7 @@ import ClassHistoryEmptyState from "@/modules/class-history/components/ClassHist
 import { useBookingHistory } from "@/modules/class-history/hooks/useBookingHistory";
 import { groupByDate } from "@/modules/class-history/utils/classHistory.utils";
 import AppButton from "@/shared/components/AppButton";
+import { getPageMinHeight } from "@/shared/utils/page-height.utils";
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 
@@ -24,10 +25,10 @@ export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
   return (
     <Box
       sx={{
-        p: "28px 32px",
+        p: { xs: "12px", md: "16px 32px" },
         display: "flex",
         flexDirection: "column",
-        minHeight: "100vh",
+        minHeight: getPageMinHeight(role),
         boxSizing: "border-box",
       }}
     >

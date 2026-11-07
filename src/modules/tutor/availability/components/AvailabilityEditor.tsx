@@ -30,6 +30,19 @@ const SLOT_LABEL_FORMAT = {
 };
 const PLUGINS = [timeGridPlugin, interactionPlugin];
 
+const editorCalendarSx = {
+  ...calendarBaseSx,
+  p: { xs: 1.5, md: 2 },
+  "& .fc-col-header-cell": { bgcolor: "transparent", borderColor: "#ececf4", py: 0.25 },
+  "& .fc-timegrid-axis": { borderColor: "#ececf4", width: { xs: "44px", md: "56px" } },
+  "& .fc-timegrid-slot-label": {
+    fontSize: { xs: "0.68rem", md: "0.78rem" },
+    color: "#8a8aa3",
+    fontWeight: 500,
+  },
+  "& .fc-timegrid-slot": { borderColor: "#f2f2f8", height: "1.25em" },
+};
+
 export default function AvailabilityEditor() {
   const calendarRef = useRef<FullCalendar>(null);
   const [rangeLabel, setRangeLabel] = useState("");
@@ -105,7 +118,7 @@ export default function AvailabilityEditor() {
   if (isLoading) return null;
 
   return (
-    <Box sx={calendarBaseSx}>
+    <Box sx={editorCalendarSx}>
       <AvailabilityLegend />
 
       <CalendarNavHeader
@@ -114,61 +127,80 @@ export default function AvailabilityEditor() {
         onNext={() => calendarRef.current?.getApi().next()}
       />
 
-      <FullCalendar
-        ref={calendarRef}
-        plugins={PLUGINS}
-        initialView="timeGridWeek"
-        initialDate={currentMondayStr}
-        validRange={validRange}
-        headerToolbar={false}
-        datesSet={handleDatesSetInternal}
-        dayHeaderContent={dayHeaderContent}
-        dayCellClassNames={dayCellClassNames}
-        allDaySlot={false}
-        slotMinTime="08:00:00"
-        slotMaxTime="24:00:00"
-        slotDuration="00:30:00"
-        slotLabelInterval="01:00:00"
-        slotLabelFormat={SLOT_LABEL_FORMAT}
-        selectable
-        selectAllow={handleSelectAllow}
-        selectOverlap={(event) => event.display === "background"}
-        eventOverlap={false}
-        select={handleSelect}
-        events={events}
-        eventClick={handleEventClick}
-        eventColor="#5B6ED9"
-        eventBorderColor="#5B6ED9"
-        height={600}
-        locale="es"
-        firstDay={1}
-      />
+      <Box sx={{ overflowX: "auto", "& .fc": { minWidth: { xs: 560, md: 0 } } }}>
+        <FullCalendar
+          ref={calendarRef}
+          plugins={PLUGINS}
+          initialView="timeGridWeek"
+          initialDate={currentMondayStr}
+          validRange={validRange}
+          headerToolbar={false}
+          datesSet={handleDatesSetInternal}
+          dayHeaderContent={dayHeaderContent}
+          dayCellClassNames={dayCellClassNames}
+          allDaySlot={false}
+          slotMinTime="08:00:00"
+          slotMaxTime="24:00:00"
+          slotDuration="00:30:00"
+          slotLabelInterval="01:00:00"
+          slotLabelFormat={SLOT_LABEL_FORMAT}
+          selectable
+          selectAllow={handleSelectAllow}
+          selectOverlap={(event) => event.display === "background"}
+          eventOverlap={false}
+          select={handleSelect}
+          events={events}
+          eventClick={handleEventClick}
+          eventColor="#5B6ED9"
+          eventBorderColor="#5B6ED9"
+          height="auto"
+          locale="es"
+          firstDay={1}
+        />
+      </Box>
 
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 1.5,
+          mt: 1.5,
+        }}
+      >
         <Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography variant="body1">Repetir horarios semanalmente</Typography>
-            <Switch checked={effectiveRepeatWeekly} onChange={(_, val) => setRepeatWeekly(val)} />
+            <Typography fontSize={14}>Repetir horarios semanalmente</Typography>
+            <Switch
+              size="small"
+              checked={effectiveRepeatWeekly}
+              onChange={(_, val) => setRepeatWeekly(val)}
+            />
           </Box>
           {isInheritedRepeat && (
-            <Typography variant="body2" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
+            <Typography fontSize={12.5} color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
               Este horario se repite porque configuraste repetición en una semana anterior.
             </Typography>
           )}
         </Box>
 
-        <Box sx={{ display: "flex", gap: 1.5 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <AppButton
             appVariant="soft-danger"
+            size="small"
+            sx={{ py: 0.75, fontSize: 14 }}
             onClick={requestClearWeek}
             disabled={events.length === 0}
             loading={isPending}
-            startIcon={<Trash2 size={16} />}
+            startIcon={<Trash2 size={15} />}
           >
             Borrar todo
           </AppButton>
           <AppButton
             appVariant="primary"
+            size="small"
+            sx={{ py: 0.75, fontSize: 14 }}
             onClick={requestSave}
             loading={isPending}
             disabled={!hasChanges}

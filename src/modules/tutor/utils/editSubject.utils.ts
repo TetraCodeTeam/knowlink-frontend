@@ -13,6 +13,21 @@ export function toEditSubjectFormValues(subject: TutorOwnSubject): EditSubjectFo
   };
 }
 
+/**
+ * Indica si los datos editables difieren de los originales. Compara el precio como número, así que
+ * escribir "8000.00" donde había "8000" no cuenta como un cambio, y el precio se ignora si es gratis.
+ */
+export function hasEditSubjectChanges(
+  initial: EditSubjectFormValues,
+  current: EditSubjectFormValues
+): boolean {
+  if (initial.isFree !== current.isFree) return true;
+  if (initial.virtualSelected !== current.virtualSelected) return true;
+  if (initial.inPersonSelected !== current.inPersonSelected) return true;
+  if (current.isFree) return false;
+  return Number(initial.pricePerHour.trim()) !== Number(current.pricePerHour.trim());
+}
+
 export function toUpdateTutorSubjectRequest(
   values: EditSubjectFormValues
 ): UpdateTutorSubjectRequest {

@@ -160,14 +160,15 @@ export default function BookingCalendar({
 
   const dayHeaderContent = useCallback(
     ({ date, isToday }: DayHeaderContentArg) => (
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.25 }}>
         <Typography variant="caption" fontWeight={700} color={isToday ? "#5B6ED9" : "#4A4B5E"}>
           {DAY_LABELS[date.getDay()]}
         </Typography>
         <Box
           sx={{
-            width: 32,
-            height: 32,
+            width: 26,
+            height: 26,
+            fontSize: 14,
             borderRadius: "50%",
             display: "grid",
             placeItems: "center",
@@ -212,7 +213,7 @@ export default function BookingCalendar({
         minHeight: 0,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mb: 1.5 }}>
         <BookingCalendarLegend />
       </Box>
 
@@ -222,7 +223,14 @@ export default function BookingCalendar({
         onNext={() => calendarRef.current?.getApi().next()}
       />
 
-      <Box sx={{ flex: 1, minHeight: 0 }}>
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          overflowX: "auto",
+          "& .fc": { minWidth: { xs: 560, md: 0 } },
+        }}
+      >
         <FullCalendar
           ref={calendarRef}
           plugins={PLUGINS}

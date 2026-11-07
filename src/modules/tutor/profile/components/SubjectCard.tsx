@@ -24,7 +24,7 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
         border: "1px solid",
         borderColor: subject.active ? "transparent" : "#E3E2EE",
         borderRadius: "16px",
-        p: "24px 26px",
+        p: { xs: "14px 16px", md: "16px 20px" },
         boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
       }}
     >
@@ -39,10 +39,10 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
       >
         <Typography
           sx={{
-            fontSize: "24px",
+            fontSize: "18px",
             fontWeight: 700,
             color: subject.active ? "#1a1a2e" : "#767684",
-            mb: "14px",
+            mb: "8px",
             lineHeight: 1.3,
           }}
         >
@@ -56,19 +56,19 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
               aria-label={`Editar materia ${subject.subjectName}`}
               onClick={() => onEdit(subject)}
             >
-              <Pencil size={20} />
+              <Pencil size={18} />
             </IconButton>
           )}
         </Box>
       </Box>
 
       {hasReviews ? (
-        <Box sx={{ display: "flex", alignItems: "center", gap: "10px", mb: "16px" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "10px", mb: "10px" }}>
           <Rating
             value={subject.averageRating}
             precision={0.5}
             readOnly
-            size="medium"
+            size="small"
             sx={{
               "& .MuiRating-iconFilled": { color: STAR_COLOR },
               "& .MuiRating-iconEmpty": { color: STAR_COLOR, opacity: 0.35 },
@@ -79,7 +79,7 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
             flexItem
             sx={{ borderColor: "#2435A1", opacity: 0.5, my: "3px" }}
           />
-          <Typography sx={{ fontSize: "17px", color: "#2435A1", fontWeight: 500 }}>
+          <Typography sx={{ fontSize: "14px", color: "#2435A1", fontWeight: 500 }}>
             {subject.averageRating!.toFixed(1)} · {subject.reviewCount} Reseñas
           </Typography>
         </Box>
@@ -91,10 +91,10 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
             py: "6px",
             borderRadius: "20px",
             backgroundColor: "#F0F0F6",
-            mb: "16px",
+            mb: "10px",
           }}
         >
-          <Typography sx={{ fontSize: "17px", color: "#767684" }}>Aún no hay reseñas</Typography>
+          <Typography sx={{ fontSize: "14px", color: "#767684" }}>Aún no hay reseñas</Typography>
         </Box>
       )}
 
@@ -109,10 +109,10 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
       >
         <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           {modalities.map((mod) => (
-            <ModalityChip key={mod} modality={mod} />
+            <ModalityChip key={mod} modality={mod} size="sm" />
           ))}
         </Box>
-        <Typography sx={{ fontSize: "22px", fontWeight: 700, color: "#5B6ED9" }}>
+        <Typography sx={{ fontSize: "18px", fontWeight: 700, color: "#5B6ED9" }}>
           {isFree
             ? "Gratis"
             : subject.pricePerHour != null

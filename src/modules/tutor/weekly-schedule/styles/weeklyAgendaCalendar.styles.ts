@@ -11,6 +11,17 @@ const bookedPast = AGENDA_BLOCK_COLOR.booked.past;
 export const weeklyAgendaCalendarSx: SxProps<Theme> = {
   ...calendarBaseSx,
 
+  // Escala compacta propia de la agenda (la base la comparten otros calendarios).
+  p: { xs: 1.5, md: 2 },
+  "& .fc-col-header-cell": { bgcolor: "transparent", borderColor: "#ececf4", py: 0.5 },
+  "& .fc-timegrid-axis": { borderColor: "#ececf4", width: { xs: "44px", md: "56px" } },
+  "& .fc-timegrid-slot-label": {
+    fontSize: { xs: "0.68rem", md: "0.78rem" },
+    color: "#8a8aa3",
+    fontWeight: 500,
+  },
+  "& .fc-timegrid-slot": { borderColor: "#f2f2f8", height: "1.25em" },
+
   "& .fc-day-today": {
     backgroundColor: "rgba(91, 110, 217, 0.03) !important",
     boxShadow: "inset 0 0 0 1px rgba(91, 110, 217, 0.12)",

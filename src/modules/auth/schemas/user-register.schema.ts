@@ -22,15 +22,24 @@ export const registerSchema = z
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
 export const studentAccountSchema = z.object({
-  firstName: z.string().min(1, "El nombre es obligatorio"),
-  lastName: z.string().min(1, "El apellido es obligatorio"),
+  firstName: z
+    .string()
+    .min(1, "El nombre es obligatorio")
+    .max(100, "El nombre no puede superar los 100 caracteres"),
+  lastName: z
+    .string()
+    .min(1, "El apellido es obligatorio")
+    .max(100, "El apellido no puede superar los 100 caracteres"),
   career: z.string().min(1, "La carrera es obligatoria"),
-  phoneNumber: z.string().min(1, "El teléfono es obligatorio"),
+  phoneNumber: z
+    .string()
+    .min(1, "El teléfono es obligatorio")
+    .max(30, "El teléfono no puede superar los 30 caracteres"),
   dni: z
     .string()
     .min(1, "El DNI es obligatorio")
     .regex(/^\d{7,8}$/, "El DNI debe tener 7 u 8 dígitos"),
-  institutionalId: z.string().optional(),
+  institutionalId: z.string().max(50, "El legajo no puede superar los 50 caracteres").optional(),
   profilePictureUrl: z.string().optional(),
 });
 

@@ -80,11 +80,13 @@ export default function MyPostsPage() {
             gap: 2,
             bgcolor: COMMUNITY_COLORS.panel,
             borderRadius: "14px",
-            px: 2.5,
+            px: { xs: 1.5, md: 2.5 },
             py: 2,
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Box
+            sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 2, minWidth: 0 }}
+          >
             <Box
               aria-hidden
               sx={{
@@ -99,10 +101,10 @@ export default function MyPostsPage() {
             >
               <FolderOpen size={28} color="#FFFFFF" />
             </Box>
-            <Box>
+            <Box sx={{ minWidth: 0 }}>
               <Typography
                 component="h1"
-                sx={{ fontSize: 28, fontWeight: 800, color: COMMUNITY_COLORS.text }}
+                sx={{ fontSize: { xs: 22, md: 26 }, fontWeight: 800, color: COMMUNITY_COLORS.text }}
               >
                 Mis publicaciones
               </Typography>
@@ -153,7 +155,17 @@ export default function MyPostsPage() {
             }
           />
         ) : (
-          <Box component="ul" sx={{ listStyle: "none", m: 0, p: 0, display: "grid", gap: 2 }}>
+          <Box
+            component="ul"
+            sx={{
+              listStyle: "none",
+              m: 0,
+              p: 0,
+              display: "grid",
+              gridTemplateColumns: "minmax(0, 1fr)",
+              gap: 2,
+            }}
+          >
             {posts.map((post) => {
               const typeStyle = POST_TYPE_STYLE[post.type];
               const canResolve = post.type === "HELP_REQUEST" && post.status === "OPEN";
@@ -256,6 +268,8 @@ export default function MyPostsPage() {
                       component="span"
                       sx={{
                         ...chipSx,
+                        whiteSpace: "normal",
+                        maxWidth: "100%",
                         mt: 1.25,
                         bgcolor: COMMUNITY_COLORS.successBg,
                         color: COMMUNITY_COLORS.success,

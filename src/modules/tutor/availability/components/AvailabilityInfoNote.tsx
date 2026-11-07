@@ -6,8 +6,8 @@ interface AvailabilityInfoNoteProps {
 
 export default function AvailabilityInfoNote({ weeksAhead }: AvailabilityInfoNoteProps) {
   return (
-    <Alert severity="info" sx={{ mt: 2 }}>
-      <Typography variant="body1">
+    <Alert severity="info" sx={{ mt: 1.5, py: 0.5 }}>
+      <Typography fontSize={13} lineHeight={1.5}>
         Si activás <strong>&quot;Repetir horarios semanalmente&quot;</strong>, el horario que
         configures en esta semana se va a repetir automáticamente durante las próximas {weeksAhead}{" "}
         semanas. Si en algún momento editás una semana puntual, esa semana queda protegida: los

@@ -28,8 +28,11 @@ export function WeeklyAgendaPage() {
   const nextSession = buildNextSessionInfo(nextClass, data.bookedSessions);
 
   return (
-    <Stack spacing={5} sx={{ p: { xs: 2, md: 3 }, pr: { xs: 2, md: 6 }, pl: { xs: 2, md: 6 } }}>
-      <Box sx={{ mb: 5 }}>
+    <Stack
+      spacing={2}
+      sx={{ p: { xs: 1.5, md: 2.5 }, pr: { xs: 1.5, md: 4 }, pl: { xs: 1.5, md: 4 } }}
+    >
+      <Box>
         <AgendaSummaryCards
           confirmedBookings={confirmedBookingsCount}
           freeBlocks={freeBlocksCount}

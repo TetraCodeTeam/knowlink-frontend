@@ -28,7 +28,6 @@ const baseValues: EditProfileFormValues = {
 
 function renderForm(overrides: Partial<ComponentProps<typeof EditProfileForm>> = {}) {
   const onSubmit = vi.fn();
-  const onCancel = vi.fn();
 
   render(
     <EditProfileForm
@@ -37,16 +36,15 @@ function renderForm(overrides: Partial<ComponentProps<typeof EditProfileForm>> =
       defaultValues={baseValues}
       isPending={false}
       onSubmit={onSubmit}
-      onCancel={onCancel}
       {...overrides}
     />
   );
 
-  return { onSubmit, onCancel };
+  return { onSubmit };
 }
 
 function getSaveButton() {
-  return screen.getByRole("button", { name: "Guardar cambios" });
+  return screen.getByRole("button", { name: "Guardar" });
 }
 
 describe("EditProfileForm", () => {
@@ -72,7 +70,7 @@ describe("EditProfileForm", () => {
     await waitFor(() => expect(getSaveButton()).toBeDisabled());
   });
 
-  it("mantiene Guardar cambios deshabilitado sin cambios y lo habilita al editar", async () => {
+  it("mantiene Guardar deshabilitado sin cambios y lo habilita al editar", async () => {
     const user = userEvent.setup();
     renderForm();
 
@@ -141,14 +139,5 @@ describe("EditProfileForm", () => {
     const [values] = onSubmit.mock.calls[0] as [EditProfileFormValues, unknown];
     expect(values).not.toHaveProperty("email");
     expect(values.lastName).toBe("García López");
-  });
-
-  it("llama a onCancel al presionar Cancelar", async () => {
-    const user = userEvent.setup();
-    const { onCancel } = renderForm();
-
-    await user.click(screen.getByRole("button", { name: "Cancelar" }));
-
-    expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });

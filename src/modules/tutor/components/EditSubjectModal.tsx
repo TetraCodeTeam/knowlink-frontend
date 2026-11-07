@@ -13,6 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { TutorOwnSubject } from "@/modules/tutor/profile/interfaces/tutor-own-profile.interface";
@@ -22,6 +23,7 @@ import {
   type EditSubjectFormValues,
 } from "@/modules/tutor/schemas/editSubject.schema";
 import {
+  hasEditSubjectChanges,
   toEditSubjectFormValues,
   toUpdateTutorSubjectRequest,
 } from "@/modules/tutor/utils/editSubject.utils";
@@ -34,6 +36,7 @@ interface EditSubjectModalProps {
 }
 
 export default function EditSubjectModal({ subject, onClose }: EditSubjectModalProps) {
+  const initialValues = useMemo(() => toEditSubjectFormValues(subject), [subject]);
   const {
     handleSubmit,
     register,
@@ -44,14 +47,22 @@ export default function EditSubjectModal({ subject, onClose }: EditSubjectModalP
   } = useForm<EditSubjectFormValues>({
     resolver: zodResolver(editSubjectSchema),
     mode: "onChange",
-    defaultValues: toEditSubjectFormValues(subject),
+    defaultValues: initialValues,
   });
 
-  const [isFree, virtualSelected, inPersonSelected] = watch([
+  const [isFree, pricePerHour, virtualSelected, inPersonSelected] = watch([
     "isFree",
+    "pricePerHour",
     "virtualSelected",
     "inPersonSelected",
   ]);
+  // "Guardar cambios" solo se habilita si se modificó algún dato permitido.
+  const hasChanges = hasEditSubjectChanges(initialValues, {
+    isFree,
+    pricePerHour,
+    virtualSelected,
+    inPersonSelected,
+  });
 
   const { mutate, isPending } = useUpdateTutorSubject();
 
@@ -195,7 +206,7 @@ export default function EditSubjectModal({ subject, onClose }: EditSubjectModalP
           appVariant="primary"
           onClick={onSubmit}
           loading={isPending}
-          disabled={!isValid || isPending}
+          disabled={!isValid || !hasChanges || isPending}
           sx={{ flex: 1, ml: 2 }}
         >
           Guardar cambios

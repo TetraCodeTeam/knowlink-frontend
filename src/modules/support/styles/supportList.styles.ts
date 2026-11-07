@@ -8,10 +8,10 @@ export const listHeaderSx = {
   gap: 2,
 } satisfies SxProps<Theme>;
 
-export const listTitleSx = { fontSize: 20, fontWeight: 600 } satisfies SxProps<Theme>;
+export const listTitleSx = { fontSize: 17, fontWeight: 600 } satisfies SxProps<Theme>;
 
 export const listCountSx = {
-  fontSize: 14,
+  fontSize: 12,
   fontWeight: 550,
   letterSpacing: 0.6,
   textTransform: "uppercase",
@@ -19,16 +19,16 @@ export const listCountSx = {
 } satisfies SxProps<Theme>;
 
 export const listSubtitleSx = {
-  fontSize: 16,
+  fontSize: 14,
   color: "text.secondary",
-  mt: 0.5,
+  mt: 0.25,
 } satisfies SxProps<Theme>;
 
 export const listSx = {
   display: "flex",
   flexDirection: "column",
-  gap: 1.5,
-  mt: 2.5,
+  gap: 1.25,
+  mt: 2,
   p: 0,
   listStyle: "none",
 } satisfies SxProps<Theme>;
@@ -37,8 +37,8 @@ export const listItemSx = {
   display: "flex",
   alignItems: "center",
   gap: 1.5,
-  px: 2,
-  py: 1.5,
+  px: 1.75,
+  py: 1.1,
   bgcolor: SUPPORT_COLORS.surface,
   borderRadius: 2,
 } satisfies SxProps<Theme>;
@@ -52,30 +52,30 @@ export const itemTitleRowSx = {
   gap: 1,
 } satisfies SxProps<Theme>;
 
-export const itemTitleSx = { fontSize: 17, fontWeight: 600 } satisfies SxProps<Theme>;
+export const itemTitleSx = { fontSize: 15, fontWeight: 600 } satisfies SxProps<Theme>;
 
 export const itemMetaSx = {
   display: "flex",
   alignItems: "center",
   flexWrap: "wrap",
   gap: 0.75,
-  mt: 0.5,
-  fontSize: 15,
+  mt: 0.25,
+  fontSize: 13,
   color: "text.secondary",
   "& svg": { flexShrink: 0 },
 } satisfies SxProps<Theme>;
 
 export const itemReasonSx = {
-  fontSize: 15,
+  fontSize: 13,
   color: "text.secondary",
-  mt: 0.5,
+  mt: 0.25,
 } satisfies SxProps<Theme>;
 
 export const detailButtonSx = {
   flexShrink: 0,
   minWidth: "auto",
   whiteSpace: "nowrap",
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 600,
   textTransform: "none",
 } satisfies SxProps<Theme>;

@@ -63,13 +63,17 @@ export default function StudentRoleCard({ hasStudentProfile }: StudentRoleCardPr
     <>
       <Paper
         elevation={0}
-        sx={{ p: "28px 32px", borderRadius: "16px", boxShadow: "0px 2px 12px rgba(0,0,0,0.06)" }}
+        sx={{
+          p: { xs: "14px", md: "16px 24px" },
+          borderRadius: "16px",
+          boxShadow: "0px 2px 12px rgba(0,0,0,0.06)",
+        }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5 }}>
-          <GraduationCap size={30} color="#5865C8" />
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+          <GraduationCap size={22} color="#5865C8" />
           <Typography
             sx={{
-              fontSize: "19px",
+              fontSize: "14px",
               fontWeight: 700,
               color: "#333",
               letterSpacing: "0.5px",
@@ -80,28 +84,28 @@ export default function StudentRoleCard({ hasStudentProfile }: StudentRoleCardPr
           </Typography>
         </Box>
 
-        <Typography sx={{ color: "#777", fontSize: "17px", lineHeight: 1.6, mb: 2.5 }}>
+        <Typography sx={{ color: "#777", fontSize: "13px", lineHeight: 1.55, mb: 1.5 }}>
           {hasStudentProfile
             ? "Cambiá tu vista actual para reservar sesiones, ver tu material de estudio y gestionar tus reservas como alumno."
             : "Tu perfil de estudiante no está activo actualmente. Configurá tu perfil para comenzar a reservar sesiones y acceder a material de estudio."}
         </Typography>
 
         {hasStudentProfile ? (
-          <Box sx={{ backgroundColor: "#EEEDFE", borderRadius: 2, p: 2.5 }}>
+          <Box sx={{ backgroundColor: "#EEEDFE", borderRadius: 2, p: 1.75 }}>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <Typography fontWeight={600} fontSize="17px">
+              <Typography fontWeight={600} fontSize="14px">
                 Acceder a la Interfaz de Alumno
               </Typography>
               <Switch
                 checked={isSwitching}
                 onChange={() => void handleSwitchToggle()}
                 disabled={isSwitching}
-                sx={{ transform: "scale(1.25)", transformOrigin: "right center" }}
+                sx={{ transform: "scale(1.1)", transformOrigin: "right center" }}
               />
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.75 }}>
               <Info size={15} color="#5865C8" />
-              <Typography sx={{ fontSize: "15px", color: "#5865C8" }}>
+              <Typography sx={{ fontSize: "13px", color: "#5865C8" }}>
                 Cambia a modo alumno
               </Typography>
             </Box>
@@ -111,22 +115,25 @@ export default function StudentRoleCard({ hasStudentProfile }: StudentRoleCardPr
             sx={{
               backgroundColor: "#EEEDFE",
               borderRadius: 2,
-              p: 2.5,
+              p: 1.75,
               display: "flex",
+              flexWrap: "wrap",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: 2,
+              gap: 1.5,
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-              <Info size={18} color="#6B7280" />
-              <Typography sx={{ fontSize: "16px", color: "#6B7280", fontWeight: 500 }}>
+              <Info size={16} color="#6B7280" />
+              <Typography sx={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>
                 Perfil Pendiente de Activación
               </Typography>
             </Box>
             <AppButton
               appVariant="primary"
-              startIcon={<Zap size={17} />}
+              size="small"
+              sx={{ py: 0.75, fontSize: 14 }}
+              startIcon={<Zap size={15} />}
               onClick={() => setShowConfirmDialog(true)}
             >
               Activar Rol Alumno

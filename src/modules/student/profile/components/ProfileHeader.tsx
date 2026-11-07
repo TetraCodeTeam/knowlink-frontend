@@ -26,24 +26,24 @@ export const ProfileHeader = ({
     <Paper
       elevation={0}
       sx={{
-        pr: 3,
-        pl: 3,
-        pt: 2,
-        pb: 2,
+        pr: 2.5,
+        pl: 2.5,
+        pt: 1.5,
+        pb: 1.5,
         borderRadius: 3,
         display: "flex",
         alignItems: "center",
         border: "0.2px solid #e0e0fa",
       }}
     >
-      <Stack direction="row" spacing={2.5} alignItems="center">
+      <Stack direction="row" spacing={2} alignItems="center">
         <Avatar
           src={profilePictureUrl ?? undefined}
           alt={fullName}
           sx={{
-            width: 95,
-            height: 95,
-            fontSize: "1.5rem",
+            width: 72,
+            height: 72,
+            fontSize: "1.25rem",
             fontWeight: 600,
             bgcolor: "primary.main",
           }}
@@ -51,10 +51,10 @@ export const ProfileHeader = ({
           {getInitials(fullName)}
         </Avatar>
         <Box>
-          <Typography variant="h4" component="h1" fontWeight={500}>
+          <Typography variant="h5" component="h1" fontWeight={500}>
             {fullName}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             {description}
           </Typography>
         </Box>

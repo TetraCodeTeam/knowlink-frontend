@@ -1,8 +1,8 @@
 import type { AuthRole } from "@/shared/types/role.type";
 
 const ROLE_REDIRECT: Partial<Record<AuthRole, string>> = {
-  STUDENT: "/student/profile",
-  TUTOR: "/tutor/profile",
+  STUDENT: "/student/home",
+  TUTOR: "/tutor/home",
   ADMIN: "/admin/home",
 };
 

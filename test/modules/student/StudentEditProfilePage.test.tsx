@@ -94,7 +94,7 @@ describe("StudentEditProfilePage", () => {
     const phoneInput = await screen.findByDisplayValue("3534123456");
     await user.clear(phoneInput);
     await user.type(phoneInput, "3534999999");
-    await user.click(screen.getByRole("button", { name: "Guardar cambios" }));
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
 
     await waitFor(() =>
       expect(mockedUpdate).toHaveBeenCalledWith({
@@ -131,7 +131,7 @@ describe("StudentEditProfilePage", () => {
     const phoneInput = await screen.findByDisplayValue("3534123456");
     await user.clear(phoneInput);
     await user.type(phoneInput, "3534888888");
-    await user.click(screen.getByRole("button", { name: "Guardar cambios" }));
+    await user.click(screen.getByRole("button", { name: "Guardar" }));
 
     expect(
       await screen.findByText("El DNI ya está registrado por otro usuario")

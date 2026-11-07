@@ -28,7 +28,13 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
   return (
     <Card variant="outlined" sx={{ borderRadius: 3 }}>
       <CardContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3, "&:last-child": { pb: 3 } }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1.25,
+          p: { xs: 1.75, md: 2 },
+          "&:last-child": { pb: { xs: 1.75, md: 2 } },
+        }}
       >
         <Box
           sx={{
@@ -36,22 +42,22 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
             flexDirection: { xs: "column", sm: "row" },
             justifyContent: "space-between",
             alignItems: { xs: "flex-start", sm: "center" },
-            gap: 2,
+            gap: 1.5,
           }}
         >
-          <Stack direction="row" spacing={3} alignItems="center">
+          <Stack direction="row" spacing={{ xs: 1.5, md: 2 }} alignItems="center">
             <Avatar
               src={tutor.avatarUrl ?? undefined}
               alt={tutor.name}
-              sx={{ width: 120, height: 120 }}
+              sx={{ width: { xs: 64, md: 84 }, height: { xs: 64, md: 84 } }}
             >
               {avatarInitial}
             </Avatar>
-            <Box>
-              <Typography variant="h4" fontWeight={500}>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography fontSize={{ xs: 22, md: 26 }} fontWeight={500} lineHeight={1.2}>
                 {tutor.name}
               </Typography>
-              <Typography variant="h6" color="#494949" gutterBottom>
+              <Typography fontSize={15} color="#494949" mb={0.5}>
                 Materias
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -62,8 +68,8 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
                     size="small"
                     variant="outlined"
                     sx={{
-                      px: 1,
-                      py: 1.5,
+                      px: 0.25,
+                      py: 1,
                       bgcolor: TUTOR_SUBJECT_TAG.bg,
                       color: TUTOR_SUBJECT_TAG.color,
                       fontSize: TUTOR_SUBJECT_TAG.fontSize,
@@ -83,11 +89,11 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
               flexWrap="nowrap"
               whiteSpace="nowrap"
             >
-              <Rating value={tutor.rating} precision={0.1} readOnly size="medium" />
-              <Typography variant="h6" fontWeight={600}>
+              <Rating value={tutor.rating} precision={0.1} readOnly size="small" />
+              <Typography fontSize={16} fontWeight={600}>
                 {tutor.rating}
               </Typography>
-              <Typography variant="subtitle1" color="text.secondary" whiteSpace="nowrap">
+              <Typography fontSize={13} color="text.secondary" whiteSpace="nowrap">
                 ({tutor.reviewsCount} Reseñas)
               </Typography>
             </Stack>
@@ -96,7 +102,7 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
 
         <Divider
           sx={{
-            my: 1,
+            my: 0.5,
             width: "80%",
             bgcolor: "#EEEEEE",
             marginX: "auto",
@@ -108,11 +114,12 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
         <AppButton
           appVariant="primary"
           onClick={onReservar}
-          startIcon={<CalendarCheck size={18} />}
+          startIcon={<CalendarCheck size={16} />}
           sx={{
-            width: "70%",
+            width: { xs: "100%", sm: "70%" },
             mx: "auto",
-            fontSize: "16px",
+            py: 0.75,
+            fontSize: "15px",
             fontWeight: 600,
             borderRadius: 2,
           }}

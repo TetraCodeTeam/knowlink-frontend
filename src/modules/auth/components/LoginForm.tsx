@@ -95,18 +95,20 @@ export default function LoginForm() {
 
           {/* ─── Olvidé mi contraseña ─── */}
           <Box sx={{ textAlign: "right", mt: "-8px" }}>
-            <Link
+            <Box
+              component={Link}
               to="/auth/forgot-password"
-              style={{
+              sx={{
                 color: "#3F4CAE",
                 fontSize: 14,
                 fontWeight: 600,
                 textDecoration: "none",
                 fontFamily: "Inter, sans-serif",
+                "&:hover, &:focus-visible": { textDecoration: "underline" },
               }}
             >
               Olvidé mi contraseña
-            </Link>
+            </Box>
           </Box>
 
           {/* ─── Botón Iniciar Sesión ─── */}

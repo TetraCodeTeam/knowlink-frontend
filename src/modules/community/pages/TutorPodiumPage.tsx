@@ -64,12 +64,12 @@ export default function TutorPodiumPage() {
               borderBottom: `1px solid ${COMMUNITY_COLORS.border}`,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Box
                 aria-hidden
                 sx={{
-                  width: 84,
-                  height: 84,
+                  width: 64,
+                  height: 64,
                   borderRadius: "20px",
                   bgcolor: "#EEF0FD",
                   display: { xs: "none", sm: "flex" },
@@ -77,10 +77,14 @@ export default function TutorPodiumPage() {
                   justifyContent: "center",
                 }}
               >
-                <Trophy size={44} color="#4F46E5" />
+                <Trophy size={34} color="#4F46E5" />
               </Box>
               <Box>
-                <Typography id="podium-title" component="h1" sx={{ fontSize: 30, fontWeight: 800 }}>
+                <Typography
+                  id="podium-title"
+                  component="h1"
+                  sx={{ fontSize: { xs: 22, md: 26 }, fontWeight: 800 }}
+                >
                   Podio de honor
                 </Typography>
                 <Typography sx={{ fontSize: 15, color: COMMUNITY_COLORS.muted, maxWidth: 560 }}>

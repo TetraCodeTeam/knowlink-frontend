@@ -17,8 +17,8 @@ export default function PaymentSection({ linked }: PaymentSectionProps) {
         sx={{
           display: "inline-flex",
           alignItems: "center",
-          gap: "16px",
-          p: "14px 22px",
+          gap: "12px",
+          p: "10px 16px",
           borderRadius: "10px",
           backgroundColor: LINKED_BG,
           border: `1.5px solid ${LINKED_BORDER}`,
@@ -28,13 +28,13 @@ export default function PaymentSection({ linked }: PaymentSectionProps) {
           component="img"
           src="/mercado-pago-logo.png"
           alt="MercadoPago"
-          sx={{ width: 52, height: 52, objectFit: "contain", flexShrink: 0 }}
+          sx={{ width: 40, height: 40, objectFit: "contain", flexShrink: 0 }}
         />
         <Box>
-          <Typography sx={{ fontSize: "17px", fontWeight: 600, color: "#1A6B3A" }}>
+          <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#1A6B3A" }}>
             Mercado Pago vinculado
           </Typography>
-          <Typography component="span" sx={{ fontSize: "14px", color: LINKED_BORDER }}>
+          <Typography component="span" sx={{ fontSize: "12px", color: LINKED_BORDER }}>
             Desvincular
           </Typography>
         </Box>
@@ -48,8 +48,8 @@ export default function PaymentSection({ linked }: PaymentSectionProps) {
         sx={{
           display: "inline-flex",
           alignItems: "center",
-          gap: "16px",
-          p: "14px 22px",
+          gap: "12px",
+          p: "10px 16px",
           borderRadius: "10px",
           backgroundColor: UNLINKED_BG,
           border: `1.5px solid ${UNLINKED_BORDER}`,
@@ -59,13 +59,13 @@ export default function PaymentSection({ linked }: PaymentSectionProps) {
           component="img"
           src="/mercado-pago-logo.png"
           alt="MercadoPago"
-          sx={{ width: 52, height: 52, objectFit: "contain", flexShrink: 0 }}
+          sx={{ width: 40, height: 40, objectFit: "contain", flexShrink: 0 }}
         />
-        <Typography sx={{ fontSize: "17px", fontWeight: 600, color: "#ef7918" }}>
+        <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#ef7918" }}>
           Vincular Mercado Pago
         </Typography>
       </Box>
-      <Typography sx={{ fontSize: "15px", color: "#888", mt: "8px", lineHeight: 1.5 }}>
+      <Typography sx={{ fontSize: "12.5px", color: "#888", mt: "6px", lineHeight: 1.5 }}>
         Para comenzar a percibir pagos por tus tutorías, por favor finaliza la vinculación de tu
         cuenta en la sección de perfil.
       </Typography>
