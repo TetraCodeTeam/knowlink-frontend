@@ -19,6 +19,7 @@ import AvailabilityWeekCustomizationBanner from "@/modules/tutor/availability/co
 import CalendarNavHeader from "@/shared/components/CalendarNavHeader";
 import { calendarBaseSx } from "@/shared/styles/calendarBaseSx";
 import { useAvailabilityDraft } from "@/modules/tutor/availability/hooks/useAvailabilityDraft";
+import { useCalendarAutoResize } from "@/shared/hooks/useCalendarAutoResize";
 import { isBeforeToday, formatWeekRangeTitle } from "@/shared/utils/calendarDateUtils";
 import AppConfirmDialog from "@/shared/components/AppConfirmDialog";
 import { Trash2 } from "lucide-react";
@@ -45,6 +46,7 @@ const editorCalendarSx = {
 
 export default function AvailabilityEditor() {
   const calendarRef = useRef<FullCalendar>(null);
+  const calendarContainerRef = useCalendarAutoResize(calendarRef);
   const [rangeLabel, setRangeLabel] = useState("");
 
   const {
@@ -127,7 +129,10 @@ export default function AvailabilityEditor() {
         onNext={() => calendarRef.current?.getApi().next()}
       />
 
-      <Box sx={{ overflowX: "auto", "& .fc": { minWidth: { xs: 560, md: 0 } } }}>
+      <Box
+        ref={calendarContainerRef}
+        sx={{ overflowX: "auto", "& .fc": { minWidth: { xs: 560, md: 0 } } }}
+      >
         <FullCalendar
           ref={calendarRef}
           plugins={PLUGINS}
