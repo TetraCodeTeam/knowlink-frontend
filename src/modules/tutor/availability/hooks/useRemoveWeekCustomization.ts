@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { removeWeekCustomization } from "@/modules/tutor/availability/api/availability-blocks.api";
 
 export function useRemoveWeekCustomization() {

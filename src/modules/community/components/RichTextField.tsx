@@ -2,7 +2,7 @@ import { useCallback, useRef } from "react";
 import type { ChangeEvent } from "react";
 import { Box, IconButton, InputBase, Tooltip, Typography } from "@mui/material";
 import { Bold, Code, Italic, Paperclip, Sigma, Underline, X } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { ATTACHMENT_ACCEPT } from "@/modules/community/constants/community.constants";
 import { COMMUNITY_COLORS } from "@/modules/community/styles/community.styles";
 import { formatFileSize } from "@/modules/community/utils/format-file-size";

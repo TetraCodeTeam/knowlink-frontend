@@ -8,8 +8,9 @@ import {
   FormControlLabel,
   Typography,
 } from "@mui/material";
-import { OctagonAlert } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
+import FrankieHero from "@/shared/frankie/FrankieHero";
+import type { FrankieMood } from "@/shared/frankie/frankie.types";
 
 type ConfirmDialogSeverity = "warning" | "danger";
 
@@ -29,12 +30,16 @@ interface AppConfirmDialogProps {
   isPending: boolean;
 }
 
+/**
+ * Frankie acompaña la decisión: ante una acción corriente duda ("¿seguro?") y ante una
+ * irreversible se preocupa, para que el usuario frene un segundo antes de confirmar.
+ */
 const SEVERITY_STYLES: Record<
   ConfirmDialogSeverity,
-  { iconColor: string; iconBg: string; confirmVariant: "primary" | "soft-danger" }
+  { mood: FrankieMood; confirmVariant: "primary" | "soft-danger" }
 > = {
-  warning: { iconColor: "#e8890c", iconBg: "#fff4e5", confirmVariant: "primary" },
-  danger: { iconColor: "#b91c1c", iconBg: "#fce8e8", confirmVariant: "soft-danger" },
+  warning: { mood: "thinking", confirmVariant: "primary" },
+  danger: { mood: "worried", confirmVariant: "soft-danger" },
 };
 
 export default function AppConfirmDialog({
@@ -52,7 +57,7 @@ export default function AppConfirmDialog({
   isPending,
 }: AppConfirmDialogProps) {
   const [checked, setChecked] = useState(false);
-  const { iconColor, iconBg, confirmVariant } = SEVERITY_STYLES[severity];
+  const { mood, confirmVariant } = SEVERITY_STYLES[severity];
 
   useEffect(() => {
     if (open) setChecked(false);
@@ -71,20 +76,7 @@ export default function AppConfirmDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
       >
-        <Box
-          sx={{
-            width: 60,
-            height: 60,
-            borderRadius: "50%",
-            bgcolor: iconBg,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2,
-          }}
-        >
-          <OctagonAlert size={32} color={iconColor} />
-        </Box>
+        <FrankieHero mood={mood} />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           {title}

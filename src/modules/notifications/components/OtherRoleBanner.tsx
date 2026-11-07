@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { ArrowLeftRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useSwitchToTutorRole } from "@/modules/student/dual-role/hooks/useSwitchToTutorRole";
 import { useSwitchToStudentRole } from "@/modules/tutor/dual-role/hooks/useSwitchToStudentRole";

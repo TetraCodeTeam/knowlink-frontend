@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Trash2, Upload, X } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import AppButton from "@/shared/components/AppButton";
 import { useUploadMaterial } from "@/modules/tutor/materials/hooks/useUploadMaterial";
 import { useMySubjectsWithCatalogId } from "@/modules/tutor/materials/hooks/useMySubjectsWithCatalogId";

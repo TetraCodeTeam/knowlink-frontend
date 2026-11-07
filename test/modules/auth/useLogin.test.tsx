@@ -9,13 +9,13 @@ import { useReactivationStore } from "@/modules/auth/hooks/useReactivationStore"
 import { loginUser } from "@/modules/auth/api/auth.api";
 import { ACCOUNT_DEACTIVATED_CODE } from "@/modules/auth/constants";
 import type { AuthRole } from "@/shared/types/role.type";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 
 vi.mock("@/modules/auth/api/auth.api", () => ({
   loginUser: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn(), warning: vi.fn(), info: vi.fn() },
 }));
 

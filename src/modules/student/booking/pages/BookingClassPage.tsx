@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { Alert, Box } from "@mui/material";
 import BookingCard from "@/modules/student/booking/components/BookingCard";
 import BookingCalendar from "@/modules/student/booking/components/BookingCalendar";

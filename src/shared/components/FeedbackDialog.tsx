@@ -1,13 +1,15 @@
 import { ReactNode } from "react";
 import { Button, Dialog, DialogContent, IconButton, Stack, Typography } from "@mui/material";
 import { X } from "lucide-react";
-import { SuccessAnimation } from "./SuccessAnimation";
+import FrankieHero from "@/shared/frankie/FrankieHero";
+import { MOOD_BY_KIND } from "@/shared/frankie/frankie.copy";
 
 export type FeedbackDialogVariant = "success" | "error" | "warning" | "info";
 
 interface FeedbackDialogProps {
   open: boolean;
   title: string;
+  /** Reemplaza a Frankie por otro elemento. Normalmente no hace falta. */
   icon?: ReactNode;
   description: string;
   onClose: () => void;
@@ -25,6 +27,7 @@ const buttonColorByVariant: Record<
   info: "info",
 };
 
+/** Frankie reacciona según el tipo de mensaje: celebra, se compadece, avisa o cuenta. */
 export function FeedbackDialog({
   open,
   title,
@@ -40,33 +43,25 @@ export function FeedbackDialog({
       onClose={onClose}
       maxWidth="sm"
       fullWidth
-      PaperProps={{
-        className: "rounded-3xl",
-      }}
+      PaperProps={{ sx: { borderRadius: 4 } }}
     >
-      <DialogContent className="relative px-10 py-8">
-        <IconButton aria-label="Close dialog" onClick={onClose} className="!absolute right-4 top-4">
-          <X size={28} />
+      <DialogContent sx={{ position: "relative", px: { xs: 3, sm: 6 }, py: 4 }}>
+        <IconButton
+          aria-label="Cerrar"
+          onClick={onClose}
+          sx={{ position: "absolute", top: 12, right: 12 }}
+        >
+          <X size={24} />
         </IconButton>
 
-        <Stack spacing={4} alignItems="center" textAlign="center">
-          <Typography variant="h3" component="h2" fontWeight={500}>
+        <Stack spacing={3} alignItems="center" textAlign="center">
+          {icon ?? <FrankieHero mood={MOOD_BY_KIND[variant]} size={190} />}
+
+          <Typography variant="h4" component="h2" fontWeight={700} sx={{ color: "#1A1A2E" }}>
             {title}
           </Typography>
 
-          <div className="flex items-center justify-center">
-            {icon ?? (variant === "success" && <SuccessAnimation />)}
-          </div>
-
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            className="max-w-lg"
-            sx={{
-              textAlign: "justify",
-              textJustify: "inter-word", // opcional
-            }}
-          >
+          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 480 }}>
             {description}
           </Typography>
 
@@ -75,7 +70,7 @@ export function FeedbackDialog({
             color={buttonColorByVariant[variant]}
             size="large"
             onClick={onClose}
-            className="!rounded-xl !px-10"
+            sx={{ borderRadius: 3, px: 5 }}
           >
             {actionLabel}
           </Button>

@@ -2,13 +2,10 @@ import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogActions, DialogContent, Box, Typography, TextField } from "@mui/material";
-import { Flag, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import ReportReasonCard from "@/modules/student/tutorProfile/components/ReportReasonCard";
-import {
-  reportIconWrapperSx,
-  reportInfoBoxSx,
-} from "@/modules/student/tutorProfile/styles/reportMaterialStyles";
+import { reportInfoBoxSx } from "@/modules/student/tutorProfile/styles/reportMaterialStyles";
 import {
   REPORT_REASON_OPTIONS,
   MAX_OTHER_REASON_LENGTH,
@@ -18,6 +15,7 @@ import {
   reportMaterialSchema,
   type ReportMaterialFormValues,
 } from "@/modules/student/tutorProfile/schemas/reportMaterial.schema";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface ReportMaterialDialogProps {
   open: boolean;
@@ -66,9 +64,7 @@ export default function ReportMaterialDialog({
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
         >
-          <Box sx={reportIconWrapperSx("#FBE2E2")}>
-            <Flag size={32} color="#C62828" />
-          </Box>
+          <FrankieHero mood="worried" />
 
           <Typography variant="h6" fontWeight={700} mb={0.5}>
             Denunciar Material

@@ -1,4 +1,5 @@
-import { Alert, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import FrankieCallout from "@/shared/frankie/FrankieCallout";
 
 interface AvailabilityInfoNoteProps {
   weeksAhead: number;
@@ -6,7 +7,7 @@ interface AvailabilityInfoNoteProps {
 
 export default function AvailabilityInfoNote({ weeksAhead }: AvailabilityInfoNoteProps) {
   return (
-    <Alert severity="info" sx={{ mt: 1.5, py: 0.5 }}>
+    <FrankieCallout kind="info" sx={{ mt: 1.5 }}>
       <Typography fontSize={13} lineHeight={1.5}>
         Si activás <strong>&quot;Repetir horarios semanalmente&quot;</strong>, el horario que
         configures en esta semana se va a repetir automáticamente durante las próximas {weeksAhead}{" "}
@@ -15,6 +16,6 @@ export default function AvailabilityInfoNote({ weeksAhead }: AvailabilityInfoNot
         botón &quot;Usar mi horario habitual en esta semana&quot; para volver a esa semana a la
         normalidad.
       </Typography>
-    </Alert>
+    </FrankieCallout>
   );
 }

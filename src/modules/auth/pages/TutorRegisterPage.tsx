@@ -4,7 +4,7 @@ import AuthLayout from "@/modules/auth/layouts/AuthLayout";
 import RegistrationStepper from "@/modules/auth/components/RegistrationStepper";
 import TutorRegisterWizard from "@/modules/auth/components/tutor-register/TutorRegisterWizard";
 import { useRegistrationStore } from "@/modules/auth/hooks/useRegistrationStore";
-import { Box } from "@mui/material";
+import FrankieIllustration from "@/shared/frankie/FrankieIllustration";
 
 export default function TutorRegisterPage() {
   const [credentials] = useState(() => useRegistrationStore.getState().credentials);
@@ -18,11 +18,10 @@ export default function TutorRegisterPage() {
   }
 
   const illustration = (
-    <Box
-      component="img"
-      src="/register-image.png"
-      alt="Estudiante con libros"
-      sx={{ width: "100%" }}
+    <FrankieIllustration
+      mood="happy"
+      accessories={["sparkles"]}
+      message="Compartir lo que sabés es una de las mejores formas de aprender."
     />
   );
 

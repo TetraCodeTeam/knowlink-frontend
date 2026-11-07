@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { TutorSubjectRequest } from "../interfaces/TutorSubjectRequest";
 import { createTutorSubject } from "../api/Tutorsubject.api";
 

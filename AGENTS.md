@@ -22,7 +22,7 @@ src/modules/{modulo}/components/ o pages/ → consume el hook
 - Estado servidor: `useQuery` / `useMutation` de TanStack Query
 - Estado cliente: Zustand store en `hooks/` del módulo o `shared/hooks/`
 - Tipos inferidos de Zod: `z.infer<typeof miSchema>`
-- Toasts: `sonner`
+- Toasts: `import { toast } from "@/shared/lib/toast"` (envuelve a `sonner` con Frankie; no importar `sonner` directo). Mensajes y estados vacíos con Frankie: `docs/frankie.md`
 
 ### Lo que nunca debe hacer
 

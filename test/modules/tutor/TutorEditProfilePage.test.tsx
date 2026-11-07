@@ -3,7 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { TutorEditProfilePage } from "@/modules/tutor/profile/pages/TutorEditProfilePage";
 import { getMyTutorProfile } from "@/modules/tutor/profile/api/getMyTutorProfile";
 import { updateMyTutorProfile } from "@/modules/tutor/profile/api/updateMyTutorProfile";
@@ -24,7 +24,7 @@ vi.mock("@/modules/tutors/hooks/useCareers", () => ({
   }),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

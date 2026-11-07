@@ -1,11 +1,7 @@
 import { Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
-import { BookOpen, CalendarX2, Clock, Laptop2, MapPin, User } from "lucide-react";
+import { BookOpen, Clock, Laptop2, MapPin, User } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
-import {
-  cancelDialogIconWrapperSx,
-  cancelBookingSummaryBoxSx,
-  cancelBookingSummaryRowSx,
-} from "@/modules/class-history/styles/classHistoryStyles";
+import { cancelBookingSummaryBoxSx, cancelBookingSummaryRowSx } from "@/modules/class-history/styles/classHistoryStyles";
 import {
   formatSessionDateLabel,
   formatTime,
@@ -14,6 +10,7 @@ import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/re
 import type { CancellationPreview } from "@/modules/class-history/interfaces/responses/cancellation-preview.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 import type { RefundPolicy } from "@/modules/class-history/types/refund-policy.type";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface CancelBookingConfirmDialogProps {
   open: boolean;
@@ -68,9 +65,7 @@ export default function CancelBookingConfirmDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
       >
-        <Box sx={cancelDialogIconWrapperSx("#fce8e8")}>
-          <CalendarX2 size={32} color="#b91c1c" />
-        </Box>
+        <FrankieHero mood="worried" />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           ¿Cancelar esta clase?

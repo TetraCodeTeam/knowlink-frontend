@@ -1,7 +1,6 @@
-import { Dialog, DialogActions, DialogContent, Box, Typography } from "@mui/material";
-import { CircleAlert } from "lucide-react";
+import { Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
-import { cancelDialogIconWrapperSx } from "@/modules/class-history/styles/classHistoryStyles";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface RateBookingAlreadyRatedDialogProps {
   open: boolean;
@@ -23,9 +22,7 @@ export default function RateBookingAlreadyRatedDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 2, px: 4 }}
       >
-        <Box sx={cancelDialogIconWrapperSx("#FBF3DE")}>
-          <CircleAlert size={32} color="#B8860B" />
-        </Box>
+        <FrankieHero mood="happy" accessories={["sparkles"]} />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           Ya calificaste esta sesión

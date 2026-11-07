@@ -16,7 +16,6 @@ import SearchModeToggle from "../components/SearchModeToggle";
 import MateriaResultCard from "../components/MateriaResultCard";
 import TutorResultCard from "../components/TutorResultCard";
 import EmptyState from "@/shared/components/EmptyState";
-import emptySearchResultsImage from "@/shared/assets/illustrations/empty-search-results.png";
 
 export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
@@ -49,8 +48,9 @@ export default function SearchResultsPage() {
 
   const emptyState = (
     <EmptyState
-      image={emptySearchResultsImage}
-      imageAlt="No se encontraron resultados"
+      mood="thinking"
+      accessories={["magnifier"]}
+      title="No encontramos nada por ahora"
       message={emptyMessage}
     />
   );

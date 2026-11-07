@@ -6,6 +6,7 @@ import StudentRoutes from "@/routes/StudentRoutes";
 import TutorRoutes from "@/routes/TutorRoutes";
 import AdminRoutes from "@/routes/AdminRoutes";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import FrankieGalleryPage from "@/shared/frankie/FrankieGalleryPage";
 import type { AuthRole } from "@/shared/types/role.type";
 
 const isDevAuthBypassEnabled = import.meta.env.DEV && import.meta.env.VITE_AUTH_BYPASS === "true";
@@ -36,6 +37,8 @@ export default function RoutesProvider() {
     <Routes>
       {/* Public routes */}
       <Route path="/auth/*" element={<AuthRoutes />} />
+      {/* Catálogo visual de Frankie: solo existe en desarrollo. */}
+      {import.meta.env.DEV && <Route path="/dev/frankie" element={<FrankieGalleryPage />} />}
       {/* La landing es la puerta de entrada; quien ya tiene sesión va directo a su panel. */}
       <Route
         path="/"

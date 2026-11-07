@@ -1,5 +1,4 @@
 import { Box, Skeleton, Typography } from "@mui/material";
-import { Scale } from "lucide-react";
 import AdminListEmptyState from "@/modules/admin/components/AdminListEmptyState";
 import AdminPagination from "@/modules/admin/components/AdminPagination";
 import SessionClaimListItem from "@/modules/admin/session-claims/components/SessionClaimListItem";
@@ -16,7 +15,6 @@ import {
   listSx,
   skeletonStackSx,
 } from "@/modules/admin/styles/admin-list.styles";
-import { ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
 
 interface SessionClaimListProps {
   claims: AdminSessionClaimListItemResponse[];
@@ -57,10 +55,7 @@ export default function SessionClaimList({
           ))}
         </Box>
       ) : claims.length === 0 ? (
-        <AdminListEmptyState
-          message={SESSION_CLAIM_MESSAGES.emptyList}
-          icon={<Scale size={38} color={ADMIN_TOKENS.slate400} aria-hidden="true" />}
-        />
+        <AdminListEmptyState message={SESSION_CLAIM_MESSAGES.emptyList} />
       ) : (
         <>
           <Box component="ul" sx={listSx}>

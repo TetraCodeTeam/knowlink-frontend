@@ -1,4 +1,4 @@
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { create } from "zustand";
 
 type Severity = "success" | "error" | "warning" | "info";

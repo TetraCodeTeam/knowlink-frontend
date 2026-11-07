@@ -9,13 +9,13 @@ import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useReactivationStore } from "@/modules/auth/hooks/useReactivationStore";
 import { ACCOUNT_REACTIVATED_MESSAGE } from "@/modules/auth/constants";
 import type { AuthResponse } from "@/modules/auth/interfaces/responses/auth.interface";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 
 vi.mock("@/modules/auth/api/auth.api", () => ({
   reactivateAccount: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

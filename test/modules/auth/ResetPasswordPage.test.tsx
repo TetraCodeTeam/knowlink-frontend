@@ -10,7 +10,7 @@ vi.mock("@/modules/auth/api/auth.api", () => ({
   resetPassword: vi.fn(),
 }));
 
-vi.mock("sonner", () => ({
+vi.mock("@/shared/lib/toast", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 

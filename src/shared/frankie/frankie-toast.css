@@ -1,0 +1,45 @@
+/* Avisos (sonner) con la cara de Frankie. */
+
+.kl-toast[data-sonner-toast] {
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-left-width: 4px;
+  box-shadow: 0 10px 30px -12px rgba(63, 76, 174, 0.35);
+  font-family: "Inter", sans-serif;
+}
+
+.kl-toast[data-sonner-toast][data-type="success"] {
+  border-left-color: #3fb27f;
+}
+.kl-toast[data-sonner-toast][data-type="error"] {
+  border-left-color: #e5646b;
+}
+.kl-toast[data-sonner-toast][data-type="warning"] {
+  border-left-color: #f0a03c;
+}
+.kl-toast[data-sonner-toast][data-type="info"],
+.kl-toast[data-sonner-toast][data-type="loading"] {
+  border-left-color: #5b6ed9;
+}
+
+/* El avatar de Frankie ocupa el lugar del ícono de siempre (16 px). */
+.kl-toast[data-sonner-toast] [data-icon] {
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  flex: none;
+}
+
+.kl-toast[data-sonner-toast] [data-title] {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.kl-toast[data-sonner-toast] [data-description] {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #55557a;
+}

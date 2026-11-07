@@ -1,6 +1,6 @@
-import { Dialog, DialogContent, Box, IconButton, Typography } from "@mui/material";
-import { BadgeCheck, X } from "lucide-react";
-import { reportIconWrapperSx } from "@/modules/student/tutorProfile/styles/reportMaterialStyles";
+import { Dialog, DialogContent, IconButton, Typography } from "@mui/material";
+import { X } from "lucide-react";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface ReportMaterialSuccessDialogProps {
   open: boolean;
@@ -31,9 +31,7 @@ export default function ReportMaterialSuccessDialog({
       <DialogContent
         sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 3, px: 4, pb: 4 }}
       >
-        <Box sx={reportIconWrapperSx("#DCEBFF")}>
-          <BadgeCheck size={32} color="#0B2447" />
-        </Box>
+        <FrankieHero mood="happy" accessories={["sparkles"]} />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           Denuncia enviada

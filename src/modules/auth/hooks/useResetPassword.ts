@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/shared/lib/toast";
 import { resetPassword } from "@/modules/auth/api/auth.api";
 import { AUTH_RESET_PASSWORD_KEY } from "@/modules/auth/constants";
 import type { ResetPasswordRequest } from "@/modules/auth/interfaces/requests/reset-password-request.interface";

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
+import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import { ArrowLeft, Award, Crown, GraduationCap, Trophy } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import BecomeTutorDialog from "@/modules/community/components/BecomeTutorDialog";
@@ -110,21 +112,16 @@ export default function TutorPodiumPage() {
               <CircularProgress aria-label="Cargando el podio" />
             </Box>
           ) : isError ? (
-            <Box sx={{ textAlign: "center", py: 6 }}>
-              <Typography sx={{ color: COMMUNITY_COLORS.muted, mb: 1.5 }}>
-                No pudimos cargar el podio de tutores.
-              </Typography>
-              <AppButton appVariant="soft" onClick={() => void refetch()}>
-                Reintentar
-              </AppButton>
-            </Box>
+            <FrankieErrorState
+              message="No pudimos cargar el podio de tutores."
+              onRetry={() => void refetch()}
+            />
           ) : isEmpty ? (
-            <Box sx={{ textAlign: "center", py: 6, color: COMMUNITY_COLORS.muted }}>
-              <Crown size={36} color="#B9BEE6" aria-hidden />
-              <Typography sx={{ mt: 1 }}>
-                Todavía no hay tutores en el ranking de este mes.
-              </Typography>
-            </Box>
+            <FrankieEmptyState
+              mood="sleepy"
+              title="El podio todavía está vacío"
+              message="Todavía no hay tutores en el ranking de este mes."
+            />
           ) : (
             <Box
               sx={{

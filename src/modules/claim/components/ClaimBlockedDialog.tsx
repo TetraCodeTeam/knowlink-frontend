@@ -1,6 +1,7 @@
-import { Dialog, DialogActions, DialogContent, Box, IconButton, Typography } from "@mui/material";
-import { CircleAlert, X } from "lucide-react";
+import { Dialog, DialogActions, DialogContent, IconButton, Typography } from "@mui/material";
+import { X } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
+import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface ClaimBlockedDialogProps {
   open: boolean;
@@ -36,20 +37,7 @@ export default function ClaimBlockedDialog({ open, message, onClose }: ClaimBloc
           pb: 4,
         }}
       >
-        <Box
-          sx={{
-            width: 60,
-            height: 60,
-            borderRadius: "50%",
-            bgcolor: "#FBF3DE",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2,
-          }}
-        >
-          <CircleAlert size={30} color="#B8860B" />
-        </Box>
+        <FrankieHero mood="worried" style={{ marginInline: "auto" }} />
 
         <Typography variant="h6" fontWeight={700} mb={1}>
           No podés iniciar un reclamo
