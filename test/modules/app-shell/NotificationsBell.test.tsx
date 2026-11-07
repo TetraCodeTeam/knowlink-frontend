@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
-import StudentSidebar from "@/modules/student/components/StudentSidebar";
+import NotificationsBell from "@/modules/app-shell/components/NotificationsBell";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
+import { STUDENT_NAVIGATION } from "@/modules/student/navigation/student-navigation.constants";
 
 vi.mock("@/modules/notifications/api/notifications.api", () => ({
   getNotifications: vi.fn().mockResolvedValue({
@@ -19,20 +20,20 @@ vi.mock("@/modules/notifications/api/notifications.api", () => ({
   markNotificationAsRead: vi.fn(),
 }));
 
-function renderSidebar() {
+function renderBell() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   );
   return render(
     <MemoryRouter>
-      <StudentSidebar />
+      <NotificationsBell theme={STUDENT_NAVIGATION.theme} />
     </MemoryRouter>,
     { wrapper }
   );
 }
 
-describe("StudentSidebar - panel de notificaciones", () => {
+describe("NotificationsBell - panel de notificaciones", () => {
   beforeEach(() => {
     useAuthStore.setState({
       isAuthenticated: true,
@@ -46,7 +47,7 @@ describe("StudentSidebar - panel de notificaciones", () => {
   });
 
   it("abre el panel, lo cierra con click fuera y devuelve el foco a la campana", () => {
-    renderSidebar();
+    renderBell();
 
     const bell = screen.getByRole("button", { name: "Notificaciones" });
     fireEvent.click(bell);

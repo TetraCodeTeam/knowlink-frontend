@@ -29,7 +29,7 @@ export function StudentSupportPage() {
   const handleCloseRules = useCallback(() => setIsRulesOpen(false), []);
 
   return (
-    <Box sx={{ ...pageLayoutSx, ...getPageScaleSx("STUDENT") }}>
+    <Box sx={{ ...pageLayoutSx, ...getPageScaleSx() }}>
       <Box component="section" sx={mainCardSx}>
         <Typography component="h1" sx={pageTitleSx}>
           Mis reclamos

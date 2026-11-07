@@ -1,35 +1,34 @@
 import { Outlet } from "react-router-dom";
-import { Box } from "@mui/material";
-import TutorSidebar, { TUTOR_SIDEBAR_WIDTH } from "@/modules/tutor/components/TutorSidebar";
+import AppShell from "@/modules/app-shell/components/AppShell";
 import { TutorSessionConfirmationWidget } from "@/modules/attendance/components/TutorSessionconfirmationwidget";
 import { useAutoOpenSessionConfirmation } from "@/modules/attendance/hooks/useAutoOpenSessionConfirmation";
 import { useConfirmSessionAttendance } from "@/modules/attendance/hooks/useConfirmSessionAttendance";
 import RatingPopupHost from "@/modules/class-history/components/RatingPopupHost";
 import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
+import { TUTOR_NAVIGATION } from "@/modules/tutor/navigation/tutor-navigation.constants";
+import { useTutorNavBadges } from "@/modules/tutor/navigation/useTutorNavBadges";
+import { tutorPaths } from "@/routes/paths";
 
 export default function TutorLayout() {
   useAutoOpenSessionConfirmation();
   const { mutateAsync: confirmSessionAttendance } = useConfirmSessionAttendance();
+  const badgeCounts = useTutorNavBadges();
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#E6E4F2" }}>
-      <TutorSidebar />
-      <Box
-        component="main"
-        sx={{
-          flex: 1,
-          minWidth: 0,
-          marginLeft: `${TUTOR_SIDEBAR_WIDTH}px`,
-          minHeight: "100vh",
-        }}
+    <>
+      <AppShell
+        navigation={TUTOR_NAVIGATION}
+        badgeCounts={badgeCounts}
+        showNotifications
+        profilePath={tutorPaths.profile}
       >
         <Outlet />
-      </Box>
+      </AppShell>
       <TutorSessionConfirmationWidget
         onConfirm={({ sessionId, code }) => confirmSessionAttendance({ sessionId, code })}
       />
       <RatingPopupHost />
       <ClaimPopupHost />
-    </Box>
+    </>
   );
 }
