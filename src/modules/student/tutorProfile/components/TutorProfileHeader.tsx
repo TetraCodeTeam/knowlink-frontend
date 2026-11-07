@@ -84,16 +84,16 @@ export const TutorProfileHeader = ({ tutor, onReservar }: TutorProfileHeaderProp
           <Stack spacing={1} alignItems={{ xs: "flex-start", sm: "flex-end" }}>
             <Stack
               direction="row"
-              spacing={0.5}
+              spacing={1}
               alignItems="center"
               flexWrap="nowrap"
               whiteSpace="nowrap"
             >
-              <Rating value={tutor.rating} precision={0.1} readOnly size="small" />
-              <Typography fontSize={16} fontWeight={600}>
+              <Rating value={tutor.rating} precision={0.1} readOnly size="large" />
+              <Typography fontSize={22} fontWeight={700}>
                 {tutor.rating}
               </Typography>
-              <Typography fontSize={13} color="text.secondary" whiteSpace="nowrap">
+              <Typography fontSize={15} color="text.secondary" whiteSpace="nowrap">
                 ({tutor.reviewsCount} Reseñas)
               </Typography>
             </Stack>
