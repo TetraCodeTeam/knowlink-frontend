@@ -1,4 +1,5 @@
 import { alpha } from "@mui/material/styles";
+import { PAGE_SUBTITLE_BASE_SX, PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 import type { SxProps, Theme } from "@mui/material/styles";
 import type { AdminStatusTone } from "@/modules/admin/constants/admin-status-meta";
 import { ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
@@ -20,15 +21,12 @@ export const headerSx = {
 } satisfies SxProps<Theme>;
 
 export const titleSx = {
-  fontSize: { xs: 30, md: 40 },
-  fontWeight: 700,
-  letterSpacing: "-1px",
-  lineHeight: 1.1,
+  ...PAGE_TITLE_BASE_SX,
   color: ADMIN_TOKENS.ink,
 } satisfies SxProps<Theme>;
 
 export const subtitleSx = {
-  fontSize: { xs: 15, md: 16 },
+  ...PAGE_SUBTITLE_BASE_SX,
   fontWeight: 500,
   color: ADMIN_TOKENS.slate500,
   maxWidth: 860,

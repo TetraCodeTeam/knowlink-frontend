@@ -35,10 +35,10 @@ export default function BookingCtaCard({ tutor, question, bookingPath }: Booking
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
         <GraduationCap size={22} color={COMMUNITY_COLORS.primaryDark} aria-hidden />
         <Box sx={{ minWidth: 0 }}>
-          <Typography sx={{ fontSize: 14.5, fontWeight: 700, color: COMMUNITY_COLORS.text }}>
+          <Typography sx={{ fontSize: 13.5, fontWeight: 700, color: COMMUNITY_COLORS.text }}>
             {question}
           </Typography>
-          <Typography sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.muted }}>
+          <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.muted }}>
             Reservá una clase con {tutor.fullName}
             {tutor.averageRating != null ? ` · ${tutor.averageRating.toFixed(1)} ★` : ""}
           </Typography>
@@ -47,7 +47,7 @@ export default function BookingCtaCard({ tutor, question, bookingPath }: Booking
       <AppButton
         size="small"
         onClick={() => navigate(bookingPath)}
-        sx={{ bgcolor: "#2A1FB8", "&:hover": { bgcolor: "#1F1690" }, py: 0.9, fontSize: 13.5 }}
+        sx={{ bgcolor: "#2A1FB8", "&:hover": { bgcolor: "#1F1690" }, py: 0.9, fontSize: 12.5 }}
       >
         Agendar clase con {firstName}
       </AppButton>

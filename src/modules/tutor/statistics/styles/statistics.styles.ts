@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 import { STATISTICS_COLORS } from "@/modules/tutor/statistics/constants/statistics-colors.constants";
 
 export const pageSx = {
@@ -17,14 +18,12 @@ export const headerSx = {
 } satisfies SxProps<Theme>;
 
 export const pageTitleSx = {
-  fontSize: { xs: 26, md: 32 },
-  fontWeight: 600,
+  ...PAGE_TITLE_BASE_SX,
   color: STATISTICS_COLORS.textStrong,
-  lineHeight: 1.2,
 } satisfies SxProps<Theme>;
 
 export const pageSubtitleSx = {
-  fontSize: 15,
+  fontSize: 14,
   color: STATISTICS_COLORS.textMuted,
   mt: 0.5,
 } satisfies SxProps<Theme>;

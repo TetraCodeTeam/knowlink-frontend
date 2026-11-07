@@ -1,4 +1,5 @@
 import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 
 interface ProfileHeaderProps {
   fullName: string;
@@ -51,7 +52,7 @@ export const ProfileHeader = ({
           {getInitials(fullName)}
         </Avatar>
         <Box>
-          <Typography variant="h5" component="h1" fontWeight={500}>
+          <Typography component="h1" sx={PAGE_TITLE_BASE_SX}>
             {fullName}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>

@@ -31,14 +31,14 @@ export default function FeaturedReplyPreview({
     <Box sx={{ bgcolor: "#EEF1FD", borderRadius: "10px", px: 2, py: 1.5, mt: 1.5 }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
         <CircleCheck size={16} color={COMMUNITY_COLORS.success} aria-hidden />
-        <Typography sx={{ fontSize: 13, fontWeight: 700, color: COMMUNITY_COLORS.success }}>
+        <Typography sx={{ fontSize: 12, fontWeight: 700, color: COMMUNITY_COLORS.success }}>
           Respuesta destacada de {author.fullName}
         </Typography>
-        <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
+        <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>
           {formatRelativeTime(featured.createdAt)}
         </Typography>
       </Box>
-      <FormattedText text={featured.excerpt} sx={{ fontSize: 13.5, mt: 0.75 }} />
+      <FormattedText text={featured.excerpt} sx={{ fontSize: 12.5, mt: 0.75 }} />
       {bookingPath ? (
         <Typography
           {...(onGuestBooking
@@ -53,7 +53,7 @@ export default function FeaturedReplyPreview({
             alignItems: "center",
             gap: 0.5,
             mt: 1,
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: 700,
             color: "#B4540A",
           }}

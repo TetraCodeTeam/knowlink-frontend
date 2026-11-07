@@ -60,7 +60,7 @@ const selectSx: SxProps<Theme> = {
   width: "100%",
   bgcolor: COMMUNITY_COLORS.panel,
   borderRadius: "8px",
-  fontSize: 14,
+  fontSize: 13,
   "& .MuiOutlinedInput-notchedOutline": { border: "none" },
   "& .MuiSelect-select": { py: 1.1 },
 };
@@ -189,7 +189,7 @@ export default function FeedFiltersPanel({
           <Typography
             id="feed-filters-title"
             component="h2"
-            sx={{ fontSize: 16, fontWeight: 700, lineHeight: 1.25 }}
+            sx={{ fontSize: 15, fontWeight: 700, lineHeight: 1.25 }}
           >
             Filtros de Búsqueda
           </Typography>
@@ -204,7 +204,7 @@ export default function FeedFiltersPanel({
                 borderRadius: "11px",
                 bgcolor: COMMUNITY_COLORS.lavender,
                 color: COMMUNITY_COLORS.primaryDark,
-                fontSize: 12,
+                fontSize: 11.5,
                 fontWeight: 700,
                 display: "inline-flex",
                 alignItems: "center",
@@ -227,7 +227,7 @@ export default function FeedFiltersPanel({
             border: "none",
             bgcolor: "transparent",
             p: 0,
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: 600,
             color: COMMUNITY_COLORS.primaryDark,
             cursor: "pointer",
@@ -259,7 +259,7 @@ export default function FeedFiltersPanel({
                   borderRadius: "8px",
                   px: 1.25,
                   py: 0.9,
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: selected ? 700 : 500,
                   color: selected ? COMMUNITY_COLORS.primaryDark : COMMUNITY_COLORS.text,
                   bgcolor: selected ? "#E4E8FB" : "transparent",
@@ -282,7 +282,7 @@ export default function FeedFiltersPanel({
                     py: 0.1,
                     borderRadius: "11px",
                     bgcolor: selected ? "#CDD4F6" : COMMUNITY_COLORS.lavender,
-                    fontSize: 12,
+                    fontSize: 11.5,
                     fontWeight: 700,
                     textAlign: "center",
                   }}
@@ -357,7 +357,7 @@ export default function FeedFiltersPanel({
                 tabIndex={-1}
                 disableRipple
               />
-              <ListItemText primary={subject.name} slotProps={{ primary: { fontSize: 14 } }} />
+              <ListItemText primary={subject.name} slotProps={{ primary: { fontSize: 13 } }} />
             </MenuItem>
           ))}
         </Select>
@@ -381,7 +381,7 @@ export default function FeedFiltersPanel({
                     }))
                   }
                 />
-                <Typography sx={{ fontSize: 14 }}>{subjectNames.get(subjectId)}</Typography>
+                <Typography sx={{ fontSize: 13 }}>{subjectNames.get(subjectId)}</Typography>
               </Box>
             ))}
           </Box>
@@ -407,7 +407,7 @@ export default function FeedFiltersPanel({
                 sx={checkboxSx}
                 onChange={() => toggleStatus(option.value)}
               />
-              <Typography sx={{ fontSize: 14 }}>{option.label}</Typography>
+              <Typography sx={{ fontSize: 13 }}>{option.label}</Typography>
             </Box>
           ))}
         </Box>

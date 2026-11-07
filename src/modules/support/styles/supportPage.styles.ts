@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material/styles";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 import { cardBase } from "@/modules/support/styles/supportShared.styles";
 
 export const pageLayoutSx = {
@@ -23,8 +24,7 @@ export const mainCardSx = {
 } satisfies SxProps<Theme>;
 
 export const pageTitleSx = {
-  fontSize: { xs: 22, md: 26 },
-  fontWeight: 500,
+  ...PAGE_TITLE_BASE_SX,
   color: "text.primary",
   mb: 1,
 } satisfies SxProps<Theme>;

@@ -62,10 +62,10 @@ export default function AttachmentEditor({
         <Box sx={rowSx}>
           <Paperclip size={16} color={COMMUNITY_COLORS.primaryDark} aria-hidden />
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography noWrap sx={{ fontSize: 13.5, fontWeight: 600 }}>
+            <Typography noWrap sx={{ fontSize: 12.5, fontWeight: 600 }}>
               {file.name}
             </Typography>
-            <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
+            <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>
               {formatFileSize(file.size)}
               {current ? " · reemplaza al archivo actual" : ""}
             </Typography>
@@ -88,7 +88,7 @@ export default function AttachmentEditor({
     if (current && removeCurrent) {
       return (
         <Box sx={{ ...rowSx, bgcolor: "#FFF4F4" }}>
-          <Typography sx={{ flex: 1, fontSize: 13.5, color: "#B91C1C" }}>
+          <Typography sx={{ flex: 1, fontSize: 12.5, color: "#B91C1C" }}>
             Se quitará el archivo adjunto ({current.fileName}) al guardar.
           </Typography>
           <Box
@@ -103,7 +103,7 @@ export default function AttachmentEditor({
               border: "none",
               bgcolor: "transparent",
               color: COMMUNITY_COLORS.primaryDark,
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: 600,
               cursor: "pointer",
             }}
@@ -120,10 +120,10 @@ export default function AttachmentEditor({
         <Box sx={rowSx}>
           <Paperclip size={16} color={COMMUNITY_COLORS.primaryDark} aria-hidden />
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography noWrap sx={{ fontSize: 13.5, fontWeight: 600 }}>
+            <Typography noWrap sx={{ fontSize: 12.5, fontWeight: 600 }}>
               {current.fileName}
             </Typography>
-            <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
+            <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>
               {formatFileSize(current.sizeInBytes)}
             </Typography>
           </Box>
@@ -166,7 +166,7 @@ export default function AttachmentEditor({
           border: "none",
           bgcolor: "transparent",
           color: COMMUNITY_COLORS.primaryDark,
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: 600,
           cursor: "pointer",
           p: 0,

@@ -1,4 +1,5 @@
 import { alpha } from "@mui/material/styles";
+import { PAGE_SUBTITLE_BASE_SX, PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 import type { SxProps, Theme } from "@mui/material/styles";
 import { ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
 
@@ -25,15 +26,12 @@ export const topBarSx = {
 } satisfies SxProps<Theme>;
 
 export const topBarTitleSx = {
-  fontSize: { xs: 30, md: 40 },
-  fontWeight: 700,
-  letterSpacing: "-1px",
-  lineHeight: 1.1,
+  ...PAGE_TITLE_BASE_SX,
   color: ADMIN_TOKENS.ink,
 } satisfies SxProps<Theme>;
 
 export const topBarSubtitleSx = {
-  fontSize: { xs: 15, md: 20 },
+  ...PAGE_SUBTITLE_BASE_SX,
   fontWeight: 500,
   color: ADMIN_TOKENS.slate500,
   mt: 0.5,

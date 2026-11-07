@@ -6,7 +6,7 @@ import type { CommunityAuthor } from "@/modules/community/interfaces/responses/c
 import { COMMUNITY_COLORS, chipSx, linkSx } from "@/modules/community/styles/community.styles";
 import { formatRelativeTime } from "@/modules/community/utils/format-relative-time";
 
-const nameSx = { fontSize: 15, fontWeight: 600, color: COMMUNITY_COLORS.text };
+const nameSx = { fontSize: 14, fontWeight: 600, color: COMMUNITY_COLORS.text };
 
 interface AuthorHeaderProps {
   author: CommunityAuthor;
@@ -59,7 +59,7 @@ export default function AuthorHeader({
             </Box>
           ) : null}
         </Box>
-        <Typography sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.subtle }}>
+        <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
           {isTutor && author.averageRating != null ? (
             <Box component="span" sx={{ color: COMMUNITY_COLORS.star, fontWeight: 600 }}>
               ★ {author.averageRating.toFixed(1)}

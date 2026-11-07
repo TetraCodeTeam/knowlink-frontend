@@ -16,6 +16,7 @@ import SearchModeToggle from "../components/SearchModeToggle";
 import MateriaResultCard from "../components/MateriaResultCard";
 import TutorResultCard from "../components/TutorResultCard";
 import EmptyState from "@/shared/components/EmptyState";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 
 export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
@@ -67,7 +68,7 @@ export default function SearchResultsPage() {
           gap: 2,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+        <Typography component="h1" sx={PAGE_TITLE_BASE_SX}>
           {title}
         </Typography>
         <SearchModeToggle value={mode} onChange={setMode} />

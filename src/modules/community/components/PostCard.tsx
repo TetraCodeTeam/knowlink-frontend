@@ -39,7 +39,7 @@ const CLAMP_LINES = 5;
 const titleSx = {
   display: "block",
   mt: 1.75,
-  fontSize: 19,
+  fontSize: 17,
   fontWeight: 700,
   lineHeight: 1.35,
   color: COMMUNITY_COLORS.text,
@@ -176,7 +176,7 @@ export default function PostCard({
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: COMMUNITY_COLORS.muted }}>
           {isDetail ? (
-            <Box sx={{ display: "inline-flex", alignItems: "center", gap: 0.75, fontSize: 13.5 }}>
+            <Box sx={{ display: "inline-flex", alignItems: "center", gap: 0.75, fontSize: 12.5 }}>
               <MessageSquare size={16} aria-hidden />
               {repliesLabel}
             </Box>
@@ -190,7 +190,7 @@ export default function PostCard({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 0.75,
-                fontSize: 13.5,
+                fontSize: 12.5,
                 color: "inherit",
                 textDecoration: "none",
                 ...(isGuest ? guestButtonSx : {}),
@@ -202,7 +202,7 @@ export default function PostCard({
             </Box>
           )}
           {post.edited ? (
-            <Box component="span" sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.subtle }}>
+            <Box component="span" sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
               (editada)
             </Box>
           ) : null}
@@ -220,7 +220,7 @@ export default function PostCard({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 0.75,
-                fontSize: 13.5,
+                fontSize: 12.5,
                 color: COMMUNITY_COLORS.primaryDark,
                 fontWeight: 600,
                 ...(isGuest

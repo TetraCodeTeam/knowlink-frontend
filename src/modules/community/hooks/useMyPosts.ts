@@ -6,12 +6,13 @@ import {
   MY_POSTS_PAGE_SIZE,
 } from "@/modules/community/constants/community.constants";
 import { COMMUNITY_QUERY_KEYS } from "@/modules/community/constants/community-query-keys";
+import type { PostDateRange } from "@/modules/community/interfaces/post-date-range.interface";
 
-/** @param date día de publicación (yyyy-MM-dd); vacío para ver todas. */
-export function useMyPosts(date: string) {
+/** @param range período de publicación; con ambos extremos vacíos trae todas. */
+export function useMyPosts(range: PostDateRange) {
   const query = useInfiniteQuery({
-    queryKey: COMMUNITY_QUERY_KEYS.myPosts(date),
-    queryFn: ({ pageParam }) => getMyPosts(pageParam, MY_POSTS_PAGE_SIZE, date),
+    queryKey: COMMUNITY_QUERY_KEYS.myPosts(range.from, range.to),
+    queryFn: ({ pageParam }) => getMyPosts(pageParam, MY_POSTS_PAGE_SIZE, range),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.page + 1 : undefined),
     staleTime: COMMUNITY_STALE_TIME_MS,

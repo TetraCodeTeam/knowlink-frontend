@@ -7,6 +7,7 @@ import TutorResultCard from "@/modules/student/components/TutorResultCard";
 import { buildTutorProfileRoute, EMPTY_FILTERED_MESSAGE } from "@/modules/student/constants";
 import { useSearchFilters } from "@/modules/student/hooks/useSearchFilters";
 import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTutorsAndMaterias";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 
 const NO_TUTORS_MESSAGE = "No hay tutores disponibles para esta materia todavía.";
 
@@ -34,7 +35,7 @@ export default function TutoresPorMateriaPage() {
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
-      <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
+      <Typography component="h1" sx={{ ...PAGE_TITLE_BASE_SX, mb: 3 }}>
         Tutores que pueden ayudarte en {materiaNombre}
       </Typography>
 

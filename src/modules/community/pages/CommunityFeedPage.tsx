@@ -11,8 +11,6 @@ import FeedFiltersPanel from "@/modules/community/components/FeedFiltersPanel";
 import MyPostsPanel from "@/modules/community/components/MyPostsPanel";
 import PostCard from "@/modules/community/components/PostCard";
 import PostComposerCard from "@/modules/community/components/PostComposerCard";
-import { TOPBAR_HEIGHT } from "@/modules/student/components/StudentTopbar";
-import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import { useCommunityFeed } from "@/modules/community/hooks/useCommunityFeed";
 import { useFeedCounts } from "@/modules/community/hooks/useFeedCounts";
 import { useFeedFilters } from "@/modules/community/hooks/useFeedFilters";
@@ -23,19 +21,17 @@ import {
   twoColumnSx,
 } from "@/modules/community/styles/community.styles";
 import type { PostType } from "@/modules/community/types/post-type.type";
+import { getPageMinHeight } from "@/shared/utils/page-height.utils";
 
 export default function CommunityFeedPage() {
   const { filters, activeCount, setType, applyDraft, clear } = useFeedFilters();
   const { posts, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } =
     useCommunityFeed(filters);
   const { counts } = useFeedCounts(filters);
-  const { role } = useCommunityViewer();
-  // El layout del alumno tiene topbar fija; el del tutor no.
-  const minHeight = role === "STUDENT" ? `calc(100vh - ${TOPBAR_HEIGHT}px)` : "100vh";
   const [composeType, setComposeType] = useState<PostType | null>(null);
 
   return (
-    <Box sx={{ ...pageSx, minHeight }}>
+    <Box sx={{ ...pageSx, minHeight: getPageMinHeight() }}>
       <Box sx={pageContentSx}>
         <CommunityHeader />
 
