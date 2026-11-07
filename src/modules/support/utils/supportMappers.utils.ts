@@ -4,15 +4,20 @@ import type {
   TutorSupportData,
   TutorSupportDto,
 } from "@/modules/support/interfaces/responses/tutor-support.response";
+import type { Role } from "@/shared/types/role.type";
 
-function describeClaimReason(reason: string): string {
+// El texto se redacta desde la perspectiva del tutor: «I_COULD_NOT_ATTEND» es propio solo si el
+// reclamo lo inició el tutor; si lo inició el alumno, quien no pudo asistir es el alumno.
+function describeClaimReason(reason: string, claimantRole: Role): string {
   switch (reason) {
     case "STUDENT_COULD_NOT_ATTEND":
       return "El alumno no pudo asistir a la sesión";
     case "TUTOR_COULD_NOT_ATTEND":
       return "El tutor no pudo asistir a la sesión";
     case "I_COULD_NOT_ATTEND":
-      return "No pude asistir a la sesión";
+      return claimantRole === "TUTOR"
+        ? "No pude asistir a la sesión"
+        : "El alumno no pudo asistir a la sesión";
     default:
       return reason;
   }
@@ -33,7 +38,8 @@ export function mapTutorSupport(data: TutorSupportDto): TutorSupportData {
       subjectName: claim.subjectName,
       studentName: claim.studentName,
       sessionDate: claim.sessionDate,
-      reason: describeClaimReason(claim.reason),
+      reason: describeClaimReason(claim.reason, claim.claimantRole),
+      claimantRole: claim.claimantRole,
       status: claim.status,
       resolvedAt: claim.status === "RESOLVED" ? claim.updatedAt.slice(0, 10) : null,
       hasUnseenUpdate: false,

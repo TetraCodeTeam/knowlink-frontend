@@ -1,5 +1,6 @@
 import type { ClaimResponse } from "@/modules/support/interfaces/responses/claim.response";
 import type { ReportedMaterialResponse } from "@/modules/support/interfaces/responses/reported-material.response";
+import type { Role } from "@/shared/types/role.type";
 
 export interface TutorSupportClaimDto {
   claimId: string;
@@ -8,6 +9,7 @@ export interface TutorSupportClaimDto {
   studentName: string;
   sessionDate: string;
   reason: string;
+  claimantRole: Role;
   status: ClaimResponse["status"];
   updatedAt: string;
 }
