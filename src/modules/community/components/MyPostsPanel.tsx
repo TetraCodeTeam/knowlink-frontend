@@ -11,18 +11,18 @@ export default function MyPostsPanel() {
       <Box
         sx={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 1 }}
       >
-        <Typography id="my-posts-panel-title" component="h2" sx={{ fontSize: 18, fontWeight: 700 }}>
+        <Typography id="my-posts-panel-title" component="h2" sx={{ fontSize: 16, fontWeight: 700 }}>
           Mis publicaciones
         </Typography>
         <Typography
           component={Link}
           to={paths.myPosts}
-          sx={{ ...linkSx, fontSize: 13, fontWeight: 700, color: COMMUNITY_COLORS.primaryDark }}
+          sx={{ ...linkSx, fontSize: 12, fontWeight: 700, color: COMMUNITY_COLORS.primaryDark }}
         >
           Ver
         </Typography>
       </Box>
-      <Typography sx={{ fontSize: 13.5, color: COMMUNITY_COLORS.muted, mt: 1 }}>
+      <Typography sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.muted, mt: 1 }}>
         Gestioná tus consultas académicas y aportes para la comunidad.
       </Typography>
     </Box>

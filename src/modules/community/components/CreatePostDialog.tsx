@@ -100,7 +100,7 @@ export default function CreatePostDialog({ open, initialType, onClose }: CreateP
               <AuthorAvatar fullName={fullName} profilePictureUrl={null} />
               <Typography
                 id="create-post-title"
-                sx={{ color: COMMUNITY_COLORS.muted, fontSize: 15 }}
+                sx={{ color: COMMUNITY_COLORS.muted, fontSize: 14 }}
               >
                 Publicar en la comunidad académica
               </Typography>
@@ -141,7 +141,7 @@ export default function CreatePostDialog({ open, initialType, onClose }: CreateP
                           borderRadius: "8px",
                           px: 1.5,
                           py: 0.75,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: 600,
                           cursor: "pointer",
                           bgcolor: selected
@@ -201,7 +201,7 @@ export default function CreatePostDialog({ open, initialType, onClose }: CreateP
 
           <Box>
             <Typography
-              sx={{ fontSize: 13, fontWeight: 600, color: COMMUNITY_COLORS.muted, mb: 0.75 }}
+              sx={{ fontSize: 12, fontWeight: 600, color: COMMUNITY_COLORS.muted, mb: 0.75 }}
             >
               {type === "HELP_REQUEST" ? "Detalle de la consulta *" : "Contenido a compartir *"}
             </Typography>

@@ -78,10 +78,10 @@ export default function EditPostDialog({ post, open, onClose }: EditPostDialogPr
       <DialogContent sx={{ p: { xs: 2, sm: 3 } }}>
         <Box component="form" onSubmit={onSubmit} noValidate sx={{ display: "grid", gap: 2.25 }}>
           <Box>
-            <Typography id="edit-post-title" sx={{ fontSize: 19, fontWeight: 700 }}>
+            <Typography id="edit-post-title" sx={{ fontSize: 17, fontWeight: 700 }}>
               Editar publicación
             </Typography>
-            <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.muted, mt: 0.25 }}>
+            <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.muted, mt: 0.25 }}>
               {post.subject.name} · El tipo y la materia no se pueden cambiar.
             </Typography>
           </Box>

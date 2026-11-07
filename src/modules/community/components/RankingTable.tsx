@@ -18,7 +18,7 @@ export default function RankingTable({ tutors }: RankingTableProps) {
   return (
     <Box component="section" aria-labelledby="ranking-table-title">
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5 }}>
-        <Typography id="ranking-table-title" component="h2" sx={{ fontSize: 22, fontWeight: 700 }}>
+        <Typography id="ranking-table-title" component="h2" sx={{ fontSize: 20, fontWeight: 700 }}>
           Tabla de clasificación de tutores
         </Typography>
         <Box component="span" sx={{ ...chipSx, bgcolor: "#EDEBFA", color: COMMUNITY_COLORS.muted }}>
@@ -27,7 +27,7 @@ export default function RankingTable({ tutors }: RankingTableProps) {
       </Box>
 
       {tutors.length === 0 ? (
-        <Box sx={{ ...cardSx, color: COMMUNITY_COLORS.muted, fontSize: 14 }}>
+        <Box sx={{ ...cardSx, color: COMMUNITY_COLORS.muted, fontSize: 13 }}>
           Todavía no hay más tutores en el ranking de este mes.
         </Box>
       ) : (
@@ -64,9 +64,12 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                     ...chipSx,
                     bgcolor: "#EEF0F4",
                     color: COMMUNITY_COLORS.muted,
-                    minWidth: 36,
+                    minWidth: 44,
                     justifyContent: "center",
-                    fontSize: 13,
+                    fontSize: 14,
+                    fontWeight: 700,
+                    px: 1.25,
+                    py: 0.5,
                   }}
                   aria-label={`Puesto ${tutor.position}`}
                 >
@@ -80,10 +83,10 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                 />
                 <Box sx={{ minWidth: 0, flex: "1 1 180px" }}>
                   <Box sx={{ display: "flex", alignItems: "baseline", gap: 1, flexWrap: "wrap" }}>
-                    <Typography sx={{ fontSize: 17, fontWeight: 700 }}>{tutor.fullName}</Typography>
+                    <Typography sx={{ fontSize: 15, fontWeight: 700 }}>{tutor.fullName}</Typography>
                     {tutor.averageRating != null ? (
                       <Typography
-                        sx={{ fontSize: 13, fontWeight: 700, color: COMMUNITY_COLORS.star }}
+                        sx={{ fontSize: 12, fontWeight: 700, color: COMMUNITY_COLORS.star }}
                       >
                         ★ {tutor.averageRating.toFixed(1)}{" "}
                         <Box
@@ -96,7 +99,7 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                     ) : null}
                   </Box>
                   {tutor.careerName ? (
-                    <Typography sx={{ fontSize: 13.5, color: COMMUNITY_COLORS.muted }}>
+                    <Typography sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.muted }}>
                       {tutor.careerName}
                     </Typography>
                   ) : null}
@@ -136,13 +139,13 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                       color: "#FFFFFF",
                       fontSize: 13.5,
                       fontWeight: 700,
-                      px: 2,
-                      py: 0.9,
+                      px: 2.5,
+                      py: 1.1,
                       borderRadius: "8px",
                       "&:hover": { bgcolor: "#3451d1" },
                     }}
                   >
-                    <User size={14} aria-hidden />
+                    <User size={16} aria-hidden />
                     Perfil
                   </Box>
                 ) : null}

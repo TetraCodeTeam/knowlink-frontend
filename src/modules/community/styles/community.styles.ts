@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 
 export const COMMUNITY_COLORS = {
   primary: "#5B6ED9",
@@ -18,7 +19,7 @@ export const COMMUNITY_COLORS = {
 
 export const pageSx: SxProps<Theme> = {
   px: { xs: 2, md: 4 },
-  py: 3,
+  py: 2,
   display: "flex",
   flexDirection: "column",
 };
@@ -28,7 +29,7 @@ export const pageContentSx: SxProps<Theme> = {
   flex: 1,
   display: "flex",
   flexDirection: "column",
-  gap: 3,
+  gap: 2.5,
 };
 
 export const cardSx: SxProps<Theme> = {
@@ -46,21 +47,19 @@ export const chipSx: SxProps<Theme> = {
   px: 1,
   py: 0.25,
   borderRadius: "6px",
-  fontSize: 12,
+  fontSize: 11.5,
   fontWeight: 600,
   lineHeight: 1.6,
   whiteSpace: "nowrap",
 };
 
 export const pageTitleSx: SxProps<Theme> = {
-  fontSize: { xs: 22, md: 26 },
-  fontWeight: 700,
+  ...PAGE_TITLE_BASE_SX,
   color: COMMUNITY_COLORS.text,
-  lineHeight: 1.25,
 };
 
 export const sectionTitleSx: SxProps<Theme> = {
-  fontSize: 20,
+  fontSize: 18,
   fontWeight: 700,
   color: COMMUNITY_COLORS.text,
 };
@@ -71,7 +70,7 @@ export const backLinkSx: SxProps<Theme> = {
   gap: 0.75,
   alignSelf: "flex-start",
   color: COMMUNITY_COLORS.primaryDark,
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 600,
   textDecoration: "none",
   cursor: "pointer",

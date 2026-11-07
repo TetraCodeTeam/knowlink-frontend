@@ -59,7 +59,7 @@ export default function FrankieDailyMessage() {
       <FrankieSpeechBubble tail="left" sx={{ flex: 1, minWidth: 0, pr: 5 }}>
         <Box
           component="span"
-          sx={{ display: "block", fontSize: 12, color: COMMUNITY_COLORS.subtle }}
+          sx={{ display: "block", fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}
         >
           Frankie dice
         </Box>

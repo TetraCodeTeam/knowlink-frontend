@@ -57,10 +57,10 @@ export default function AttachmentView({ attachment }: AttachmentViewProps) {
     >
       <Icon size={22} color={COMMUNITY_COLORS.primaryDark} aria-hidden />
       <Box sx={{ minWidth: 0, flex: 1 }}>
-        <Typography noWrap sx={{ fontSize: 14, fontWeight: 600, color: COMMUNITY_COLORS.text }}>
+        <Typography noWrap sx={{ fontSize: 13, fontWeight: 600, color: COMMUNITY_COLORS.text }}>
           {attachment.fileName}
         </Typography>
-        <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
+        <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>
           {formatFileSize(attachment.sizeInBytes)}
         </Typography>
       </Box>
@@ -74,7 +74,7 @@ export default function AttachmentView({ attachment }: AttachmentViewProps) {
             display: "inline-flex",
             alignItems: "center",
             gap: 0.5,
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: 600,
             color: COMMUNITY_COLORS.primaryDark,
           }}
@@ -83,7 +83,7 @@ export default function AttachmentView({ attachment }: AttachmentViewProps) {
           Descargar
         </MuiLink>
       ) : (
-        <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>No disponible</Typography>
+        <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>No disponible</Typography>
       )}
     </Box>
   );

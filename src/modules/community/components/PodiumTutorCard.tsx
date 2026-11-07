@@ -19,7 +19,7 @@ const actionSx = {
   flex: 1,
   border: "none",
   borderRadius: "8px",
-  py: 0.9,
+  py: 1.1,
   fontSize: 13,
   fontWeight: 700,
   cursor: "pointer",
@@ -61,7 +61,7 @@ export default function PodiumTutorCard({ tutor }: PodiumTutorCardProps) {
           borderRadius: "15px",
           bgcolor: style.accent,
           color: "#FFFFFF",
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: 800,
         }}
       >
@@ -101,12 +101,12 @@ export default function PodiumTutorCard({ tutor }: PodiumTutorCardProps) {
         ) : null}
       </Typography>
       {tutor.careerName ? (
-        <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.muted }}>
+        <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.muted }}>
           {tutor.careerName}
         </Typography>
       ) : null}
       {tutor.averageRating != null ? (
-        <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.star, fontWeight: 600 }}>
+        <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.star, fontWeight: 600 }}>
           ★ {tutor.averageRating.toFixed(1)}
           <Box component="span" sx={{ color: COMMUNITY_COLORS.subtle, fontWeight: 400 }}>
             {" · "}({tutor.reviewsCount} {tutor.reviewsCount === 1 ? "reseña" : "reseñas"})
@@ -141,7 +141,7 @@ export default function PodiumTutorCard({ tutor }: PodiumTutorCardProps) {
           <Medal size={13} aria-hidden />
           {style.caption}
         </Typography>
-        <Typography sx={{ fontSize: 15, fontWeight: 700, color: COMMUNITY_COLORS.text, my: 0.75 }}>
+        <Typography sx={{ fontSize: 14, fontWeight: 700, color: COMMUNITY_COLORS.text, my: 0.75 }}>
           {tutor.completedClasses}{" "}
           {tutor.completedClasses === 1 ? "clase concretada" : "clases concretadas"} en KnowLink
         </Typography>
@@ -154,7 +154,7 @@ export default function PodiumTutorCard({ tutor }: PodiumTutorCardProps) {
                 onClick={() => navigate(profilePath)}
                 sx={{ ...actionSx, bgcolor: "#EEF0FD", color: COMMUNITY_COLORS.primaryDark }}
               >
-                <User size={14} aria-hidden />
+                <User size={16} aria-hidden />
                 Perfil
               </Box>
             ) : null}
@@ -170,7 +170,7 @@ export default function PodiumTutorCard({ tutor }: PodiumTutorCardProps) {
                   "&:hover": { bgcolor: style.buttonHoverBg },
                 }}
               >
-                <CalendarDays size={14} aria-hidden />
+                <CalendarDays size={16} aria-hidden />
                 Reservar
               </Box>
             ) : null}

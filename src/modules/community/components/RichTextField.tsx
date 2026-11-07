@@ -146,7 +146,7 @@ export default function RichTextField({
                   border: "none",
                   bgcolor: "transparent",
                   color: COMMUNITY_COLORS.primaryDark,
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: 600,
                   cursor: "pointer",
                   px: 1,
@@ -171,7 +171,7 @@ export default function RichTextField({
           onChange={(event) => onChange(event.target.value)}
           inputRef={inputRef}
           inputProps={{ "aria-label": ariaLabel }}
-          sx={{ px: 1.75, py: 1.25, fontSize: 15, alignItems: "flex-start" }}
+          sx={{ px: 1.75, py: 1.25, fontSize: 14, alignItems: "flex-start" }}
         />
 
         {file ? (
@@ -187,10 +187,10 @@ export default function RichTextField({
           >
             <Paperclip size={16} color={COMMUNITY_COLORS.primaryDark} aria-hidden />
             <Box sx={{ minWidth: 0, flex: 1 }}>
-              <Typography noWrap sx={{ fontSize: 13.5, fontWeight: 600 }}>
+              <Typography noWrap sx={{ fontSize: 12.5, fontWeight: 600 }}>
                 {file.name}
               </Typography>
-              <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
+              <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>
                 {formatFileSize(file.size)}
               </Typography>
             </Box>
@@ -207,12 +207,12 @@ export default function RichTextField({
       </Box>
 
       <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, mt: 0.5 }}>
-        <Typography sx={{ fontSize: 12.5, color: "#D64545" }} role={error ? "alert" : undefined}>
+        <Typography sx={{ fontSize: 12, color: "#D64545" }} role={error ? "alert" : undefined}>
           {error ?? ""}
         </Typography>
         <Typography
           sx={{
-            fontSize: 12.5,
+            fontSize: 12,
             fontWeight: 600,
             color: overLimit ? "#D64545" : COMMUNITY_COLORS.primaryDark,
             whiteSpace: "nowrap",
