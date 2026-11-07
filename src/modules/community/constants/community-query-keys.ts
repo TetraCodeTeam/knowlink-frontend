@@ -7,7 +7,7 @@ export const COMMUNITY_QUERY_KEYS = {
   feedList: (filters: FeedFilters) => ["community", "feed", "list", filters] as const,
   feedCounts: (filters: FeedFilters) => ["community", "feed", "counts", filters] as const,
   myPostsBase: ["community", "my-posts"] as const,
-  myPosts: (date: string) => ["community", "my-posts", date] as const,
+  myPosts: (from: string, to: string) => ["community", "my-posts", from, to] as const,
   post: (postId: string) => ["community", "post", postId] as const,
   subjects: ["community", "subjects"] as const,
   subjectsByCareer: (careerId: string | null) => ["community", "subjects", careerId] as const,

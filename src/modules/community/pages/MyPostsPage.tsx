@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 import {
-  ArrowLeft,
   CircleCheck,
   Eye,
   FolderOpen,
@@ -27,24 +26,29 @@ import { useResolvePost } from "@/modules/community/hooks/useResolvePost";
 import type { CommunityPost } from "@/modules/community/interfaces/responses/community-post.interface";
 import {
   COMMUNITY_COLORS,
-  backLinkSx,
   cardSx,
   chipSx,
   pageContentSx,
   pageSx,
+  pageTitleSx,
 } from "@/modules/community/styles/community.styles";
 import { formatRelativeTime } from "@/modules/community/utils/format-relative-time";
+import { toDateStr } from "@/shared/utils/calendarDateUtils";
 
 type PendingAction = { kind: "resolve" | "delete"; post: CommunityPost };
 
 export default function MyPostsPage() {
   const navigate = useNavigate();
   const { paths } = useCommunityViewer();
-  const [date, setDate] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const hasDateFilter = dateFrom !== "" || dateTo !== "";
+  // Las publicaciones no pueden ser del futuro: tampoco se ofrecen fechas posteriores a hoy.
+  const today = toDateStr(new Date());
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [editing, setEditing] = useState<CommunityPost | null>(null);
   const { posts, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } =
-    useMyPosts(date);
+    useMyPosts({ from: dateFrom, to: dateTo });
   const { resolvePost, isPending: isResolving } = useResolvePost();
   const { deletePost, isPending: isDeleting } = useDeletePost();
 
@@ -66,11 +70,6 @@ export default function MyPostsPage() {
   return (
     <Box sx={pageSx}>
       <Box sx={pageContentSx}>
-        <Box component={Link} to={paths.home} sx={backLinkSx}>
-          <ArrowLeft size={16} aria-hidden />
-          Volver a la Comunidad
-        </Box>
-
         <Box
           component="header"
           sx={{
@@ -82,7 +81,7 @@ export default function MyPostsPage() {
             bgcolor: COMMUNITY_COLORS.panel,
             borderRadius: "14px",
             px: { xs: 1.5, md: 2.5 },
-            py: 2,
+            py: 1.25,
           }}
         >
           <Box
@@ -91,42 +90,61 @@ export default function MyPostsPage() {
             <Box
               aria-hidden
               sx={{
-                width: 56,
-                height: 56,
-                borderRadius: "14px",
+                width: 48,
+                height: 48,
+                borderRadius: "12px",
                 bgcolor: "#4F46E5",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <FolderOpen size={28} color="#FFFFFF" />
+              <FolderOpen size={24} color="#FFFFFF" />
             </Box>
             <Box sx={{ minWidth: 0 }}>
-              <Typography
-                component="h1"
-                sx={{ fontSize: { xs: 22, md: 26 }, fontWeight: 800, color: COMMUNITY_COLORS.text }}
-              >
+              <Typography component="h1" sx={pageTitleSx}>
                 Mis publicaciones
               </Typography>
-              <Typography sx={{ fontSize: 14.5, color: COMMUNITY_COLORS.muted }}>
+              <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.muted }}>
                 Consultas realizadas y aportes compartidos en la comunidad universitaria
               </Typography>
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 1 }}>
             <TextField
               type="date"
               size="small"
-              label="Seleccionar fecha"
-              value={date}
-              onChange={(event) => setDate(event.target.value)}
-              InputLabelProps={{ shrink: true }}
+              label="Desde"
+              value={dateFrom}
+              onChange={(event) => setDateFrom(event.target.value)}
+              slotProps={{
+                inputLabel: { shrink: true },
+                htmlInput: { max: dateTo || today },
+              }}
               sx={{ bgcolor: "#FFFFFF", borderRadius: 1 }}
             />
-            {date ? (
-              <AppButton size="small" appVariant="outline" onClick={() => setDate("")}>
+            <TextField
+              type="date"
+              size="small"
+              label="Hasta"
+              value={dateTo}
+              onChange={(event) => setDateTo(event.target.value)}
+              slotProps={{
+                inputLabel: { shrink: true },
+                htmlInput: { min: dateFrom || undefined, max: today },
+              }}
+              sx={{ bgcolor: "#FFFFFF", borderRadius: 1 }}
+            />
+            {hasDateFilter ? (
+              <AppButton
+                size="small"
+                appVariant="outline"
+                onClick={() => {
+                  setDateFrom("");
+                  setDateTo("");
+                }}
+              >
                 Limpiar
               </AppButton>
             ) : null}
@@ -146,12 +164,12 @@ export default function MyPostsPage() {
           </Box>
         ) : posts.length === 0 ? (
           <CommunityEmptyState
-            mood={date ? "thinking" : "happy"}
-            accessories={date ? ["question"] : ["sparkles"]}
-            title={date ? "Nada en esa fecha" : "Tu primera publicación te espera"}
+            mood={hasDateFilter ? "thinking" : "happy"}
+            accessories={hasDateFilter ? ["question"] : ["sparkles"]}
+            title={hasDateFilter ? "Nada en ese período" : "Tu primera publicación te espera"}
             message={
-              date
-                ? "No publicaste nada en la fecha seleccionada."
+              hasDateFilter
+                ? "No publicaste nada en el período seleccionado."
                 : "Todavía no realizaste ninguna publicación en la comunidad."
             }
           />
@@ -209,7 +227,7 @@ export default function MyPostsPage() {
                           Resuelto
                         </Box>
                       ) : null}
-                      <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.subtle }}>
+                      <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
                         · {post.status === "RESOLVED" ? "Cerrada" : "Publicado"}{" "}
                         {formatRelativeTime(
                           post.status === "RESOLVED" && post.resolvedAt
@@ -224,7 +242,7 @@ export default function MyPostsPage() {
                         alignItems: "center",
                         gap: 2,
                         color: COMMUNITY_COLORS.muted,
-                        fontSize: 14,
+                        fontSize: 13,
                       }}
                     >
                       <Box
@@ -246,12 +264,12 @@ export default function MyPostsPage() {
                     </Box>
                   </Box>
 
-                  <Typography sx={{ fontSize: 18, fontWeight: 700, mt: 1.25 }}>
+                  <Typography sx={{ fontSize: 16, fontWeight: 700, mt: 1.25 }}>
                     {post.title}
                   </Typography>
                   <Typography
                     sx={{
-                      fontSize: 14.5,
+                      fontSize: 13.5,
                       color: COMMUNITY_COLORS.muted,
                       mt: 0.5,
                       display: "-webkit-box",
