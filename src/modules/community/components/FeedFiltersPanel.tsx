@@ -22,7 +22,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import { useCommunityCareers } from "@/modules/community/hooks/useCommunityCareers";
 import {
   CLEARED_FEED_FILTERS,
   FEED_PERIOD_OPTIONS,
@@ -129,7 +129,7 @@ export default function FeedFiltersPanel({
   onClear,
 }: FeedFiltersPanelProps) {
   const [draft, setDraft] = useState<FeedFiltersDraft>(() => toDraft(filters));
-  const { data: careers = [] } = useCareers();
+  const { data: careers = [] } = useCommunityCareers();
   const { subjects } = useCommunitySubjects(true, draft.careerId);
 
   const subjectNames = new Map(subjects.map((subject) => [subject.subjectId, subject.name]));

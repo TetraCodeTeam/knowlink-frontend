@@ -15,6 +15,9 @@ vi.mock("react-router-dom", async () => {
   return { ...actual, useNavigate: () => navigateMock };
 });
 
+const LONG_MESSAGE =
+  "Este es un mensaje muy largo que supera los cien caracteres para poder probar la expansion del contenido completo en la notificacion del panel.";
+
 function makeNotification(overrides: Partial<NotificationResponse> = {}): NotificationResponse {
   return {
     notificationId: "n-1",
@@ -66,7 +69,7 @@ describe("NotificationItem", () => {
     await user.click(screen.getByRole("button"));
 
     expect(onMarkAsRead).toHaveBeenCalledWith("n-1");
-    expect(navigateMock).toHaveBeenCalledWith("/student/classes");
+    expect(navigateMock).toHaveBeenCalledWith("/student/classes?category=RESERVED");
     expect(onClose).toHaveBeenCalled();
   });
 
@@ -77,10 +80,26 @@ describe("NotificationItem", () => {
     await user.click(screen.getByRole("button"));
 
     expect(onMarkAsRead).not.toHaveBeenCalled();
-    expect(navigateMock).toHaveBeenCalledWith("/student/classes");
+    expect(navigateMock).toHaveBeenCalledWith("/student/classes?category=RESERVED");
   });
 
-  it("marca como leida pero no navega cuando el tipo no tiene ruta para el rol", async () => {
+  it("agrega el claim de la URL al navegar desde una notificacion de reclamo", async () => {
+    const user = userEvent.setup();
+    render_item(
+      makeNotification({
+        type: "SESSION_CLAIM_UPDATE",
+        title: "Actualizacion de tu reclamo",
+        message: "Tu reclamo avanzo",
+        referenceId: "claim-9",
+      })
+    );
+
+    await user.click(screen.getByRole("button"));
+
+    expect(navigateMock).toHaveBeenCalledWith("/student/complaints?tab=claims&claim=claim-9");
+  });
+
+  it("marca como leida pero no navega ni cierra cuando el tipo no tiene ruta para el rol", async () => {
     const user = userEvent.setup();
     const { onMarkAsRead, onClose } = render_item(
       makeNotification({ type: "SUBJECT_VALIDATION_UPDATED" })
@@ -90,7 +109,7 @@ describe("NotificationItem", () => {
 
     expect(onMarkAsRead).toHaveBeenCalledWith("n-1");
     expect(navigateMock).not.toHaveBeenCalled();
-    expect(onClose).toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("muestra el titulo en negrita y el mensaje debajo", () => {
@@ -118,15 +137,77 @@ describe("NotificationItem", () => {
   it("destaca visualmente la notificacion no leida", () => {
     render_item(makeNotification());
 
-    expect(screen.getByRole("button")).toHaveStyle({ backgroundColor: "#F4F3FB" });
+    expect(screen.getByTestId("notification-item")).toHaveStyle({ backgroundColor: "#F4F3FB" });
     expect(screen.getByText("Reserva confirmada")).toHaveStyle({ fontWeight: "600" });
   });
 
   it("renderiza la notificacion leida sin destacar", () => {
     render_item(makeNotification({ read: true }));
 
-    expect(screen.getByRole("button")).toHaveStyle({ backgroundColor: "#FFFFFF" });
+    expect(screen.getByTestId("notification-item")).toHaveStyle({ backgroundColor: "#FFFFFF" });
     expect(screen.getByText("Reserva confirmada")).toHaveStyle({ fontWeight: "400" });
+  });
+
+  it("muestra Ver mas en un mensaje largo y al expandir marca leida sin navegar ni cerrar", async () => {
+    const user = userEvent.setup();
+    const { onMarkAsRead, onClose } = render_item(makeNotification({ message: LONG_MESSAGE }));
+
+    const toggle = screen.getByRole("button", { name: "Ver más" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+    await user.click(toggle);
+
+    expect(onMarkAsRead).toHaveBeenCalledWith("n-1");
+    expect(navigateMock).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Ver menos" })).toHaveAttribute(
+      "aria-expanded",
+      "true"
+    );
+  });
+
+  it("vuelve a colapsar el mensaje al hacer click en Ver menos", async () => {
+    const user = userEvent.setup();
+    render_item(makeNotification({ message: LONG_MESSAGE }));
+
+    await user.click(screen.getByRole("button", { name: "Ver más" }));
+    await user.click(screen.getByRole("button", { name: "Ver menos" }));
+
+    expect(screen.getByRole("button", { name: "Ver más" })).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    );
+  });
+
+  it("no muestra Ver mas con un mensaje corto", () => {
+    render_item(makeNotification());
+
+    expect(screen.queryByRole("button", { name: "Ver más" })).not.toBeInTheDocument();
+  });
+
+  it("no muestra Ver mas cuando la notificacion no tiene titulo", () => {
+    render_item(makeNotification({ title: null, message: LONG_MESSAGE }));
+
+    expect(screen.queryByRole("button", { name: "Ver más" })).not.toBeInTheDocument();
+  });
+
+  it("no muestra etiqueta de accion ni cierra el panel en el recordatorio de token", async () => {
+    const user = userEvent.setup();
+    const { onMarkAsRead, onClose } = render_item(
+      makeNotification({
+        type: "SESSION_CONFIRMATION_REMINDER",
+        title: "Recordatorio de token. Clase en curso",
+        message: "Ingresa el codigo para confirmar la sesion",
+      })
+    );
+
+    expect(screen.queryByText("Ver →")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button"));
+
+    expect(onMarkAsRead).toHaveBeenCalledWith("n-1");
+    expect(navigateMock).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("abre el popup de calificacion para RATING_ENABLED sin navegar", async () => {
@@ -180,15 +261,15 @@ describe("NotificationItem", () => {
 
     expect(screen.getByText("Ya calificaste")).toBeInTheDocument();
     expect(screen.queryByText("Calificar →")).not.toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveStyle({ opacity: "0.7" });
-    expect(screen.getByRole("button")).toHaveAttribute(
+    expect(screen.getByTestId("notification-item")).toHaveStyle({ opacity: "0.7" });
+    expect(screen.getByRole("button", { name: /Ya calificaste/ })).toHaveAttribute(
       "aria-label",
       expect.stringContaining("Ya calificaste.")
     );
     expect(onMarkAsRead).not.toHaveBeenCalled();
   });
 
-  it("muestra Venció el plazo cuando la notificacion expiro", () => {
+  it("muestra Vencido el plazo cuando la notificacion expiro", () => {
     render_item(
       makeNotification({
         type: "RATING_ENABLED",
@@ -201,8 +282,8 @@ describe("NotificationItem", () => {
 
     expect(screen.getByText("Venció el plazo")).toBeInTheDocument();
     expect(screen.queryByText("Calificar →")).not.toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveStyle({ opacity: "0.7" });
-    expect(screen.getByRole("button")).toHaveAttribute(
+    expect(screen.getByTestId("notification-item")).toHaveStyle({ opacity: "0.7" });
+    expect(screen.getByRole("button", { name: /Venció el plazo/ })).toHaveAttribute(
       "aria-label",
       expect.stringContaining("Venció el plazo para calificar.")
     );
@@ -220,7 +301,7 @@ describe("NotificationItem", () => {
       })
     );
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: /Ya calificaste/ }));
 
     expect(useRatingPopupStore.getState().bookingId).toBe("b-9");
     expect(navigateMock).not.toHaveBeenCalled();
@@ -238,11 +319,12 @@ describe("NotificationItem", () => {
       })
     );
 
-    await user.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button", { name: /Venció el plazo/ }));
 
     expect(useRatingPopupStore.getState().bookingId).toBe("b-9");
     expect(navigateMock).not.toHaveBeenCalled();
   });
+
   it("anuncia No leida en el aria-label cuando no esta leida", () => {
     render_item(makeNotification());
     expect(screen.getByRole("button")).toHaveAttribute(

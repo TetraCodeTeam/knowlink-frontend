@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import CategoryTabs from "@/modules/class-history/components/CategoryTabs";
 import ClassDateGroup from "@/modules/class-history/components/ClassDateGroup";
 import ClassHistoryEmptyState from "@/modules/class-history/components/ClassHistoryEmptyState";
 import { useBookingHistory } from "@/modules/class-history/hooks/useBookingHistory";
-import { groupByDate } from "@/modules/class-history/utils/classHistory.utils";
+import {
+  groupByDate,
+  parseHistoryCategory,
+} from "@/modules/class-history/utils/classHistory.utils";
 import AppButton from "@/shared/components/AppButton";
 import { getPageMinHeight } from "@/shared/utils/page-height.utils";
 import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
@@ -15,9 +18,13 @@ interface ClassHistoryPageProps {
 }
 
 export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
-  const [category, setCategory] = useState<BookingHistoryCategory>("RESERVED");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = parseHistoryCategory(searchParams.get("category")) ?? "RESERVED";
   const { items, hasNext, goToNextPage, isLoading, isFetchingNextPage, isError } =
     useBookingHistory(role, category);
+
+  const handleCategoryChange = (next: BookingHistoryCategory) =>
+    setSearchParams({ category: next }, { replace: true });
 
   const dateGroups = groupByDate(items);
   const hasItems = items.length > 0;
@@ -32,7 +39,7 @@ export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
         boxSizing: "border-box",
       }}
     >
-      <CategoryTabs activeCategory={category} onChange={setCategory} />
+      <CategoryTabs activeCategory={category} onChange={handleCategoryChange} />
 
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: "48px" }}>

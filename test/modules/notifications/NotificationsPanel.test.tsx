@@ -12,12 +12,18 @@ vi.mock("@/modules/notifications/api/notifications.api", () => ({
   getNotifications: vi.fn(),
   getUnreadCount: vi.fn(),
   markNotificationAsRead: vi.fn(),
+  markAllNotificationsAsRead: vi.fn(),
 }));
 
-import { getNotifications, getUnreadCount } from "@/modules/notifications/api/notifications.api";
+import {
+  getNotifications,
+  getUnreadCount,
+  markAllNotificationsAsRead,
+} from "@/modules/notifications/api/notifications.api";
 
 const mockedGetNotifications = vi.mocked(getNotifications);
 const mockedGetUnreadCount = vi.mocked(getUnreadCount);
+const mockedMarkAll = vi.mocked(markAllNotificationsAsRead);
 
 function makePage(content: PagedNotificationsResponse["content"]): PagedNotificationsResponse {
   return {
@@ -61,6 +67,8 @@ describe("NotificationsPanel", () => {
   beforeEach(() => {
     mockedGetNotifications.mockReset();
     mockedGetUnreadCount.mockReset();
+    mockedMarkAll.mockReset();
+    mockedMarkAll.mockResolvedValue(undefined);
     mockedGetUnreadCount.mockResolvedValue({ count: 4, otherRoleCount: 0 });
     useAuthStore.setState({
       isAuthenticated: true,
@@ -89,6 +97,41 @@ describe("NotificationsPanel", () => {
       expect(screen.getByText("4")).toBeInTheDocument();
     });
     expect(screen.getByRole("button", { name: "Colapsar panel" })).toBeInTheDocument();
+  });
+
+  it("muestra Marcar todo como leido cuando hay notificaciones sin leer", async () => {
+    mockedGetNotifications.mockResolvedValue(makePage([sampleNotification]));
+    renderPanel();
+
+    expect(
+      await screen.findByRole("button", { name: "Marcar todo como leído" })
+    ).toBeInTheDocument();
+  });
+
+  it("oculta Marcar todo como leido cuando no hay notificaciones sin leer", async () => {
+    mockedGetUnreadCount.mockResolvedValue({ count: 0, otherRoleCount: 0 });
+    mockedGetNotifications.mockResolvedValue(makePage([]));
+    renderPanel();
+
+    await waitFor(() => {
+      expect(mockedGetUnreadCount).toHaveBeenCalled();
+    });
+    expect(
+      screen.queryByRole("button", { name: "Marcar todo como leído" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("marca todas como leidas al hacer click en el boton", async () => {
+    const user = userEvent.setup();
+    mockedGetNotifications.mockResolvedValue(makePage([sampleNotification]));
+    renderPanel();
+
+    const button = await screen.findByRole("button", { name: "Marcar todo como leído" });
+    await user.click(button);
+
+    await waitFor(() => {
+      expect(mockedMarkAll).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("consulta la pestaña No Leído por defecto y muestra los items", async () => {

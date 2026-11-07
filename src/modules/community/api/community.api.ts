@@ -1,4 +1,5 @@
 import { httpClient } from "@/shared/lib/httpClient";
+import type { CareerOption } from "@/modules/tutors/api/catalog.api";
 import type { FeedFilters } from "@/modules/community/interfaces/feed-filters.interface";
 import type { CreatePostRequest } from "@/modules/community/interfaces/requests/create-post.interface";
 import type { CreateReplyRequest } from "@/modules/community/interfaces/requests/create-reply.interface";
@@ -138,6 +139,12 @@ export async function getCommunitySubjects(careerId?: string | null): Promise<Co
   const response = await httpClient.get<CommunitySubject[]>(`${BASE}/subjects`, {
     params: { careerId: careerId ?? undefined },
   });
+  return response.data;
+}
+
+/** Carreras regulares de la institución del usuario autenticado. */
+export async function getCommunityCareers(): Promise<CareerOption[]> {
+  const response = await httpClient.get<CareerOption[]>(`${BASE}/careers`);
   return response.data;
 }
 

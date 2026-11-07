@@ -24,3 +24,7 @@ export async function getUnreadCount(): Promise<UnreadCountResponse> {
 export async function markNotificationAsRead(notificationId: string): Promise<void> {
   await rawHttpClient.patch(`/api/v1/notifications/${notificationId}/read`);
 }
+
+export async function markAllNotificationsAsRead(): Promise<void> {
+  await rawHttpClient.patch("/api/v1/notifications/read-all");
+}

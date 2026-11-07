@@ -7,34 +7,66 @@ import { NOTIFICATION_TYPE_VALUES } from "@/modules/notifications/types/notifica
 
 describe("getNotificationRoute", () => {
   it("devuelve la ruta configurada para cada tipo y rol", () => {
-    expect(getNotificationRoute("BOOKING_CONFIRMED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("BOOKING_CONFIRMED", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("BOOKING_CANCELLED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("BOOKING_CANCELLED", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("SESSION_CONFIRMATION_REMINDER", "STUDENT")).toBe(
-      "/student/classes"
+    expect(getNotificationRoute("BOOKING_CONFIRMED", "STUDENT")).toBe(
+      "/student/classes?category=RESERVED"
     );
-    expect(getNotificationRoute("SESSION_CONFIRMATION_REMINDER", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("SESSION_CONFIRMED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("SESSION_CONFIRMED", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("SESSION_NOT_CONFIRMED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("SESSION_NOT_CONFIRMED", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("SESSION_COMPLETED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("SESSION_COMPLETED", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("FUNDS_TRANSFERRED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("FUNDS_TRANSFERRED", "TUTOR")).toBe("/tutor/classes");
-    expect(getNotificationRoute("FUNDS_SUSPENDED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("FUNDS_SUSPENDED", "TUTOR")).toBe("/tutor/requests");
+    expect(getNotificationRoute("BOOKING_CONFIRMED", "TUTOR")).toBe(
+      "/tutor/classes?category=RESERVED"
+    );
+    expect(getNotificationRoute("BOOKING_CANCELLED", "STUDENT")).toBe(
+      "/student/classes?category=CANCELLED"
+    );
+    expect(getNotificationRoute("BOOKING_CANCELLED", "TUTOR")).toBe(
+      "/tutor/classes?category=CANCELLED"
+    );
+    expect(getNotificationRoute("SESSION_CONFIRMATION_REMINDER", "STUDENT")).toBeNull();
+    expect(getNotificationRoute("SESSION_CONFIRMATION_REMINDER", "TUTOR")).toBeNull();
+    expect(getNotificationRoute("SESSION_CONFIRMATION_TOKEN_AVAILABLE", "STUDENT")).toBe(
+      "/student/classes?category=RESERVED"
+    );
+    expect(getNotificationRoute("SESSION_CONFIRMATION_TOKEN_AVAILABLE", "TUTOR")).toBeNull();
+    expect(getNotificationRoute("SESSION_CONFIRMED", "STUDENT")).toBe(
+      "/student/classes?category=COMPLETED"
+    );
+    expect(getNotificationRoute("SESSION_CONFIRMED", "TUTOR")).toBe(
+      "/tutor/classes?category=COMPLETED"
+    );
+    expect(getNotificationRoute("SESSION_NOT_CONFIRMED", "STUDENT")).toBe(
+      "/student/classes?category=NOT_CONFIRMED"
+    );
+    expect(getNotificationRoute("SESSION_NOT_CONFIRMED", "TUTOR")).toBe(
+      "/tutor/classes?category=NOT_CONFIRMED"
+    );
+    expect(getNotificationRoute("SESSION_COMPLETED", "STUDENT")).toBe(
+      "/student/classes?category=RESERVED"
+    );
+    expect(getNotificationRoute("SESSION_COMPLETED", "TUTOR")).toBe(
+      "/tutor/classes?category=RESERVED"
+    );
+    expect(getNotificationRoute("FUNDS_TRANSFERRED", "STUDENT")).toBe(
+      "/student/classes?category=COMPLETED"
+    );
+    expect(getNotificationRoute("FUNDS_TRANSFERRED", "TUTOR")).toBe(
+      "/tutor/classes?category=COMPLETED"
+    );
+    expect(getNotificationRoute("FUNDS_SUSPENDED", "STUDENT")).toBe(
+      "/student/complaints?tab=claims"
+    );
+    expect(getNotificationRoute("FUNDS_SUSPENDED", "TUTOR")).toBe("/tutor/requests?tab=claims");
     expect(getNotificationRoute("FUNDS_RELEASED", "STUDENT")).toBe("/student/classes");
     expect(getNotificationRoute("FUNDS_RELEASED", "TUTOR")).toBe("/tutor/requests");
     expect(getNotificationRoute("SUBJECT_VALIDATION_UPDATED", "STUDENT")).toBeNull();
     expect(getNotificationRoute("SUBJECT_VALIDATION_UPDATED", "TUTOR")).toBe("/tutor/profile");
     expect(getNotificationRoute("MATERIAL_REPORT_PROCESSED", "STUDENT")).toBe(
-      "/student/complaints"
+      "/student/complaints?tab=materials"
     );
     expect(getNotificationRoute("MATERIAL_REPORT_PROCESSED", "TUTOR")).toBe("/tutor/content");
-    expect(getNotificationRoute("RATING_ENABLED", "STUDENT")).toBe("/student/classes");
-    expect(getNotificationRoute("RATING_ENABLED", "TUTOR")).toBe("/tutor/classes");
+    expect(getNotificationRoute("RATING_ENABLED", "STUDENT")).toBe(
+      "/student/classes?category=RESERVED"
+    );
+    expect(getNotificationRoute("RATING_ENABLED", "TUTOR")).toBe(
+      "/tutor/classes?category=RESERVED"
+    );
     expect(getNotificationRoute("ADMIN_VALIDATION_REQUEST_PENDING", "STUDENT")).toBeNull();
     expect(getNotificationRoute("ADMIN_VALIDATION_REQUEST_PENDING", "TUTOR")).toBeNull();
     expect(getNotificationRoute("ADMIN_MATERIAL_REPORT_RECEIVED", "STUDENT")).toBeNull();
@@ -42,14 +74,16 @@ describe("getNotificationRoute", () => {
   });
 
   it("resuelve las rutas de los tipos de soporte", () => {
-    for (const type of [
-      "SESSION_CLAIM_UPDATE",
-      "SESSION_CLAIM_COMMENT",
-      "MATERIAL_REPORT_UPDATE",
-    ] as const) {
-      expect(getNotificationRoute(type, "STUDENT")).toBe("/student/complaints");
-      expect(getNotificationRoute(type, "TUTOR")).toBe("/tutor/requests");
+    for (const type of ["SESSION_CLAIM_UPDATE", "SESSION_CLAIM_COMMENT"] as const) {
+      expect(getNotificationRoute(type, "STUDENT")).toBe("/student/complaints?tab=claims");
+      expect(getNotificationRoute(type, "TUTOR")).toBe("/tutor/requests?tab=claims");
     }
+    expect(getNotificationRoute("MATERIAL_REPORT_UPDATE", "STUDENT")).toBe(
+      "/student/complaints?tab=materials"
+    );
+    expect(getNotificationRoute("MATERIAL_REPORT_UPDATE", "TUTOR")).toBe(
+      "/tutor/requests?tab=materials"
+    );
   });
 
   it("devuelve null para ADMIN en todos los tipos", () => {
@@ -69,7 +103,7 @@ describe("getNotificationAction", () => {
     expect(getNotificationAction("BOOKING_CONFIRMED", "STUDENT")).toEqual({
       kind: "navigate",
       label: "Ver",
-      route: "/student/classes",
+      route: "/student/classes?category=RESERVED",
     });
   });
 
@@ -112,7 +146,16 @@ describe("getNotificationAction", () => {
     expect(getNotificationAction("SESSION_CLAIM_COMMENT", "TUTOR")).toEqual({
       kind: "navigate",
       label: "Ver",
-      route: "/tutor/requests",
+      route: "/tutor/requests?tab=claims",
+    });
+  });
+
+  it("resuelve none para el recordatorio de token", () => {
+    expect(getNotificationAction("SESSION_CONFIRMATION_REMINDER", "STUDENT")).toEqual({
+      kind: "none",
+    });
+    expect(getNotificationAction("SESSION_CONFIRMATION_REMINDER", "TUTOR")).toEqual({
+      kind: "none",
     });
   });
 

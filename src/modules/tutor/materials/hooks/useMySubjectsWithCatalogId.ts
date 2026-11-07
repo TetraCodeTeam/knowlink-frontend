@@ -1,4 +1,3 @@
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
 import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
 import { useMyTutorProfile } from "@/modules/tutor/profile/hooks/useMyTutorProfile";
@@ -19,19 +18,14 @@ function normalizeName(name: string) {
 
 /**
  * Cross-references the tutor's own subjects (which only carry tutorSubjectId + subjectName)
- * against the catalog (basic + career subjects) to resolve the real catalog subjectId.
- * That catalog subjectId is what the materials API expects as the `subjectId` param.
+ * against the catalog (basic + career subjects of the tutor's own institution and career)
+ * to resolve the real catalog subjectId. That catalog subjectId is what the materials API
+ * expects as the `subjectId` param.
  */
 export function useMySubjectsWithCatalogId() {
   const { data: profile, isLoading: profileLoading } = useMyTutorProfile();
-  const { data: careers, isLoading: careersLoading } = useCareers();
-
-  const ownCareer = careers?.find(
-    (c) => normalizeName(c.name) === normalizeName(profile?.career ?? "")
-  );
-
-  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
-  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(ownCareer?.careerId);
+  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects(profile?.institutionId);
+  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(profile?.careerId);
 
   const allCatalogSubjects = [...(basicSubjects ?? []), ...(careerSubjects ?? [])];
 
@@ -49,7 +43,7 @@ export function useMySubjectsWithCatalogId() {
     })
     .filter((s): s is SubjectWithCatalogId => s !== null);
 
-  const isLoading = profileLoading || careersLoading || basicLoading || careerLoading;
+  const isLoading = profileLoading || basicLoading || careerLoading;
 
   return { subjects, isLoading };
 }

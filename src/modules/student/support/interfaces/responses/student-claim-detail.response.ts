@@ -16,6 +16,7 @@ export interface ClaimFundsSummary {
 export interface ClaimReviewProgress {
   currentPhase: string;
   queuePosition: number | null;
+  queueTotal: number | null;
   responseDueAt: string | null;
   remainingMinutes: number;
 }

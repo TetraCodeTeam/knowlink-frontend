@@ -81,6 +81,8 @@ export const StudentEditProfilePage = () => {
         key={profile.userId}
         variant="student"
         email={profile.email}
+        institutionId={profile.institutionId}
+        institutionName={profile.institution}
         defaultValues={defaultValues}
         isPending={isPending}
         onSubmit={handleSubmit}

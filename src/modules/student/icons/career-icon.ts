@@ -26,6 +26,7 @@ const RAW_CAREER_ICONS: [string, LucideIcon][] = [
   ["Ingeniería civíl", Building],
   ["Administración rural", Wheat],
   ["Materias básicas", Sigma],
+  ["Materias compartidas", Sigma],
 ];
 
 const CAREER_ICONS: Record<string, LucideIcon> = Object.fromEntries(

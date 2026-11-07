@@ -42,15 +42,15 @@ export function ClaimsSidebar({
         iconColor={TONE_COLORS.neutral.fg}
         title="Antes de reclamar"
       >
-        Solo podés abrir un reclamo activo por sesión. Elegí la sesión desde tu historial de clases
-        para iniciar uno nuevo.
+        Solo podés abrir un reclamo activo por sesión. Los reclamos se inician desde las clases no
+        confirmadas de tu historial.
         <Button
           variant="text"
           endIcon={<ArrowRight size={14} aria-hidden="true" />}
           sx={sideLinkSx}
           onClick={onGoToClassHistory}
         >
-          Ir al historial de clases
+          Ir a clases no confirmadas
         </Button>
       </SideInfoCard>
 

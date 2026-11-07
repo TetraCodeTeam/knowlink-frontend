@@ -11,6 +11,8 @@ export default function TutorRegisterPage() {
   const location = useLocation();
   const isDualRole = (location.state as { startAtStep?: number } | null)?.startAtStep === 2;
   const dualRoleCareer = (location.state as { career?: string } | null)?.career ?? "";
+  const dualRoleInstitutionId =
+    (location.state as { institutionId?: string } | null)?.institutionId ?? "";
   const [currentStep, setCurrentStep] = useState(1);
 
   if (!isDualRole && !credentials) {
@@ -36,6 +38,7 @@ export default function TutorRegisterPage() {
         initialStep={isDualRole ? 2 : 1}
         isDualRole={isDualRole}
         dualRoleCareer={dualRoleCareer}
+        dualRoleInstitutionId={dualRoleInstitutionId}
       />
     </AuthLayout>
   );

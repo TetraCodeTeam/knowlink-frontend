@@ -42,6 +42,8 @@ const Field = ({ label, children }: FieldProps) => (
 interface EditProfileFormProps {
   variant: "student" | "tutor";
   email: string;
+  institutionId: string;
+  institutionName: string;
   defaultValues: EditProfileFormValues;
   requiresAddress?: boolean;
   isPending: boolean;
@@ -54,6 +56,8 @@ interface EditProfileFormProps {
 export default function EditProfileForm({
   variant,
   email,
+  institutionId,
+  institutionName,
   defaultValues,
   requiresAddress = false,
   isPending,
@@ -75,7 +79,7 @@ export default function EditProfileForm({
     mode: "all",
   });
 
-  const { data: careers } = useCareers();
+  const { data: careers } = useCareers(institutionId);
   const currentCareer = defaultValues.career;
 
   const careerOptions = useMemo(() => {
@@ -151,6 +155,18 @@ export default function EditProfileForm({
             disabled
             helperText="El correo electrónico no puede modificarse."
             slotProps={{ htmlInput: { "data-testid": "email-field" } }}
+            sx={inputSx}
+          />
+        </Field>
+
+        <Field label="Institución">
+          <TextField
+            fullWidth
+            size="small"
+            value={institutionName}
+            disabled
+            helperText="La institución no puede modificarse."
+            slotProps={{ htmlInput: { "data-testid": "institution-field" } }}
             sx={inputSx}
           />
         </Field>

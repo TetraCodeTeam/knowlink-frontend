@@ -8,7 +8,10 @@ export interface StudentSelfProfileResponse {
   lastName: string;
   email: string;
   phoneNumber: string;
+  careerId: string;
   career: string;
+  institutionId: string;
+  institution: string;
   dni: string | null;
   institutionalId: string | null;
   profilePictureUrl: string | null;

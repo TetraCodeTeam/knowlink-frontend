@@ -52,7 +52,11 @@ export const OwnProfilePage = () => {
               major={profile.career}
               onEdit={() => navigate(studentPaths.editProfile)}
             />
-            <TutorRoleCard hasTutorProfile={profile.hasTutorProfile} career={profile.career} />
+            <TutorRoleCard
+              hasTutorProfile={profile.hasTutorProfile}
+              career={profile.career}
+              institutionId={profile.institutionId}
+            />
           </Stack>
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>

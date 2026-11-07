@@ -1,4 +1,3 @@
-import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
 import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
 import { useMyTutorProfile } from "@/modules/tutor/hooks/useMyTutorProfile";
@@ -6,10 +5,13 @@ import { useMyTutorProfile } from "@/modules/tutor/hooks/useMyTutorProfile";
 /**
  * Materias básicas y de la carrera propia, excluyendo las que el tutor
  * ya tiene cargadas como Tutor_Subject (evita duplicados / 409).
+ *
+ * La carrera y la institución se resuelven por sus ids en el perfil: con dos
+ * instituciones que comparten el nombre de una carrera, buscar por nombre sería
+ * ambiguo.
  */
 export function useAvailableSubjects() {
   const { data: profile, isLoading: profileLoading } = useMyTutorProfile();
-  const { data: careers, isLoading: careersLoading } = useCareers();
 
   function normalizeName(name: string) {
     return name
@@ -19,12 +21,8 @@ export function useAvailableSubjects() {
       .toLowerCase();
   }
 
-  const ownCareer = careers?.find(
-    (c) => normalizeName(c.name) === normalizeName(profile?.career ?? "")
-  );
-
-  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
-  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(ownCareer?.careerId);
+  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects(profile?.institutionId);
+  const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(profile?.careerId);
 
   const existingSubjectIds = profile?.subjects
     ?.map((ts) => {
@@ -43,7 +41,7 @@ export function useAvailableSubjects() {
     (s) => !existingSubjectIds?.includes(s.subjectId)
   );
 
-  const isLoading = profileLoading || careersLoading || basicLoading || careerLoading;
+  const isLoading = profileLoading || basicLoading || careerLoading;
 
   const hasAvailableSubjects =
     !!availableBasicSubjects?.length || !!availableCareerSubjects?.length;

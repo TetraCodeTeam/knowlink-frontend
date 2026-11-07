@@ -23,6 +23,7 @@ const inputSx = { "& .MuiOutlinedInput-root": { borderRadius: 2 } };
 
 interface Step2Props {
   career: string;
+  institutionId: string;
   defaultValues: Partial<Step2Data>;
   onNext: (data: Step2Data) => void;
   onBack: () => void;
@@ -30,6 +31,7 @@ interface Step2Props {
 
 export default function Step2AcademicProfile({
   career,
+  institutionId,
   defaultValues,
   onNext,
   onBack,
@@ -64,10 +66,10 @@ export default function Step2AcademicProfile({
   const { fields, append, remove } = useFieldArray({ control, name: "subjects" });
   const watchedSubjects = watch("subjects");
 
-  const { data: careers } = useCareers();
+  const { data: careers } = useCareers(institutionId);
   const selectedCareer = careers?.find((c) => c.name === career);
 
-  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects();
+  const { data: basicSubjects, isLoading: basicLoading } = useBasicSubjects(institutionId);
   const { data: careerSubjects, isLoading: careerLoading } = useCareerSubjects(
     selectedCareer?.careerId
   );

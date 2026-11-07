@@ -23,3 +23,8 @@ export function formatReviewPhase(phase: string): string {
   };
   return labels[phase] ?? phase.replaceAll("_", " ").toLowerCase();
 }
+export function formatQueuePosition(position: number, total: number | null): string {
+  return total != null
+    ? `Lugar ${position} de ${total} en la cola de casos pendientes`
+    : `Turno #${position}`;
+}

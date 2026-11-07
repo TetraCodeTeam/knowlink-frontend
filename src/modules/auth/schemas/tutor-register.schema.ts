@@ -9,6 +9,7 @@ export const step1Schema = z.object({
     .string()
     .min(1, "El apellido es obligatorio")
     .max(100, "El apellido no puede superar los 100 caracteres"),
+  institutionId: z.string().min(1, "La institución es obligatoria"),
   career: z.string().min(1, "La carrera es obligatoria"),
   phoneNumber: z
     .string()

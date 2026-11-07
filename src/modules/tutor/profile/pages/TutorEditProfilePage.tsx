@@ -89,6 +89,8 @@ export const TutorEditProfilePage = () => {
         key={profile.userId}
         variant="tutor"
         email={profile.email}
+        institutionId={profile.institutionId}
+        institutionName={profile.institution}
         defaultValues={defaultValues}
         requiresAddress={requiresAddress}
         isPending={isPending}
