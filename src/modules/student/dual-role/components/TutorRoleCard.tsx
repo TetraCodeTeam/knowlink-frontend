@@ -13,9 +13,14 @@ import RoleRedirectDialog from "@/modules/student/dual-role/components/RoleRedir
 interface TutorRoleCardProps {
   hasTutorProfile: boolean;
   career?: string;
+  institutionId?: string;
 }
 
-export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCardProps) {
+export default function TutorRoleCard({
+  hasTutorProfile,
+  career,
+  institutionId,
+}: TutorRoleCardProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { authResponse, login } = useAuthStore();
@@ -28,7 +33,9 @@ export default function TutorRoleCard({ hasTutorProfile, career }: TutorRoleCard
 
   const handleActivateConfirm = () => {
     setShowConfirmDialog(false);
-    navigate("/auth/register/tutor", { state: { startAtStep: 2, career: career ?? "" } });
+    navigate("/auth/register/tutor", {
+      state: { startAtStep: 2, career: career ?? "", institutionId },
+    });
   };
 
   const handleSwitchToggle = async () => {

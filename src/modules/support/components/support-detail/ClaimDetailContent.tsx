@@ -4,6 +4,7 @@ import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tu
 import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import {
+  formatQueuePosition,
   formatReviewPhase,
   formatSupportAmount,
   formatSupportReason,
@@ -125,9 +126,17 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
           {formatReviewPhase(claim.reviewProgress.currentPhase)}
         </Typography>
         {claim.reviewProgress.queuePosition != null && (
-          <Typography sx={supportMutedTextSx}>
-            Turno #{claim.reviewProgress.queuePosition}
-          </Typography>
+          <>
+            <Typography sx={supportMutedTextSx}>
+              {formatQueuePosition(
+                claim.reviewProgress.queuePosition,
+                claim.reviewProgress.queueTotal
+              )}
+            </Typography>
+            <Typography sx={supportMutedTextSx}>
+              Baja cuando el equipo académico toma un caso.
+            </Typography>
+          </>
         )}
         <Typography sx={{ ...supportAccentTextSx, fontWeight: 600 }}>
           {claim.reviewProgress.remainingMinutes > 0

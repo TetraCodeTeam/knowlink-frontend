@@ -4,16 +4,14 @@ import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useResolveRatingNotification } from "@/modules/notifications/hooks/useResolveRatingNotification";
 import RateBookingDialog from "@/modules/class-history/components/RateBookingDialog";
 import RateBookingAlreadyRatedDialog from "@/modules/class-history/components/RateBookingAlreadyRatedDialog";
-import RateBookingExpiredDialog from "@/modules/class-history/components/RateBookingExpiredDialog";
 import RateBookingSuccessDialog from "@/modules/class-history/components/RateBookingSuccessDialog";
 import { useBookingDetail } from "@/modules/class-history/hooks/useBookingDetail";
 import { useRateBooking } from "@/modules/class-history/hooks/useRateBooking";
 import { useRatingPopupStore } from "@/modules/class-history/hooks/useRatingPopupStore";
 import type { RateBookingFormValues } from "@/modules/class-history/schemas/rateBooking.schema";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
-import type { ErrorResponse } from "@/shared/interfaces/error-response.interface";
 
-type RatingPopupStep = "rating" | "success" | "already-rated" | "expired";
+type RatingPopupStep = "rating" | "success" | "already-rated";
 
 export default function RatingPopupHost() {
   const bookingId = useRatingPopupStore((s) => s.bookingId);
@@ -32,7 +30,7 @@ export default function RatingPopupHost() {
 
   useEffect(() => {
     if (!bookingId || !detail) return;
-    if (step === "success" || step === "already-rated" || step === "expired") return;
+    if (step === "success" || step === "already-rated") return;
 
     switch (detail.ratingStatus) {
       case "PENDING":
@@ -41,28 +39,11 @@ export default function RatingPopupHost() {
       case "SUBMITTED":
         setStep("already-rated");
         break;
-      case "EXPIRED":
-        setStep("expired");
-        break;
       case "NOT_AVAILABLE":
         close();
         break;
     }
   }, [bookingId, detail, step, close]);
-
-  useEffect(() => {
-    if (step !== "rating" || !detail || detail.ratingStatus !== "PENDING") return;
-    if (!detail.ratingDeadline) return;
-
-    const delay = new Date(detail.ratingDeadline).getTime() - Date.now();
-    if (delay <= 0) {
-      setStep("expired");
-      return;
-    }
-
-    const timer = setTimeout(() => setStep("expired"), delay);
-    return () => clearTimeout(timer);
-  }, [step, detail]);
 
   useEffect(() => {
     if (bookingId && isError) {
@@ -82,15 +63,6 @@ export default function RatingPopupHost() {
         setStep("already-rated");
         invalidate();
         resolve(bookingId);
-        return;
-      }
-      if (
-        status === 422 &&
-        axios.isAxiosError<ErrorResponse>(err) &&
-        err.response?.data?.detail === "RATING_WINDOW_EXPIRED"
-      ) {
-        setStep("expired");
-        invalidate();
       }
     }
   };
@@ -119,7 +91,6 @@ export default function RatingPopupHost() {
         onClose={handleSuccessClose}
       />
       <RateBookingAlreadyRatedDialog open={step === "already-rated"} onClose={close} />
-      <RateBookingExpiredDialog open={step === "expired"} onClose={close} />
     </>
   );
 }

@@ -25,6 +25,7 @@ export interface TutorClaimDetail {
   reviewProgress: {
     currentPhase: string;
     queuePosition: number | null;
+    queueTotal: number | null;
     responseDueAt: string | null;
     remainingMinutes: number;
   };

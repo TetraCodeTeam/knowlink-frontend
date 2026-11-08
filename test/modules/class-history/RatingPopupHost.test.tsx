@@ -18,17 +18,6 @@ import { getBookingDetail, rateBooking } from "@/modules/class-history/api/class
 const mockedGetBookingDetail = vi.mocked(getBookingDetail);
 const mockedRateBooking = vi.mocked(rateBooking);
 
-function toLocalDateTime(date: Date): string {
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
-    date.getHours()
-  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
-function futureDeadline(offsetMs = 60 * 60 * 1000): string {
-  return toLocalDateTime(new Date(Date.now() + offsetMs));
-}
-
 function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHistoryDetail {
   return {
     bookingId: "b-1",
@@ -46,7 +35,6 @@ function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHisto
     address: null,
     createdAt: "2026-10-15T10:00:00",
     ratingStatus: "PENDING",
-    ratingDeadline: futureDeadline(),
     ...overrides,
   };
 }
@@ -108,9 +96,7 @@ describe("RatingPopupHost", () => {
   });
 
   it("muestra el dialogo de ya calificaste si el backend informa SUBMITTED", async () => {
-    mockedGetBookingDetail.mockResolvedValue(
-      makeDetail({ ratingStatus: "SUBMITTED", ratingDeadline: futureDeadline() })
-    );
+    mockedGetBookingDetail.mockResolvedValue(makeDetail({ ratingStatus: "SUBMITTED" }));
     renderHost();
     openPopup();
 
@@ -118,21 +104,8 @@ describe("RatingPopupHost", () => {
     expect(screen.queryByText("Calificá tu sesión")).not.toBeInTheDocument();
   });
 
-  it("muestra el aviso de plazo vencido si el backend informa EXPIRED", async () => {
-    mockedGetBookingDetail.mockResolvedValue(
-      makeDetail({ ratingStatus: "EXPIRED", ratingDeadline: futureDeadline() })
-    );
-    renderHost();
-    openPopup();
-
-    expect(await screen.findByText("El plazo para calificar venció")).toBeInTheDocument();
-    expect(screen.queryByText("Calificá tu sesión")).not.toBeInTheDocument();
-  });
-
   it("cierra el store cuando la calificacion no esta disponible", async () => {
-    mockedGetBookingDetail.mockResolvedValue(
-      makeDetail({ ratingStatus: "NOT_AVAILABLE", ratingDeadline: null })
-    );
+    mockedGetBookingDetail.mockResolvedValue(makeDetail({ ratingStatus: "NOT_AVAILABLE" }));
     renderHost();
     openPopup();
 
@@ -195,42 +168,5 @@ describe("RatingPopupHost", () => {
     await waitFor(() => {
       expect(screen.getByText("Ya calificaste esta sesión")).toBeInTheDocument();
     });
-  });
-
-  it("un 422 RATING_WINDOW_EXPIRED muestra el aviso de plazo vencido", async () => {
-    const user = userEvent.setup();
-    mockedGetBookingDetail.mockResolvedValue(makeDetail());
-    mockedRateBooking.mockRejectedValue(axiosError(422, "RATING_WINDOW_EXPIRED"));
-    renderHost();
-    openPopup();
-
-    await user.click(await screen.findByRole("radio", { name: "5 estrellas" }));
-    await user.click(screen.getByRole("button", { name: "Enviar" }));
-
-    await waitFor(() => {
-      expect(screen.getByText("El plazo para calificar venció")).toBeInTheDocument();
-    });
-    expect(screen.queryByText("Ya calificaste esta sesión")).not.toBeInTheDocument();
-  });
-
-  it("si el plazo ya vencio al abrir el formulario muestra el aviso", async () => {
-    mockedGetBookingDetail.mockResolvedValue(
-      makeDetail({ ratingDeadline: futureDeadline(-60_000) })
-    );
-    renderHost();
-    openPopup();
-
-    expect(await screen.findByText("El plazo para calificar venció")).toBeInTheDocument();
-  });
-
-  it("si el plazo vence con el formulario abierto muestra el aviso", async () => {
-    mockedGetBookingDetail.mockResolvedValue(makeDetail({ ratingDeadline: futureDeadline(1_200) }));
-    renderHost();
-    openPopup();
-
-    expect(await screen.findByText("Calificá tu sesión")).toBeInTheDocument();
-    expect(
-      await screen.findByText("El plazo para calificar venció", {}, { timeout: 3000 })
-    ).toBeInTheDocument();
   });
 });

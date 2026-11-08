@@ -3,6 +3,7 @@ import AppShell from "@/modules/app-shell/components/AppShell";
 import { StudentTokenWidget } from "@/modules/attendance/components/StudentTokenWidget";
 import { useAutoShowStudentToken } from "@/modules/attendance/hooks/useAutoShowStudentToken";
 import RatingPopupHost from "@/modules/class-history/components/RatingPopupHost";
+import MandatoryRatingGate from "@/modules/class-history/components/MandatoryRatingGate";
 import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
 import SearchBar from "@/modules/student/components/SearchBar";
 import { STUDENT_NAVIGATION } from "@/modules/student/navigation/student-navigation.constants";
@@ -26,6 +27,7 @@ export default function StudentLayout() {
       </AppShell>
       <StudentTokenWidget />
       <RatingPopupHost />
+      <MandatoryRatingGate />
       <ClaimPopupHost />
     </>
   );

@@ -16,7 +16,10 @@ import {
 import { Camera } from "lucide-react";
 import { step1Schema, type Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import AppButton from "@/shared/components/AppButton";
+import { useInstitutions } from "@/modules/tutors/hooks/useInstitutions";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
+import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
+import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
 const inputSx = {
@@ -34,19 +37,33 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
     defaultValues.profilePictureUrl
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data: careers, isLoading: careersLoading } = useCareers();
 
   const {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
+    resetField,
     control,
+    watch,
     formState: { errors },
     setError,
   } = useForm<Step1Data>({
     resolver: zodResolver(step1Schema),
     defaultValues,
   });
+
+  const {
+    data: institutions,
+    isLoading: institutionsLoading,
+    isError: institutionsError,
+    refetch: refetchInstitutions,
+  } = useInstitutions();
+
+  const institutionId = watch("institutionId");
+  const { data: careers, isLoading: careersLoading } = useCareers(institutionId);
+
+  const hasInstitutions = !!institutions?.length;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -152,6 +169,58 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         />
       </Box>
 
+      {/* Institución */}
+      <Box>
+        <Typography variant="body2" fontWeight={500} mb={0.5}>
+          Institución*
+        </Typography>
+        <FormControl fullWidth error={!!errors.institutionId}>
+          <Controller
+            name="institutionId"
+            control={control}
+            render={({ field: f }) => (
+              <Select
+                {...f}
+                value={f.value ?? ""}
+                displayEmpty
+                disabled={institutionsLoading || !hasInstitutions}
+                onChange={(event) => {
+                  f.onChange(event);
+                  resetField("career", { defaultValue: "" });
+                  clearErrors("career");
+                }}
+                renderValue={(selected) =>
+                  selected
+                    ? (institutions?.find((i) => i.institutionId === selected)?.name ?? "")
+                    : "Elegí tu institución"
+                }
+                sx={{ borderRadius: 2 }}
+              >
+                {institutions?.map((institution) => (
+                  <MenuItem key={institution.institutionId} value={institution.institutionId}>
+                    {institution.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {errors.institutionId && <FormHelperText>{errors.institutionId.message}</FormHelperText>}
+        </FormControl>
+        {institutionsError && (
+          <FrankieErrorState
+            compact
+            message="No pudimos cargar las instituciones. Sin este dato no podés continuar."
+            onRetry={() => void refetchInstitutions()}
+          />
+        )}
+        {!institutionsLoading && !institutionsError && institutions?.length === 0 && (
+          <FrankieEmptyState
+            compact
+            message="Todavía no hay instituciones disponibles para registrarte."
+          />
+        )}
+      </Box>
+
       {/* Carrera */}
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
@@ -162,7 +231,14 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
             name="career"
             control={control}
             render={({ field: f }) => (
-              <Select {...f} sx={{ borderRadius: 2 }} disabled={careersLoading}>
+              <Select
+                {...f}
+                value={f.value ?? ""}
+                displayEmpty
+                disabled={!institutionId || careersLoading}
+                renderValue={(selected) => selected || "Elegí tu carrera"}
+                sx={{ borderRadius: 2 }}
+              >
                 {careers?.map((c) => (
                   <MenuItem key={c.careerId} value={c.name}>
                     {c.name}
@@ -171,8 +247,18 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
               </Select>
             )}
           />
-          {errors.career && <FormHelperText>{errors.career.message}</FormHelperText>}
+          {errors.career ? (
+            <FormHelperText>{errors.career.message}</FormHelperText>
+          ) : !institutionId ? (
+            <FormHelperText>Elegí tu institución primero</FormHelperText>
+          ) : null}
         </FormControl>
+        {institutionId && !careersLoading && careers?.length === 0 && (
+          <FrankieEmptyState
+            compact
+            message="Esta institución todavía no tiene carreras cargadas."
+          />
+        )}
       </Box>
 
       {/* Teléfono */}

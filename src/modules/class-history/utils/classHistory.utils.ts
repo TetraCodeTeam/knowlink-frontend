@@ -1,6 +1,12 @@
 import { formatClockTime, toMinutesOfDay } from "@/shared/utils/dayTime.utils";
-import { MAX_VIRTUAL_LINK_LENGTH } from "@/modules/class-history/constants/classHistory.constants";
+import {
+  CATEGORY_TABS,
+  MAX_VIRTUAL_LINK_LENGTH,
+} from "@/modules/class-history/constants/classHistory.constants";
+import { studentPaths, tutorPaths } from "@/routes/paths";
 import type { BookingHistoryItem } from "@/modules/class-history/interfaces/responses/booking-history-item.interface";
+import type { BookingHistoryCategory } from "@/modules/class-history/types/booking-history-category.type";
+import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 
 const DAY_NAMES = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
@@ -111,4 +117,18 @@ export function isWithinVirtualLinkEditWindow(
 export function formatSessionDateLabel(sessionDate: string): string {
   const date = new Date(`${sessionDate}T00:00:00`);
   return `${DAY_NAMES[date.getDay()]} ${date.getDate()}/${date.getMonth() + 1}`;
+}
+
+export function parseHistoryCategory(value: string | null): BookingHistoryCategory | null {
+  if (!value) return null;
+  const match = CATEGORY_TABS.find((tab) => tab.category === value);
+  return match?.category ?? null;
+}
+
+export function buildClassHistoryRoute(
+  role: BookingRole,
+  category: BookingHistoryCategory
+): string {
+  const base = role === "STUDENT" ? studentPaths.classes : tutorPaths.classes;
+  return `${base}?category=${category}`;
 }

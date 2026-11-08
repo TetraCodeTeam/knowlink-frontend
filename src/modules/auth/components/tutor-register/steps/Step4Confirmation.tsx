@@ -3,6 +3,7 @@ import { Box, Card, CardContent, Chip, Typography } from "@mui/material";
 import { Laptop, LibraryBig } from "lucide-react";
 import type { Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import type { Step2Data } from "@/modules/auth/schemas/tutor-register.schema";
+import { useInstitutions } from "@/modules/tutors/hooks/useInstitutions";
 import AppButton from "@/shared/components/AppButton";
 
 interface Step4Props {
@@ -31,6 +32,11 @@ export default function Step4Confirmation({
   onConfirm,
   onBack,
 }: Step4Props) {
+  const { data: institutions } = useInstitutions();
+  const institutionName = institutions?.find(
+    (institution) => institution.institutionId === step1.institutionId
+  )?.name;
+
   return (
     <Box
       sx={{
@@ -61,6 +67,11 @@ export default function Step4Confirmation({
             <Typography component="li" variant="body2" mb={0.5}>
               Nombre completo: {step1.firstName} {step1.lastName}
             </Typography>
+            {institutionName && (
+              <Typography component="li" variant="body2" mb={0.5}>
+                Institución: {institutionName}
+              </Typography>
+            )}
             <Typography component="li" variant="body2" mb={0.5}>
               Carrera: {step1.career}
             </Typography>

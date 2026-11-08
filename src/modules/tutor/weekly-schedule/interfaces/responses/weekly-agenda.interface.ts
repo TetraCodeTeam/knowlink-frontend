@@ -36,6 +36,7 @@ export interface WeeklyAgendaNextClass {
 
 export interface WeeklyAgendaSummary {
   confirmedBookingsCount: number;
+  /** Cantidad de bloques libres de 1 hora. */
   freeBlocksCount: number;
   nextClass: WeeklyAgendaNextClass | null;
 }

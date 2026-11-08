@@ -6,6 +6,7 @@ export interface StudentRegisterRequest {
   lastName: string;
   dni: string;
   phoneNumber: string;
+  institutionId: string;
   career: string;
   institutionalId?: string;
   profilePictureUrl?: string;

@@ -9,6 +9,7 @@ export const COMMUNITY_QUERY_KEYS = {
   myPostsBase: ["community", "my-posts"] as const,
   myPosts: (from: string, to: string) => ["community", "my-posts", from, to] as const,
   post: (postId: string) => ["community", "post", postId] as const,
+  careers: ["community", "careers"] as const,
   subjects: ["community", "subjects"] as const,
   subjectsByCareer: (careerId: string | null) => ["community", "subjects", careerId] as const,
   podium: ["community", "podium"] as const,

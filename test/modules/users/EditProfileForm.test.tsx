@@ -4,15 +4,19 @@ import userEvent from "@testing-library/user-event";
 import type { ComponentProps } from "react";
 import EditProfileForm from "@/modules/users/components/EditProfileForm";
 import type { EditProfileFormValues } from "@/modules/users/schemas/editProfile.schema";
+import { useCareers } from "@/modules/tutors/hooks/useCareers";
 
 vi.mock("@/modules/tutors/hooks/useCareers", () => ({
-  useCareers: () => ({
-    data: [
-      { careerId: "career-1", name: "Ingeniería en Sistemas de Información" },
-      { careerId: "career-2", name: "Licenciatura en Administración" },
-    ],
+  useCareers: vi.fn((institutionId?: string) => ({
+    data:
+      institutionId === "institution-1"
+        ? [
+            { careerId: "career-1", name: "Ingeniería en Sistemas de Información" },
+            { careerId: "career-2", name: "Licenciatura en Administración" },
+          ]
+        : [{ careerId: "career-other", name: "Carrera de otra institución" }],
     isLoading: false,
-  }),
+  })),
 }));
 
 const baseValues: EditProfileFormValues = {
@@ -33,6 +37,8 @@ function renderForm(overrides: Partial<ComponentProps<typeof EditProfileForm>> =
     <EditProfileForm
       variant="student"
       email="ana@example.com"
+      institutionId="institution-1"
+      institutionName="UTN FRVM"
       defaultValues={baseValues}
       isPending={false}
       onSubmit={onSubmit}
@@ -56,6 +62,24 @@ describe("EditProfileForm", () => {
     expect(screen.getByPlaceholderText("Teléfono celular")).toHaveValue("3534123456");
     expect(screen.getByPlaceholderText("DNI")).toHaveValue("40123456");
     expect(screen.getByRole("combobox")).toHaveTextContent("Ingeniería en Sistemas de Información");
+    await waitFor(() => expect(getSaveButton()).toBeDisabled());
+  });
+
+  it("muestra la institución en solo lectura", async () => {
+    renderForm();
+
+    const institutionInput = screen.getByTestId("institution-field");
+
+    expect(institutionInput).toBeDisabled();
+    expect(institutionInput).toHaveValue("UTN FRVM");
+    expect(screen.getByText("La institución no puede modificarse.")).toBeInTheDocument();
+    await waitFor(() => expect(getSaveButton()).toBeDisabled());
+  });
+
+  it("pide las carreras de la institución del perfil", async () => {
+    renderForm();
+
+    expect(vi.mocked(useCareers)).toHaveBeenCalledWith("institution-1");
     await waitFor(() => expect(getSaveButton()).toBeDisabled());
   });
 

@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import NotificationsList from "@/modules/notifications/components/NotificationsList";
+import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import type { PagedNotificationsResponse } from "@/modules/notifications/interfaces/responses/paged-notifications.interface";
 import type { NotificationReadFilter } from "@/modules/notifications/types/notification-read-filter.type";
 
@@ -133,5 +134,37 @@ describe("NotificationsList", () => {
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "Cargar más" })).toBeInTheDocument();
     });
+  });
+  it("renderiza como calificable una RATING_ENABLED EXPIRED que llega en leidas", async () => {
+    useAuthStore.setState({
+      isAuthenticated: true,
+      authResponse: {
+        userId: "u-1",
+        email: "alumno@test.com",
+        token: "token",
+        role: "STUDENT",
+      } as never,
+    });
+    mockedGetNotifications.mockResolvedValue(
+      makePage({
+        content: [
+          {
+            notificationId: "n-expired",
+            type: "RATING_ENABLED",
+            title: "Calificá tu sesión de Física 1",
+            message: "Contanos cómo fue tu experiencia",
+            referenceId: "b-9",
+            read: true,
+            createdAt: "2026-10-20T10:00:00",
+            expiresAt: "2026-10-21T10:00:00",
+            actionStatus: "EXPIRED",
+          },
+        ],
+      })
+    );
+    renderList("READ");
+
+    expect(await screen.findByText("Calificar →")).toBeInTheDocument();
+    expect(screen.queryByText("Venció el plazo")).not.toBeInTheDocument();
   });
 });

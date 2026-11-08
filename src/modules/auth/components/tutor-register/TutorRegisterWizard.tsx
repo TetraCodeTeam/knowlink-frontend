@@ -23,6 +23,7 @@ interface TutorRegisterWizardProps {
   initialStep?: number;
   isDualRole?: boolean;
   dualRoleCareer?: string;
+  dualRoleInstitutionId?: string;
 }
 
 export default function TutorRegisterWizard({
@@ -31,6 +32,7 @@ export default function TutorRegisterWizard({
   initialStep = 1,
   isDualRole = false,
   dualRoleCareer = "",
+  dualRoleInstitutionId,
 }: TutorRegisterWizardProps) {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
@@ -84,6 +86,7 @@ export default function TutorRegisterWizard({
       lastName: s1.lastName,
       dni: s1.dni,
       phoneNumber: s1.phoneNumber,
+      institutionId: s1.institutionId,
       career: s1.career,
       institutionalId: s1.institutionalId || undefined,
       profilePictureUrl: s1.profilePictureUrl || undefined,
@@ -113,6 +116,7 @@ export default function TutorRegisterWizard({
       <>
         <Step2AcademicProfile
           career={isDualRole ? dualRoleCareer : step1Data.career || ""}
+          institutionId={isDualRole ? (dualRoleInstitutionId ?? "") : step1Data.institutionId || ""}
           defaultValues={step2Data}
           onNext={(data) => void handleStep2Next(data)}
           onBack={() => (isDualRole ? navigate(-1) : goTo(1))}

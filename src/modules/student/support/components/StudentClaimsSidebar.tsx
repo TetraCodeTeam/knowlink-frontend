@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { ArrowRight, Info, Lock, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { buildClassHistoryRoute } from "@/modules/class-history/utils/classHistory.utils";
 import { SideInfoCard } from "@/modules/support/components/SideInfoCard";
 import { SummaryCard, type SummaryTile } from "@/modules/support/components/SummaryCard";
 import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
@@ -40,15 +41,15 @@ export function StudentClaimsSidebar({ openCount, inReviewCount }: StudentClaims
         iconColor={TONE_COLORS.neutral.fg}
         title="Antes de reclamar"
       >
-        Solo podés abrir un reclamo activo por sesión. Elegí la sesión desde tu historial de clases
-        para iniciar uno nuevo.
+        Solo podés abrir un reclamo activo por sesión. Los reclamos se inician desde las clases no
+        confirmadas de tu historial.
         <Button
           variant="text"
           endIcon={<ArrowRight size={14} aria-hidden="true" />}
           sx={sideLinkSx}
-          onClick={() => navigate("/student/classes")}
+          onClick={() => navigate(buildClassHistoryRoute("STUDENT", "NOT_CONFIRMED"))}
         >
-          Ir al historial de clases
+          Ir a clases no confirmadas
         </Button>
       </SideInfoCard>
 

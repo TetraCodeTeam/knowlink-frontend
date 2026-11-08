@@ -96,9 +96,14 @@ export function AgendaSummaryCards({
           <Typography fontSize={26} fontWeight={700} lineHeight={1.1}>
             {freeBlocks}
           </Typography>
-          <Typography fontSize={15} color="text.secondary">
-            Bloques libres
-          </Typography>
+          <Box>
+            <Typography fontSize={15} color="text.secondary">
+              {freeBlocks === 1 ? "Bloque libre" : "Bloques libres"}
+            </Typography>
+            <Typography fontSize={12} color="text.secondary">
+              de 1 hora
+            </Typography>
+          </Box>
         </Stack>
       </Box>
 

@@ -18,6 +18,7 @@ import {
   tabPanelSx,
   tabsSx,
 } from "@/modules/support/styles/supportPage.styles";
+import { buildClassHistoryRoute } from "@/modules/class-history/utils/classHistory.utils";
 import { getPageScaleSx } from "@/shared/utils/page-height.utils";
 
 export function SupportPage() {
@@ -35,7 +36,10 @@ export function SupportPage() {
 
   const handleOpenRules = useCallback(() => setIsRulesOpen(true), []);
   const handleCloseRules = useCallback(() => setIsRulesOpen(false), []);
-  const handleGoToClassHistory = useCallback(() => navigate("/tutor/classes"), [navigate]);
+  const handleGoToClassHistory = useCallback(
+    () => navigate(buildClassHistoryRoute("TUTOR", "NOT_CONFIRMED")),
+    [navigate]
+  );
 
   return (
     <Box sx={{ ...pageLayoutSx, ...getPageScaleSx() }}>

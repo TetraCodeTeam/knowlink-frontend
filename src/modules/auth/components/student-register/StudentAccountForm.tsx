@@ -18,8 +18,11 @@ import {
   studentAccountSchema,
   type StudentAccountData,
 } from "@/modules/auth/schemas/user-register.schema";
+import { useInstitutions } from "@/modules/tutors/hooks/useInstitutions";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import AppButton from "@/shared/components/AppButton";
+import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
+import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
 
 const inputSx = {
@@ -54,12 +57,25 @@ export default function StudentAccountForm({
     control,
     setValue,
     setError,
+    clearErrors,
+    resetField,
+    watch,
     formState: { errors },
   } = useForm<StudentAccountData>({
     resolver: zodResolver(studentAccountSchema),
   });
 
-  const { data: careers, isLoading: careersLoading } = useCareers();
+  const {
+    data: institutions,
+    isLoading: institutionsLoading,
+    isError: institutionsError,
+    refetch: refetchInstitutions,
+  } = useInstitutions();
+
+  const institutionId = watch("institutionId");
+  const { data: careers, isLoading: careersLoading } = useCareers(institutionId);
+
+  const hasInstitutions = !!institutions?.length;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -162,6 +178,57 @@ export default function StudentAccountForm({
 
       <Box>
         <Typography variant="body2" fontWeight={500} mb={0.5}>
+          Institución*
+        </Typography>
+        <FormControl fullWidth error={!!errors.institutionId}>
+          <Controller
+            name="institutionId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                value={field.value ?? ""}
+                displayEmpty
+                disabled={institutionsLoading || !hasInstitutions}
+                onChange={(event) => {
+                  field.onChange(event);
+                  resetField("career", { defaultValue: "" });
+                  clearErrors("career");
+                }}
+                renderValue={(selected) =>
+                  selected
+                    ? (institutions?.find((i) => i.institutionId === selected)?.name ?? "")
+                    : "Elegí tu institución"
+                }
+                sx={{ borderRadius: 2 }}
+              >
+                {institutions?.map((institution) => (
+                  <MenuItem key={institution.institutionId} value={institution.institutionId}>
+                    {institution.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {errors.institutionId && <FormHelperText>{errors.institutionId.message}</FormHelperText>}
+        </FormControl>
+        {institutionsError && (
+          <FrankieErrorState
+            compact
+            message="No pudimos cargar las instituciones. Sin este dato no podés continuar."
+            onRetry={() => void refetchInstitutions()}
+          />
+        )}
+        {!institutionsLoading && !institutionsError && institutions?.length === 0 && (
+          <FrankieEmptyState
+            compact
+            message="Todavía no hay instituciones disponibles para registrarte."
+          />
+        )}
+      </Box>
+
+      <Box>
+        <Typography variant="body2" fontWeight={500} mb={0.5}>
           Carrera*
         </Typography>
         <FormControl fullWidth error={!!errors.career}>
@@ -169,7 +236,14 @@ export default function StudentAccountForm({
             name="career"
             control={control}
             render={({ field }) => (
-              <Select {...field} disabled={careersLoading} sx={{ borderRadius: 2 }}>
+              <Select
+                {...field}
+                value={field.value ?? ""}
+                displayEmpty
+                disabled={!institutionId || careersLoading}
+                renderValue={(selected) => selected || "Elegí tu carrera"}
+                sx={{ borderRadius: 2 }}
+              >
                 {careers?.map((c) => (
                   <MenuItem key={c.careerId} value={c.name}>
                     {c.name}
@@ -178,8 +252,18 @@ export default function StudentAccountForm({
               </Select>
             )}
           />
-          {errors.career && <FormHelperText>{errors.career.message}</FormHelperText>}
+          {errors.career ? (
+            <FormHelperText>{errors.career.message}</FormHelperText>
+          ) : !institutionId ? (
+            <FormHelperText>Elegí tu institución primero</FormHelperText>
+          ) : null}
         </FormControl>
+        {institutionId && !careersLoading && careers?.length === 0 && (
+          <FrankieEmptyState
+            compact
+            message="Esta institución todavía no tiene carreras cargadas."
+          />
+        )}
       </Box>
 
       <Box>
