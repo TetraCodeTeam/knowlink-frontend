@@ -1,10 +1,12 @@
 import { QueryClient, QueryCache } from "@tanstack/react-query";
 import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
-import { getErrorMessage } from "@/shared/utils/errors";
+import { getErrorMessage, isRatingRequiredError } from "@/shared/utils/errors";
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
-    onError: (error: unknown) => {
+    onError: (error: unknown, query) => {
+      if (query.meta?.silent || isRatingRequiredError(error)) return;
+
       useSnackbarStore
         .getState()
         .showMessage(getErrorMessage(error, "Ocurrió un error inesperado"), "error");
@@ -12,7 +14,7 @@ export const queryClient = new QueryClient({
   }),
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: (failureCount, error) => !isRatingRequiredError(error) && failureCount < 1,
       staleTime: 1000 * 60 * 5,
     },
   },

@@ -33,15 +33,10 @@ export default function NotificationItem({
   const hasSecondaryMessage = notification.title != null;
   const isLongMessage =
     hasSecondaryMessage && notification.message.length > NOTIFICATION_MESSAGE_PREVIEW_CHARS;
-  const isSettledRating = action.kind === "rating-done" || action.kind === "rating-expired";
+  const isSettledRating = action.kind === "rating-done";
   const isRatingAction = action.kind === "rating" || isSettledRating;
   const messageId = `notification-message-${notification.notificationId}`;
-  const ariaSuffix =
-    action.kind === "rating-done"
-      ? ". Ya calificaste."
-      : action.kind === "rating-expired"
-        ? ". Venció el plazo para calificar."
-        : "";
+  const ariaSuffix = action.kind === "rating-done" ? ". Ya calificaste." : "";
 
   const navigateToAction = (route: string) => {
     const config = getNotificationConfig(notification.type);

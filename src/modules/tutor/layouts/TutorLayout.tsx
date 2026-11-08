@@ -4,6 +4,7 @@ import { TutorSessionConfirmationWidget } from "@/modules/attendance/components/
 import { useAutoOpenSessionConfirmation } from "@/modules/attendance/hooks/useAutoOpenSessionConfirmation";
 import { useConfirmSessionAttendance } from "@/modules/attendance/hooks/useConfirmSessionAttendance";
 import RatingPopupHost from "@/modules/class-history/components/RatingPopupHost";
+import MandatoryRatingGate from "@/modules/class-history/components/MandatoryRatingGate";
 import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
 import { TUTOR_NAVIGATION } from "@/modules/tutor/navigation/tutor-navigation.constants";
 import { useTutorNavBadges } from "@/modules/tutor/navigation/useTutorNavBadges";
@@ -28,6 +29,7 @@ export default function TutorLayout() {
         onConfirm={({ sessionId, code }) => confirmSessionAttendance({ sessionId, code })}
       />
       <RatingPopupHost />
+      <MandatoryRatingGate />
       <ClaimPopupHost />
     </>
   );

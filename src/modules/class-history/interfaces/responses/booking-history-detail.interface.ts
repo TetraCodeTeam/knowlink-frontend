@@ -1,12 +1,15 @@
 import type { RatingStatus } from "@/modules/class-history/types/rating-status.type";
 import type { Modality } from "@/modules/tutor/types/modality.type";
 
-export interface BookingHistoryDetail {
-  bookingId: string;
-  otherPartyFullName: string;
-  otherPartyProfilePictureUrl: string | null;
+export interface RateBookingSummary {
   subjectName: string;
+  otherPartyFullName: string;
   sessionDate: string;
+}
+
+export interface BookingHistoryDetail extends RateBookingSummary {
+  bookingId: string;
+  otherPartyProfilePictureUrl: string | null;
   startTime: string;
   endTime: string;
   modality: Modality;
@@ -17,5 +20,4 @@ export interface BookingHistoryDetail {
   address: string | null; // solo si modality === "IN_PERSON"
   createdAt: string;
   ratingStatus: RatingStatus;
-  ratingDeadline: string | null; // LocalDateTime sin zona; null si NOT_AVAILABLE
 }

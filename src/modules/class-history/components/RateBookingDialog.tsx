@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogActions, DialogContent, Box, Typography, TextField } from "@mui/material";
@@ -7,21 +7,25 @@ import AppButton from "@/shared/components/AppButton";
 import StarRatingInput from "@/modules/class-history/components/StarRatingInput";
 import { formatSessionDateLabel } from "@/modules/class-history/utils/classHistory.utils";
 import { MAX_RATING_COMMENT_LENGTH } from "@/modules/class-history/constants/classHistory.constants";
+import { RATING_GATE_Z_INDEX } from "@/modules/class-history/constants/ratingGate.constants";
 import {
   rateBookingSchema,
   type RateBookingFormValues,
 } from "@/modules/class-history/schemas/rateBooking.schema";
-import type { BookingHistoryDetail } from "@/modules/class-history/interfaces/responses/booking-history-detail.interface";
+import type { RateBookingSummary } from "@/modules/class-history/interfaces/responses/booking-history-detail.interface";
 import type { BookingRole } from "@/modules/class-history/types/booking-role.type";
 import FrankieHero from "@/shared/frankie/FrankieHero";
 
 interface RateBookingDialogProps {
   open: boolean;
-  detail: BookingHistoryDetail;
+  detail: RateBookingSummary;
   role: BookingRole;
   isPending: boolean;
   onConfirm: (values: RateBookingFormValues) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
+  mandatory?: boolean;
+  errorMessage?: string | null;
+  pendingCount?: number;
 }
 
 function getCommentPlaceholder(role: BookingRole): string {
@@ -39,7 +43,11 @@ export default function RateBookingDialog({
   isPending,
   onConfirm,
   onCancel,
+  mandatory = false,
+  errorMessage = null,
+  pendingCount = 0,
 }: RateBookingDialogProps) {
+  const titleId = useId();
   const {
     control,
     register,
@@ -61,10 +69,13 @@ export default function RateBookingDialog({
   return (
     <Dialog
       open={open}
-      onClose={isPending ? undefined : onCancel}
+      onClose={mandatory || isPending ? undefined : onCancel}
+      disableEscapeKeyDown={mandatory}
       maxWidth="xs"
       fullWidth
+      aria-labelledby={titleId}
       PaperProps={{ sx: { borderRadius: 4, textAlign: "center", pt: 1 } }}
+      sx={mandatory ? { zIndex: RATING_GATE_Z_INDEX } : undefined}
     >
       <Box component="form" onSubmit={handleSubmit(onConfirm)}>
         <DialogContent
@@ -72,9 +83,21 @@ export default function RateBookingDialog({
         >
           <FrankieHero mood="happy" accessories={["sparkles"]} />
 
-          <Typography variant="h6" fontWeight={700} mb={1}>
-            Calificá tu sesión
+          <Typography id={titleId} variant="h6" fontWeight={700} mb={1}>
+            {mandatory ? "Calificá tu sesión para continuar" : "Calificá tu sesión"}
           </Typography>
+
+          {mandatory && (
+            <Typography variant="body2" color="text.secondary" mb={1}>
+              Para seguir usando KnowLink, tenés que calificar esta sesión.
+            </Typography>
+          )}
+
+          {pendingCount > 1 && (
+            <Typography variant="body2" fontWeight={600} color="text.secondary" mb={1}>
+              Tenés {pendingCount} sesiones por calificar
+            </Typography>
+          )}
 
           <Typography variant="body2" color="text.secondary" mb={2}>
             {detail.subjectName} con {detail.otherPartyFullName} ·{" "}
@@ -120,21 +143,44 @@ export default function RateBookingDialog({
               No vas a poder modificarla una vez enviada
             </Typography>
           </Box>
+
+          {errorMessage && (
+            <Typography
+              role="alert"
+              sx={{ mt: "12px", fontSize: "0.85rem", color: "#b91c1c", width: "100%" }}
+            >
+              {errorMessage}
+            </Typography>
+          )}
         </DialogContent>
 
         <DialogActions sx={{ justifyContent: "center", gap: 1.5, px: 4, pb: 3 }}>
-          <AppButton appVariant="outline" onClick={onCancel} disabled={isPending} fullWidth>
-            Cancelar
-          </AppButton>
-          <AppButton
-            type="submit"
-            appVariant="primary"
-            loading={isPending}
-            disabled={score === 0}
-            fullWidth
-          >
-            Enviar
-          </AppButton>
+          {mandatory ? (
+            <AppButton
+              type="submit"
+              appVariant="primary"
+              loading={isPending}
+              disabled={score === 0}
+              fullWidth
+            >
+              Calificar
+            </AppButton>
+          ) : (
+            <>
+              <AppButton appVariant="outline" onClick={onCancel} disabled={isPending} fullWidth>
+                Cancelar
+              </AppButton>
+              <AppButton
+                type="submit"
+                appVariant="primary"
+                loading={isPending}
+                disabled={score === 0}
+                fullWidth
+              >
+                Enviar
+              </AppButton>
+            </>
+          )}
         </DialogActions>
       </Box>
     </Dialog>

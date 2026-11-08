@@ -253,7 +253,6 @@ export type NotificationAction =
   | { kind: "none" }
   | { kind: "rating"; label: string }
   | { kind: "rating-done"; label: string }
-  | { kind: "rating-expired"; label: string }
   | { kind: "claim"; label: string }
   | { kind: "navigate"; label: string; route: string };
 
@@ -272,9 +271,6 @@ export function getNotificationAction(
   if (config.action.kind === "rating") {
     if (actionStatus === "COMPLETED") {
       return { kind: "rating-done", label: "Ya calificaste" };
-    }
-    if (actionStatus === "EXPIRED") {
-      return { kind: "rating-expired", label: "Venció el plazo" };
     }
     return { kind: "rating", label: config.action.label };
   }

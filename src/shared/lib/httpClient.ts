@@ -1,8 +1,11 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import type { ErrorResponse } from "@/shared/interfaces/error-response.interface";
 import { EXCLUDED_BEARER_ROUTES } from "@/shared/lib/constants";
+import { queryClient } from "@/shared/lib/queryClient";
+import { RATING_GATE_QUERY_KEYS } from "@/modules/class-history/constants/ratingGate.constants";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import { useSnackbarStore } from "@/shared/hooks/useSnackbarStore";
+import { isRatingRequiredError } from "@/shared/utils/errors";
 import { isTokenExpired } from "@/shared/utils/jwt.utils";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
@@ -51,6 +54,11 @@ rawHttpClient.interceptors.request.use(attachToken);
 httpClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ErrorResponse>) => {
+    if (isRatingRequiredError(error)) {
+      void queryClient.invalidateQueries({ queryKey: RATING_GATE_QUERY_KEYS.pending });
+      return Promise.reject(error);
+    }
+
     const data = error.response?.data;
     const errorMessage =
       data?.message ??
