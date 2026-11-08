@@ -269,7 +269,7 @@ describe("NotificationItem", () => {
     expect(onMarkAsRead).not.toHaveBeenCalled();
   });
 
-  it("muestra Vencido el plazo cuando la notificacion expiro", () => {
+  it("trata una RATING_ENABLED EXPIRED vieja como calificable", () => {
     render_item(
       makeNotification({
         type: "RATING_ENABLED",
@@ -280,13 +280,12 @@ describe("NotificationItem", () => {
       })
     );
 
-    expect(screen.getByText("Venció el plazo")).toBeInTheDocument();
-    expect(screen.queryByText("Calificar →")).not.toBeInTheDocument();
-    expect(screen.getByTestId("notification-item")).toHaveStyle({ opacity: "0.7" });
-    expect(screen.getByRole("button", { name: /Venció el plazo/ })).toHaveAttribute(
-      "aria-label",
-      expect.stringContaining("Venció el plazo para calificar.")
-    );
+    expect(screen.getByText("Calificar →")).toBeInTheDocument();
+    expect(screen.queryByText("Venció el plazo")).not.toBeInTheDocument();
+    expect(screen.getByTestId("notification-item")).not.toHaveStyle({ opacity: "0.7" });
+    expect(
+      screen.getByRole("button", { name: /Contanos cómo fue tu experiencia/ })
+    ).toHaveAttribute("aria-label", expect.not.stringContaining("Venció"));
   });
 
   it("abre el popup al tocar una notificacion completada", async () => {
@@ -307,7 +306,7 @@ describe("NotificationItem", () => {
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
-  it("abre el popup al tocar una notificacion vencida", async () => {
+  it("abre el popup al tocar una notificacion EXPIRED vieja", async () => {
     const user = userEvent.setup();
     render_item(
       makeNotification({
@@ -319,7 +318,7 @@ describe("NotificationItem", () => {
       })
     );
 
-    await user.click(screen.getByRole("button", { name: /Venció el plazo/ }));
+    await user.click(screen.getByRole("button", { name: /Contanos cómo fue tu experiencia/ }));
 
     expect(useRatingPopupStore.getState().bookingId).toBe("b-9");
     expect(navigateMock).not.toHaveBeenCalled();

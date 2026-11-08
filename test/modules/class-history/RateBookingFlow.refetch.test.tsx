@@ -14,13 +14,6 @@ import { rateBooking } from "@/modules/class-history/api/classHistory.api";
 
 const mockedRateBooking = vi.mocked(rateBooking);
 
-function toLocalDateTime(date: Date): string {
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
-    date.getHours()
-  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
 function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHistoryDetail {
   return {
     bookingId: "b-1",
@@ -38,7 +31,6 @@ function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHisto
     address: null,
     createdAt: "2026-10-15T10:00:00",
     ratingStatus: "PENDING",
-    ratingDeadline: toLocalDateTime(new Date(Date.now() + 60 * 60 * 1000)),
     ...overrides,
   };
 }
@@ -80,45 +72,9 @@ describe("RateBookingFlow con refetch del detalle", () => {
     await submitRating();
     expect(await screen.findByText("Ya calificaste esta sesión")).toBeInTheDocument();
 
-    rerender(
-      <RateBookingFlow
-        detail={{ ...detail, ratingStatus: "SUBMITTED", ratingDeadline: null }}
-        role="STUDENT"
-      />
-    );
+    rerender(<RateBookingFlow detail={{ ...detail, ratingStatus: "SUBMITTED" }} role="STUDENT" />);
 
     expect(screen.getByText("Ya calificaste esta sesión")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Calificar" })).not.toBeInTheDocument();
-  });
-
-  it("mantiene el aviso de plazo vencido cuando el refetch devuelve EXPIRED", async () => {
-    mockedRateBooking.mockRejectedValue(axiosError(422, "RATING_WINDOW_EXPIRED"));
-    const detail = makeDetail();
-    const { rerender } = renderFlow(detail);
-
-    await submitRating();
-    expect(await screen.findByText("El plazo para calificar venció")).toBeInTheDocument();
-
-    rerender(
-      <RateBookingFlow
-        detail={{ ...detail, ratingStatus: "EXPIRED", ratingDeadline: null }}
-        role="STUDENT"
-      />
-    );
-
-    expect(screen.getByText("El plazo para calificar venció")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Calificar" })).not.toBeInTheDocument();
-  });
-
-  it("muestra el aviso si el plazo vence con el formulario abierto", async () => {
-    const user = userEvent.setup();
-    renderFlow(makeDetail({ ratingDeadline: toLocalDateTime(new Date(Date.now() + 1_500)) }));
-
-    await user.click(screen.getByRole("button", { name: "Calificar" }));
-    expect(await screen.findByText("Calificá tu sesión")).toBeInTheDocument();
-
-    expect(
-      await screen.findByText("El plazo para calificar venció", {}, { timeout: 3000 })
-    ).toBeInTheDocument();
   });
 });

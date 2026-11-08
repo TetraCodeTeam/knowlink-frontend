@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -20,10 +21,12 @@ const detail: BookingHistoryDetail = {
   address: null,
   createdAt: "2026-10-15T10:00:00",
   ratingStatus: "PENDING",
-  ratingDeadline: "2026-10-21T11:00:00",
 };
 
-function renderDialog(onConfirm = vi.fn()) {
+function renderDialog(
+  onConfirm = vi.fn(),
+  props: Partial<ComponentProps<typeof RateBookingDialog>> = {}
+) {
   render(
     <RateBookingDialog
       open
@@ -32,6 +35,7 @@ function renderDialog(onConfirm = vi.fn()) {
       isPending={false}
       onConfirm={onConfirm}
       onCancel={vi.fn()}
+      {...props}
     />
   );
   return { onConfirm };
@@ -71,5 +75,48 @@ describe("RateBookingDialog", () => {
       { score: 4, comment: "Muy buena clase" },
       expect.anything()
     );
+  });
+
+  describe("modo obligatorio", () => {
+    it("muestra el titulo, la descripcion y un unico boton Calificar", async () => {
+      const user = userEvent.setup();
+      renderDialog(vi.fn(), { mandatory: true, onCancel: undefined });
+
+      expect(screen.getByText("Calificá tu sesión para continuar")).toBeInTheDocument();
+      expect(
+        screen.getByText("Para seguir usando KnowLink, tenés que calificar esta sesión.")
+      ).toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: "Cancelar" })).not.toBeInTheDocument();
+
+      const submit = screen.getByRole("button", { name: "Calificar" });
+      expect(submit).toBeDisabled();
+
+      await user.click(screen.getByRole("radio", { name: "5 estrellas" }));
+      expect(submit).toBeEnabled();
+    });
+
+    it("no se cierra con Escape", async () => {
+      const user = userEvent.setup();
+      renderDialog(vi.fn(), { mandatory: true, onCancel: undefined });
+
+      await user.keyboard("{Escape}");
+
+      expect(screen.getByText("Calificá tu sesión para continuar")).toBeInTheDocument();
+    });
+
+    it("muestra el contador de sesiones pendientes cuando hay mas de una", () => {
+      renderDialog(vi.fn(), { mandatory: true, pendingCount: 2 });
+
+      expect(screen.getByText("Tenés 2 sesiones por calificar")).toBeInTheDocument();
+    });
+
+    it("muestra el error inline con role alert", () => {
+      renderDialog(vi.fn(), {
+        mandatory: true,
+        errorMessage: "No pudimos registrar tu calificación.",
+      });
+
+      expect(screen.getByRole("alert")).toHaveTextContent("No pudimos registrar tu calificación.");
+    });
   });
 });

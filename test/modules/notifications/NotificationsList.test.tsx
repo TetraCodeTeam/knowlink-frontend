@@ -135,7 +135,7 @@ describe("NotificationsList", () => {
       expect(screen.getByRole("button", { name: "Cargar más" })).toBeInTheDocument();
     });
   });
-  it("renderiza como vencida una RATING_ENABLED expirada que llega en leidas", async () => {
+  it("renderiza como calificable una RATING_ENABLED EXPIRED que llega en leidas", async () => {
     useAuthStore.setState({
       isAuthenticated: true,
       authResponse: {
@@ -164,7 +164,7 @@ describe("NotificationsList", () => {
     );
     renderList("READ");
 
-    expect(await screen.findByText("Venció el plazo")).toBeInTheDocument();
-    expect(screen.getByTestId("notification-item")).toHaveStyle({ opacity: "0.7" });
+    expect(await screen.findByText("Calificar →")).toBeInTheDocument();
+    expect(screen.queryByText("Venció el plazo")).not.toBeInTheDocument();
   });
 });

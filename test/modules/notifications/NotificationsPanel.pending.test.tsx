@@ -29,7 +29,7 @@ function renderPanel() {
   );
   render(
     <MemoryRouter>
-      <NotificationsPanel open onClose={vi.fn()} sidebarWidth={120} />
+      <NotificationsPanel open onClose={vi.fn()} topOffset={64} />
     </MemoryRouter>,
     { wrapper }
   );

@@ -121,10 +121,10 @@ describe("getNotificationAction", () => {
     });
   });
 
-  it("resuelve rating-expired cuando vencio el plazo", () => {
+  it("trata EXPIRED como pendiente para filas viejas", () => {
     expect(getNotificationAction("RATING_ENABLED", "STUDENT", "EXPIRED")).toEqual({
-      kind: "rating-expired",
-      label: "Venció el plazo",
+      kind: "rating",
+      label: "Calificar",
     });
   });
 

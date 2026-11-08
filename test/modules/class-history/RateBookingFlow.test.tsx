@@ -15,13 +15,6 @@ import { rateBooking } from "@/modules/class-history/api/classHistory.api";
 
 const mockedRateBooking = vi.mocked(rateBooking);
 
-function toLocalDateTime(date: Date): string {
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
-    date.getHours()
-  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
 function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHistoryDetail {
   return {
     bookingId: "b-1",
@@ -39,7 +32,6 @@ function makeDetail(overrides: Partial<BookingHistoryDetail> = {}): BookingHisto
     address: null,
     createdAt: "2026-10-15T10:00:00",
     ratingStatus: "PENDING",
-    ratingDeadline: toLocalDateTime(new Date(Date.now() + 60 * 60 * 1000)),
     ...overrides,
   };
 }
@@ -71,23 +63,13 @@ describe("RateBookingFlow", () => {
     expect(screen.getByRole("button", { name: "Calificar" })).toBeInTheDocument();
   });
 
-  it.each<RatingStatus>(["SUBMITTED", "EXPIRED", "NOT_AVAILABLE"])(
+  it.each<RatingStatus>(["SUBMITTED", "NOT_AVAILABLE"])(
     "no muestra el boton cuando el estado es %s",
     (ratingStatus) => {
-      renderFlow(makeDetail({ ratingStatus, ratingDeadline: null }));
+      renderFlow(makeDetail({ ratingStatus }));
       expect(screen.queryByRole("button", { name: "Calificar" })).not.toBeInTheDocument();
     }
   );
-
-  it("no muestra el boton si el plazo ya vencio aunque el estado sea PENDING", () => {
-    renderFlow(
-      makeDetail({
-        ratingStatus: "PENDING",
-        ratingDeadline: toLocalDateTime(new Date(Date.now() - 60_000)),
-      })
-    );
-    expect(screen.queryByRole("button", { name: "Calificar" })).not.toBeInTheDocument();
-  });
 
   it("abre el formulario y envia la calificacion", async () => {
     const user = userEvent.setup();
@@ -114,9 +96,9 @@ describe("RateBookingFlow", () => {
     expect(await screen.findByText("Ya calificaste esta sesión")).toBeInTheDocument();
   });
 
-  it("un 422 RATING_WINDOW_EXPIRED muestra el aviso de plazo vencido", async () => {
+  it("ante un error de red mantiene el formulario abierto para reintentar", async () => {
     const user = userEvent.setup();
-    mockedRateBooking.mockRejectedValue(axiosError(422, "RATING_WINDOW_EXPIRED"));
+    mockedRateBooking.mockRejectedValue(axiosError(500));
     renderFlow();
 
     await user.click(screen.getByRole("button", { name: "Calificar" }));
@@ -124,7 +106,8 @@ describe("RateBookingFlow", () => {
     await user.click(screen.getByRole("button", { name: "Enviar" }));
 
     await waitFor(() => {
-      expect(screen.getByText("El plazo para calificar venció")).toBeInTheDocument();
+      expect(screen.getByText("Calificá tu sesión")).toBeInTheDocument();
     });
+    expect(screen.queryByText("Ya calificaste esta sesión")).not.toBeInTheDocument();
   });
 });
