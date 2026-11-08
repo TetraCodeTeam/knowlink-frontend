@@ -21,6 +21,7 @@ import BookingCalendarLegend from "@/modules/student/booking/components/BookingC
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
 import BookingStatusEventContent from "@/modules/student/booking/components/BookingStatusEventContent";
 import CalendarNavHeader from "@/shared/components/CalendarNavHeader";
+import { useCalendarAutoResize } from "@/shared/hooks/useCalendarAutoResize";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
 import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/bookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
@@ -53,6 +54,7 @@ export default function BookingCalendar({
   onViewedRangeChange,
 }: BookingCalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
+  const calendarContainerRef = useCalendarAutoResize(calendarRef);
   const [rangeLabel, setRangeLabel] = useState("");
   const [viewedRange, setViewedRange] = useState<{ start: string; end: string }>({
     start: "",
@@ -224,6 +226,7 @@ export default function BookingCalendar({
       />
 
       <Box
+        ref={calendarContainerRef}
         sx={{
           flex: 1,
           minHeight: 0,

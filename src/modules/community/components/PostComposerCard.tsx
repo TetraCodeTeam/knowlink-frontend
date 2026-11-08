@@ -15,7 +15,7 @@ const actionSx = {
   ...chipSx,
   border: "none",
   cursor: "pointer",
-  fontSize: 14,
+  fontSize: 13,
   px: 1.5,
   py: 0.75,
   borderRadius: "8px",
@@ -42,7 +42,7 @@ export default function PostComposerCard({ onCompose, displayName }: PostCompose
             borderRadius: "10px",
             px: 2,
             py: 1.25,
-            fontSize: 15,
+            fontSize: 14,
             cursor: "text",
           }}
         >

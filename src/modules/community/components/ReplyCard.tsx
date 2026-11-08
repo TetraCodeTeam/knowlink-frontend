@@ -115,13 +115,13 @@ export default function ReplyCard({
                 borderRadius: "10px",
                 px: 1.5,
                 py: 1,
-                fontSize: 15,
+                fontSize: 14,
               }}
             />
             <Typography
               sx={{
                 mt: 0.5,
-                fontSize: 12.5,
+                fontSize: 12,
                 color: draftInvalid ? "#D64545" : COMMUNITY_COLORS.subtle,
               }}
             >
@@ -162,7 +162,7 @@ export default function ReplyCard({
           <>
             <FormattedText text={reply.content} />
             {reply.edited ? (
-              <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle, mt: 0.5 }}>
+              <Typography sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle, mt: 0.5 }}>
                 (editada)
               </Typography>
             ) : null}
@@ -197,7 +197,7 @@ export default function ReplyCard({
                   cursor: "pointer",
                   px: 1.5,
                   py: 0.6,
-                  fontSize: 13,
+                  fontSize: 12,
                   bgcolor: reply.markedHelpfulByMe ? "#D7D3F7" : "#EEEBFC",
                   color: "#3F2FB5",
                   "&:disabled": { cursor: "default", opacity: reply.ownedByMe ? 0.75 : 0.6 },

@@ -78,9 +78,9 @@ export default function MyPositionDialog({ open, onClose }: MyPositionDialogProp
             #{position.position}
           </Typography>
         </Box>
-        <Typography sx={{ fontSize: 19, fontWeight: 700 }}>{position.fullName}</Typography>
+        <Typography sx={{ fontSize: 17, fontWeight: 700 }}>{position.fullName}</Typography>
         {position.careerName ? (
-          <Typography sx={{ fontSize: 14, color: COMMUNITY_COLORS.muted }}>
+          <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.muted }}>
             {position.careerName}
           </Typography>
         ) : null}
@@ -89,13 +89,13 @@ export default function MyPositionDialog({ open, onClose }: MyPositionDialogProp
           <Box sx={{ width: "100%", bgcolor: "#F3F4FF", borderRadius: "10px", p: 1.5, mt: 1 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.75 }}>
               <Typography
-                sx={{ fontSize: 13, fontWeight: 600, color: COMMUNITY_COLORS.primaryDark }}
+                sx={{ fontSize: 12, fontWeight: 600, color: COMMUNITY_COLORS.primaryDark }}
               >
                 A solo {position.positionsToTopTen}{" "}
                 {position.positionsToTopTen === 1 ? "puesto" : "puestos"} del Top 10
               </Typography>
               <Typography
-                sx={{ fontSize: 13, fontWeight: 700, color: COMMUNITY_COLORS.primaryDark }}
+                sx={{ fontSize: 12, fontWeight: 700, color: COMMUNITY_COLORS.primaryDark }}
               >
                 {position.progressPercent}%
               </Typography>
@@ -114,7 +114,7 @@ export default function MyPositionDialog({ open, onClose }: MyPositionDialogProp
           </Box>
         ) : (
           <Typography
-            sx={{ fontSize: 14, fontWeight: 600, color: COMMUNITY_COLORS.success, mt: 1 }}
+            sx={{ fontSize: 13, fontWeight: 600, color: COMMUNITY_COLORS.success, mt: 1 }}
           >
             ¡Estás dentro del Top 10!
           </Typography>
@@ -156,7 +156,7 @@ export default function MyPositionDialog({ open, onClose }: MyPositionDialogProp
           >
             <Trophy size={17} color="#FFFFFF" aria-hidden />
           </Box>
-          <Typography id="my-position-title" sx={{ fontSize: 17, fontWeight: 700 }}>
+          <Typography id="my-position-title" sx={{ fontSize: 15, fontWeight: 700 }}>
             Tu posición en el podio
           </Typography>
         </Box>

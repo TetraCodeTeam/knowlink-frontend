@@ -35,7 +35,7 @@ export default function ClassHistoryPage({ role }: ClassHistoryPageProps) {
         p: { xs: "12px", md: "16px 32px" },
         display: "flex",
         flexDirection: "column",
-        minHeight: getPageMinHeight(role),
+        minHeight: getPageMinHeight(),
         boxSizing: "border-box",
       }}
     >

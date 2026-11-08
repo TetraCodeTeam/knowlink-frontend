@@ -33,10 +33,10 @@ export default function BecomeTutorDialog({ open, onCancel, onConfirm }: BecomeT
         >
           <GraduationCap size={30} color="#5B6ED9" aria-hidden />
         </Box>
-        <Typography id="become-tutor-title" sx={{ fontSize: 20, fontWeight: 700, mb: 1 }}>
+        <Typography id="become-tutor-title" sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>
           Te redirigiremos a tu perfil
         </Typography>
-        <Typography sx={{ fontSize: 14.5, color: "#555" }}>
+        <Typography sx={{ fontSize: 13.5, color: "#555" }}>
           Desde ahí vas a poder gestionar tu rol de tutor en KnowLink.
         </Typography>
       </DialogContent>

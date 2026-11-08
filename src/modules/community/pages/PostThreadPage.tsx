@@ -212,7 +212,7 @@ export default function PostThreadPage() {
                 bgcolor: "#FFFAF6",
                 px: 2,
                 py: 1.5,
-                fontSize: 13,
+                fontSize: 12,
                 color: COMMUNITY_COLORS.muted,
               }}
             >
@@ -264,7 +264,7 @@ export default function PostThreadPage() {
               borderRadius: "10px",
               px: 2,
               py: 1.25,
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: 600,
             }}
           >

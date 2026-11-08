@@ -42,7 +42,7 @@ export function SupportPage() {
   );
 
   return (
-    <Box sx={{ ...pageLayoutSx, ...getPageScaleSx("TUTOR") }}>
+    <Box sx={{ ...pageLayoutSx, ...getPageScaleSx() }}>
       <Box component="section" sx={mainCardSx}>
         <Typography component="h1" sx={pageTitleSx}>
           Soporte y solicitudes

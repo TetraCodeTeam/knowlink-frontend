@@ -10,6 +10,7 @@ import {
 import type { Role } from "@/shared/types/role.type";
 import { getPageMinHeight } from "@/shared/utils/page-height.utils";
 import FrankieIllustration from "@/shared/frankie/FrankieIllustration";
+import { PAGE_TITLE_BASE_SX } from "@/shared/styles/typography.styles";
 
 interface EditProfileLayoutProps {
   role: Role;
@@ -59,7 +60,7 @@ export default function EditProfileLayout({
     <Box
       sx={{
         p: { xs: 2, md: 3 },
-        minHeight: getPageMinHeight(role),
+        minHeight: getPageMinHeight(),
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -119,13 +120,7 @@ export default function EditProfileLayout({
         >
           <Typography
             component="h1"
-            sx={{
-              textAlign: "center",
-              fontSize: { xs: 24, md: 28 },
-              fontWeight: 500,
-              lineHeight: 1.2,
-              color: "#1a1a2e",
-            }}
+            sx={{ ...PAGE_TITLE_BASE_SX, textAlign: "center", color: "#1a1a2e" }}
           >
             Editar perfil
           </Typography>

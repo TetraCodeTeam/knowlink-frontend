@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { ArrowLeftToLine, CheckCheck } from "lucide-react";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { ArrowRightToLine } from "lucide-react";
+import { Box, IconButton, Typography } from "@mui/material";
 import { keyframes } from "@mui/material/styles";
+import { LAYOUT_Z_INDEX } from "@/modules/app-shell/constants/navigation.constants";
 import NotificationsList from "@/modules/notifications/components/NotificationsList";
 import OtherRoleBanner from "@/modules/notifications/components/OtherRoleBanner";
-import { useMarkAllNotificationsAsRead } from "@/modules/notifications/hooks/useMarkAllNotificationsAsRead";
 import { useUnreadNotificationsCount } from "@/modules/notifications/hooks/useUnreadNotificationsCount";
 import type { NotificationsPanelProps } from "@/modules/notifications/components/NotificationsPanel.types";
 import type { NotificationReadFilter } from "@/modules/notifications/types/notification-read-filter.type";
@@ -14,19 +14,19 @@ const fadeIn = keyframes`
   to { opacity: 1; }
 `;
 
+const slideIn = keyframes`
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+`;
+
 const TABS: { label: string; status: NotificationReadFilter }[] = [
   { label: "No Leído", status: "UNREAD" },
   { label: "Leído", status: "READ" },
 ];
 
-export default function NotificationsPanel({
-  open,
-  onClose,
-  sidebarWidth,
-}: NotificationsPanelProps) {
+export default function NotificationsPanel({ open, onClose, topOffset }: NotificationsPanelProps) {
   const [status, setStatus] = useState<NotificationReadFilter>("UNREAD");
   const { data } = useUnreadNotificationsCount();
-  const markAll = useMarkAllNotificationsAsRead();
   const unreadCount = data?.count ?? 0;
   const otherRoleCount = data?.otherRoleCount ?? 0;
 
@@ -49,12 +49,12 @@ export default function NotificationsPanel({
         onClick={onClose}
         sx={{
           position: "fixed",
-          // Oscurece todo menos el menú lateral, para destacar que se está en Notificaciones.
-          inset: `0 0 0 ${sidebarWidth}px`,
+          // Oscurece todo menos el topbar, para que la campana siga a la vista.
+          inset: `${topOffset}px 0 0 0`,
           backgroundColor: "rgba(17, 17, 40, 0.45)",
           animation: `${fadeIn} 0.2s ease-out`,
           "@media (prefers-reduced-motion: reduce)": { animation: "none" },
-          zIndex: 99,
+          zIndex: LAYOUT_Z_INDEX.notificationsBackdrop,
         }}
       />
       <Box
@@ -62,14 +62,16 @@ export default function NotificationsPanel({
         aria-label="Notificaciones"
         sx={{
           position: "fixed",
-          top: 0,
-          left: `${sidebarWidth}px`,
-          width: `min(380px, calc(100vw - ${sidebarWidth}px))`,
-          height: "100vh",
+          top: `${topOffset}px`,
+          right: 0,
+          width: "min(380px, 100vw)",
+          height: `calc(100vh - ${topOffset}px)`,
           backgroundColor: "#FFFFFF",
-          borderRight: "1px solid #E8E8F0",
-          boxShadow: "4px 0 24px rgba(0, 0, 0, 0.06)",
-          zIndex: 100,
+          borderLeft: "1px solid #E8E8F0",
+          boxShadow: "-4px 0 24px rgba(0, 0, 0, 0.06)",
+          animation: `${slideIn} 0.2s ease-out`,
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+          zIndex: LAYOUT_Z_INDEX.notificationsPanel,
           display: "flex",
           flexDirection: "column",
         }}
@@ -101,25 +103,11 @@ export default function NotificationsPanel({
             size="small"
             sx={{ color: "#3F4CAE" }}
           >
-            <ArrowLeftToLine size={20} />
+            <ArrowRightToLine size={20} />
           </IconButton>
         </Box>
 
         {otherRoleCount > 0 && <OtherRoleBanner otherRoleCount={otherRoleCount} />}
-
-        {unreadCount > 0 && (
-          <Box sx={{ display: "flex", justifyContent: "flex-end", px: 2, py: 0.5 }}>
-            <Button
-              size="small"
-              startIcon={<CheckCheck size={16} aria-hidden />}
-              disabled={markAll.isPending}
-              onClick={() => markAll.mutate()}
-              sx={{ textTransform: "none", fontSize: "12px", fontWeight: 600, color: "#3F4CAE" }}
-            >
-              Marcar todo como leído
-            </Button>
-          </Box>
-        )}
 
         <Box sx={{ display: "flex", borderBottom: "1px solid #E8E8F0" }} role="tablist">
           {TABS.map((tab) => {

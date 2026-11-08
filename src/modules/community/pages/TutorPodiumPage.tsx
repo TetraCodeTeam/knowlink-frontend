@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
 import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
-import { ArrowLeft, Award, Crown, GraduationCap, Trophy } from "lucide-react";
+import { Award, Crown, GraduationCap, Trophy } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import BecomeTutorDialog from "@/modules/community/components/BecomeTutorDialog";
 import MyPositionDialog from "@/modules/community/components/MyPositionDialog";
@@ -14,10 +14,10 @@ import { useTutorPodium } from "@/modules/community/hooks/useTutorPodium";
 import type { RankedTutor } from "@/modules/community/interfaces/responses/ranked-tutor.interface";
 import {
   COMMUNITY_COLORS,
-  backLinkSx,
   cardSx,
   pageContentSx,
   pageSx,
+  pageTitleSx,
 } from "@/modules/community/styles/community.styles";
 
 /** Orden visual del podio: 2º a la izquierda, 1º al centro y 3º a la derecha. */
@@ -41,18 +41,13 @@ export default function TutorPodiumPage() {
   return (
     <Box sx={pageSx}>
       <Box sx={pageContentSx}>
-        <Box component={Link} to={paths.home} sx={backLinkSx}>
-          <ArrowLeft size={16} aria-hidden />
-          Volver a la Comunidad
-        </Box>
-
         <Box
           component="section"
           aria-labelledby="podium-title"
           sx={{
             ...cardSx,
             background: "linear-gradient(180deg, #F3F4FF 0%, #FFFFFF 70%)",
-            p: { xs: 2, md: 3 },
+            p: { xs: 1.5, md: 2 },
           }}
         >
           <Box
@@ -62,7 +57,7 @@ export default function TutorPodiumPage() {
               justifyContent: "space-between",
               flexWrap: "wrap",
               gap: 2,
-              pb: 2.5,
+              pb: 1.5,
               borderBottom: `1px solid ${COMMUNITY_COLORS.border}`,
             }}
           >
@@ -70,26 +65,22 @@ export default function TutorPodiumPage() {
               <Box
                 aria-hidden
                 sx={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: "20px",
+                  width: 56,
+                  height: 56,
+                  borderRadius: "18px",
                   bgcolor: "#EEF0FD",
                   display: { xs: "none", sm: "flex" },
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Trophy size={34} color="#4F46E5" />
+                <Trophy size={28} color="#4F46E5" />
               </Box>
               <Box>
-                <Typography
-                  id="podium-title"
-                  component="h1"
-                  sx={{ fontSize: { xs: 22, md: 26 }, fontWeight: 800 }}
-                >
+                <Typography id="podium-title" component="h1" sx={pageTitleSx}>
                   Podio de honor
                 </Typography>
-                <Typography sx={{ fontSize: 15, color: COMMUNITY_COLORS.muted, maxWidth: 560 }}>
+                <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.muted, maxWidth: 760 }}>
                   Reconocimiento oficial por excelencia académica, velocidad de respuesta y
                   valoración comunitaria.
                 </Typography>
@@ -157,21 +148,24 @@ export default function TutorPodiumPage() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 0.75,
-                fontSize: 13,
+                fontSize: 12,
                 color: COMMUNITY_COLORS.muted,
               }}
             >
               <Award size={15} color="#B4540A" aria-hidden />
               El ranking se actualiza el primer día del mes
             </Typography>
-            <AppButton
-              size="small"
-              appVariant="soft"
-              startIcon={<Crown size={16} />}
-              onClick={() => setIsMyPositionOpen(true)}
-            >
-              Consultar mi puesto en el podio
-            </AppButton>
+            {/* El ranking es solo de tutores: un alumno no tiene puesto que consultar (ya tiene "Ser tutor"). */}
+            {role === "TUTOR" ? (
+              <AppButton
+                size="small"
+                appVariant="soft"
+                startIcon={<Crown size={16} />}
+                onClick={() => setIsMyPositionOpen(true)}
+              >
+                Consultar mi puesto en el podio
+              </AppButton>
+            ) : null}
           </Box>
         </Box>
 

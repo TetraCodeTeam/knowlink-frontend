@@ -1,45 +1,32 @@
 import { Outlet } from "react-router-dom";
-import { Box } from "@mui/material";
-import StudentSidebar from "@/modules/student/components/StudentSidebar";
-import StudentTopbar, {
-  SIDEBAR_WIDTH,
-  TOPBAR_HEIGHT,
-} from "@/modules/student/components/StudentTopbar";
+import AppShell from "@/modules/app-shell/components/AppShell";
 import { StudentTokenWidget } from "@/modules/attendance/components/StudentTokenWidget";
 import { useAutoShowStudentToken } from "@/modules/attendance/hooks/useAutoShowStudentToken";
 import RatingPopupHost from "@/modules/class-history/components/RatingPopupHost";
 import ClaimPopupHost from "@/modules/claim/components/ClaimPopupHost";
+import SearchBar from "@/modules/student/components/SearchBar";
+import { STUDENT_NAVIGATION } from "@/modules/student/navigation/student-navigation.constants";
+import { useStudentNavBadges } from "@/modules/student/navigation/useStudentNavBadges";
+import { studentPaths } from "@/routes/paths";
 
 export default function StudentLayout() {
   useAutoShowStudentToken();
+  const badgeCounts = useStudentNavBadges();
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#F4F3FB" }}>
-      <StudentSidebar />
-      <Box
-        sx={{
-          flex: 1,
-          minWidth: 0,
-          marginLeft: `${SIDEBAR_WIDTH}px`,
-          display: "flex",
-          flexDirection: "column",
-        }}
+    <>
+      <AppShell
+        navigation={STUDENT_NAVIGATION}
+        badgeCounts={badgeCounts}
+        showNotifications
+        profilePath={studentPaths.profile}
+        searchSlot={<SearchBar />}
       >
-        <StudentTopbar />
-        <Box
-          component="main"
-          sx={{
-            flex: 1,
-            marginTop: `${TOPBAR_HEIGHT}px`,
-            minHeight: `calc(100vh - ${TOPBAR_HEIGHT}px)`,
-          }}
-        >
-          <Outlet />
-        </Box>
-      </Box>
+        <Outlet />
+      </AppShell>
       <StudentTokenWidget />
       <RatingPopupHost />
       <ClaimPopupHost />
-    </Box>
+    </>
   );
 }

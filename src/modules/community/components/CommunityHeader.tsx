@@ -16,7 +16,7 @@ export default function CommunityHeader() {
         bgcolor: COMMUNITY_COLORS.panel,
         borderRadius: "14px",
         px: 2.5,
-        py: 1.75,
+        py: 1.25,
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -49,7 +49,7 @@ export default function CommunityHeader() {
           px: 1.5,
           py: 0.75,
           color: COMMUNITY_COLORS.text,
-          fontSize: 14,
+          fontSize: 13,
           fontWeight: 500,
         }}
       >

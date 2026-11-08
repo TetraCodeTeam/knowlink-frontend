@@ -38,7 +38,7 @@ export const OwnProfilePage = () => {
   return (
     <Stack
       spacing={2}
-      sx={{ mx: "auto", pr: 4, pl: 4, pt: 2, pb: 2, ...getPageScaleSx("STUDENT") }}
+      sx={{ mx: "auto", pr: 4, pl: 4, pt: 2, pb: 2, ...getPageScaleSx() }}
     >
       <ProfileHeader fullName={profile.fullName} profilePictureUrl={profile.profilePictureUrl} />
 

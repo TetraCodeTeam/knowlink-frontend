@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FullCalendar from "@fullcalendar/react";
@@ -21,6 +21,7 @@ import {
 import { WEEKLY_AGENDA_CALENDAR_CONFIG } from "@/modules/tutor/weekly-schedule/WeeklyAgendaCalendar.config";
 import { weeklyAgendaCalendarSx } from "@/modules/tutor/weekly-schedule/styles/weeklyAgendaCalendar.styles";
 import { AgendaLegend } from "@/modules/tutor/weekly-schedule/components/AgendaLegend";
+import { useCalendarAutoResize } from "@/shared/hooks/useCalendarAutoResize";
 import { isBeforeToday } from "@/shared/utils/calendarDateUtils";
 
 const MONTH_LABELS = [
@@ -70,6 +71,8 @@ export function WeeklyAgendaCalendar({
   onPreviousWeek,
   onNextWeek,
 }: WeeklyAgendaCalendarProps) {
+  const calendarRef = useRef<FullCalendar>(null);
+  const calendarContainerRef = useCalendarAutoResize(calendarRef);
   const events = useMemo<EventInput[]>(() => {
     const shading = buildPastTimeShadingEvent(weekStart);
     return [
@@ -150,8 +153,12 @@ export function WeeklyAgendaCalendar({
         <AgendaLegend />
       </Stack>
 
-      <Box sx={{ overflowX: "auto", "& .fc": { minWidth: { xs: 560, md: 0 } } }}>
+      <Box
+        ref={calendarContainerRef}
+        sx={{ overflowX: "auto", "& .fc": { minWidth: { xs: 560, md: 0 } } }}
+      >
         <FullCalendar
+          ref={calendarRef}
           key={weekStart.toISOString()}
           {...WEEKLY_AGENDA_CALENDAR_CONFIG}
           initialDate={weekStart}

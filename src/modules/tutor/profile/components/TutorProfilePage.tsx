@@ -28,6 +28,7 @@ import SubjectCard from "@/modules/tutor/profile/components/SubjectCard";
 import PaymentSection from "@/modules/tutor/profile/components/PaymentSection";
 import MaterialsSection from "@/modules/tutor/materials/components/MaterialsSection";
 import AvailabilityEditor from "@/modules/tutor/availability/components/AvailabilityEditor";
+import { getPageMinHeight } from "@/shared/utils/page-height.utils";
 import MinNoticeHoursPanel from "@/modules/tutor/availability/components/MinNoticeHoursPanel";
 import AddSubjectModal from "@/modules/tutor/components/AddSubjectModal";
 import EditSubjectModal from "@/modules/tutor/components/EditSubjectModal";
@@ -97,7 +98,7 @@ export default function TutorProfilePage() {
   const initials = getInitials(profile.fullName ?? "");
 
   return (
-    <Box sx={{ p: { xs: "12px", md: "16px 32px" }, minHeight: "100vh" }}>
+    <Box sx={{ p: { xs: "12px", md: "16px 32px" }, minHeight: getPageMinHeight() }}>
       {/* ── Header card ──────────────────────────────────────────── */}
       <Box
         sx={{

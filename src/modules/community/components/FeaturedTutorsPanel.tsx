@@ -28,19 +28,19 @@ export default function FeaturedTutorsPanel({ fill = false }: FeaturedTutorsPane
         <Typography
           id="featured-tutors-title"
           component="h2"
-          sx={{ fontSize: 18, fontWeight: 700 }}
+          sx={{ fontSize: 16, fontWeight: 700 }}
         >
           Tutores destacados
         </Typography>
         <Typography
           component={Link}
           to={paths.podium}
-          sx={{ ...linkSx, fontSize: 13, fontWeight: 700, color: COMMUNITY_COLORS.primaryDark }}
+          sx={{ ...linkSx, fontSize: 12, fontWeight: 700, color: COMMUNITY_COLORS.primaryDark }}
         >
           Ver todos
         </Typography>
       </Box>
-      <Typography sx={{ fontSize: 13.5, color: COMMUNITY_COLORS.muted, mt: 1, mb: 1.5 }}>
+      <Typography sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.muted, mt: 1, mb: 1.5 }}>
         Estos tutores se destacan en la comunidad por sus aportes:
       </Typography>
 
@@ -49,7 +49,7 @@ export default function FeaturedTutorsPanel({ fill = false }: FeaturedTutorsPane
           <CircularProgress size={22} aria-label="Cargando tutores destacados" />
         </Box>
       ) : tutors.length === 0 ? (
-        <Typography sx={{ fontSize: 13.5, color: COMMUNITY_COLORS.subtle }}>
+        <Typography sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.subtle }}>
           Todavía no hay tutores destacados este mes.
         </Typography>
       ) : (
@@ -77,14 +77,14 @@ export default function FeaturedTutorsPanel({ fill = false }: FeaturedTutorsPane
                 size={38}
               />
               <Box sx={{ minWidth: 0, flex: 1 }}>
-                <Typography noWrap sx={{ fontSize: 14, fontWeight: 600 }}>
+                <Typography noWrap sx={{ fontSize: 13, fontWeight: 600 }}>
                   {tutor.fullName}
                 </Typography>
-                <Typography noWrap sx={{ fontSize: 12, color: COMMUNITY_COLORS.subtle }}>
+                <Typography noWrap sx={{ fontSize: 11.5, color: COMMUNITY_COLORS.subtle }}>
                   {tutor.subjects.slice(0, 2).join(" & ") || tutor.careerName || "Tutor"}
                 </Typography>
                 {tutor.averageRating != null ? (
-                  <Typography sx={{ fontSize: 12, fontWeight: 600, color: COMMUNITY_COLORS.star }}>
+                  <Typography sx={{ fontSize: 11.5, fontWeight: 600, color: COMMUNITY_COLORS.star }}>
                     ★ {tutor.averageRating.toFixed(1)}
                   </Typography>
                 ) : null}
@@ -101,7 +101,7 @@ export default function FeaturedTutorsPanel({ fill = false }: FeaturedTutorsPane
                     cursor: "pointer",
                     bgcolor: "#EEF0FD",
                     color: COMMUNITY_COLORS.primaryDark,
-                    fontSize: 12.5,
+                    fontSize: 12,
                     fontWeight: 700,
                     px: 1.5,
                     py: 0.6,

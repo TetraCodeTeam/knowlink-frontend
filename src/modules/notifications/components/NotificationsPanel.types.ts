@@ -1,5 +1,6 @@
 export interface NotificationsPanelProps {
   open: boolean;
   onClose: () => void;
-  sidebarWidth: number;
+  /** Alto del topbar: el panel se abre debajo para dejar la campana a la vista. */
+  topOffset: number;
 }

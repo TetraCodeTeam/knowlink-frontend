@@ -37,7 +37,7 @@ const mathSx: SxProps<Theme> = {
 const codeBlockSx: SxProps<Theme> = {
   ...monoSx,
   display: "block",
-  fontSize: 13.5,
+  fontSize: 12.5,
   bgcolor: "#F4F5FB",
   color: COMMUNITY_COLORS.text,
   p: 1.5,
@@ -55,7 +55,7 @@ export default function FormattedText({ text, sx }: FormattedTextProps) {
     <Box
       sx={[
         {
-          fontSize: 15,
+          fontSize: 14,
           lineHeight: 1.6,
           color: "#33334A",
           whiteSpace: "pre-wrap",

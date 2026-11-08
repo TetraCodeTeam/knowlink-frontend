@@ -94,10 +94,10 @@ export default function ReplyDialog({ open, postId, postTitle, onClose }: ReplyD
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
               <AuthorAvatar fullName={fullName} profilePictureUrl={null} size={44} />
               <Box sx={{ minWidth: 0 }}>
-                <Typography id="reply-dialog-title" sx={{ fontSize: 17, fontWeight: 700 }}>
+                <Typography id="reply-dialog-title" sx={{ fontSize: 15, fontWeight: 700 }}>
                   {fullName}
                 </Typography>
-                <Typography noWrap sx={{ fontSize: 12.5, color: COMMUNITY_COLORS.muted }}>
+                <Typography noWrap sx={{ fontSize: 12, color: COMMUNITY_COLORS.muted }}>
                   Respondiendo a: {postTitle}
                 </Typography>
               </Box>
@@ -159,14 +159,14 @@ export default function ReplyDialog({ open, postId, postTitle, onClose }: ReplyD
                 />
                 <Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
-                    <Typography sx={{ fontSize: 14.5, fontWeight: 700 }}>
+                    <Typography sx={{ fontSize: 13.5, fontWeight: 700 }}>
                       Incluir tarjeta de vinculación a tutoría
                     </Typography>
                     <Box component="span" sx={{ ...chipSx, bgcolor: "#0B4A2E", color: "#FFFFFF" }}>
                       Recomendado
                     </Box>
                   </Box>
-                  <Typography sx={{ fontSize: 13, color: COMMUNITY_COLORS.muted, mt: 0.25 }}>
+                  <Typography sx={{ fontSize: 12, color: COMMUNITY_COLORS.muted, mt: 0.25 }}>
                     Si tu respuesta abre un tema complejo, podés definir una pregunta disparadora
                     para invitar al alumno a profundizar en una clase personalizada.
                   </Typography>
@@ -218,7 +218,7 @@ export default function ReplyDialog({ open, postId, postTitle, onClose }: ReplyD
                     >
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                         <GraduationCap size={22} color="#B4540A" aria-hidden />
-                        <Typography sx={{ fontSize: 14.5, fontWeight: 700 }}>{question}</Typography>
+                        <Typography sx={{ fontSize: 13.5, fontWeight: 700 }}>{question}</Typography>
                       </Box>
                       <Box
                         component="span"
@@ -226,7 +226,7 @@ export default function ReplyDialog({ open, postId, postTitle, onClose }: ReplyD
                           ...chipSx,
                           bgcolor: "#B4540A",
                           color: "#FFFFFF",
-                          fontSize: 13,
+                          fontSize: 12,
                           px: 1.5,
                           py: 0.75,
                           borderRadius: "8px",

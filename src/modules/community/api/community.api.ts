@@ -11,6 +11,7 @@ import type { CommunityReply } from "@/modules/community/interfaces/responses/co
 import type { CommunitySubject } from "@/modules/community/interfaces/responses/community-subject.interface";
 import type { FeedCounts } from "@/modules/community/interfaces/responses/feed-counts.interface";
 import type { HelpfulMark } from "@/modules/community/interfaces/responses/helpful-mark.interface";
+import type { PostDateRange } from "@/modules/community/interfaces/post-date-range.interface";
 import type { MyPodiumPosition } from "@/modules/community/interfaces/responses/my-podium-position.interface";
 import type { PagedPosts } from "@/modules/community/interfaces/responses/paged-posts.interface";
 import type { TutorPodium } from "@/modules/community/interfaces/responses/tutor-podium.interface";
@@ -47,9 +48,13 @@ export async function getFeedCounts(filters: FeedFilters): Promise<FeedCounts> {
   return response.data;
 }
 
-export async function getMyPosts(page: number, size: number, date?: string): Promise<PagedPosts> {
+export async function getMyPosts(
+  page: number,
+  size: number,
+  range: PostDateRange
+): Promise<PagedPosts> {
   const response = await httpClient.get<PagedPosts>(`${BASE}/posts/mine`, {
-    params: { page, size, date: date || undefined },
+    params: { page, size, dateFrom: range.from || undefined, dateTo: range.to || undefined },
   });
   return response.data;
 }

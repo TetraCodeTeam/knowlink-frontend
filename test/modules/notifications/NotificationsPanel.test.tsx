@@ -56,7 +56,7 @@ function renderPanel(props: Partial<Parameters<typeof NotificationsPanel>[0]> = 
   );
   render(
     <MemoryRouter>
-      <NotificationsPanel open onClose={onClose} sidebarWidth={120} {...props} />
+      <NotificationsPanel open onClose={onClose} topOffset={64} {...props} />
     </MemoryRouter>,
     { wrapper }
   );

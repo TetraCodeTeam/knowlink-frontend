@@ -1,30 +1,18 @@
 import { Outlet } from "react-router-dom";
-import { Box } from "@mui/material";
-import AdminSidebar, { ADMIN_SIDEBAR_WIDTH } from "@/modules/admin/components/AdminSidebar";
-import { ADMIN_CONTENT_FONT_FAMILY, ADMIN_TOKENS } from "@/modules/admin/styles/admin-tokens";
+import { ADMIN_NAVIGATION } from "@/modules/admin/constants/admin-nav-items";
+import { useAdminNavBadgeCounts } from "@/modules/admin/navigation/hooks/useAdminNavBadgeCounts";
+import AppShell from "@/modules/app-shell/components/AppShell";
 
 export default function AdminLayout() {
+  const badgeCounts = useAdminNavBadgeCounts();
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: ADMIN_TOKENS.fondo3,
-        fontFamily: ADMIN_CONTENT_FONT_FAMILY,
-      }}
+    <AppShell
+      navigation={ADMIN_NAVIGATION}
+      badgeCounts={badgeCounts}
+      topbarLabel="Panel de administración"
     >
-      <AdminSidebar />
-      <Box
-        component="main"
-        sx={{
-          flex: 1,
-          minWidth: 0,
-          marginLeft: `${ADMIN_SIDEBAR_WIDTH}px`,
-          minHeight: "100vh",
-        }}
-      >
-        <Outlet />
-      </Box>
-    </Box>
+      <Outlet />
+    </AppShell>
   );
 }
