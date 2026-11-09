@@ -34,6 +34,7 @@ export function mapTutorSupport(data: TutorSupportDto): TutorSupportData {
       studentName: claim.studentName,
       sessionDate: claim.sessionDate,
       reason: describeClaimReason(claim.reason),
+      claimantRole: claim.claimantRole,
       status: claim.status,
       resolvedAt: claim.status === "RESOLVED" ? claim.updatedAt.slice(0, 10) : null,
       hasUnseenUpdate: false,

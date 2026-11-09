@@ -25,6 +25,7 @@ interface ClaimListItemProps {
 
 export function ClaimListItem({ claim, onViewDetail, selected = false }: ClaimListItemProps) {
   const { label, tone } = CLAIM_STATUS_META[claim.status];
+  const isOwnClaim = claim.claimantRole === "TUTOR";
   const isResolved = claim.status === "RESOLVED" && claim.resolvedAt !== null;
   const { bg, fg } = TONE_COLORS[tone];
 
@@ -48,6 +49,10 @@ export function ClaimListItem({ claim, onViewDetail, selected = false }: ClaimLi
             {claim.subjectName}
           </Typography>
           <SupportStatusChip label={label} tone={tone} />
+          <SupportStatusChip
+            label={isOwnClaim ? "Tu reclamo" : "Reclamo del alumno"}
+            tone={isOwnClaim ? "info" : "neutral"}
+          />
         </Box>
 
         <Box sx={itemMetaSx}>
