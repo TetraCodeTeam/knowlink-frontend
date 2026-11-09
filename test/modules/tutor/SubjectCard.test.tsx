@@ -52,6 +52,32 @@ describe("SubjectCard", () => {
     expect(onEdit).toHaveBeenCalledWith(subject);
   });
 
+  it("muestra el hint de verificacion en una materia activa sin verificar", () => {
+    renderCard({ verificationStatus: "PENDING", verified: false, averageRating: 4.3, reviewCount: 7 });
+
+    expect(screen.getByText("Promedio 4.3 · Necesitás 4.5 para verificarte")).toBeInTheDocument();
+  });
+
+  it("no muestra el hint cuando la materia ya esta verificada", () => {
+    renderCard({ verificationStatus: "ACTIVE", verified: true, averageRating: 4.8, reviewCount: 7 });
+
+    expect(screen.queryByText(/Necesitás 4.5 para verificarte/)).toBeNull();
+  });
+
+  it("no muestra el hint cuando el backend no informa la verificacion", () => {
+    renderCard({ verificationStatus: "ACTIVE", averageRating: 4.8, reviewCount: 7 });
+
+    expect(screen.queryByText(/Necesitás 4.5 para verificarte/)).toBeNull();
+  });
+
+  it("muestra el mensaje sin promedio cuando la materia nunca fue calificada", () => {
+    renderCard({ verificationStatus: "PENDING", verified: false, averageRating: null, reviewCount: null });
+
+    expect(
+      screen.getByText("Necesitás un promedio de 4.5 en tus reseñas para verificarte")
+    ).toBeInTheDocument();
+  });
+
   it("muestra el chip Desactivada y el botón Reactivar en una materia inactiva", () => {
     renderCard({ active: false });
 

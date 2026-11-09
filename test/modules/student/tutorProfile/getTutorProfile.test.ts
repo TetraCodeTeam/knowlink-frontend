@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mapRatingComments } from "@/modules/student/tutorProfile/api/getTutorProfile";
+import { isSubjectVerified, mapRatingComments } from "@/modules/student/tutorProfile/api/getTutorProfile";
 import type { RatingCommentApiResponse } from "@/modules/student/tutorProfile/interfaces/responses/tutor-api.types";
 
 const baseComment: RatingCommentApiResponse = {
@@ -39,5 +39,23 @@ describe("mapRatingComments", () => {
 
     expect(review.studentName).toBe("Maria Lopez");
     expect(review.studentAvatarUrl).toBeNull();
+  });
+});
+
+describe("isSubjectVerified", () => {
+  it("prioriza el flag verified de la materia cuando el backend lo envia", () => {
+    expect(isSubjectVerified(true, "PENDING", false)).toBe(true);
+    expect(isSubjectVerified(false, "ACTIVE", true)).toBe(false);
+  });
+
+  it("cae en verificationStatus cuando el backend viejo no manda verified", () => {
+    expect(isSubjectVerified(undefined, "ACTIVE", false)).toBe(true);
+    expect(isSubjectVerified(undefined, "PENDING", true)).toBe(false);
+    expect(isSubjectVerified(null, "REJECTED", true)).toBe(false);
+  });
+
+  it("usa el verified del perfil como ultimo recurso", () => {
+    expect(isSubjectVerified(undefined, undefined, true)).toBe(true);
+    expect(isSubjectVerified(undefined, null, false)).toBe(false);
   });
 });

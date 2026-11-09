@@ -19,10 +19,14 @@ const normalizeModality = (modality: string): TutorSubjectRate["modalities"] => 
   return ["Virtual"];
 };
 
-const isSubjectVerified = (
+export const isSubjectVerified = (
+  subjectVerified: boolean | null | undefined,
   verificationStatus: string | null | undefined,
   profileVerified: boolean
 ) => {
+  // The per-subject flag is the source of truth when the backend sends it;
+  // older backends only expose the legacy verificationStatus.
+  if (typeof subjectVerified === "boolean") return subjectVerified;
   if (!verificationStatus) return profileVerified;
   return verificationStatus === "ACTIVE";
 };
@@ -90,7 +94,7 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     modalities: normalizeModality(m.modality),
     rawModality: m.modality as RawModality,
 
-    isVerified: isSubjectVerified(m.verificationStatus, api.verified),
+    isVerified: isSubjectVerified(m.verified, m.verificationStatus, api.verified),
   }));
 
   const reviews: TutorReview[] = reviewsApi.map((r, i) => ({

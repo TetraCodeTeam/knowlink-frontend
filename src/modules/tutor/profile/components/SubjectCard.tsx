@@ -15,6 +15,9 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
   const hasReviews =
     subject.averageRating !== null && subject.reviewCount !== null && subject.reviewCount > 0;
   const isFree = subject.compensationType === "FREE";
+  // Only when the backend explicitly reports an unverified subject: an old
+  // backend omits the flag and the tutor would see a misleading hint.
+  const needsVerification = subject.active && subject.verified === false;
   const modalities = toModalityList(subject.modality);
 
   return (
@@ -98,6 +101,13 @@ export default function SubjectCard({ subject, onEdit }: SubjectCardProps) {
         </Box>
       )}
 
+      {needsVerification && (
+        <Typography sx={{ fontSize: "13px", color: "#767684", mb: "10px" }}>
+          {hasReviews
+            ? `Promedio ${subject.averageRating!.toFixed(1)} · Necesitás 4.5 para verificarte`
+            : "Necesitás un promedio de 4.5 en tus reseñas para verificarte"}
+        </Typography>
+      )}
       <Box
         sx={{
           display: "flex",

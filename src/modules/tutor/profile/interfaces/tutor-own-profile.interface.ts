@@ -9,6 +9,8 @@ export interface TutorOwnSubject {
   compensationType: "FREE" | "PAID";
   pricePerHour: number | null;
   verificationStatus: "PENDING" | "ACTIVE" | "REJECTED";
+  /** Verificación derivada del promedio de calificaciones (opcional: backend viejo no lo envía). */
+  verified?: boolean;
   active: boolean;
 }
 

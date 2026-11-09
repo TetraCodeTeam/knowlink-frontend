@@ -8,6 +8,8 @@ export interface TutorSubjectResponse {
   verificationStatus: "PENDING" | "ACTIVE" | "REJECTED";
   averageRating: number | null;
   reviewCount: number | null;
+  /** Verificación derivada del promedio de calificaciones (opcional: backend viejo no lo envía). */
+  verified?: boolean;
   /** true = ofrecida; false = desactivada por el tutor. */
   active: boolean;
 }

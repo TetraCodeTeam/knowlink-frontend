@@ -5,6 +5,8 @@ export interface TutorSubjectApiResponse {
   compensationType: string;
   pricePerHour: number | null;
   verificationStatus: string;
+  /** Verificación derivada del promedio de calificaciones (opcional: backend viejo no lo envía). */
+  verified?: boolean;
   averageRating: number | null;
   reviewCount: number | null;
 }
