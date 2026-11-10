@@ -13,6 +13,7 @@ const unvmCareerSubject = {
 };
 const utnSharedSubject = { subjectId: "shared-utn", name: "Inglés", isBasic: true };
 const unvmSharedSubject = { subjectId: "shared-unvm", name: "Inglés", isBasic: true };
+const institutionOnlySubject = { subjectId: "subject-contabilidad", name: "Contabilidad" };
 
 vi.mock("@/modules/tutor/hooks/useMyTutorProfile", () => ({
   useMyTutorProfile: () => ({
@@ -34,7 +35,10 @@ vi.mock("@/modules/tutor/profile/hooks/useMyTutorProfile", () => ({
       career: "Medicina Veterinaria",
       institutionId: "institution-unvm",
       institution: "UNVM",
-      subjects: [{ tutorSubjectId: "ts-2", subjectName: "Medicina Veterinaria I" }],
+      subjects: [
+        { tutorSubjectId: "ts-2", subjectName: "Medicina Veterinaria I" },
+        { tutorSubjectId: "ts-3", subjectName: "Contabilidad" },
+      ],
     },
     isLoading: false,
   }),
@@ -54,6 +58,13 @@ vi.mock("@/modules/tutors/hooks/useCareerSubjects", () => ({
   })),
 }));
 
+vi.mock("@/modules/community/hooks/useCommunitySubjects", () => ({
+  useCommunitySubjects: vi.fn(() => ({
+    subjects: [unvmSharedSubject, unvmCareerSubject, institutionOnlySubject],
+    isLoading: false,
+  })),
+}));
+
 describe("resolución del catálogo por ids del perfil", () => {
   it("useAvailableSubjects usa la institución y la carrera del tutor", () => {
     const { result } = renderHook(() => useAvailableSubjects());
@@ -65,7 +76,7 @@ describe("resolución del catálogo por ids del perfil", () => {
     expect(result.current.isLoading).toBe(false);
   });
 
-  it("useMySubjectsWithCatalogId resuelve la materia con la carrera correcta", () => {
+  it("useMySubjectsWithCatalogId resuelve todas las materias con su id de catálogo", () => {
     const { result } = renderHook(() => useMySubjectsWithCatalogId());
 
     expect(vi.mocked(useBasicSubjects)).toHaveBeenCalledWith("institution-unvm");
@@ -75,6 +86,11 @@ describe("resolución del catálogo por ids del perfil", () => {
         tutorSubjectId: "ts-2",
         subjectName: "Medicina Veterinaria I",
         catalogSubjectId: "subject-unvm",
+      },
+      {
+        tutorSubjectId: "ts-3",
+        subjectName: "Contabilidad",
+        catalogSubjectId: "subject-contabilidad",
       },
     ]);
   });
