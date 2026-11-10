@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Box, Card, CardContent, IconButton, Stack, Typography } from "@mui/material";
-import { Download, FolderLock, FolderOpen } from "lucide-react";
+import { Download, Eye, FolderLock, FolderOpen } from "lucide-react";
 
 import type { TutorMaterialItem } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import { FILE_TYPE_ICON } from "@/modules/student/tutorProfile/utils/material-file-mapping";
@@ -11,6 +11,7 @@ import {
 } from "@/modules/student/tutorProfile/utils/materialTruncation";
 import { TutorMaterialModal } from "@/modules/student/tutorProfile/components/TutorMaterialModal";
 import ReportMaterialFlow from "@/modules/student/tutorProfile/components/ReportMaterialFlow";
+import MaterialPreviewDialog from "@/shared/material-preview/components/MaterialPreviewDialog";
 
 interface TutorMaterialCardProps {
   material: TutorMaterialItem[];
@@ -25,6 +26,7 @@ export const TutorMaterialCard = ({
 }: TutorMaterialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialSubject, setModalInitialSubject] = useState<string | undefined>(undefined);
+  const [previewItem, setPreviewItem] = useState<TutorMaterialItem | null>(null);
 
   const groupedMaterial = useMemo(() => groupBySubject(material), [material]);
   const { preview, hasMoreSubjects, subjectsWithMoreItems } = useMemo(
@@ -126,6 +128,13 @@ export const TutorMaterialCard = ({
                               alreadyReported={item.alreadyReported}
                             />
                             <IconButton
+                              onClick={() => setPreviewItem(item)}
+                              size="small"
+                              aria-label={`Ver ${item.title}`}
+                            >
+                              <Eye size={18} color="#5865C8" />
+                            </IconButton>
+                            <IconButton
                               onClick={() => void onDownload(item.id)}
                               size="small"
                               aria-label={`Descargar ${item.title}`}
@@ -168,9 +177,22 @@ export const TutorMaterialCard = ({
               material={material}
               initialSubject={modalInitialSubject}
               onDownload={onDownload}
+              onPreview={setPreviewItem}
             />
           </>
         )}
+
+        <MaterialPreviewDialog
+          open={previewItem !== null}
+          onClose={() => setPreviewItem(null)}
+          material={
+            previewItem && {
+              id: previewItem.id,
+              title: previewItem.title,
+              format: previewItem.fileType,
+            }
+          }
+        />
       </CardContent>
     </Card>
   );

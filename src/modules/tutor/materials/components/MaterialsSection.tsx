@@ -7,13 +7,16 @@ import MaterialCard from "@/modules/tutor/materials/components/MaterialCard";
 import MaterialEmptyState from "@/modules/tutor/materials/components/MaterialEmptyState";
 import UploadMaterialDialog from "@/modules/tutor/materials/components/UploadMaterialDialog";
 import DeleteMaterialDialog from "@/modules/tutor/materials/components/DeleteMaterialDialog";
+import MaterialPreviewDialog from "@/shared/material-preview/components/MaterialPreviewDialog";
 import type { Material } from "@/modules/tutor/materials/interfaces/material.interface";
+import { getMaterialDisplayName } from "@/modules/tutor/materials/utils/materials.utils";
 import { uploadButtonSx } from "@/modules/tutor/materials/styles/materialsStyles";
 
 export default function MaterialsSection() {
   const [selectedCatalogSubjectId, setSelectedCatalogSubjectId] = useState<string | undefined>();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [materialToDelete, setMaterialToDelete] = useState<Material | null>(null);
+  const [materialToPreview, setMaterialToPreview] = useState<Material | null>(null);
   const [hasSubjectOverflow, setHasSubjectOverflow] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +46,12 @@ export default function MaterialsSection() {
       window.removeEventListener("resize", checkOverflow);
     };
   }, [subjects, selectedCatalogSubjectId]);
+
+  useEffect(() => {
+    scrollRef.current
+      ?.querySelector<HTMLElement>('[aria-pressed="true"]')
+      ?.scrollIntoView?.({ behavior: "smooth", inline: "nearest", block: "nearest" });
+  }, [selectedCatalogSubjectId]);
 
   const scroll = (direction: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: direction === "left" ? -120 : 120, behavior: "smooth" });
@@ -99,6 +108,7 @@ export default function MaterialsSection() {
           <Button
             size="small"
             onClick={() => setSelectedCatalogSubjectId(undefined)}
+            aria-pressed={selectedCatalogSubjectId === undefined}
             sx={chipSx(selectedCatalogSubjectId === undefined)}
           >
             Todo
@@ -108,6 +118,7 @@ export default function MaterialsSection() {
               key={subject.tutorSubjectId}
               size="small"
               onClick={() => setSelectedCatalogSubjectId(subject.catalogSubjectId)}
+              aria-pressed={selectedCatalogSubjectId === subject.catalogSubjectId}
               sx={chipSx(selectedCatalogSubjectId === subject.catalogSubjectId)}
             >
               {subject.subjectName}
@@ -142,12 +153,21 @@ export default function MaterialsSection() {
       ) : (
         <Box>
           {materials.map((material) => (
-            <MaterialCard key={material.id} material={material} onDelete={setMaterialToDelete} />
+            <MaterialCard
+              key={material.id}
+              material={material}
+              onDelete={setMaterialToDelete}
+              onPreview={setMaterialToPreview}
+            />
           ))}
         </Box>
       )}
 
-      <UploadMaterialDialog open={isUploadOpen} onClose={() => setIsUploadOpen(false)} />
+      <UploadMaterialDialog
+        open={isUploadOpen}
+        onClose={() => setIsUploadOpen(false)}
+        onUploaded={setSelectedCatalogSubjectId}
+      />
 
       {materialToDelete && (
         <DeleteMaterialDialog
@@ -156,6 +176,18 @@ export default function MaterialsSection() {
           onClose={() => setMaterialToDelete(null)}
         />
       )}
+
+      <MaterialPreviewDialog
+        open={materialToPreview !== null}
+        onClose={() => setMaterialToPreview(null)}
+        material={
+          materialToPreview && {
+            id: materialToPreview.id,
+            title: getMaterialDisplayName(materialToPreview),
+            format: materialToPreview.format,
+          }
+        }
+      />
     </Box>
   );
 }

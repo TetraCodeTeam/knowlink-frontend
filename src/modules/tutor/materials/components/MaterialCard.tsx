@@ -1,5 +1,5 @@
 import { Box, IconButton, Typography } from "@mui/material";
-import { Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import type { Material } from "@/modules/tutor/materials/interfaces/material.interface";
 import { getMaterialDisplayName } from "@/modules/tutor/materials/utils/materials.utils";
 import { getFileIconAndColor } from "@/modules/tutor/materials/utils/materials.utils";
@@ -11,9 +11,10 @@ import {
 interface MaterialCardProps {
   material: Material;
   onDelete: (material: Material) => void;
+  onPreview: (material: Material) => void;
 }
 
-export default function MaterialCard({ material, onDelete }: MaterialCardProps) {
+export default function MaterialCard({ material, onDelete, onPreview }: MaterialCardProps) {
   const { icon: Icon, bgColor, iconColor } = getFileIconAndColor(material.format);
   const displayName = getMaterialDisplayName(material);
 
@@ -36,6 +37,14 @@ export default function MaterialCard({ material, onDelete }: MaterialCardProps) 
       >
         {displayName}
       </Typography>
+      <IconButton
+        size="small"
+        onClick={() => onPreview(material)}
+        aria-label={`Ver ${displayName}`}
+        sx={{ color: "#5865C8", flexShrink: 0, "&:hover": { backgroundColor: "#EEEDFE" } }}
+      >
+        <Eye size={16} />
+      </IconButton>
       <IconButton
         size="small"
         onClick={() => onDelete(material)}

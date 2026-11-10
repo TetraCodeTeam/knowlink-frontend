@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Download, FolderOpen, X } from "lucide-react";
+import { Download, Eye, FolderOpen, X } from "lucide-react";
 import {
   Box,
   Button,
@@ -23,6 +23,7 @@ interface TutorMaterialModalProps {
   material: TutorMaterialItem[];
   initialSubject?: string;
   onDownload: (materialId: string) => void | Promise<void>;
+  onPreview: (item: TutorMaterialItem) => void;
 }
 
 const ALL_SUBJECTS_FILTER = "Todos";
@@ -40,6 +41,7 @@ export const TutorMaterialModal = ({
   material,
   initialSubject,
   onDownload,
+  onPreview,
 }: TutorMaterialModalProps) => {
   const [selectedSubject, setSelectedSubject] = useState<string>(ALL_SUBJECTS_FILTER);
 
@@ -159,6 +161,21 @@ export const TutorMaterialModal = ({
                           materialTitle={item.title}
                           alreadyReported={item.alreadyReported}
                         />
+                        <Button
+                          onClick={() => onPreview(item)}
+                          variant="outlined"
+                          size="small"
+                          startIcon={<Eye size={16} />}
+                          sx={{
+                            textTransform: "none",
+                            borderRadius: 3,
+                            color: "#5865C8",
+                            borderColor: "#5865C8",
+                          }}
+                          aria-label={`Ver ${item.title}`}
+                        >
+                          Ver
+                        </Button>
                         <Button
                           onClick={() => void onDownload(item.id)}
                           variant="contained"

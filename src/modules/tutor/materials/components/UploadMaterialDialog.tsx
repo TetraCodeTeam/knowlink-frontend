@@ -29,9 +29,15 @@ import { isValidFormat } from "@/modules/tutor/materials/utils/materials.utils";
 interface UploadMaterialDialogProps {
   open: boolean;
   onClose: () => void;
+  /** Se llama con la materia elegida, después de subir, para posicionar el listado ahí. */
+  onUploaded?: (catalogSubjectId: string) => void;
 }
 
-export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDialogProps) {
+export default function UploadMaterialDialog({
+  open,
+  onClose,
+  onUploaded,
+}: UploadMaterialDialogProps) {
   const { uploadMaterial, isPending } = useUploadMaterial();
   const { subjects } = useMySubjectsWithCatalogId();
 
@@ -76,13 +82,15 @@ export default function UploadMaterialDialog({ open, onClose }: UploadMaterialDi
       return;
     }
     if (!selectedFile) return;
+    const uploadedSubjectId = selectedCatalogSubjectId;
     try {
       await uploadMaterial({
         name: materialName.trim(),
-        subjectId: selectedCatalogSubjectId,
+        subjectId: uploadedSubjectId,
         file: selectedFile,
       });
       toast.success("Material subido correctamente");
+      onUploaded?.(uploadedSubjectId);
       handleClose();
     } catch {
       // httpClient interceptor already shows the server error message
