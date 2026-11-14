@@ -14,6 +14,7 @@ import type { HelpfulMark } from "@/modules/community/interfaces/responses/helpf
 import type { PostDateRange } from "@/modules/community/interfaces/post-date-range.interface";
 import type { MyPodiumPosition } from "@/modules/community/interfaces/responses/my-podium-position.interface";
 import type { PagedPosts } from "@/modules/community/interfaces/responses/paged-posts.interface";
+import type { PostHelpfulMark } from "@/modules/community/interfaces/responses/post-helpful-mark.interface";
 import type { TutorPodium } from "@/modules/community/interfaces/responses/tutor-podium.interface";
 import { toFeedFilterParams } from "@/modules/community/utils/feed-filter-params";
 
@@ -136,6 +137,17 @@ export async function unmarkReplyHelpful(postId: string, replyId: string): Promi
   const response = await httpClient.delete<HelpfulMark>(
     `${BASE}/posts/${postId}/replies/${replyId}/helpful`
   );
+  return response.data;
+}
+
+/** "Esto me sirvió" sobre un aporte (no sobre una consulta: de esas se marcan las respuestas). */
+export async function markPostHelpful(postId: string): Promise<PostHelpfulMark> {
+  const response = await httpClient.put<PostHelpfulMark>(`${BASE}/posts/${postId}/helpful`);
+  return response.data;
+}
+
+export async function unmarkPostHelpful(postId: string): Promise<PostHelpfulMark> {
+  const response = await httpClient.delete<PostHelpfulMark>(`${BASE}/posts/${postId}/helpful`);
   return response.data;
 }
 

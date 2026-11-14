@@ -8,10 +8,12 @@ import AttachmentView from "@/modules/community/components/AttachmentView";
 import AuthorHeader from "@/modules/community/components/AuthorHeader";
 import FeaturedReplyPreview from "@/modules/community/components/FeaturedReplyPreview";
 import FormattedText from "@/modules/community/components/FormattedText";
+import HelpfulButton from "@/modules/community/components/HelpfulButton";
 import PostBadges from "@/modules/community/components/PostBadges";
 import ReplyButton from "@/modules/community/components/ReplyButton";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import { useFeedSessionStore } from "@/modules/community/hooks/useFeedSessionStore";
+import { useTogglePostHelpful } from "@/modules/community/hooks/useTogglePostHelpful";
 import type { CommunityPost } from "@/modules/community/interfaces/responses/community-post.interface";
 import type { PostGuestAction } from "@/modules/community/types/post-guest-action.type";
 import {
@@ -84,6 +86,24 @@ export default function PostCard({
   const openThread = (state?: object) => {
     rememberPosition();
     navigate(threadPath, { state: { ...threadState, ...state } });
+  };
+
+  // Un aporte se marca ahí mismo con "Esto me sirvió". De una consulta se marcan sus respuestas, así que
+  // en la tarjeta solo se ve el número de marcas de la mejor (no es un botón).
+  const isSharedContent = post.type === "SHARED_CONTENT";
+  const showHelpfulButton =
+    isSharedContent && (isGuest || !post.ownedByMe || post.helpfulCount > 0);
+  const showHelpfulCounter = !isSharedContent && post.helpfulCount > 0;
+  const { toggleHelpful, isPending: isHelpfulPending } = useTogglePostHelpful();
+
+  const handleHelpful = () => {
+    if (onGuestAction) {
+      onGuestAction("helpful");
+      return;
+    }
+    void toggleHelpful({ postId: post.postId, markedByMe: post.markedHelpfulByMe }).catch(() => {
+      // El interceptor de httpClient ya mostró el motivo.
+    });
   };
 
   const handleReply = () => {
@@ -235,7 +255,16 @@ export default function PostCard({
               (editada)
             </Box>
           ) : null}
-          {post.helpfulCount > 0 ? (
+          {showHelpfulButton ? (
+            <HelpfulButton
+              count={post.helpfulCount}
+              marked={post.markedHelpfulByMe}
+              pending={isHelpfulPending}
+              lockedReason={post.ownedByMe ? "No podés marcar tu propio aporte" : undefined}
+              onClick={handleHelpful}
+            />
+          ) : null}
+          {showHelpfulCounter ? (
             <Box
               {...(onGuestAction
                 ? {

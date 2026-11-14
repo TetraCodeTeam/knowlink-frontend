@@ -24,8 +24,13 @@ export interface CommunityPost {
   createdAt: string;
   resolvedAt: string | null;
   replyCount: number;
-  /** Marcas "Esto me sirvió" de la mejor respuesta de la publicación. */
+  /**
+   * Marcas "Esto me sirvió". En un aporte son las del propio aporte; en una consulta, las de su mejor respuesta
+   * (las consultas no se marcan: se marcan sus respuestas).
+   */
   helpfulCount: number;
+  /** El usuario ya marcó este aporte. Siempre `false` en una consulta. */
+  markedHelpfulByMe: boolean;
   featuredReply: FeaturedReply | null;
   ownedByMe: boolean;
   edited: boolean;

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Box, IconButton, InputBase, Tooltip, Typography } from "@mui/material";
-import { Lightbulb, Pencil, Reply, Trash2 } from "lucide-react";
+import { Pencil, Reply, Trash2 } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import AttachmentEditor from "@/modules/community/components/AttachmentEditor";
 import AttachmentView from "@/modules/community/components/AttachmentView";
 import AuthorHeader from "@/modules/community/components/AuthorHeader";
 import BookingCtaCard from "@/modules/community/components/BookingCtaCard";
 import FormattedText from "@/modules/community/components/FormattedText";
+import HelpfulButton from "@/modules/community/components/HelpfulButton";
 import { REPLY_MAX_LENGTH } from "@/modules/community/constants/community.constants";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import type { ReplyEdit } from "@/modules/community/interfaces/reply-edit.interface";
@@ -183,40 +184,13 @@ export default function ReplyCard({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
-          <Tooltip title={reply.ownedByMe ? "No podés marcar tu propia respuesta" : ""}>
-            <span>
-              <Box
-                component="button"
-                type="button"
-                disabled={reply.ownedByMe || isHelpfulPending}
-                aria-pressed={reply.markedHelpfulByMe}
-                onClick={() => onToggleHelpful(reply)}
-                sx={{
-                  ...chipSx,
-                  border: "none",
-                  cursor: "pointer",
-                  px: 1.5,
-                  py: 0.6,
-                  fontSize: 12,
-                  bgcolor: reply.markedHelpfulByMe ? "#D7D3F7" : "#EEEBFC",
-                  color: "#3F2FB5",
-                  "&:disabled": { cursor: "default", opacity: reply.ownedByMe ? 0.75 : 0.6 },
-                  "&:hover:not(:disabled)": { bgcolor: "#D7D3F7" },
-                }}
-              >
-                <Lightbulb
-                  size={15}
-                  aria-hidden
-                  fill={reply.markedHelpfulByMe ? "#F5B820" : "none"}
-                  color={reply.markedHelpfulByMe ? "#B7860B" : "#3F2FB5"}
-                />
-                Esto me sirvió
-                <Box component="span" sx={{ fontWeight: 400 }}>
-                  · {reply.helpfulCount} {reply.helpfulCount === 1 ? "voto" : "votos"}
-                </Box>
-              </Box>
-            </span>
-          </Tooltip>
+          <HelpfulButton
+            count={reply.helpfulCount}
+            marked={reply.markedHelpfulByMe}
+            pending={isHelpfulPending}
+            lockedReason={reply.ownedByMe ? "No podés marcar tu propia respuesta" : undefined}
+            onClick={() => onToggleHelpful(reply)}
+          />
           {onReply && !isEditing ? (
             <AppButton
               size="small"

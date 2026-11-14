@@ -198,6 +198,7 @@ export function createDemoPosts(now: number): CommunityPost[] {
         }
       : null,
     ownedByMe: false,
+    markedHelpfulByMe: false,
     edited: false,
     canReply: rest.status === "OPEN",
   }));
