@@ -83,6 +83,24 @@ export const linkSx: SxProps<Theme> = {
   "&:hover": { textDecoration: "underline" },
 };
 
+/**
+ * Paneles de la columna derecha que acompañan el scroll del feed, debajo del topbar fijo. Solo con dos
+ * columnas (`lg`): en pantallas chicas todo va en una columna y no hay nada que mantener a la vista.
+ * Si la ventana es baja, el propio panel hace scroll en vez de quedar cortado.
+ */
+export const stickyPanelsSx = (topbarHeight: number): SxProps<Theme> => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: 2.5,
+  position: { lg: "sticky" },
+  top: { lg: topbarHeight + 20 },
+  maxHeight: { lg: `calc(100vh - ${topbarHeight + 40}px)` },
+  overflowY: { lg: "auto" },
+  // El margen negativo compensa el relleno para que `overflow` no recorte la sombra de las tarjetas.
+  p: { lg: "3px" },
+  m: { lg: "-3px" },
+});
+
 export const twoColumnSx: SxProps<Theme> = {
   display: "grid",
   gridTemplateColumns: { xs: "minmax(0, 1fr)", lg: "minmax(0, 1fr) 340px" },

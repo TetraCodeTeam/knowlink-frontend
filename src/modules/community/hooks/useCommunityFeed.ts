@@ -3,6 +3,7 @@ import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { getCommunityFeed } from "@/modules/community/api/community.api";
 import {
   COMMUNITY_STALE_TIME_MS,
+  FEED_GC_TIME_MS,
   FEED_PAGE_SIZE,
 } from "@/modules/community/constants/community.constants";
 import { COMMUNITY_QUERY_KEYS } from "@/modules/community/constants/community-query-keys";
@@ -15,6 +16,8 @@ export function useCommunityFeed(filters: FeedFilters) {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.page + 1 : undefined),
     staleTime: COMMUNITY_STALE_TIME_MS,
+    // Las páginas ya cargadas se conservan un buen rato: al volver de un hilo el feed aparece tal cual estaba.
+    gcTime: FEED_GC_TIME_MS,
     // Al cambiar de filtros se sigue mostrando el feed anterior hasta que llegue el nuevo, sin saltos.
     placeholderData: keepPreviousData,
   });
