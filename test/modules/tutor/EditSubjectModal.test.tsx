@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import EditSubjectModal from "@/modules/tutor/components/EditSubjectModal";
@@ -119,6 +119,50 @@ describe("EditSubjectModal", () => {
 
     expect(screen.getByLabelText("Precio por hora")).toBeDisabled();
     expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeEnabled();
+  });
+
+  it("en una materia desactivada avisa que otros usuarios no la ven, pero deja editarla", async () => {
+    const user = userEvent.setup();
+    renderModal({ active: false });
+
+    expect(screen.getByText(/Esta materia está desactivada/)).toBeInTheDocument();
+    expect(screen.getByText(/otros usuarios no la ven/)).toBeInTheDocument();
+    expect(screen.getByText(/nadie los verá hasta que la reactives/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Presencial" }));
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "Guardar cambios" })).toBeEnabled()
+    );
+  });
+
+  it("en una materia activa no muestra el aviso de desactivada", async () => {
+    renderModal({ active: true });
+    // El formulario valida de forma asíncrona al montarse: se deja terminar antes de dar por válida la ausencia.
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(screen.queryByText(/Esta materia está desactivada/)).not.toBeInTheDocument();
+  });
+
+  it("el precio no tiene un paso que fuerce los centésimos y admite centavos", async () => {
+    const user = userEvent.setup();
+    renderModal();
+
+    const priceInput = screen.getByLabelText("Precio por hora");
+    expect(priceInput).toHaveAttribute("step", "any");
+
+    await user.clear(priceInput);
+    await user.type(priceInput, "15250.5");
+    await user.click(screen.getByRole("button", { name: "Guardar cambios" }));
+
+    await waitFor(() => {
+      expect(mockedUpdateTutorSubject).toHaveBeenCalledWith("ts-1", {
+        modality: "VIRTUAL",
+        compensationType: "PAID",
+        pricePerHour: 15250.5,
+      });
+    });
   });
 
   it("envía el PUT con los datos editados y cierra el modal", async () => {
