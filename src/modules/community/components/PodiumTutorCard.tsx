@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { BadgeCheck, CalendarDays, Crown, Medal, User } from "lucide-react";
 import AuthorAvatar from "@/modules/community/components/AuthorAvatar";
+import PodiumScoreBreakdown from "@/modules/community/components/PodiumScoreBreakdown";
 import { PODIUM_BADGE_STYLE } from "@/modules/community/constants/podium-badge-config";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import type { RankedTutor } from "@/modules/community/interfaces/responses/ranked-tutor.interface";
@@ -145,6 +146,9 @@ export default function PodiumTutorCard({ tutor }: PodiumTutorCardProps) {
           {tutor.completedClasses}{" "}
           {tutor.completedClasses === 1 ? "clase concretada" : "clases concretadas"} en KnowLink
         </Typography>
+        <Box sx={{ pt: 1.25, borderTop: `1px solid ${COMMUNITY_COLORS.border}` }}>
+          <PodiumScoreBreakdown tutor={tutor} variant="card" />
+        </Box>
         {profilePath || bookingPath ? (
           <Box sx={{ display: "flex", gap: 1, mt: 1.25 }}>
             {profilePath ? (

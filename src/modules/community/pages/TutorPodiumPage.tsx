@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
 import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
-import { Award, Crown, GraduationCap, Trophy } from "lucide-react";
+import { Award, Crown, GraduationCap, Info, Trophy } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
 import BecomeTutorDialog from "@/modules/community/components/BecomeTutorDialog";
 import MyPositionDialog from "@/modules/community/components/MyPositionDialog";
 import PodiumTutorCard from "@/modules/community/components/PodiumTutorCard";
 import RankingTable from "@/modules/community/components/RankingTable";
+import { RANKING_SCORE_WEIGHTS } from "@/modules/community/constants/ranking-score.constants";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import { useTutorPodium } from "@/modules/community/hooks/useTutorPodium";
 import type { RankedTutor } from "@/modules/community/interfaces/responses/ranked-tutor.interface";
@@ -167,6 +168,26 @@ export default function TutorPodiumPage() {
               </AppButton>
             ) : null}
           </Box>
+
+          <Typography
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 0.75,
+              mt: 1.25,
+              fontSize: 12,
+              color: COMMUNITY_COLORS.muted,
+            }}
+          >
+            <Info size={15} aria-hidden style={{ flexShrink: 0, marginTop: 1 }} />
+            <span>
+              El puntaje suma {RANKING_SCORE_WEIGHTS.bestAnswer} puntos por cada respuesta
+              destacada, {RANKING_SCORE_WEIGHTS.helpfulMark} por cada voto “Esto me sirvió” que
+              recibieron sus respuestas y la calificación promedio multiplicada por{" "}
+              {RANKING_SCORE_WEIGHTS.averageRating}. Las respuestas y los votos son los del mes
+              anterior; la calificación es el promedio vigente.
+            </span>
+          </Typography>
         </Box>
 
         {!isLoading && !isError ? <RankingTable tutors={podium?.ranking ?? []} /> : null}
