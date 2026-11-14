@@ -28,7 +28,9 @@ describe("AccountManagementCard", () => {
     render(<AccountManagementCard onDeactivateAccount={vi.fn()} onDeleteAccount={vi.fn()} />);
 
     expect(
-      screen.getByText("Podés desactivar tu cuenta temporalmente o eliminarla definitivamente.")
+      screen.getByText(
+        /Podés desactivar tu cuenta temporalmente \(se reactiva al volver a iniciar sesión\) o eliminarla definitivamente\./
+      )
     ).toBeInTheDocument();
   });
 });

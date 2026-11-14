@@ -10,9 +10,10 @@ import {
 import { useDeleteAccount } from "@/modules/users/hooks/useDeleteAccount";
 
 const DELETE_ACCOUNT_WARNING =
-  "Esta acción es permanente. Vamos a borrar tus datos personales y no vas a poder " +
-  "recuperarlos. Tu historial de clases que otras personas ya vivieron conservará solo el " +
-  "nombre «Usuario eliminado».";
+  "Esta acción es permanente y no se puede deshacer. Vamos a borrar tus datos personales y " +
+  "tus publicaciones y respuestas de la comunidad; si sos tutor, también tus materiales y tus " +
+  "materias dejarán de estar disponibles. En el historial de clases que compartiste con otros " +
+  "usuarios, tu nombre se verá como «Usuario eliminado».";
 
 interface DeleteAccountDialogProps {
   open: boolean;

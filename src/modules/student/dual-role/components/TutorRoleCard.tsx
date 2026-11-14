@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Paper, Switch, Typography } from "@mui/material";
 import { GraduationCap, Info, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -14,18 +14,28 @@ interface TutorRoleCardProps {
   hasTutorProfile: boolean;
   career?: string;
   institutionId?: string;
+  /** Sube cuando el menú del avatar pide activar el rol: la tarjeta se centra en pantalla y abre su diálogo. */
+  activationRequest?: number;
 }
 
 export default function TutorRoleCard({
   hasTutorProfile,
   career,
   institutionId,
+  activationRequest = 0,
 }: TutorRoleCardProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { authResponse, login } = useAuthStore();
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  useEffect(() => {
+    if (activationRequest === 0 || hasTutorProfile) return;
+    cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setShowConfirmDialog(true);
+  }, [activationRequest, hasTutorProfile]);
   const [showRedirectDialog, setShowRedirectDialog] = useState(false);
   const [pendingToken, setPendingToken] = useState<string | null>(null);
 
@@ -59,6 +69,7 @@ export default function TutorRoleCard({
   return (
     <>
       <Paper
+        ref={cardRef}
         elevation={0}
         sx={{ pt: 2, pb: 2, pr: 2.5, pl: 2.5, borderRadius: 3, border: "0.2px solid #e0e0fa" }}
       >

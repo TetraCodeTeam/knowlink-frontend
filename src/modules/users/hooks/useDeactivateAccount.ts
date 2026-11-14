@@ -8,6 +8,7 @@ import {
   ACCOUNT_NOT_ACTIVE,
   ACTIVE_BOOKINGS_BLOCK_MESSAGE,
   DEACTIVATE_ACCOUNT_KEY,
+  DEACTIVATED_ACCOUNT_MESSAGE,
 } from "@/modules/users/constants";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 import type { ErrorResponse } from "@/shared/interfaces/error-response.interface";
@@ -28,7 +29,7 @@ export function useDeactivateAccount({ onBlockedByBookings }: Options) {
       // already invalid after deactivation: do NOT call POST /auth/logout.
       logout();
       navigate("/auth/login", { replace: true });
-      toast.success("Tu cuenta fue desactivada. Podés volver cuando quieras.");
+      toast.success(DEACTIVATED_ACCOUNT_MESSAGE);
     },
     onError: (error) => {
       if (!axios.isAxiosError<ErrorResponse>(error)) {

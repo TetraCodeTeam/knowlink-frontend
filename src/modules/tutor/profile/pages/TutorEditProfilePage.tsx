@@ -39,6 +39,12 @@ export const TutorEditProfilePage = () => {
   const requiresAddress = (profile.subjects ?? []).some(
     (subject) => subject.modality === "IN_PERSON" || subject.modality === "BOTH"
   );
+  // El back rechaza el cambio de carrera si el tutor tiene alguna materia registrada (activa o no) y no hay
+  // forma de eliminarlas, así que se avisa de entrada en lugar de dejar elegir y fallar al guardar.
+  const careerLockedReason =
+    (profile.subjects ?? []).length > 0
+      ? "No podés cambiar tu carrera mientras tengas materias registradas: tus materias dependen de ella."
+      : undefined;
 
   const defaultValues: EditProfileFormValues = {
     firstName: profile.firstName,
@@ -93,6 +99,7 @@ export const TutorEditProfilePage = () => {
         institutionName={profile.institution}
         defaultValues={defaultValues}
         requiresAddress={requiresAddress}
+        careerLockedReason={careerLockedReason}
         isPending={isPending}
         onSubmit={handleSubmit}
       />

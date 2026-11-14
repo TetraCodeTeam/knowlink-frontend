@@ -46,6 +46,8 @@ interface EditProfileFormProps {
   institutionName: string;
   defaultValues: EditProfileFormValues;
   requiresAddress?: boolean;
+  /** Si se pasa, la carrera no se puede cambiar y este texto explica por qué. */
+  careerLockedReason?: string;
   isPending: boolean;
   onSubmit: (
     values: EditProfileFormValues,
@@ -60,6 +62,7 @@ export default function EditProfileForm({
   institutionName,
   defaultValues,
   requiresAddress = false,
+  careerLockedReason,
   isPending,
   onSubmit,
 }: EditProfileFormProps) {
@@ -179,6 +182,7 @@ export default function EditProfileForm({
               render={({ field }) => (
                 <Select
                   {...field}
+                  disabled={Boolean(careerLockedReason)}
                   sx={{ borderRadius: 2, fontSize: 14, "& .MuiSelect-select": { py: 0.8 } }}
                 >
                   {careerOptions.map((career) => (
@@ -189,7 +193,11 @@ export default function EditProfileForm({
                 </Select>
               )}
             />
-            {errors.career && <FormHelperText>{errors.career.message}</FormHelperText>}
+            {errors.career ? (
+              <FormHelperText>{errors.career.message}</FormHelperText>
+            ) : careerLockedReason ? (
+              <FormHelperText>{careerLockedReason}</FormHelperText>
+            ) : null}
           </FormControl>
         </Field>
 

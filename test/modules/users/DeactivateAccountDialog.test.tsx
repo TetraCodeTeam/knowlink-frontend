@@ -2,16 +2,28 @@ import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import DeactivateAccountDialog from "@/modules/users/components/DeactivateAccountDialog";
 
-const CONFIRMATION_TEXT =
-  "Tu cuenta dejará de ser visible para el resto de los usuarios y no podrás iniciar sesión hasta reactivarla. Tu información se conserva para cuando quieras volver.";
-
 describe("DeactivateAccountDialog", () => {
   it("muestra la explicación de qué implica desactivar la cuenta", () => {
     render(
       <DeactivateAccountDialog open isPending={false} onConfirm={vi.fn()} onCancel={vi.fn()} />
     );
 
-    expect(screen.getByText(CONFIRMATION_TEXT)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Tu cuenta dejará de ser visible para el resto de los usuarios/)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/vamos a cerrar tu sesión/)).toBeInTheDocument();
+  });
+
+  it("explica cómo reactivar la cuenta: volviendo a iniciar sesión", () => {
+    render(
+      <DeactivateAccountDialog open isPending={false} onConfirm={vi.fn()} onCancel={vi.fn()} />
+    );
+
+    expect(
+      screen.getByText(/Para reactivarla, volvé a iniciar sesión con tu correo y tu contraseña/)
+    ).toBeInTheDocument();
+    // No debe prometer lo contrario: la cuenta sí se puede reactivar al intentar entrar.
+    expect(screen.queryByText(/no podrás iniciar sesión/)).not.toBeInTheDocument();
   });
 
   it("Cancelar cierra el diálogo sin confirmar", () => {
