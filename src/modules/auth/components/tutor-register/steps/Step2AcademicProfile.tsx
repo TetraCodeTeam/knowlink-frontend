@@ -18,6 +18,7 @@ import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import { useBasicSubjects } from "@/modules/tutors/hooks/useBasicSubjects";
 import { useCareerSubjects } from "@/modules/tutors/hooks/useCareerSubjects";
 import AppButton from "@/shared/components/AppButton";
+import PriceField from "@/shared/components/PriceField";
 
 const inputSx = { "& .MuiOutlinedInput-root": { borderRadius: 2 } };
 
@@ -242,13 +243,14 @@ export default function Step2AcademicProfile({
                   />
                 </Box>
                 {!isGratuita && (
-                  <TextField
+                  <PriceField
                     placeholder="Ej. 15000"
                     size="small"
-                    type="number"
-                    inputProps={{ min: 1, step: "0.01" }}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                    slotProps={{
+                      htmlInput: { min: 1 },
+                      input: {
+                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                      },
                     }}
                     {...register(`subjects.${index}.pricePerHour`, { valueAsNumber: true })}
                     error={!!subjectErrors?.pricePerHour}

@@ -1,5 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import {
+  Alert,
   Box,
   Dialog,
   DialogActions,
@@ -29,6 +30,7 @@ import {
 } from "@/modules/tutor/utils/editSubject.utils";
 import { useUpdateTutorSubject } from "@/modules/tutor/hooks/useUpdateTutorSubject";
 import AppButton from "@/shared/components/AppButton";
+import PriceField from "@/shared/components/PriceField";
 
 interface EditSubjectModalProps {
   subject: TutorOwnSubject;
@@ -119,6 +121,13 @@ export default function EditSubjectModal({ subject, onClose }: EditSubjectModalP
 
       <DialogContent sx={{ mt: 2 }}>
         <Stack spacing={3}>
+          {!subject.active && (
+            <Alert severity="info">
+              Esta materia está desactivada, así que otros usuarios no la ven. Podés actualizarla
+              igual: los cambios se guardan, pero nadie los verá hasta que la reactives.
+            </Alert>
+          )}
+
           <TextField
             label="Materia"
             value={subject.subjectName}
@@ -143,12 +152,11 @@ export default function EditSubjectModal({ subject, onClose }: EditSubjectModalP
                 label="Gratis"
               />
 
-              <TextField
-                type="number"
+              <PriceField
                 disabled={isFree}
                 error={!!errors.pricePerHour}
                 helperText={errors.pricePerHour?.message}
-                inputProps={{ min: 0, step: "0.01", "aria-label": "Precio por hora" }}
+                slotProps={{ htmlInput: { "aria-label": "Precio por hora" } }}
                 sx={{ width: 160 }}
                 {...register("pricePerHour")}
               />
