@@ -23,8 +23,8 @@ import {
   TUTOR_ROLE,
 } from "../constants";
 import { useSearchFilters } from "../hooks/useSearchFilters";
+import { useSearchSubjects } from "../hooks/useSearchSubjects";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
-import { deriveMateriasFromTutors } from "../utils/derive-materias";
 import SearchFiltersPopover from "./SearchFiltersPopover";
 import SearchResultsPanel from "./SearchResultsPanel";
 
@@ -80,11 +80,20 @@ export default function SearchBar() {
   const { mode, filters, setFilters, activeFilterCount } = useSearchFilters();
 
   // Se dispara una solicitud por cada carácter ingresado (sin debounce),
-  // según lo pedido: GET /api/v1/tutors/search/{query}.
+  // según lo pedido: GET /api/v1/tutors/search/{query} y
+  // GET /api/v1/subjects/search/{query}. En modo tutor no se piden materias
+  // (la barra está deshabilitada y el endpoint exige rol STUDENT).
   const { data, isFetching } = useSearchTutorsAndMaterias(inputValue);
   const tutors = useMemo(() => (Array.isArray(data) ? data : []), [data]);
 
-  const materias = useMemo(() => deriveMateriasFromTutors(tutors), [tutors]);
+  const { data: subjectsData, isFetching: isFetchingSubjects } = useSearchSubjects(
+    inputValue,
+    { enabled: !isTutorModeActive }
+  );
+  const materias = useMemo(
+    () => (Array.isArray(subjectsData) ? subjectsData : []),
+    [subjectsData]
+  );
 
   const showPanel = open && inputValue.trim().length > 0;
   const showFiltersButton = !isTutorModeActive && Boolean(matchesSearchPage || matchesTutoresPage);
@@ -202,7 +211,7 @@ export default function SearchBar() {
             query={inputValue}
             materias={materias.slice(0, MAX_SEARCH_SUGGESTIONS)}
             tutors={tutors.slice(0, MAX_SEARCH_SUGGESTIONS)}
-            loading={isFetching}
+            loading={isFetching || isFetchingSubjects}
             onSelectMateria={handleSelectMateria}
             onSelectTutor={handleSelectTutor}
           />

@@ -14,7 +14,7 @@ function getTextContent(text: string) {
 function renderPanel(props: Partial<SearchResultsPanelProps> = {}) {
   const onSelectMateria = vi.fn();
   const onSelectTutor = vi.fn();
-  render(
+  const { container } = render(
     <SearchResultsPanel
       query="a"
       materias={materiasIngenieria}
@@ -25,7 +25,7 @@ function renderPanel(props: Partial<SearchResultsPanelProps> = {}) {
       {...props}
     />
   );
-  return { onSelectMateria, onSelectTutor };
+  return { onSelectMateria, onSelectTutor, container };
 }
 
 describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
@@ -79,5 +79,20 @@ describe("US-46 / CP-003 — Panel de resultados de búsqueda", () => {
     renderPanel({ materias: materiasIngenieria, tutors: [] });
     expect(screen.getByText("Materias")).toBeInTheDocument();
     expect(screen.queryByText("Tutores")).toBeNull();
+  });
+
+  it("US-06 — Solo materias: una columna, sin divisor y sin mensaje de vacío", () => {
+    const { container } = renderPanel({ materias: materiasIngenieria, tutors: [] });
+
+    expect(screen.getByText("Materias")).toBeInTheDocument();
+    expect(screen.queryByText("Tutores")).toBeNull();
+    expect(container.querySelector("hr")).toBeNull();
+    expect(screen.queryByText("No se encontraron resultados para tu búsqueda")).toBeNull();
+  });
+
+  it("US-06 — Ambas secciones vacías muestra el mensaje de resultados", () => {
+    renderPanel({ materias: [], tutors: [] });
+
+    expect(screen.getByText("No se encontraron resultados para tu búsqueda")).toBeInTheDocument();
   });
 });

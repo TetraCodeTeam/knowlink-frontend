@@ -4,7 +4,10 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import SearchResultsPage from "@/modules/student/pages/SearchResultsPage";
 import { EMPTY_FILTERED_MESSAGE, EMPTY_SEARCH_MESSAGE } from "@/modules/student/constants";
-import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
+import type {
+  SubjectSummary,
+  TutorSearchResult,
+} from "@/modules/student/interfaces/tutor-search-result.interface";
 import { tutorAna } from "../../../fixtures/busqueda/tutoresDePrueba";
 
 vi.mock("@/modules/student/hooks/useSearchTutorsAndMaterias", () => ({
@@ -15,6 +18,14 @@ import { useSearchTutorsAndMaterias } from "@/modules/student/hooks/useSearchTut
 
 const mockedHook = vi.mocked(useSearchTutorsAndMaterias);
 
+vi.mock("@/modules/student/hooks/useSearchSubjects", () => ({
+  useSearchSubjects: vi.fn(),
+}));
+
+import { useSearchSubjects } from "@/modules/student/hooks/useSearchSubjects";
+
+const mockedSubjectsHook = vi.mocked(useSearchSubjects);
+
 type HookResult = ReturnType<typeof useSearchTutorsAndMaterias>;
 
 interface HookOptions {
@@ -23,6 +34,12 @@ interface HookOptions {
 
 function hookResult(data: TutorSearchResult[], isFetching = false): HookResult {
   return { data, isFetching } as unknown as HookResult;
+}
+
+type SubjectsHookResult = ReturnType<typeof useSearchSubjects>;
+
+function subjectsResult(data: SubjectSummary[], isFetching = false): SubjectsHookResult {
+  return { data, isFetching } as unknown as SubjectsHookResult;
 }
 
 interface MockSearchOptions {
@@ -71,6 +88,8 @@ function currentLocation() {
 describe("SearchResultsPage — US-49", () => {
   beforeEach(() => {
     mockedHook.mockReset();
+    mockedSubjectsHook.mockReset();
+    mockedSubjectsHook.mockReturnValue(subjectsResult([]));
   });
 
   it("con filtros en la URL el hook se llama con esos filtros", () => {
@@ -163,5 +182,56 @@ describe("SearchResultsPage — US-49", () => {
 
     await user.click(screen.getByRole("button", { name: "Ver materias" }));
     expect(currentLocation()).not.toContain("mode=tutores");
+  });
+
+  it("US-06 — sin filtros lista las materias del catálogo, aunque no tengan tutores", () => {
+    mockedSubjectsHook.mockReturnValue(
+      subjectsResult([
+        { name: "Álgebra", career: "Ingeniería en Sistemas" },
+        { name: "Física", career: "Ingeniería en Sistemas" },
+      ])
+    );
+    mockSearch({ filtered: [], base: [] });
+
+    renderPage("/student/buscar?q=alg");
+
+    expect(screen.getByText("Álgebra")).toBeInTheDocument();
+    expect(screen.getByText("Física")).toBeInTheDocument();
+    expect(screen.queryByText(EMPTY_SEARCH_MESSAGE)).not.toBeInTheDocument();
+  });
+
+  it("US-06 — sin filtros el vacío lo define el catálogo, no los tutores", () => {
+    mockedSubjectsHook.mockReturnValue(subjectsResult([]));
+    mockSearch({ filtered: [tutorAna], base: [] });
+
+    renderPage("/student/buscar?q=Ana");
+
+    expect(screen.getByText(EMPTY_SEARCH_MESSAGE)).toBeInTheDocument();
+  });
+
+  it("US-06 — con filtros activos las materias salen de los tutores filtrados", () => {
+    mockedSubjectsHook.mockReturnValue(
+      subjectsResult([{ name: "Química", career: "Ingeniería en Sistemas" }])
+    );
+    mockSearch({ filtered: [tutorAna] });
+
+    renderPage("/student/buscar?q=Álgebra&modality=VIRTUAL");
+
+    expect(screen.getByText("Álgebra")).toBeInTheDocument();
+    expect(screen.queryByText("Química")).not.toBeInTheDocument();
+  });
+
+  it("US-06 — con filtros activos el catálogo queda deshabilitado", () => {
+    mockSearch({ filtered: [tutorAna] });
+    renderPage("/student/buscar?q=Ana&modality=VIRTUAL");
+
+    expect(mockedSubjectsHook).toHaveBeenCalledWith("Ana", { enabled: false });
+  });
+
+  it("US-06 — sin filtros activos el catálogo se consulta habilitado", () => {
+    mockSearch({ filtered: [], base: [] });
+    renderPage("/student/buscar?q=alg");
+
+    expect(mockedSubjectsHook).toHaveBeenCalledWith("alg", { enabled: true });
   });
 });

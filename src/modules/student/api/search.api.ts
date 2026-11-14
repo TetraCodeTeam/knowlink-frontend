@@ -1,6 +1,9 @@
 import { httpClient } from "@/shared/lib/httpClient";
 import type { SearchFilters } from "@/modules/student/interfaces/search-filters.interface";
-import type { TutorSearchResult } from "@/modules/student/interfaces/tutor-search-result.interface";
+import type {
+  SubjectSummary,
+  TutorSearchResult,
+} from "@/modules/student/interfaces/tutor-search-result.interface";
 import { toApiParams } from "@/modules/student/utils/search-filters.utils";
 
 /**
@@ -23,6 +26,18 @@ export async function searchTutors(
   const response = await httpClient.get<TutorSearchResult[]>(
     `/api/v1/tutors/search/${encodeURIComponent(query)}`,
     { params: filters ? toApiParams(filters) : undefined }
+  );
+  return response.data;
+}
+
+/**
+ * GET /api/v1/subjects/search/{query}
+ * -> SubjectSummary[]  (materias del catálogo de la institución del alumno, con o sin tutores;
+ *    ya ordenadas por el backend). Requiere rol STUDENT.
+ */
+export async function searchSubjects(query: string): Promise<SubjectSummary[]> {
+  const response = await httpClient.get<SubjectSummary[]>(
+    `/api/v1/subjects/search/${encodeURIComponent(query)}`
   );
   return response.data;
 }
