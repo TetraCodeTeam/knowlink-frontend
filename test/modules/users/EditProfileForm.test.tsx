@@ -164,4 +164,22 @@ describe("EditProfileForm", () => {
     expect(values).not.toHaveProperty("email");
     expect(values.lastName).toBe("García López");
   });
+
+  it("con careerLockedReason bloquea la carrera y explica por qué", async () => {
+    renderForm({
+      careerLockedReason: "No podés cambiar tu carrera mientras tengas materias registradas.",
+    });
+
+    expect(screen.getByRole("combobox")).toHaveAttribute("aria-disabled", "true");
+    expect(
+      screen.getByText("No podés cambiar tu carrera mientras tengas materias registradas.")
+    ).toBeInTheDocument();
+  });
+
+  it("sin careerLockedReason la carrera se puede cambiar", async () => {
+    renderForm();
+
+    expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-disabled", "true");
+    expect(screen.queryByText(/No podés cambiar tu carrera/)).not.toBeInTheDocument();
+  });
 });

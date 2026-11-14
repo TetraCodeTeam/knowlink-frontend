@@ -21,7 +21,8 @@ export default function AccountManagementCard({
       </Stack>
 
       <Typography color="text.secondary" sx={{ mb: 2, fontSize: 13 }}>
-        Podés desactivar tu cuenta temporalmente o eliminarla definitivamente.
+        Podés desactivar tu cuenta temporalmente (se reactiva al volver a iniciar sesión) o
+        eliminarla definitivamente.
       </Typography>
 
       <Stack spacing={1.5}>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Paper, Switch, Typography } from "@mui/material";
 import { GraduationCap, Info, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -13,14 +13,26 @@ import RoleRedirectDialog from "@/modules/tutor/dual-role/components/RoleRedirec
 
 interface StudentRoleCardProps {
   hasStudentProfile: boolean;
+  /** Sube cuando el menú del avatar pide activar el rol: la tarjeta se centra en pantalla y abre su diálogo. */
+  activationRequest?: number;
 }
 
-export default function StudentRoleCard({ hasStudentProfile }: StudentRoleCardProps) {
+export default function StudentRoleCard({
+  hasStudentProfile,
+  activationRequest = 0,
+}: StudentRoleCardProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { authResponse, login, logout } = useAuthStore();
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  useEffect(() => {
+    if (activationRequest === 0 || hasStudentProfile) return;
+    cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setShowConfirmDialog(true);
+  }, [activationRequest, hasStudentProfile]);
   const [redirectVariant, setRedirectVariant] = useState<"activation" | "switch" | null>(null);
   const [pendingToken, setPendingToken] = useState<string | null>(null);
 
@@ -62,6 +74,7 @@ export default function StudentRoleCard({ hasStudentProfile }: StudentRoleCardPr
   return (
     <>
       <Paper
+        ref={cardRef}
         elevation={0}
         sx={{
           p: { xs: "14px", md: "16px 24px" },

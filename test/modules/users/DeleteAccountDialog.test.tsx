@@ -96,4 +96,15 @@ describe("DeleteAccountDialog", () => {
     await waitFor(() => expect(confirmButton()).toBeDisabled());
     expect(within(dialog()).getByRole("button", { name: "Cancelar" })).toBeDisabled();
   });
+
+  it("explica qué se borra y cómo se verá la cuenta en el historial de otras personas", () => {
+    renderDialog();
+
+    const warning = within(dialog());
+    expect(warning.getByText(/publicaciones y respuestas de la comunidad/)).toBeInTheDocument();
+    expect(
+      warning.getByText(/historial de clases que compartiste con otros usuarios/)
+    ).toBeInTheDocument();
+    expect(warning.getByText(/tu nombre se verá como «Usuario eliminado»/)).toBeInTheDocument();
+  });
 });

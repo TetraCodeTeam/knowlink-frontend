@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import { toast } from "@/shared/lib/toast";
 import { deactivateMyAccount } from "@/modules/users/api/users.api";
-import { ACCOUNT_NOT_ACTIVE } from "@/modules/users/constants";
+import { ACCOUNT_NOT_ACTIVE, DEACTIVATED_ACCOUNT_MESSAGE } from "@/modules/users/constants";
 import { useDeactivateAccount } from "@/modules/users/hooks/useDeactivateAccount";
 import { useAuthStore } from "@/modules/auth/hooks/useAuthStore";
 
@@ -61,9 +61,7 @@ describe("useDeactivateAccount", () => {
     act(() => result.current.mutate());
 
     await waitFor(() =>
-      expect(mockedToast.success).toHaveBeenCalledWith(
-        "Tu cuenta fue desactivada. Podés volver cuando quieras."
-      )
+      expect(mockedToast.success).toHaveBeenCalledWith(DEACTIVATED_ACCOUNT_MESSAGE)
     );
     expect(logoutSpy).toHaveBeenCalledTimes(1);
     expect(screen.getByTestId("location")).toHaveTextContent("/auth/login");

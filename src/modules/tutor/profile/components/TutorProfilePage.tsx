@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -37,6 +37,7 @@ import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvailableSubjects";
 import { useQueryClient } from "@tanstack/react-query";
 import StudentRoleCard from "@/modules/tutor/dual-role/components/StudentRoleCard";
+import { useRoleActivationRequest } from "@/modules/app-shell/hooks/useRoleActivationRequest";
 import AccountManagementSection from "@/modules/users/components/AccountManagementSection";
 import AppButton from "@/shared/components/AppButton";
 import { tutorPaths } from "@/routes/paths";
@@ -47,6 +48,12 @@ export default function TutorProfilePage() {
   const isCompact = useMediaQuery(theme.breakpoints.down("md"));
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState(0);
+  // "Activar rol de alumno" desde el menú del avatar: la tarjeta del rol vive en "Información personal", así que
+  // si se estaba en otra pestaña hay que volver a ella para que el pedido tenga efecto visible.
+  const activationRequest = useRoleActivationRequest();
+  useEffect(() => {
+    if (activationRequest > 0) setActiveTab(0);
+  }, [activationRequest]);
   const { data: profile, isLoading, isError } = useMyTutorProfile();
   const [openAddSubject, setOpenAddSubject] = useState(false);
   const [editingSubject, setEditingSubject] = useState<TutorOwnSubject | null>(null);
@@ -325,7 +332,10 @@ export default function TutorProfilePage() {
             </Box>
           </Box>
           <Box sx={{ mt: 2 }}>
-            <StudentRoleCard hasStudentProfile={profile.hasStudentProfile} />
+            <StudentRoleCard
+              hasStudentProfile={profile.hasStudentProfile}
+              activationRequest={activationRequest}
+            />
           </Box>
           <Box sx={{ mt: 2 }}>
             <AccountManagementSection classesPath={tutorPaths.classes} />

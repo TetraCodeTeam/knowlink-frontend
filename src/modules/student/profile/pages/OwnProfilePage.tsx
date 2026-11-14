@@ -4,15 +4,15 @@ import { PersonalDataCard } from "@/modules/student/profile/components/PersonalD
 import { ProfileHeader } from "@/modules/student/profile/components/ProfileHeader";
 import TutorRoleCard from "@/modules/student/dual-role/components/TutorRoleCard";
 import { useMyStudentProfile } from "@/modules/student/profile/hooks/useMyStudentProfile";
+import { useRoleActivationRequest } from "@/modules/app-shell/hooks/useRoleActivationRequest";
 import AccountManagementSection from "@/modules/users/components/AccountManagementSection";
 import { studentPaths } from "@/routes/paths";
 import { getPageScaleSx } from "@/shared/utils/page-height.utils";
 
-/** Hace que las tarjetas hijas crezcan para repartirse el alto del contenedor. */
-const stretchChildrenSx = { "& > .MuiPaper-root": { flex: 1 } };
-
 export const OwnProfilePage = () => {
   const navigate = useNavigate();
+  // "Activar rol de tutor" desde el menú del avatar: la tarjeta abre su diálogo de activación.
+  const activationRequest = useRoleActivationRequest();
   const { data: profile, isLoading, isError } = useMyStudentProfile();
 
   if (isLoading) {
@@ -36,16 +36,13 @@ export const OwnProfilePage = () => {
   }
 
   return (
-    <Stack
-      spacing={2}
-      sx={{ mx: "auto", pr: 4, pl: 4, pt: 2, pb: 2, ...getPageScaleSx() }}
-    >
+    <Stack spacing={2} sx={{ mx: "auto", pr: 4, pl: 4, pt: 2, pb: 2, ...getPageScaleSx() }}>
       <ProfileHeader fullName={profile.fullName} profilePictureUrl={profile.profilePictureUrl} />
 
-      {/* En pantallas altas las tarjetas se estiran para ocupar el alto disponible. */}
-      <Grid container spacing={2} sx={{ flex: 1, alignItems: "stretch" }}>
-        <Grid size={{ xs: 12, md: 8 }} sx={{ display: "flex" }}>
-          <Stack spacing={2} sx={{ flex: 1, minWidth: 0, ...stretchChildrenSx }}>
+      {/* Las tarjetas miden lo que ocupa su contenido: estirarlas al alto de la pantalla dejaba grandes huecos vacíos por dentro. */}
+      <Grid container spacing={2} sx={{ alignItems: "flex-start" }}>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Stack spacing={2} sx={{ minWidth: 0 }}>
             <PersonalDataCard
               email={profile.email}
               phoneNumber={profile.phoneNumber}
@@ -56,6 +53,7 @@ export const OwnProfilePage = () => {
               hasTutorProfile={profile.hasTutorProfile}
               career={profile.career}
               institutionId={profile.institutionId}
+              activationRequest={activationRequest}
             />
           </Stack>
         </Grid>

@@ -18,7 +18,7 @@ export default function DeactivateAccountDialog({
       open={open}
       severity="warning"
       title="Desactivar cuenta"
-      message="Tu cuenta dejará de ser visible para el resto de los usuarios y no podrás iniciar sesión hasta reactivarla. Tu información se conserva para cuando quieras volver."
+      message="Tu cuenta dejará de ser visible para el resto de los usuarios y vamos a cerrar tu sesión. Tu información y tu historial se conservan. Para reactivarla, volvé a iniciar sesión con tu correo y tu contraseña y confirmá la reactivación."
       confirmLabel="Desactivar cuenta"
       cancelLabel="Cancelar"
       isPending={isPending}

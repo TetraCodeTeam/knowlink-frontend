@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { ArrowLeftRight, ChevronDown, LogOut, UserRound, Zap } from "lucide-react";
 import { useCurrentUser } from "@/modules/app-shell/hooks/useCurrentUser";
+import { ROLE_ACTIVATION_STATE } from "@/modules/app-shell/hooks/useRoleActivationRequest";
 import { useRoleSwitch } from "@/modules/app-shell/hooks/useRoleSwitch";
 import type { NavTheme } from "@/modules/app-shell/interfaces/navigation.interface";
 import LogoutDialog from "@/modules/auth/logout/components/LogoutDialog";
@@ -165,7 +166,12 @@ export default function UserMenu({ theme, profilePath }: UserMenuProps) {
           </MenuItem>
         )}
         {target && user.hasOtherRole === false && (
-          <MenuItem component={RouterLink} to={target.activationPath} onClick={closeMenu}>
+          <MenuItem
+            component={RouterLink}
+            to={target.activationPath}
+            state={ROLE_ACTIVATION_STATE}
+            onClick={closeMenu}
+          >
             <ListItemIcon>
               <Zap size={18} aria-hidden />
             </ListItemIcon>

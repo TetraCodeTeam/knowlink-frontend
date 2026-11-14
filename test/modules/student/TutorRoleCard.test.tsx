@@ -54,4 +54,28 @@ describe("TutorRoleCard", () => {
     expect(state).toHaveTextContent("institution-unvm");
     expect(state).toHaveTextContent("Medicina Veterinaria");
   });
+
+  it("cuando el menú del avatar pide activar el rol, abre el diálogo de activación", async () => {
+    // jsdom no implementa scrollIntoView.
+    Element.prototype.scrollIntoView = vi.fn();
+    const card = (activationRequest: number) => (
+      <QueryClientProvider client={new QueryClient()}>
+        <MemoryRouter initialEntries={["/student/profile"]}>
+          <TutorRoleCard
+            hasTutorProfile={false}
+            career="Medicina Veterinaria"
+            institutionId="institution-unvm"
+            activationRequest={activationRequest}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+
+    const { rerender } = render(card(0));
+    expect(screen.queryByRole("button", { name: "Continuar" })).not.toBeInTheDocument();
+
+    rerender(card(1));
+
+    expect(await screen.findByRole("button", { name: "Continuar" })).toBeInTheDocument();
+  });
 });

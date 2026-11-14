@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
+import { ROLE_ACTIVATION_STATE } from "@/modules/app-shell/hooks/useRoleActivationRequest";
 import { OwnProfilePage } from "@/modules/student/profile/pages/OwnProfilePage";
 import { getMyStudentProfile } from "@/modules/student/profile/api/student-profile.api";
 import type { StudentSelfProfileResponse } from "@/modules/student/profile/interfaces/ownProfileInterface";
@@ -57,5 +58,21 @@ describe("OwnProfilePage", () => {
     expect(await screen.findByText("Gestión de Cuenta")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Desactivar cuenta" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Eliminar cuenta" })).toBeInTheDocument();
+  });
+
+  it('"Activar rol de tutor" desde el menú abre la activación aunque ya se esté en el perfil', async () => {
+    // jsdom no implementa scrollIntoView.
+    Element.prototype.scrollIntoView = vi.fn();
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <MemoryRouter
+          initialEntries={[{ pathname: "/student/profile", state: ROLE_ACTIVATION_STATE }]}
+        >
+          <OwnProfilePage />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+
+    expect(await screen.findByRole("button", { name: "Continuar" })).toBeInTheDocument();
   });
 });

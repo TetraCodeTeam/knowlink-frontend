@@ -136,4 +136,22 @@ describe("TutorEditProfilePage", () => {
     expect(await screen.findByText("Perfil del tutor")).toBeInTheDocument();
     expect(queryClient.getQueryData(["myTutorProfile"])).toEqual(updatedProfile);
   });
+
+  it("bloquea la carrera y explica por qué cuando el tutor tiene materias registradas", async () => {
+    renderPage();
+
+    expect(
+      await screen.findByText(/No podés cambiar tu carrera mientras tengas materias registradas/)
+    ).toBeInTheDocument();
+    expect(screen.getByRole("combobox")).toHaveAttribute("aria-disabled", "true");
+  });
+
+  it("deja cambiar la carrera si el tutor todavía no tiene materias", async () => {
+    mockedGet.mockResolvedValue({ ...profile, subjects: [] });
+    renderPage();
+
+    await screen.findByPlaceholderText("Nombre");
+    expect(screen.getByRole("combobox")).not.toHaveAttribute("aria-disabled", "true");
+    expect(screen.queryByText(/No podés cambiar tu carrera/)).not.toBeInTheDocument();
+  });
 });

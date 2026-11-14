@@ -10,3 +10,6 @@ export const ACCOUNT_DEACTIVATED = "ACCOUNT_DEACTIVATED";
 export const ACTIVE_BOOKINGS_BLOCK_MESSAGE =
   "No podés dar de baja tu cuenta con reservas activas pendientes";
 export const ACCOUNT_DELETED_MESSAGE = "Tu cuenta fue eliminada definitivamente.";
+/** La cuenta se reactiva al volver a iniciar sesión: el aviso tiene que decir cómo, no solo que se puede. */
+export const DEACTIVATED_ACCOUNT_MESSAGE =
+  "Tu cuenta fue desactivada. Para reactivarla, volvé a iniciar sesión con tu correo y tu contraseña.";
