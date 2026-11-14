@@ -13,7 +13,6 @@ import {
   Select,
   Stack,
   Switch,
-  TextField,
   Typography,
 } from "@mui/material";
 
@@ -27,6 +26,7 @@ import { useAvailableSubjects } from "@/modules/tutor/availability/hooks/useAvai
 import { useFeedbackDialog } from "@/shared/hooks/useFeedbackDialog";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import AppButton from "@/shared/components/AppButton";
+import PriceField from "@/shared/components/PriceField";
 
 interface Props {
   open: boolean;
@@ -209,11 +209,11 @@ export default function AddSubjectModal({ open, onClose, onSuccess }: Props) {
                   label="Gratis"
                 />
 
-                <TextField
+                <PriceField
                   disabled={free}
                   value={price}
-                  type="number"
                   onChange={(e) => setPrice(e.target.value)}
+                  slotProps={{ htmlInput: { "aria-label": "Precio por hora" } }}
                   sx={{ width: 160 }}
                 />
               </Stack>

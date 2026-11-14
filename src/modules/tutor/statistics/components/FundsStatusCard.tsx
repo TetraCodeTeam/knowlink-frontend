@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 import { Box, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { STATISTICS_COLORS } from "@/modules/tutor/statistics/constants/statistics-colors.constants";
-import { TUTOR_STATISTICS_PATHS } from "@/modules/tutor/statistics/constants/statistics.constants";
 import type { FundsStatus } from "@/modules/tutor/statistics/interfaces/responses/tutor-statistics.response";
 import StatisticsCard from "@/modules/tutor/statistics/components/StatisticsCard";
 import { mutedTextSx } from "@/modules/tutor/statistics/styles/statistics.styles";
 import { formatCount } from "@/modules/tutor/statistics/utils/statistics-format.utils";
+import { buildSupportClaimsPath } from "@/modules/tutor/statistics/utils/statistics-links.utils";
 import { formatCurrency } from "@/shared/utils/currency.utils";
 
 interface FundsStatusCardProps {
@@ -15,6 +15,10 @@ interface FundsStatusCardProps {
 
 export default function FundsStatusCard({ funds }: FundsStatusCardProps) {
   const navigate = useNavigate();
+  // Con una sola sesión en disputa se abre directo su reclamo; con varias, el listado para elegir.
+  const claimIds = funds.withheldClaimIds ?? [];
+  const singleClaimId =
+    funds.withheldByClaim.sessions === 1 && claimIds.length === 1 ? claimIds[0] : null;
 
   return (
     <StatisticsCard title="Estado de mis fondos">
@@ -52,10 +56,10 @@ export default function FundsStatusCard({ funds }: FundsStatusCardProps) {
                   <Link
                     component="button"
                     type="button"
-                    onClick={() => navigate(TUTOR_STATISTICS_PATHS.support)}
+                    onClick={() => navigate(buildSupportClaimsPath(singleClaimId))}
                     sx={{ fontSize: "inherit", verticalAlign: "baseline" }}
                   >
-                    Ver en Soporte
+                    {singleClaimId ? "Ver reclamo en Soporte" : "Ver en Soporte"}
                   </Link>
                 </>
               ) : null}

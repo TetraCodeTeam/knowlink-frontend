@@ -44,6 +44,11 @@ export interface FundsStatus {
   released: FundsAmount;
   pendingRelease: FundsAmount;
   withheldByClaim: FundsAmount;
+  /**
+   * Reclamo abierto detrás de cada sesión con fondos retenidos, de la más reciente a la más antigua.
+   * Ausente si el backend todavía no lo envía: en ese caso «Ver en Soporte» lleva al listado.
+   */
+  withheldClaimIds?: string[];
   commissionPercentage: number;
 }
 
