@@ -2,7 +2,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import TutoresPorMateriaPage from "@/modules/student/pages/TutoresPorMateriaPage";
-import { EMPTY_FILTERED_MESSAGE } from "@/modules/student/constants";
+import {
+  EMPTY_FILTERED_MESSAGE,
+  EMPTY_SUBJECT_TUTORS_MESSAGE,
+} from "@/modules/student/constants";
 import { tutorAna, tutorCarlos } from "../../../fixtures/busqueda/tutoresDePrueba";
 
 vi.mock("@/modules/student/hooks/useSearchTutorsAndMaterias", () => ({
@@ -48,12 +51,12 @@ describe("TutoresPorMateriaPage", () => {
     expect(screen.getByText("Buscando tutores…")).toBeInTheDocument();
   });
 
-  it("muestra mensaje vacío cuando no hay tutores", () => {
+  it("US-06 — materia sin tutores muestra el EmptyState con el mensaje nuevo", () => {
     mockedHook.mockReturnValue(hookResult([]));
-    renderPage();
-    expect(
-      screen.getByText("No hay tutores disponibles para esta materia todavía.")
-    ).toBeInTheDocument();
+    const { container } = renderPage();
+
+    expect(screen.getByText(EMPTY_SUBJECT_TUTORS_MESSAGE)).toBeInTheDocument();
+    expect(container.querySelector("svg")).not.toBeNull();
   });
 
   it("renderiza una TutorResultCard por cada tutor", () => {
@@ -82,7 +85,7 @@ describe("TutoresPorMateriaPage", () => {
 
     expect(screen.getByText(EMPTY_FILTERED_MESSAGE)).toBeInTheDocument();
     expect(
-      screen.queryByText("No hay tutores disponibles para esta materia todavía.")
+      screen.queryByText(EMPTY_SUBJECT_TUTORS_MESSAGE)
     ).not.toBeInTheDocument();
   });
 });

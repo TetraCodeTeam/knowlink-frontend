@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useSearchFilters } from "../hooks/useSearchFilters";
+import { useSearchSubjects } from "../hooks/useSearchSubjects";
 import { useSearchTutorsAndMaterias } from "../hooks/useSearchTutorsAndMaterias";
 import { deriveMateriasFromTutors } from "../utils/derive-materias";
 import {
@@ -28,7 +29,19 @@ export default function SearchResultsPage() {
 
   const { data, isFetching } = useSearchTutorsAndMaterias(query, effectiveFilters);
   const tutores = useMemo(() => (Array.isArray(data) ? data : []), [data]);
-  const materias = useMemo(() => deriveMateriasFromTutors(tutores), [tutores]);
+
+  // Sin filtros las materias salen del catálogo (incluidas las que no tienen
+  // tutores); con filtros avanzados activos (US-49) se siguen derivando de los
+  // tutores filtrados, porque una materia "cumple" un filtro solo si algún
+  // tutor lo cumple. El orden lo define el backend: aquí no se reordena.
+  const { data: subjectsData, isFetching: isFetchingSubjects } = useSearchSubjects(query, {
+    enabled: !hasActive,
+  });
+  const subjectsLoading = !hasActive && isFetchingSubjects;
+  const materias = useMemo(
+    () => (hasActive ? deriveMateriasFromTutors(tutores, query) : (subjectsData ?? [])),
+    [hasActive, tutores, query, subjectsData]
+  );
 
   // AC-5: para diferenciar "sin resultados por filtros" de "la búsqueda base
   // tampoco tiene resultados" se consulta la búsqueda base sin filtros. Usa la
@@ -76,7 +89,7 @@ export default function SearchResultsPage() {
 
       <ActiveFiltersBar filters={effectiveFilters} onRemove={removeChip} onClear={clearFilters} />
 
-      {isFetching || baseLoading ? (
+      {isFetching || subjectsLoading || baseLoading ? (
         <Typography color="text.secondary">Buscando…</Typography>
       ) : mode === "materias" ? (
         materias.length === 0 ? (

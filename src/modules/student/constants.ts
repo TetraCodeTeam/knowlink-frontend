@@ -39,6 +39,8 @@ export const COMPENSATION_LABEL: Record<CompensationFilter, string> = {
 
 export const EMPTY_FILTERED_MESSAGE = "No se encontraron tutores para los filtros seleccionados";
 export const EMPTY_SEARCH_MESSAGE = "No se encontraron resultados para tu búsqueda";
+/** Materia sin tutores en el catálogo: se muestra con EmptyState (US-06). */
+export const EMPTY_SUBJECT_TUTORS_MESSAGE = "No se encontraron tutores para esta materia";
 
 /**
  * El endpoint de búsqueda no expone un materiaId (no hay entidad "materia"

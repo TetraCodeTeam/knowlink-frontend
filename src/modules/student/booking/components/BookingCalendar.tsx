@@ -210,6 +210,7 @@ export default function BookingCalendar({
       sx={{
         ...bookingCalendarSx,
         height: "100%",
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         minHeight: 0,

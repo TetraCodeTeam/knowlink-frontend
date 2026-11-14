@@ -17,6 +17,7 @@ import { getErrorMessage } from "@/shared/utils/errors";
 import { studentPaths } from "@/routes/paths";
 import { buildSelectableSlot } from "@/modules/student/booking/utils/bookingSlotFormat";
 import type { ActiveHoldResponse } from "@/modules/student/booking/interfaces/responses/activeHold.interface";
+import { TOPBAR_HEIGHT } from "@/modules/app-shell/constants/navigation.constants";
 
 const WEEKS_AHEAD = 3;
 
@@ -137,7 +138,20 @@ export default function BookingClassPage() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: { xs: 1.5, md: "16px 32px" } }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        p: { xs: 1.5, md: "16px 32px" },
+        boxSizing: "border-box",
+        // Ocupa todo el alto visible debajo del topbar para que el calendario y la
+        // tarjeta de reserva lleguen hasta abajo (sin hueco vacío). El minHeight
+        // evita que se aplaste en pantallas bajas: ahí scrollea la página.
+        height: `calc(100vh - ${TOPBAR_HEIGHT}px)`,
+        minHeight: 720,
+      }}
+    >
       {activeHoldElsewhere && (
         <Alert
           severity="info"
@@ -163,6 +177,7 @@ export default function BookingClassPage() {
           flexDirection: { xs: "column", lg: "row" },
           gap: 2.5,
           alignItems: "stretch",
+          flex: 1,
         }}
       >
         <Box sx={{ flex: 1, minWidth: 0 }}>
