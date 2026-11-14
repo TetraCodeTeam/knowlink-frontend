@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { User } from "lucide-react";
 import AuthorAvatar from "@/modules/community/components/AuthorAvatar";
+import PodiumScoreBreakdown from "@/modules/community/components/PodiumScoreBreakdown";
 import { TOP_RANKING_SIZE } from "@/modules/community/constants/community.constants";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
 import type { RankedTutor } from "@/modules/community/interfaces/responses/ranked-tutor.interface";
@@ -122,6 +123,9 @@ export default function RankingTable({ tutors }: RankingTableProps) {
                       ))}
                     </Box>
                   ) : null}
+                </Box>
+                <Box sx={{ flex: { xs: "1 1 100%", sm: "0 0 auto" } }}>
+                  <PodiumScoreBreakdown tutor={tutor} variant="row" />
                 </Box>
                 {profilePath ? (
                   <Box
