@@ -32,6 +32,8 @@ const REPLIES_ANCHOR = "respuestas";
 
 interface ThreadLocationState {
   openReply?: boolean;
+  /** Se llegó desde una publicación del feed: "Volver" regresa a esa misma posición del feed. */
+  fromFeed?: boolean;
 }
 
 type PendingConfirm =
@@ -66,7 +68,20 @@ export default function PostThreadPage() {
     document.getElementById(REPLIES_ANCHOR)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [hasDetail, location.hash]);
 
-  const backLink = (
+  // Si se vino del feed, "Volver" es un "atrás": el feed recupera sus filtros y la publicación donde se
+  // quedó. Sin esa procedencia (notificación, enlace directo) lleva al feed de siempre.
+  const cameFromFeed = (location.state as ThreadLocationState | null)?.fromFeed === true;
+  const backLink = cameFromFeed ? (
+    <Box
+      component="button"
+      type="button"
+      onClick={() => navigate(-1)}
+      sx={{ ...backLinkSx, background: "none", border: 0, p: 0, fontFamily: "inherit" }}
+    >
+      <ArrowLeft size={16} aria-hidden />
+      Volver a la Comunidad
+    </Box>
+  ) : (
     <Box component={Link} to={paths.home} sx={backLinkSx}>
       <ArrowLeft size={16} aria-hidden />
       Volver a la Comunidad

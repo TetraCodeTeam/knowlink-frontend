@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { MessageSquare, ThumbsUp } from "lucide-react";
 import AppButton from "@/shared/components/AppButton";
+import { TOPBAR_HEIGHT } from "@/modules/app-shell/constants/navigation.constants";
 import AttachmentView from "@/modules/community/components/AttachmentView";
 import AuthorHeader from "@/modules/community/components/AuthorHeader";
 import FeaturedReplyPreview from "@/modules/community/components/FeaturedReplyPreview";
@@ -10,6 +11,7 @@ import FormattedText from "@/modules/community/components/FormattedText";
 import PostBadges from "@/modules/community/components/PostBadges";
 import ReplyButton from "@/modules/community/components/ReplyButton";
 import { useCommunityViewer } from "@/modules/community/hooks/useCommunityViewer";
+import { useFeedSessionStore } from "@/modules/community/hooks/useFeedSessionStore";
 import type { CommunityPost } from "@/modules/community/interfaces/responses/community-post.interface";
 import type { PostGuestAction } from "@/modules/community/types/post-guest-action.type";
 import {
@@ -18,6 +20,7 @@ import {
   chipSx,
   linkSx,
 } from "@/modules/community/styles/community.styles";
+import { feedPostDomId } from "@/modules/community/utils/feed-post-dom-id";
 
 interface PostCardProps {
   post: CommunityPost;
@@ -71,6 +74,18 @@ export default function PostCard({
 
   const isGuest = onGuestAction !== undefined;
 
+  // Desde el feed, el hilo sabe que se vino de ahí (su "Volver" regresa con "atrás") y el feed recuerda esta
+  // publicación para volver a ella en lugar de quedar arriba de todo.
+  const isFeedCard = !isDetail && !isGuest;
+  const threadState = isFeedCard ? { fromFeed: true } : undefined;
+  const rememberPosition = () => {
+    if (isFeedCard) useFeedSessionStore.getState().setAnchorPostId(post.postId);
+  };
+  const openThread = (state?: object) => {
+    rememberPosition();
+    navigate(threadPath, { state: { ...threadState, ...state } });
+  };
+
   const handleReply = () => {
     if (onGuestAction) {
       onGuestAction("reply");
@@ -80,16 +95,19 @@ export default function PostCard({
       onReply?.();
       return;
     }
-    navigate(threadPath, { state: { openReply: true } });
+    openThread({ openReply: true });
   };
 
   return (
     <Box
       component="article"
+      id={isFeedCard ? feedPostDomId(post.postId) : undefined}
       aria-label={post.title}
       sx={{
         ...cardSx,
         ...(post.type === "SHARED_CONTENT" ? { borderTop: "3px solid #3F2FB5" } : {}),
+        // Al volver al feed, la publicación queda justo debajo del topbar fijo.
+        ...(isFeedCard ? { scrollMarginTop: `${TOPBAR_HEIGHT + 16}px` } : {}),
       }}
     >
       <Box
@@ -119,7 +137,13 @@ export default function PostCard({
           {post.title}
         </Typography>
       ) : (
-        <Typography component={Link} to={threadPath} sx={{ ...titleSx, ...linkSx }}>
+        <Typography
+          component={Link}
+          to={threadPath}
+          state={threadState}
+          onClick={rememberPosition}
+          sx={{ ...titleSx, ...linkSx }}
+        >
           {post.title}
         </Typography>
       )}
@@ -184,7 +208,12 @@ export default function PostCard({
             <Box
               {...(onGuestAction
                 ? { component: "button", type: "button", onClick: () => onGuestAction("thread") }
-                : { component: Link, to: `${threadPath}#respuestas` })}
+                : {
+                    component: Link,
+                    to: `${threadPath}#respuestas`,
+                    state: threadState,
+                    onClick: rememberPosition,
+                  })}
               aria-label={`Ver ${repliesLabel}`}
               sx={{
                 display: "inline-flex",
@@ -242,7 +271,7 @@ export default function PostCard({
               </Box>
             ) : null
           ) : (
-            <AppButton size="small" appVariant="soft" onClick={() => navigate(threadPath)}>
+            <AppButton size="small" appVariant="soft" onClick={() => openThread()}>
               Ver hilo
             </AppButton>
           )
@@ -252,7 +281,7 @@ export default function PostCard({
           <AppButton
             size="small"
             appVariant="soft"
-            onClick={() => (onGuestAction ? onGuestAction("thread") : navigate(threadPath))}
+            onClick={() => (onGuestAction ? onGuestAction("thread") : openThread())}
           >
             Ver hilo
           </AppButton>

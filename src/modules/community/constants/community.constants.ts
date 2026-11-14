@@ -20,3 +20,6 @@ export const MY_POSTS_PAGE_SIZE = 10;
 export const FACULTY_LABEL = "UTN Facultad Regional Villa María";
 
 export const COMMUNITY_STALE_TIME_MS = 30_000;
+
+/** Cuánto se conserva en caché un feed ya cargado (con todas sus páginas) después de salir de la pantalla. */
+export const FEED_GC_TIME_MS = 30 * 60_000;

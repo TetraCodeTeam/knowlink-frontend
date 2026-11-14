@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigationType } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import AppButton from "@/shared/components/AppButton";
+import { TOPBAR_HEIGHT } from "@/modules/app-shell/constants/navigation.constants";
 import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import CommunityEmptyState from "@/modules/community/components/CommunityEmptyState";
 import CommunityHeader from "@/modules/community/components/CommunityHeader";
@@ -14,21 +16,37 @@ import PostComposerCard from "@/modules/community/components/PostComposerCard";
 import { useCommunityFeed } from "@/modules/community/hooks/useCommunityFeed";
 import { useFeedCounts } from "@/modules/community/hooks/useFeedCounts";
 import { useFeedFilters } from "@/modules/community/hooks/useFeedFilters";
+import { useRestoreFeedPosition } from "@/modules/community/hooks/useRestoreFeedPosition";
 import {
   cardSx,
   pageContentSx,
   pageSx,
+  stickyPanelsSx,
   twoColumnSx,
 } from "@/modules/community/styles/community.styles";
 import type { PostType } from "@/modules/community/types/post-type.type";
 import { getPageMinHeight } from "@/shared/utils/page-height.utils";
 
 export default function CommunityFeedPage() {
-  const { filters, activeCount, setType, applyDraft, clear } = useFeedFilters();
+  // Se vuelve con "atrás" (o desde un hilo, que hace lo mismo): el feed recupera filtros y posición.
+  // Una visita nueva (menú, enlace) arranca limpia, con los filtros por defecto.
+  const navigationType = useNavigationType();
+  const [restore] = useState(navigationType === "POP");
+
+  const { filters, activeCount, setType, applyDraft, clear } = useFeedFilters(restore);
   const { posts, isLoading, isError, hasNextPage, isFetchingNextPage, fetchNextPage, refetch } =
     useCommunityFeed(filters);
   const { counts } = useFeedCounts(filters);
   const [composeType, setComposeType] = useState<PostType | null>(null);
+
+  useRestoreFeedPosition({
+    restore,
+    isLoading,
+    posts,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
 
   return (
     <Box sx={{ ...pageSx, minHeight: getPageMinHeight() }}>
@@ -98,8 +116,17 @@ export default function CommunityFeedPage() {
               onApply={applyDraft}
               onClear={clear}
             />
-            <MyPostsPanel />
-            <FeaturedTutorsPanel fill={posts.length === 0} />
+            {/* Los filtros se van con el scroll (son altos); estos dos quedan a la vista para que la columna no se vacíe. */}
+            <Box
+              sx={
+                posts.length === 0
+                  ? { display: "flex", flexDirection: "column", gap: 2.5, flex: 1 }
+                  : stickyPanelsSx(TOPBAR_HEIGHT)
+              }
+            >
+              <MyPostsPanel />
+              <FeaturedTutorsPanel fill={posts.length === 0} />
+            </Box>
           </Box>
         </Box>
       </Box>
