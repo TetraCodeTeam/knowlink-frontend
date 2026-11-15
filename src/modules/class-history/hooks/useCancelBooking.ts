@@ -16,6 +16,8 @@ export function useCancelBooking(bookingId: string) {
     // availability/booking-calendar views must be refetched to reflect it.
     queryClient.invalidateQueries({ queryKey: ["availability-blocks"] });
     queryClient.invalidateQueries({ queryKey: ["booking-calendar"] });
+    // The weekly agenda renders the same bookings/slots, so refresh it as well.
+    queryClient.invalidateQueries({ queryKey: ["weekly-agenda"] });
   };
 
   return {

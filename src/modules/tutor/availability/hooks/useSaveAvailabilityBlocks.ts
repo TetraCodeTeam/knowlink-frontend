@@ -19,6 +19,7 @@ export function useSaveAvailabilityBlocks() {
     }) => saveWeekAvailabilityBlocks(weekStart, weekEnd, blocks),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["availability-blocks"] });
+      queryClient.invalidateQueries({ queryKey: ["weekly-agenda"] });
       toast.success("Disponibilidad guardada correctamente.");
     },
     onError: (error: unknown) => {

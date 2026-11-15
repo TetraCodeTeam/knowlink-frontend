@@ -112,6 +112,8 @@ export function useBookingRealtime(tutorId: string, from: string, to: string) {
       windowEnd: slot.endIso,
     });
     await queryClient.invalidateQueries({ queryKey: ["booking-calendar", tutorId] });
+    // A new booking changes both the grid and the summary of the tutor's weekly agenda.
+    await queryClient.invalidateQueries({ queryKey: ["weekly-agenda"] });
   };
 
   const releaseSlot = async (slot: BookingSlot) => {
