@@ -21,6 +21,9 @@ export function useConfirmSessionAttendance() {
       confirmSessionAttendance(sessionId, code),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["attendance-upcoming-bookings"] });
+      // The confirmed class now counts as COMPLETED in the tutor's weekly agenda
+      // (summary + grid), so it must be refetched too.
+      void queryClient.invalidateQueries({ queryKey: ["weekly-agenda"] });
     },
   });
 }

@@ -1,4 +1,5 @@
 import type { ClaimStatus } from "@/modules/support/interfaces/claim-status.type";
+import type { ClaimResolution } from "@/modules/support/interfaces/responses/claim-resolution.response";
 import type {
   ClaimantRole,
   ClaimReason,
@@ -60,4 +61,5 @@ export interface StudentSessionClaimDetail {
   reviewProgress: ClaimReviewProgress;
   attachments: ClaimAttachment[];
   comments: ClaimComment[];
+  resolution: ClaimResolution | null;
 }

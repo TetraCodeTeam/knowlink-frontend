@@ -4,10 +4,12 @@ import type { StudentSessionClaimDetail } from "@/modules/student/support/interf
 import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import {
+  formatFundsNote,
   formatQueuePosition,
   formatReviewPhase,
   formatSupportAmount,
 } from "@/modules/support/utils/supportDetail.utils";
+import { ClaimResolutionSection } from "@/modules/support/components/support-detail/ClaimResolutionSection";
 import {
   SupportDetailSection,
   SupportDetailTile,
@@ -40,6 +42,8 @@ function declarationLabel(claim: StudentSessionClaimDetail): string {
 }
 
 export function StudentClaimDetailContent({ claim }: StudentClaimDetailContentProps) {
+  const fundsNote = formatFundsNote(claim.status, claim.funds.status);
+
   return (
     <>
       <SupportDetailSection title="Tutor involucrado">
@@ -84,12 +88,12 @@ export function StudentClaimDetailContent({ claim }: StudentClaimDetailContentPr
               </Typography>
             </Box>
           </Box>
-          <Box sx={detailFundsNoteSx}>
-            <Banknote size={20} color={SUPPORT_COLORS.primaryIcon} />
-            <Typography sx={supportBodyTextSx}>
-              Los fondos se liberarán automáticamente al finalizar la revisión.
-            </Typography>
-          </Box>
+          {fundsNote && (
+            <Box sx={detailFundsNoteSx}>
+              <Banknote size={20} color={SUPPORT_COLORS.primaryIcon} />
+              <Typography sx={supportBodyTextSx}>{fundsNote}</Typography>
+            </Box>
+          )}
         </Box>
       </SupportDetailSection>
 
@@ -120,6 +124,8 @@ export function StudentClaimDetailContent({ claim }: StudentClaimDetailContentPr
           )}
         </Box>
       </SupportDetailSection>
+
+      {claim.resolution && <ClaimResolutionSection resolution={claim.resolution} />}
 
       <Box sx={detailPhaseCardSx}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>

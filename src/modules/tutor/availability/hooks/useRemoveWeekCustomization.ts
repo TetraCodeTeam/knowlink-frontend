@@ -10,6 +10,7 @@ export function useRemoveWeekCustomization() {
     mutationFn: (weekStart: string) => removeWeekCustomization(weekStart),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["week-customization"] });
+      queryClient.invalidateQueries({ queryKey: ["weekly-agenda"] });
       toast.success(
         "Listo. La próxima vez que actualices tu horario habitual, esta semana también se va a actualizar."
       );
