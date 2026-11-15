@@ -9,25 +9,24 @@ import type {
   DatesSetArg,
 } from "@fullcalendar/core";
 import { Box, Typography } from "@mui/material";
-import {
-  isBeforeToday,
-  isBeforeNow,
-  toDateStr,
-  formatWeekRangeTitle,
-  toLocalDateTimeStr,
-} from "@/shared/utils/calendarDateUtils";
+import { isBeforeToday, toDateStr, formatWeekRangeTitle } from "@/shared/utils/calendarDateUtils";
 import { bookingCalendarSx } from "@/modules/student/booking/styles/bookingCalendarSx";
 import BookingCalendarLegend from "@/modules/student/booking/components/BookingCalendarLegend";
 import AvailabilityBlockContent from "@/modules/student/booking/components/AvailabilityBlockContent";
 import BookingStatusEventContent from "@/modules/student/booking/components/BookingStatusEventContent";
 import CalendarNavHeader from "@/shared/components/CalendarNavHeader";
 import { useCalendarAutoResize } from "@/shared/hooks/useCalendarAutoResize";
+import { useNow } from "@/shared/hooks/useNow";
 import type { ReservationWindow } from "@/modules/student/booking/interfaces/reservationWindowType";
-import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/bookingSlotEventType";
 import type { BookingCalendarProps } from "@/modules/student/booking/interfaces/bookingComponentPropsType";
 import type { SlotDisplayStatus } from "@/modules/student/booking/interfaces/slotDisplayStatusType";
 import { BOOKING_STATUS_META } from "@/modules/student/booking/constants/bookingLegendConstants";
+import { BOOKING_CALENDAR_CLOCK_INTERVAL_MS } from "@/modules/student/booking/constants/bookingRefresh.constants";
 import { buildSelectableSlot } from "@/modules/student/booking/utils/bookingSlotFormat";
+import {
+  buildNowOverlayEvent,
+  getSlotDisplayStatus,
+} from "@/modules/student/booking/utils/bookingSlotStatus";
 
 const PLUGINS = [timeGridPlugin, interactionPlugin];
 const SLOT_LABEL_FORMAT = {
@@ -36,13 +35,6 @@ const SLOT_LABEL_FORMAT = {
   hour12: false as const,
 };
 const DAY_LABELS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"];
-
-function getSlotStatus(slot: BookingSlotEvent): SlotDisplayStatus {
-  if (isBeforeNow(new Date(slot.end))) return "PAST";
-  if (slot.status === "BLOCKED") return "BLOCKED";
-  if (slot.status === "RESERVED") return "RESERVED";
-  return "AVAILABLE";
-}
 
 export default function BookingCalendar({
   selectedSlot,
@@ -61,10 +53,14 @@ export default function BookingCalendar({
     end: "",
   });
 
+  // La hora avanza sola: así un bloque pasa a "pasado" y la línea de "ahora" se mueve sin que
+  // el alumno tenga que tocar nada.
+  const now = useNow(BOOKING_CALENDAR_CLOCK_INTERVAL_MS);
+
   const slotEvents = useMemo(
     () =>
       bookingSlots.map((slot) => {
-        const status = getSlotStatus(slot);
+        const status = getSlotDisplayStatus(slot, now);
         return {
           id: slot.id,
           start: slot.start,
@@ -81,25 +77,14 @@ export default function BookingCalendar({
           extendedProps: { status },
         };
       }),
-    [bookingSlots]
+    [bookingSlots, now]
   );
 
   // Franja que sombrea desde la medianoche del día de hoy hasta el instante
   // actual, para orientar visualmente al alumno sobre "dónde está parado" en
   // la semana — mismo patrón que ya usa el calendario de disponibilidad del
   // tutor. Solo se agrega si la semana visible incluye el día de hoy.
-  const nowOverlayEvent = useMemo(() => {
-    const todayStr = toDateStr(new Date());
-    const isViewingToday = todayStr >= viewedRange.start && todayStr <= viewedRange.end;
-    if (!isViewingToday) return null;
-
-    return {
-      start: `${todayStr}T00:00:00`,
-      end: toLocalDateTimeStr(new Date()), // antes: new Date().toISOString().slice(0, 19)
-      display: "background",
-      classNames: ["fc-past-now"],
-    };
-  }, [viewedRange]);
+  const nowOverlayEvent = useMemo(() => buildNowOverlayEvent(now, viewedRange), [now, viewedRange]);
 
   const events = useMemo(
     () => (nowOverlayEvent ? [...slotEvents, nowOverlayEvent] : slotEvents),

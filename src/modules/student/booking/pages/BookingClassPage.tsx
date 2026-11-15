@@ -54,8 +54,9 @@ export default function BookingClassPage() {
   const from = viewedRange.start < fixedFrom ? viewedRange.start : fixedFrom;
   const to = viewedRange.end > fixedTo ? viewedRange.end : fixedTo;
 
+  // Con un horario seleccionado el calendario ya está bloqueado: no se actualiza solo hasta que termine.
   const { bookingSlots, minimumNoticeMinutes, holdSlot, reserveSlot, releaseSlot } =
-    useBookingRealtime(tutorId, from, to);
+    useBookingRealtime(tutorId, from, to, slot !== null);
 
   const { data: activeHoldData } = useActiveHold();
 
