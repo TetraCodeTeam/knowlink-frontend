@@ -23,5 +23,9 @@ export const formatLongDate = (isoDate: string): string =>
 export const formatShortDate = (isoDate: string): string =>
   shortDateFormatter.format(parseIsoDate(isoDate)).replace(/\./g, "");
 
+/** "15/11/2026, 14:30:05" — recibe un ISO con fecha y hora (ej: resolvedAt). */
+export const formatDateTime = (isoDateTime: string): string =>
+  new Date(isoDateTime).toLocaleString("es-AR");
+
 export const pluralizeReports = (count: number): string =>
   `${count} ${count === 1 ? "denuncia" : "denuncias"}`;

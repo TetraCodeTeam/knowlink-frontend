@@ -1,3 +1,4 @@
+import type { ClaimResolution } from "@/modules/support/interfaces/responses/claim-resolution.response";
 import type { ClaimResponse } from "@/modules/support/interfaces/responses/claim.response";
 
 export interface TutorClaimDetail {
@@ -31,4 +32,5 @@ export interface TutorClaimDetail {
   };
   attachments: Array<{ id: string; fileName: string; signedUrl: string }>;
   comments: Array<{ id: string; authorName: string; comment: string; createdAt: string }>;
+  resolution: ClaimResolution | null;
 }

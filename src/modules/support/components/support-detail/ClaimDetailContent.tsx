@@ -4,11 +4,13 @@ import type { TutorClaimDetail } from "@/modules/support/interfaces/responses/tu
 import { SUPPORT_COLORS } from "@/modules/support/constants/support-colors.constants";
 import { formatLongDate } from "@/modules/support/utils/format.utils";
 import {
+  formatFundsNote,
   formatQueuePosition,
   formatReviewPhase,
   formatSupportAmount,
   formatSupportReason,
 } from "@/modules/support/utils/supportDetail.utils";
+import { ClaimResolutionSection } from "@/modules/support/components/support-detail/ClaimResolutionSection";
 import {
   SupportDetailSection,
   SupportDetailTile,
@@ -36,6 +38,8 @@ interface ClaimDetailContentProps {
 }
 
 export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
+  const fundsNote = formatFundsNote(claim.status, claim.funds.status);
+
   return (
     <>
       <SupportDetailSection title="Estudiante involucrado">
@@ -80,12 +84,12 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
               </Typography>
             </Box>
           </Box>
-          <Box sx={detailFundsNoteSx}>
-            <Banknote size={20} color={SUPPORT_COLORS.primaryIcon} />
-            <Typography sx={supportBodyTextSx}>
-              Los fondos se liberarán automáticamente al finalizar la revisión.
-            </Typography>
-          </Box>
+          {fundsNote && (
+            <Box sx={detailFundsNoteSx}>
+              <Banknote size={20} color={SUPPORT_COLORS.primaryIcon} />
+              <Typography sx={supportBodyTextSx}>{fundsNote}</Typography>
+            </Box>
+          )}
         </Box>
       </SupportDetailSection>
 
@@ -116,6 +120,8 @@ export function ClaimDetailContent({ claim }: ClaimDetailContentProps) {
           )}
         </Box>
       </SupportDetailSection>
+
+      {claim.resolution && <ClaimResolutionSection resolution={claim.resolution} />}
 
       <Box sx={detailPhaseCardSx}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
