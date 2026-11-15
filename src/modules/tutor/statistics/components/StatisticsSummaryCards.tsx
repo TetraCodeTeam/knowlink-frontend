@@ -147,7 +147,7 @@ export default function StatisticsSummaryCards({ summary }: StatisticsSummaryCar
         value={summary.netIncome > 0 ? formatCurrency(summary.netIncome) : NO_VALUE}
       >
         <Typography sx={{ ...mutedTextSx, mt: 1 }}>
-          Con el {summary.commissionPercentage}% de comisión ya descontado
+          Es el precio de tus clases: la tarifa de servicio la paga el alumno
         </Typography>
       </SummaryCard>
     </Box>

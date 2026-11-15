@@ -10,7 +10,6 @@ const baseFunds: FundsStatus = {
   pendingRelease: { amount: 1940, sessions: 2 },
   withheldByClaim: { amount: 3007, sessions: 1 },
   withheldClaimIds: ["claim-1"],
-  commissionPercentage: 3,
 };
 
 function Destination() {

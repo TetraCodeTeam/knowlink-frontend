@@ -69,8 +69,8 @@ export default function FundsStatusCard({ funds }: FundsStatusCardProps) {
         />
       </Box>
       <Typography sx={{ ...mutedTextSx, mt: 2 }}>
-        Montos netos registrados por KnowLink, con el {funds.commissionPercentage}% de comisión
-        descontado.
+        Montos registrados por KnowLink. La tarifa de servicio la paga el alumno y no se
+        descuenta de tus ingresos.
       </Typography>
     </StatisticsCard>
   );

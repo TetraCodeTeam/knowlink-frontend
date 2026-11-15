@@ -18,7 +18,6 @@ export interface StatisticsSummary {
   averageRating: number | null;
   reviewsCount: number;
   netIncome: number;
-  commissionPercentage: number;
 }
 
 export interface MonthlySessions {
@@ -49,7 +48,6 @@ export interface FundsStatus {
    * Ausente si el backend todavía no lo envía: en ese caso «Ver en Soporte» lleva al listado.
    */
   withheldClaimIds?: string[];
-  commissionPercentage: number;
 }
 
 export interface RatingBucket {
