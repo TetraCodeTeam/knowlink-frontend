@@ -26,8 +26,8 @@ import type { BookingSlotEvent } from "@/modules/student/booking/interfaces/book
 // que trae la query. `null` significa "liberada" (AVAILABLE).
 type WindowOverrides = Record<string, BookingUnavailableWindow | null>;
 
-export function useBookingRealtime(tutorId: string, from: string, to: string) {
-  const { data, isLoading } = useBookingSlots(tutorId, from, to);
+export function useBookingRealtime(tutorId: string, from: string, to: string, paused = false) {
+  const { data, isLoading } = useBookingSlots(tutorId, from, to, { paused });
   const [overrides, setOverrides] = useState<WindowOverrides>({});
   const queryClient = useQueryClient();
 

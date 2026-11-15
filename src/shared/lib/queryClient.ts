@@ -6,6 +6,8 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error: unknown, query) => {
       if (query.meta?.silent || isRatingRequiredError(error)) return;
+      // Consultas que se actualizan solas: si ya hay datos en pantalla, un fallo al refrescar no se avisa.
+      if (query.meta?.silentWhenCached && query.state.data !== undefined) return;
 
       useSnackbarStore
         .getState()
