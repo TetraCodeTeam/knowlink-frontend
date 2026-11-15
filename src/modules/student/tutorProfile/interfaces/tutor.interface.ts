@@ -51,4 +51,5 @@ export interface TutorProfile {
   hasRatings: boolean;
   material: TutorMaterialItem[];
   hasConfirmedBooking: boolean;
+  accessibleSubjects: string[];
 }

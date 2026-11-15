@@ -25,9 +25,28 @@ interface SessionConfirmationState {
    */
   resolvedBookingIds: Map<string, number>;
   openConfirmation: (data: PendingSessionConfirmation) => void;
-  /** Se llama al confirmar, vencer el plazo o bloquearse por un reclamo:
-   * en todos los casos el widget deja de tener sentido en pantalla. */
+  /** Se llama cuando la reserva quedó RESUELTA: el tutor confirmó con el
+   * token, venció el plazo o se bloqueó por un reclamo. Cierra el popup
+   * **y** registra la reserva en `resolvedBookingIds` para que no se
+   * reabra mientras esté stale la caché de /bookings/mine.
+   * Ojo: NO es para "simplemente cerrar" el popup — para eso está
+   * `closeConfirmation`, que no registra la reserva como resuelta (si no,
+   * cerrar sesión con el popup abierto bloquearía la clase hasta que
+   * venza el TTL de 6 min).
+   */
   clearConfirmation: () => void;
+  /** Cierra el popup sin marcar la reserva como resuelta: la usa
+   * useAutoOpenSessionConfirmation cuando desaparece la reserva elegible
+   * sin que nadie haya confirmado (p. ej. al cerrar sesión, donde
+   * queryClient.clear() vacía la caché de reservas). Así el popup puede
+   * volver a abrirse en cuanto vuelva la reserva.
+   */
+  closeConfirmation: () => void;
+  /** Vacia el store por completo (pending + resolvedBookingIds). Se llama
+   * en login y logout para que el estado de un usuario no se filtre al
+   * siguiente en la misma pestaña.
+   */
+  reset: () => void;
   isResolved: (bookingId: string) => boolean;
 }
 
@@ -54,6 +73,8 @@ export const useSessionConfirmationStore = create<SessionConfirmationState>((set
       resolvedBookingIds.set(state.pending.sessionId, now);
       return { pending: null, resolvedBookingIds };
     }),
+  closeConfirmation: () => set((state) => (state.pending ? { pending: null } : state)),
+  reset: () => set({ pending: null, resolvedBookingIds: new Map() }),
   isResolved: (bookingId) => {
     const resolvedAt = get().resolvedBookingIds.get(bookingId);
     return resolvedAt !== undefined && Date.now() - resolvedAt < RESOLVED_BOOKING_TTL_MS;

@@ -43,7 +43,8 @@ export interface TutorMaterialApiResponse {
 }
 
 export interface TutorMaterialAccessApiResponse {
-  accesoHabilitado: boolean;
+  accessEnabled: boolean;
+  accessibleSubjects: string[];
 }
 
 export interface SubjectAverageApiResponse {

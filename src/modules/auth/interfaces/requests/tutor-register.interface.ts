@@ -20,7 +20,8 @@ export interface TutorRegisterRequest {
   institutionId: string;
   career: string;
   institutionalId?: string;
-  profilePictureUrl?: string;
+  /** Foto elegida en el formulario. Se envía como parte "file" del multipart de registro. */
+  profilePictureFile?: File;
   biography?: string;
   address?: string;
   subjects: TutorSubjectRequest[];

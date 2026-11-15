@@ -41,6 +41,7 @@ export default function TutorRegisterWizard({
 
   const [step, setStep] = useState(initialStep);
   const [step1Data, setStep1Data] = useState<Partial<Step1Data>>({});
+  const [step1Picture, setStep1Picture] = useState<File | null>(null);
   const [step2Data, setStep2Data] = useState<Partial<Step2Data>>({});
   const [showRedirectDialog, setShowRedirectDialog] = useState(false);
 
@@ -49,8 +50,9 @@ export default function TutorRegisterWizard({
     onStepChange(next);
   };
 
-  const handleStep1Next = (data: Step1Data) => {
+  const handleStep1Next = (data: Step1Data, profilePictureFile: File | null) => {
     setStep1Data(data);
+    setStep1Picture(profilePictureFile);
     goTo(2);
   };
 
@@ -89,7 +91,7 @@ export default function TutorRegisterWizard({
       institutionId: s1.institutionId,
       career: s1.career,
       institutionalId: s1.institutionalId || undefined,
-      profilePictureUrl: s1.profilePictureUrl || undefined,
+      profilePictureFile: step1Picture ?? undefined,
       biography: s2.biography || undefined,
       address: s2.address || undefined,
       subjects: s2.subjects.map((s) => ({
@@ -105,6 +107,7 @@ export default function TutorRegisterWizard({
     return (
       <Step1Account
         defaultValues={step1Data}
+        defaultPictureFile={step1Picture}
         onNext={handleStep1Next}
         onBack={() => navigate("/auth/register")}
       />

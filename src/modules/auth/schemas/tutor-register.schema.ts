@@ -20,7 +20,6 @@ export const step1Schema = z.object({
     .min(1, "El DNI es obligatorio")
     .regex(/^\d{7,8}$/, "El DNI debe tener 7 u 8 dígitos"),
   institutionalId: z.string().max(50, "El legajo no puede superar los 50 caracteres").optional(),
-  profilePictureUrl: z.string().optional(),
 });
 
 export type Step1Data = z.infer<typeof step1Schema>;

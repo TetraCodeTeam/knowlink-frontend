@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useSessionConfirmationStore } from "@/modules/attendance/hooks/useSessionConfirmationStore";
 
+function pendingFor(sessionId: string) {
+  return { sessionId, expiresAt: "2026-01-01T00:00:00", deadlineLabel: "00:00 hs" };
+}
+
 describe("useSessionConfirmationStore — TTL de resolvedBookingIds", () => {
   beforeEach(() => {
     useSessionConfirmationStore.setState({ pending: null, resolvedBookingIds: new Map() });
@@ -12,7 +16,11 @@ describe("useSessionConfirmationStore — TTL de resolvedBookingIds", () => {
     const store = useSessionConfirmationStore;
 
     store.setState({
-      pending: { sessionId: "booking-1", expiresAt: "2026-01-01T00:00:00", deadlineLabel: "00:00 hs" },
+      pending: {
+        sessionId: "booking-1",
+        expiresAt: "2026-01-01T00:00:00",
+        deadlineLabel: "00:00 hs",
+      },
     });
     store.getState().clearConfirmation();
     expect(store.getState().isResolved("booking-1")).toBe(true);
@@ -33,7 +41,11 @@ describe("useSessionConfirmationStore — TTL de resolvedBookingIds", () => {
     const store = useSessionConfirmationStore;
 
     store.setState({
-      pending: { sessionId: "booking-old", expiresAt: "2026-01-01T00:00:00", deadlineLabel: "00:00 hs" },
+      pending: {
+        sessionId: "booking-old",
+        expiresAt: "2026-01-01T00:00:00",
+        deadlineLabel: "00:00 hs",
+      },
     });
     store.getState().clearConfirmation();
     expect(store.getState().resolvedBookingIds.size).toBe(1);
@@ -41,7 +53,11 @@ describe("useSessionConfirmationStore — TTL de resolvedBookingIds", () => {
     vi.advanceTimersByTime(7 * 60 * 1000); // supera el TTL de "booking-old"
 
     store.setState({
-      pending: { sessionId: "booking-new", expiresAt: "2026-01-01T01:00:00", deadlineLabel: "01:00 hs" },
+      pending: {
+        sessionId: "booking-new",
+        expiresAt: "2026-01-01T01:00:00",
+        deadlineLabel: "01:00 hs",
+      },
     });
     store.getState().clearConfirmation();
 
@@ -51,5 +67,61 @@ describe("useSessionConfirmationStore — TTL de resolvedBookingIds", () => {
     expect(store.getState().resolvedBookingIds.size).toBe(1);
 
     vi.useRealTimers();
+  });
+});
+
+describe("useSessionConfirmationStore — closeConfirmation y reset", () => {
+  beforeEach(() => {
+    useSessionConfirmationStore.setState({ pending: null, resolvedBookingIds: new Map() });
+    vi.useRealTimers();
+  });
+
+  it("closeConfirmation deja pending en null SIN marcar la reserva como resuelta", () => {
+    const store = useSessionConfirmationStore;
+    store.setState({ pending: pendingFor("booking-1") });
+
+    store.getState().closeConfirmation();
+
+    expect(store.getState().pending).toBeNull();
+    expect(store.getState().isResolved("booking-1")).toBe(false);
+    expect(store.getState().resolvedBookingIds.size).toBe(0);
+  });
+
+  it("closeConfirmation con pending en null no cambia el estado (sin re-render)", () => {
+    const store = useSessionConfirmationStore;
+    const listener = vi.fn();
+    const unsubscribe = store.subscribe(listener);
+    const stateBefore = store.getState();
+
+    store.getState().closeConfirmation();
+
+    expect(store.getState()).toBe(stateBefore);
+    expect(listener).not.toHaveBeenCalled();
+    unsubscribe();
+  });
+
+  it("clearConfirmation sigue marcando la reserva como resuelta (regresión)", () => {
+    const store = useSessionConfirmationStore;
+    store.setState({ pending: pendingFor("booking-1") });
+
+    store.getState().clearConfirmation();
+
+    expect(store.getState().pending).toBeNull();
+    expect(store.getState().isResolved("booking-1")).toBe(true);
+    expect(store.getState().resolvedBookingIds.size).toBe(1);
+  });
+
+  it("reset deja pending en null y el Map de resueltas vacío", () => {
+    const store = useSessionConfirmationStore;
+    store.setState({
+      pending: pendingFor("booking-1"),
+      resolvedBookingIds: new Map([["booking-0", Date.now()]]),
+    });
+
+    store.getState().reset();
+
+    expect(store.getState().pending).toBeNull();
+    expect(store.getState().resolvedBookingIds.size).toBe(0);
+    expect(store.getState().isResolved("booking-0")).toBe(false);
   });
 });

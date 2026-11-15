@@ -16,12 +16,13 @@ export default function StudentRegisterPage() {
     return <Navigate to="/auth/register" replace />;
   }
 
-  const handleSubmit = (data: StudentAccountData) => {
+  const handleSubmit = (data: StudentAccountData, profilePictureFile: File | null) => {
     mutate({
       email: credentials.email,
       password: credentials.password,
       confirmPassword: credentials.confirmPassword,
       ...data,
+      profilePictureFile: profilePictureFile ?? undefined,
     });
   };
 

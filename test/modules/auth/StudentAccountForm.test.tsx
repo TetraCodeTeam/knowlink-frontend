@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import StudentAccountForm from "@/modules/auth/components/student-register/StudentAccountForm";
@@ -56,6 +56,10 @@ async function chooseCareer(user: ReturnType<typeof userEvent.setup>, name: stri
 }
 
 describe("StudentAccountForm", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("deshabilita la carrera hasta elegir una institución", () => {
     renderForm();
 
@@ -106,7 +110,35 @@ describe("StudentAccountForm", () => {
       expect.objectContaining({
         institutionId: "institution-unvm",
         career: "Medicina Veterinaria",
-      })
+      }),
+      null
     );
+  });
+
+  it("envía el archivo de la foto (no la URL del preview) al confirmar el registro", async () => {
+    class MockURL extends URL {
+      static createObjectURL = () => "blob:preview";
+      static revokeObjectURL = () => {};
+    }
+    vi.stubGlobal("URL", MockURL);
+
+    const user = userEvent.setup();
+    const { onSubmit } = renderForm();
+
+    await user.type(screen.getByPlaceholderText("Nombre"), "Ana");
+    await user.type(screen.getByPlaceholderText("Apellido"), "García");
+    await chooseInstitution(user, "UNVM");
+    await chooseCareer(user, "Medicina Veterinaria");
+    await user.type(screen.getByPlaceholderText("+54 9 3534138xxx"), "3534123456");
+    await user.type(screen.getByPlaceholderText("43606xxx"), "40123456");
+
+    const file = new File(["avatar"], "avatar.png", { type: "image/png" });
+    const input = document.querySelector<HTMLInputElement>("input[type=file]");
+    await user.upload(input as HTMLInputElement, file);
+
+    await user.click(screen.getByRole("button", { name: /Finalizar registro/i }));
+
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
+    expect(onSubmit).toHaveBeenCalledWith(expect.anything(), file);
   });
 });

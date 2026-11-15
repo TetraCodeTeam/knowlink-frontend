@@ -7,6 +7,7 @@ import type {
 } from "@/modules/student/tutorProfile/interfaces/tutor.interface";
 import type {
   RatingCommentApiResponse,
+  TutorMaterialAccessApiResponse,
   TutorMaterialApiResponse,
   TutorProfileApiResponse,
   TutorRatingHistoryApiResponse,
@@ -121,6 +122,7 @@ function mapTutorProfile(api: TutorProfileApiResponse): TutorProfile {
     hasRatings: reviewsApi.length > 0,
     material: [],
     hasConfirmedBooking: false,
+    accessibleSubjects: [],
   };
 }
 
@@ -131,11 +133,13 @@ export const getTutorProfile = async (tutorId: string): Promise<TutorProfile> =>
   return mapTutorProfile(data);
 };
 
-export const checkTutorMaterialAccess = async (tutorId: string): Promise<boolean> => {
-  const { data } = await httpClient.get<{ accesoHabilitado: boolean }>(
+export const checkTutorMaterialAccess = async (
+  tutorId: string
+): Promise<TutorMaterialAccessApiResponse> => {
+  const { data } = await httpClient.get<TutorMaterialAccessApiResponse>(
     `/api/v1/materials/tutores/${tutorId}/acceso`
   );
-  return data.accesoHabilitado;
+  return data;
 };
 
 export const getAccessibleTutorMaterials = async (

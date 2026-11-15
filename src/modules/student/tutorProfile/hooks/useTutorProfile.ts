@@ -19,11 +19,12 @@ export const useTutorProfile = (tutorId: string) => {
   return useQuery({
     queryKey: ["tutorProfile", tutorId],
     queryFn: async () => {
-      const [profile, hasConfirmedBooking, ratingHistory] = await Promise.all([
+      const [profile, materialAccess, ratingHistory] = await Promise.all([
         getTutorProfile(tutorId),
         checkTutorMaterialAccess(tutorId),
         getTutorRatingHistory(tutorId, { page: 0, size: REVIEWS_PREVIEW_SIZE }),
       ]);
+      const hasConfirmedBooking = materialAccess.accessEnabled;
       const materials = hasConfirmedBooking
         ? mapTutorMaterials(await getAccessibleTutorMaterials(tutorId))
         : [];
@@ -61,6 +62,7 @@ export const useTutorProfile = (tutorId: string) => {
         hasRatings: ratingHistory.averageRating !== null,
         material: materials,
         hasConfirmedBooking,
+        accessibleSubjects: materialAccess.accessibleSubjects ?? [],
       };
     },
     enabled: Boolean(tutorId),
