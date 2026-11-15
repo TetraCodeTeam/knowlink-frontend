@@ -21,6 +21,11 @@ import {
 import { useInstitutions } from "@/modules/tutors/hooks/useInstitutions";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import AppButton from "@/shared/components/AppButton";
+import { toast } from "@/shared/lib/toast";
+import {
+  PROFILE_PICTURE_ACCEPT,
+  validateProfilePicture,
+} from "@/modules/users/utils/validate-profile-picture";
 import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
 import FrankieErrorState from "@/shared/frankie/FrankieErrorState";
 import { checkAvailability } from "@/modules/auth/api/auth.api";
@@ -30,7 +35,7 @@ const inputSx = {
 };
 
 interface StudentAccountFormProps {
-  onSubmit: (data: StudentAccountData) => void;
+  onSubmit: (data: StudentAccountData, profilePictureFile: File | null) => void;
   onBack: () => void;
   isPending: boolean;
 }
@@ -41,6 +46,7 @@ export default function StudentAccountForm({
   isPending,
 }: StudentAccountFormProps) {
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>();
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -55,7 +61,6 @@ export default function StudentAccountForm({
     register,
     handleSubmit,
     control,
-    setValue,
     setError,
     clearErrors,
     resetField,
@@ -79,15 +84,22 @@ export default function StudentAccountForm({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    // Permite volver a elegir el mismo archivo si la validación falló.
+    e.target.value = "";
     if (!file) return;
+
+    const error = validateProfilePicture(file);
+    if (error) {
+      toast.error(error);
+      return;
+    }
 
     if (avatarPreview?.startsWith("blob:")) {
       URL.revokeObjectURL(avatarPreview);
     }
 
-    const url = URL.createObjectURL(file);
-    setAvatarPreview(url);
-    setValue("profilePictureUrl", url);
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   const handleAccountSubmit = async (data: StudentAccountData) => {
@@ -101,7 +113,7 @@ export default function StudentAccountForm({
       return;
     }
 
-    onSubmit(data);
+    onSubmit(data, avatarFile);
   };
 
   return (
@@ -145,7 +157,13 @@ export default function StudentAccountForm({
         <Typography variant="caption" color="text.secondary" textAlign="center">
           Agregá una foto de perfil haciendo clic en +
         </Typography>
-        <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={PROFILE_PICTURE_ACCEPT}
+          hidden
+          onChange={handleFileChange}
+        />
       </Box>
 
       <Box>

@@ -7,23 +7,31 @@ import { useEligibleConfirmationBooking } from "@/modules/attendance/hooks/useEl
  * habilita la ventana de confirmación de una clase.
  */
 export function useAutoOpenSessionConfirmation() {
-  const eligibleBooking = useEligibleConfirmationBooking("TUTOR");
+  // `isResolved` se lee antes porque va como criterio de salteo a
+  // useEligibleConfirmationBooking: así una reserva resuelta no tapa a la
+  // siguiente que ya tenga su ventana abierta (clases pegadas).
+  const isResolved = useSessionConfirmationStore((state) => state.isResolved);
+  const eligibleBooking = useEligibleConfirmationBooking("TUTOR", { skip: isResolved });
   const pending = useSessionConfirmationStore((state) => state.pending);
   // `eligibleBooking` sigue viniendo del último fetch cacheado hasta el
   // próximo poll, así que puede seguir marcando como elegible una reserva
   // recién confirmada (o vencida). `isResolved` consulta el Map con TTL
   // del store global (no un ref local) para no perderse si este
   // componente se remonta antes del próximo refetch.
-  const isResolved = useSessionConfirmationStore((state) => state.isResolved);
   const openConfirmation = useSessionConfirmationStore((state) => state.openConfirmation);
-  const clearConfirmation = useSessionConfirmationStore((state) => state.clearConfirmation);
+  // Cerrar sin resolver: acá no hubo confirmación ni vencimiento, solo
+  // dejó de haber reserva elegible (p. ej. logout, que vacía la caché de
+  // queries). Usar clearConfirmation acá marcaría la clase como resuelta
+  // y bloquearía el popup durante el TTL de 6 min.
+  const closeConfirmation = useSessionConfirmationStore((state) => state.closeConfirmation);
 
   useEffect(() => {
     if (!eligibleBooking) {
-      if (pending) clearConfirmation();
+      if (pending) closeConfirmation();
       return;
     }
 
+    // Defensa ante datos stale entre el filtrado del hook y este efecto.
     if (isResolved(eligibleBooking.bookingId)) return;
 
     if (pending?.sessionId !== eligibleBooking.bookingId) {
@@ -36,5 +44,5 @@ export function useAutoOpenSessionConfirmation() {
         }),
       });
     }
-  }, [eligibleBooking, pending, isResolved, openConfirmation, clearConfirmation]);
+  }, [eligibleBooking, pending, isResolved, openConfirmation, closeConfirmation]);
 }

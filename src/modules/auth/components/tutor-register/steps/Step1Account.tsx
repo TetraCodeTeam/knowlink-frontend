@@ -1,5 +1,5 @@
 import type React from "react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -16,6 +16,11 @@ import {
 import { Camera } from "lucide-react";
 import { step1Schema, type Step1Data } from "@/modules/auth/schemas/tutor-register.schema";
 import AppButton from "@/shared/components/AppButton";
+import { toast } from "@/shared/lib/toast";
+import {
+  PROFILE_PICTURE_ACCEPT,
+  validateProfilePicture,
+} from "@/modules/users/utils/validate-profile-picture";
 import { useInstitutions } from "@/modules/tutors/hooks/useInstitutions";
 import { useCareers } from "@/modules/tutors/hooks/useCareers";
 import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
@@ -28,20 +33,35 @@ const inputSx = {
 
 interface Step1Props {
   defaultValues: Partial<Step1Data>;
-  onNext: (data: Step1Data) => void;
+  /** Foto elegida en una pasada anterior, para rehidratar el preview al volver. */
+  defaultPictureFile?: File | null;
+  onNext: (data: Step1Data, profilePictureFile: File | null) => void;
   onBack: () => void;
 }
 
-export default function Step1Account({ defaultValues, onNext, onBack }: Step1Props) {
-  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
-    defaultValues.profilePictureUrl
+export default function Step1Account({
+  defaultValues,
+  defaultPictureFile,
+  onNext,
+  onBack,
+}: Step1Props) {
+  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(() =>
+    defaultPictureFile ? URL.createObjectURL(defaultPictureFile) : undefined
   );
+  const [avatarFile, setAvatarFile] = useState<File | null>(defaultPictureFile ?? null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (avatarPreview?.startsWith("blob:")) {
+        URL.revokeObjectURL(avatarPreview);
+      }
+    };
+  }, [avatarPreview]);
 
   const {
     register,
     handleSubmit,
-    setValue,
     clearErrors,
     resetField,
     control,
@@ -67,15 +87,22 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    // Permite volver a elegir el mismo archivo si la validación falló.
+    e.target.value = "";
     if (!file) return;
+
+    const error = validateProfilePicture(file);
+    if (error) {
+      toast.error(error);
+      return;
+    }
 
     if (avatarPreview?.startsWith("blob:")) {
       URL.revokeObjectURL(avatarPreview);
     }
 
-    const url = URL.createObjectURL(file);
-    setAvatarPreview(url);
-    setValue("profilePictureUrl", url);
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   const handleAccountSubmit = async (data: Step1Data) => {
@@ -89,7 +116,7 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
       return;
     }
 
-    onNext(data);
+    onNext(data, avatarFile);
   };
 
   return (
@@ -134,7 +161,13 @@ export default function Step1Account({ defaultValues, onNext, onBack }: Step1Pro
         <Typography variant="caption" color="text.secondary" textAlign="center">
           Agregá una foto de perfil haciendo clic en +
         </Typography>
-        <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handleFileChange} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={PROFILE_PICTURE_ACCEPT}
+          hidden
+          onChange={handleFileChange}
+        />
       </Box>
 
       {/* Nombre */}

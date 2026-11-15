@@ -19,6 +19,14 @@ export interface EligibleConfirmationBooking {
   expiresAt: string;
 }
 
+interface EligibleConfirmationOptions {
+  /** Reservas a saltear porque ya no deben mostrar su popup (p. ej. las
+   * marcadas como resueltas en useSessionConfirmationStore): aunque su
+   * ventana siga abierta, se evalúa la siguiente de la lista en vez de
+   * devolver una reserva que el caller va a descartar. */
+  skip?: (bookingId: string) => boolean;
+}
+
 function getSessionStartMs(booking: UpcomingConfirmableBooking): number {
   return new Date(`${booking.sessionDate}T${booking.startTime}`).getTime();
 }
@@ -38,15 +46,19 @@ function computeRefetchInterval(bookings: UpcomingConfirmableBooking[] | undefin
 
 /**
  * De las reservas activas del usuario, devuelve la primera cuya ventana de
- * confirmación por token ya está abierta.
+ * confirmación por token ya está abierta (y que `options.skip` no descarte).
  * - Alumno: desde 5 minutos antes del inicio (mismo lead time que usa el
  *   backend para generar el token), para poder mostrarle el código.
  * - Tutor: recién desde el inicio de la clase, ya que hasta entonces solo
  *   puede ingresar el código (criterio 3 de la issue de US-41).
  * En ambos casos, hasta que el código vence del lado del servidor.
  */
-export function useEligibleConfirmationBooking(role: Role): EligibleConfirmationBooking | null {
+export function useEligibleConfirmationBooking(
+  role: Role,
+  options?: EligibleConfirmationOptions
+): EligibleConfirmationBooking | null {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const skip = options?.skip;
 
   const { data } = useQuery({
     queryKey: ["attendance-upcoming-bookings", role],
@@ -69,6 +81,8 @@ export function useEligibleConfirmationBooking(role: Role): EligibleConfirmation
 
     for (const booking of data) {
       if (!booking.confirmationTokenExpiresAt) continue;
+      // Una reserva ya resuelta no debe tapar a la siguiente en ventana.
+      if (skip?.(booking.bookingId)) continue;
 
       const sessionStart = getSessionStartMs(booking);
       const expiresAt = new Date(booking.confirmationTokenExpiresAt).getTime();
@@ -80,5 +94,5 @@ export function useEligibleConfirmationBooking(role: Role): EligibleConfirmation
       }
     }
     return null;
-  }, [data, now, role]);
+  }, [data, now, role, skip]);
 }

@@ -17,11 +17,26 @@ export async function reactivateAccount(data: ReactivateRequest): Promise<AuthRe
 }
 
 export async function registerStudent(data: StudentRegisterRequest): Promise<void> {
-  await rawHttpClient.post("/api/v1/auth/register/student", data);
+  await rawHttpClient.post("/api/v1/auth/register/student", buildRegistrationForm(data));
 }
 
 export async function registerTutor(data: TutorRegisterRequest): Promise<void> {
-  await rawHttpClient.post("/api/v1/auth/register/tutor", data);
+  await rawHttpClient.post("/api/v1/auth/register/tutor", buildRegistrationForm(data));
+}
+
+/**
+ * El registro es multipart: los datos viajan en la parte "data" (JSON) y la foto de
+ * perfil, si la hay, en la parte "file". La URL blob del preview nunca se envía.
+ */
+function buildRegistrationForm(data: StudentRegisterRequest | TutorRegisterRequest): FormData {
+  const { profilePictureFile, ...payload } = data;
+
+  const formData = new FormData();
+  formData.append("data", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+  if (profilePictureFile) {
+    formData.append("file", profilePictureFile);
+  }
+  return formData;
 }
 
 export async function checkAvailability(params: { email?: string; dni?: string }): Promise<void> {

@@ -66,6 +66,7 @@ export const TutorProfilePage = () => {
             <TutorMaterialCard
               material={tutor.material}
               hasConfirmedBooking={tutor.hasConfirmedBooking}
+              accessibleSubjects={tutor.accessibleSubjects}
               onDownload={downloadMaterial}
             />
           </Stack>

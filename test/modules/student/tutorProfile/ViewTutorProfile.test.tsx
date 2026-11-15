@@ -7,7 +7,9 @@ import { getTutorProfile } from "@/modules/student/tutorProfile/api/getTutorProf
 
 vi.mock("@/modules/student/tutorProfile/api/getTutorProfile", () => ({
   getTutorProfile: vi.fn(),
-  checkTutorMaterialAccess: vi.fn().mockResolvedValue(false),
+  checkTutorMaterialAccess: vi
+    .fn()
+    .mockResolvedValue({ accessEnabled: false, accessibleSubjects: [] }),
   getAccessibleTutorMaterials: vi.fn().mockResolvedValue([]),
   getTutorRatingHistory: vi.fn().mockResolvedValue({
     subjects: [],

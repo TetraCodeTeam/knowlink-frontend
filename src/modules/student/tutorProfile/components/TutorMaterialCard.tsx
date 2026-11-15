@@ -12,16 +12,19 @@ import {
 import { TutorMaterialModal } from "@/modules/student/tutorProfile/components/TutorMaterialModal";
 import ReportMaterialFlow from "@/modules/student/tutorProfile/components/ReportMaterialFlow";
 import MaterialPreviewDialog from "@/shared/material-preview/components/MaterialPreviewDialog";
+import FrankieEmptyState from "@/shared/frankie/FrankieEmptyState";
 
 interface TutorMaterialCardProps {
   material: TutorMaterialItem[];
   hasConfirmedBooking: boolean;
+  accessibleSubjects: string[];
   onDownload: (materialId: string) => void | Promise<void>;
 }
 
 export const TutorMaterialCard = ({
   material,
   hasConfirmedBooking,
+  accessibleSubjects,
   onDownload,
 }: TutorMaterialCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +63,19 @@ export const TutorMaterialCard = ({
             <Typography fontSize={12.5} color="text.secondary">
               Reservá y completá una sesión con este tutor para acceder a su material de estudio.
             </Typography>
+          </Box>
+        ) : material.length === 0 ? (
+          <Box sx={{ borderRadius: 3, bgcolor: "#F4F3FB" }}>
+            <FrankieEmptyState
+              compact
+              mood="sleepy"
+              size={180}
+              message={
+                accessibleSubjects.length > 0
+                  ? `No hay materiales académicos cargados para ${accessibleSubjects.join(", ")}.`
+                  : "No hay materiales académicos cargados."
+              }
+            />
           </Box>
         ) : (
           <>

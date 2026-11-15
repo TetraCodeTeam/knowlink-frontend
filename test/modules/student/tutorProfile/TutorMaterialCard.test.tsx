@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -44,12 +45,18 @@ const material: TutorMaterialItem[] = [
   },
 ];
 
-function renderCard() {
+function renderCard(overrides: Partial<ComponentProps<typeof TutorMaterialCard>> = {}) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
   return render(
     <QueryClientProvider client={client}>
-      <TutorMaterialCard material={material} hasConfirmedBooking onDownload={vi.fn()} />
+      <TutorMaterialCard
+        material={material}
+        hasConfirmedBooking
+        accessibleSubjects={["Álgebra"]}
+        onDownload={vi.fn()}
+        {...overrides}
+      />
     </QueryClientProvider>
   );
 }
@@ -82,5 +89,13 @@ describe("TutorMaterialCard", () => {
 
     expect(await screen.findByTitle("Vista previa de Tabla de Química")).toBeInTheDocument();
     expect(getMaterialSignedUrl).toHaveBeenCalledWith("m-3");
+  });
+
+  it("muestra el estado vacéo con la materia cuando no hay materiales", () => {
+    renderCard({ material: [], accessibleSubjects: ["Álgebra"] });
+
+    expect(
+      screen.getByText("No hay materiales académicos cargados para Álgebra.")
+    ).toBeInTheDocument();
   });
 });
