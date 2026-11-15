@@ -132,3 +132,8 @@ export function buildClassHistoryRoute(
   const base = role === "STUDENT" ? studentPaths.classes : tutorPaths.classes;
   return `${base}?category=${category}`;
 }
+
+export function normalizeTopic(topic: string | null | undefined): string | null {
+  const trimmed = topic?.trim();
+  return trimmed ? trimmed : null;
+}

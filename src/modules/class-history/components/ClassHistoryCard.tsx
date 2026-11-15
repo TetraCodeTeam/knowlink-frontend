@@ -1,6 +1,6 @@
 ﻿import { useState } from "react";
 import { Avatar, Box, Chip, Divider, IconButton, Typography } from "@mui/material";
-import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin } from "lucide-react";
+import { Clock, DollarSign, ChevronDown, ChevronUp, Laptop2, MapPin, BookText } from "lucide-react";
 import ModalityChip from "@/modules/tutor/profile/components/ModalityChip";
 import { useBookingDetail } from "@/modules/class-history/hooks/useBookingDetail";
 import {
@@ -8,6 +8,7 @@ import {
   formatDurationLabel,
   formatPriceLabel,
   formatTime,
+  normalizeTopic,
 } from "@/modules/class-history/utils/classHistory.utils";
 import {
   cardContainerSx,
@@ -32,6 +33,7 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
   const [expanded, setExpanded] = useState(false);
   const { detail, isLoading, isError } = useBookingDetail(item.bookingId, expanded);
   const showVirtualLinkBox = role === "TUTOR" && detail?.modality === "VIRTUAL";
+  const topic = normalizeTopic(detail?.topic);
 
   return (
     <Box sx={cardContainerSx}>
@@ -161,6 +163,31 @@ export default function ClassHistoryCard({ item, role, category }: ClassHistoryC
                       {buildModalityMessage(detail)}
                     </Typography>
                   </Box>
+
+                  {topic && (
+                    <Box sx={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                      <Box sx={{ flexShrink: 0, mt: "2px" }}>
+                        <BookText size={16} color="#666" />
+                      </Box>
+                      <Typography
+                        sx={{
+                          fontSize: "0.85rem",
+                          color: "#333",
+                          flex: 1,
+                          minWidth: 0,
+                          wordBreak: "break-word",
+                          whiteSpace: "pre-wrap",
+                        }}
+                      >
+                        <Box component="span" sx={{ color: "#666", mr: "6px" }}>
+                          Tema a tratar
+                        </Box>
+                        <Box component="span" sx={{ fontWeight: 500 }}>
+                          {`“${topic}”`}
+                        </Box>
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
 
                 {category === "RESERVED" && !showVirtualLinkBox && (
