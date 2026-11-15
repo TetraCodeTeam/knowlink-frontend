@@ -68,6 +68,52 @@ describe("queryClient y el bloqueo por calificacion", () => {
     expect(toast.error).not.toHaveBeenCalled();
   });
 
+  it("con silentWhenCached no avisa si el fallo ocurre al refrescar datos que ya se ven", async () => {
+    const queryKey = ["test", "silent-when-cached", "with-data"];
+    queryClient.setQueryData(queryKey, { slots: [] });
+
+    await expect(
+      queryClient.fetchQuery({
+        queryKey,
+        queryFn: () => Promise.reject(axiosError(500, { message: "Sin conexión" })),
+        meta: { silentWhenCached: true },
+        retry: false,
+        staleTime: 0,
+      })
+    ).rejects.toBeTruthy();
+
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it("con silentWhenCached sí avisa el error de la primera carga, cuando todavía no hay datos", async () => {
+    await expect(
+      queryClient.fetchQuery({
+        queryKey: ["test", "silent-when-cached", "without-data"],
+        queryFn: () => Promise.reject(axiosError(500, { message: "Falla de carga" })),
+        meta: { silentWhenCached: true },
+        retry: false,
+      })
+    ).rejects.toBeTruthy();
+
+    expect(toast.error).toHaveBeenCalledWith("Falla de carga");
+  });
+
+  it("sin silentWhenCached avisa también cuando ya había datos", async () => {
+    const queryKey = ["test", "not-silent", "with-data"];
+    queryClient.setQueryData(queryKey, { ok: true });
+
+    await expect(
+      queryClient.fetchQuery({
+        queryKey,
+        queryFn: () => Promise.reject(axiosError(500, { message: "Falla al refrescar" })),
+        retry: false,
+        staleTime: 0,
+      })
+    ).rejects.toBeTruthy();
+
+    expect(toast.error).toHaveBeenCalledWith("Falla al refrescar");
+  });
+
   it("muestra el mensaje del backend en errores comunes", async () => {
     await expect(
       queryClient.fetchQuery({
